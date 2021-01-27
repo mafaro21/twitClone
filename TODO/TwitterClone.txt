@@ -7,8 +7,8 @@ Suggest App Name:... twitClone?
 
 PLAN OUTLINE:
 
-- Sketch/Design the UI/UX of each page
-- Make database model
+^^ Sketch/Design the UI/UX of each page
+^^ Make database model
 - Make the frontend.*** 
 - Connect barebones frontend with backend
 - add User auth: username[30] :no spaces, email, password.
