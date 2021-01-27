@@ -1,7 +1,7 @@
 {
   "name": "twitclone",
   "version": "1.0.0",
-  "description": "A twitter clone made by MEAN Stack.",
+  "description": "A twitter clone made by MERN Stack.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
