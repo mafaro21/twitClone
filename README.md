@@ -1,3 +1,3 @@
 # twitClone
 
-A twitter clone made by MEAN Stack.
+A twitter clone made using the MERN Stack.
