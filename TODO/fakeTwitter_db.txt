@@ -1,0 +1,64 @@
+﻿TWITTER CLONE:
+Rough Database model
+2021-01-27
+- - - -
+
+____
+Users 
+—
+Uid
+Username 
+Email
+Password
+Following count (int) *
+Followers count (int) *
+
+____
+Tweets
+——
+id
+tweetBody(max 140 chars)
+Hashtags [array of 5 max]
+UserTags_id [array of 5 max]
+Likes (int) *
+Retweets (int) *
+DateTime()
+
+____
+Tweet Replies/Comments === tweet
+————
+id
+linked_tweet_id
+
+
+______
+Follows
+———
+from_user_id
+to_user_id
+
+
+
+___
+Retweets(not really needed)
+_____
+tweet_id
+by_user_id
+DateTime
+
+____
+Likes
+————
+tweet_id
+by_user_id
+DateTime 
+
+____
+Chat DM’s (1 to 1)
+———
+from_user_id
+to_user_id
+message. (max 140 chars)
+DateTime()
+
+
