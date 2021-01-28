@@ -20,6 +20,7 @@ PLAN OUTLINE:
 - Or popup notifications when new message arrives (chat)
 - also send notifications when User get a follow / liked tweet.
 - record / display/ update #Likes on a tweet
+-chat template -> https://socketio-chat-template.templates.repl.co/
 
 ## HASHTAGS ## (tough^)
 - Add auto hashtags feature. (Maybe we can limit hashtags to 5 MAX per tweet - auto) (live as typing)
