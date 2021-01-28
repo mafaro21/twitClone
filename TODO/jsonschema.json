@@ -20,10 +20,6 @@
             "datejoined": {
                 "bsonType": "date",
                 "description": "Must be a valid date",
-            },
-            "fullname": {
-                "bsonType": "string",
-                "description": "Contains invalid characters",
             }
         }
     },
