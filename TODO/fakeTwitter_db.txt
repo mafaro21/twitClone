@@ -10,8 +10,6 @@ Uid
 Username 
 Email
 Password
-Following count (int) *
-Followers count (int) *
 datejoined (DateTime)
 
 ____
