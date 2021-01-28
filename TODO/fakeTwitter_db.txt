@@ -12,6 +12,7 @@ Email
 Password
 Following count (int) *
 Followers count (int) *
+datejoined (DateTime)
 
 ____
 Tweets
