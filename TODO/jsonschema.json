@@ -1,12 +1,36 @@
 {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["name", "year", "major", "gpa", "address.city", "address.street"],
+        "required": ["fullname", "email", "password", "datejoined"],
         "properties": {
-            "name": {
+            "fullname": {
                 "bsonType": "string",
-                "description": "must be a string"
+                "description": "must be a string",
+                "maxLength": 30
+            },
+            "email": {
+                "bsonType": "string",
+                "description": "must be a valid email",
+            },
+            "password": {
+                "bsonType": "string",
+                "minLength": 8,
+                "description": "must be at least 8 characters long",
+            },
+            "datejoined": {
+                "bsonType": "date",
+                "description": "Must be a valid date",
+            },
+            "fullname": {
+                "bsonType": "string",
+                "description": "Contains invalid characters",
             }
         }
-    }
+    },
+    $and: [
+        { email: { $regex: /[\w\S\.]+@+[\w\S]+\.[\w\S]/ } },
+        { fullname: { $regex: /\w+/ } },
+        { username: { $regex: /\w+\S+/ } },
+    ]
+
 }
