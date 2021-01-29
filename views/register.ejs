@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<h1 style="text-align: center">Register</h1>
+	<h1 style="text-align: center">Create Account</h1>
 
 	<form id="register" onsubmit="return false">
 		<div>
@@ -19,20 +19,20 @@
 			<p id="errname" style="color: red"></p>
 		</div>
 		<div>
-			<input name="email" id="email" type="email" placeholder="Email address" required />
+			<input name="email" id="email" type="email" maxlength="30" placeholder="Email address" required />
 			<p id="erremail" style="color: red"></p>
 		</div>
 		<div>
-			<input name="password" id="password" type="password" placeholder="Enter Password" pattern=".{8,}"
+			<input name="password" id="password" type="password" maxlength="30" placeholder="Enter Password" pattern=".{8,}"
 				title="Required 8 characters or more" required />
 			<p id="errpwd" style="color: red"></p>
 		</div>
 		<div>
-			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required />
+			<input name="confirmPass" id="confirmPass" type="password" maxlength="30" placeholder="Confirm Password" required />
 			<p id="errpwd2" style="color: red"></p>
 		</div>
 		<div>
-			<button style="background-color:yellow;" type="submit" class="submit-btn">Register</button>
+			<button style="background-color:yellow;" type="submit">Register</button>
 		</div>
 	</form>
 	<br />
