@@ -1,6 +1,7 @@
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const port = process.env.PORT || 3000;
 
 const indexRouter = require('./routes/index');
 
@@ -25,9 +26,9 @@ app.use((req, res, next) => {
     next(err);
 });
 
-
-app.listen(process.env.PORT || 3000, function() {
-    console.log(`listening on port ${process.env.PORT}`)
+//listening ports
+app.listen(port, () => {
+    console.log(`listening on port ${port}`);
 })
 
 // error handler
