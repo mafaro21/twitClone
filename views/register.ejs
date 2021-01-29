@@ -1,34 +1,41 @@
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/public/stylesheets/style.css" />
-    <title>
-        <%= title %>
-    </title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="stylesheets/style.css" />
+	<title>
+		<%= title %>
+	</title>
 </head>
 
 <body>
-    <h1><%= title  %> </h1>
-    <form id="register" onsubmit="return checkInputs()">
-
-        <input name="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span
-            id="errname" style="color: red"></span> <br>
-
-        <input name="email" type="email" placeholder="Email address" required> <span id="erremail"
-            style="color: red"></span> <br>
-
-        <input name="password" type="password" placeholder="Enter Password" pattern=".{8,}"
-            title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
-        <br>
-        <input name="confirmPass" type="password" placeholder="Confirm Password" required> <span
-            id="errpwd2" style="color: red"></span>
-        <div>
-            <button type="submit" class="submit-btn">Register</button>
-        </div>
-    </form>
-    <script>
+	<h1>
+		<%= title %>
+	</h1>
+	<form id="register" onsubmit="return false">
+		<div>
+			<input name="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span id="errname"
+				style="color: red"></span>
+		</div>
+		<div>
+			<input name="email" type="email" placeholder="Email address" required> <span id="erremail"
+				style="color: red"></span>
+		</div>
+		<div>
+			<input name="password" type="password" placeholder="Enter Password" pattern=".{8,}"
+				title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
+		</div>
+		<div>
+			<input name="confirmPass" type="password" placeholder="Confirm Password" required> <span id="errpwd2"
+				style="color: red"></span>
+		</div>
+		<div>
+			<button type="submit" class="submit-btn">Register</button>
+		</div>
+	</form>
+	<script>
 		/*For Register Form */
 		//checking values entered by user
 		function checkInputs() {
@@ -49,7 +56,7 @@
 				document.getElementById("errname").innerHTML = "Name contains illegal characters ";
 				return false;
 			}
-		
+
 			if (b.indexOf('.') - b.indexOf("@") < 2) {
 				document.getElementById("erremail").innerHTML = "Invalid email address";
 				return false;
@@ -65,4 +72,5 @@
 		}
 	</script>
 </body>
+
 </html>
