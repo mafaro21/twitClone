@@ -13,7 +13,7 @@
 <body>
 	<h1 style="text-align: center">Register</h1>
 
-	<form id="register" method="POST" onsubmit="return false">
+	<form id="register" onsubmit="return checkInputs()">
 		<div>
 			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required />
 			<p id="errname" style="color: red"></p>
@@ -40,6 +40,8 @@
 	<script>
 		/*For Register Form */
 		//checking values entered by user
+		function checkInputs() {
+			const regform = document.forms.register;
 			const a = document.forms["register"]["name"].value.trim();
 			const b = document.forms["register"]["email"].value.trim();
 			const c = document.forms["register"]["password"].value.trim();
@@ -69,6 +71,11 @@
 			if (c !== d) {
 				document.getElementById("errpwd2").innerHTML = "Passwords do not match";
 				return false;
+			}
+		}
+		function checkifokay() {
+			if(checkInputs() === true){
+				window.alert('hello');
 			}
 		}
 	</script>
