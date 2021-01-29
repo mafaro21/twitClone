@@ -4,7 +4,7 @@
 function myFunction() {
   var myemail = "mama@gm_ail.com";
   var patt1 = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-  var result = patt1.test(str);
+  var result = patt1.test(myemail);
   return result; //boolean true (PASS) or false (FAIL)
 }
 
