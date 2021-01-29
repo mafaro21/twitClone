@@ -18,8 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Serve pages
 app.use('/', indexRouter);
+
 app.get("/register", (req, res) => {
-  res.render('register', { title: 'register page'});
+  res.render('register', { title: 'TwitClone : Register'});
   console.log("we are on register page");
 });
 

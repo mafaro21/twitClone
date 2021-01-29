@@ -11,9 +11,10 @@
 </head>
 
 <body>
-	<h1>
-		<%= title %>
+	<h1 style="text-align: center;">
+		Register
 	</h1>
+
 	<form id="register" method="POST" onsubmit="return false">
 		<div>
 			<input name="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span id="errname"
@@ -35,6 +36,8 @@
 			<button type="submit" class="submit-btn">Register</button>
 		</div>
 	</form>
+	<br>
+	<a href="/"><button>go home</button></a>
 	<script>
 		/*For Register Form */
 		//checking values entered by user
