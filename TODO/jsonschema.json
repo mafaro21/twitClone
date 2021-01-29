@@ -10,16 +10,16 @@
             },
             "email": {
                 "bsonType": "string",
-                "description": "must be a valid email",
+                "description": "must be a valid email"
             },
             "password": {
                 "bsonType": "string",
                 "minLength": 8,
-                "description": "must be at least 8 characters long",
+                "description": "must be at least 8 characters long"
             },
             "datejoined": {
                 "bsonType": "date",
-                "description": "Must be a valid date",
+                "description": "Must be a valid date"
             }
         }
     },
