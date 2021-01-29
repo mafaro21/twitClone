@@ -13,10 +13,10 @@
 <body>
 	<h1 style="text-align: center">Register</h1>
 
-	<form id="register-form" method="POST" onsubmit="return false">
+	<form id="regform">
 		<div>
-			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span id="errname"
-				style="color: red"></span>
+			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span
+				id="errname" style="color: red"></span>
 		</div>
 		<div>
 			<input name="email" id="email" type="email" placeholder="Email address" required> <span id="erremail"
@@ -27,8 +27,8 @@
 				title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
 		</div>
 		<div>
-			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required> <span id="errpwd2"
-				style="color: red"></span>
+			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required> <span
+				id="errpwd2" style="color: red"></span>
 		</div>
 		<div>
 			<button type="submit" class="submit-btn">Register</button>
@@ -39,14 +39,19 @@
 	<script>
 		/*For Register Form */
 		//checking values entered by user
-		
-			const a = ""
-			const b = ""
-			const c = ""
-			const d = ""
-			function checkInputs() {
-				
-			
+		const regform = document.getElementById('regform');
+		regform.addEventListener(event => {
+			event.preventDefault();
+		})
+
+		const a = document.getElementById("fullname").value;
+		const b = document.getElementById("email").value;
+		const c = document.getElementById("password").value;
+		const d = document.getElementById("password").value;
+
+
+		function checkInputs() {
+
 			//reset all error texts to null
 			document.getElementById("errname").innerHTML = "";
 			document.getElementById("erremail").innerHTML = "";
@@ -71,6 +76,12 @@
 			if (c !== d) {
 				document.getElementById("errpwd2").innerHTML = "Passwords do not match";
 				return false;
+			}
+			getthefuckoutofhere();
+		}
+		function getthefuckoutofhere{
+			if (checkInputs() === true) {
+				window.alert('you did well');
 			}
 		}
 	</script>
