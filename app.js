@@ -26,8 +26,8 @@ app.use((req, res, next) => {
 });
 
 
-app.listen(3000, function() {
-    console.log('listening on 3000')
+app.listen(process.env.PORT, function() {
+    console.log(`listening on port ${process.env.PORT}`)
 })
 
 // error handler
