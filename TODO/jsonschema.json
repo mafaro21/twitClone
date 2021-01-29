@@ -23,10 +23,10 @@
             }
         }
     },
-    $and: [
-        { email: { $regex: /[\w\S\.]+@+[\w\S]+\.[\w\S]/ } },
-        { fullname: { $regex: /\w+/ } },
-        { username: { $regex: /\w+\S+/ } }
+    "$and": [
+        { "email": { "$regex": "/[\\w\\S\\.]+@+[\\w\\S]+\\.[\\w\\S]\/" } },
+        { "fullname": { "$regex": "/\\w+\\s{1}/" } },
+        { "username": { "$regex": "/\\w+\\S+/" } }
     ]
 
 }
