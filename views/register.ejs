@@ -1,19 +1,35 @@
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/public/stylesheets/style.css" />
-    <title><%= title %></title>
-  </head>
+    <title>
+        <%= title %>
+    </title>
+</head>
 
-  <body>
-      <form id="register" action="" method="post">
-        <input type="text" name="fullname" id="" required>
-        <input type="text" name="fullname" id="">
-        <input type="password" name="password" id="">
-        <input type="submit">
+<body>
+    <form id="register">
+        <div>
+            <input name="name" type="text" class="input-field" maxlength="20" placeholder="Your Name" required> <span
+                id="errname" style="color: red"></span>
+        </div>
+        <div>
+        <input name="email" type="email" class="input-field" placeholder="Email address" required> <span id="erremail"
+            style="color: red"></span>
+        </div>
+        <div>
+        <input name="password" type="password" class="input-field" placeholder="Enter Password" pattern=".{8,}"
+            title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
+</div>
+        <div>
+        <input name="confirmPass" type="password" class="input-field" placeholder="Confirm Password" required> <span
+            id="errpwd2" style="color: red"></span>
+</div>
+        <button type="submit" class="submit-btn">Register</button>
 
+    </form>
+</body>
 
-      </form>
-  </body>
 </html>
