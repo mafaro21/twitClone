@@ -30,7 +30,7 @@ app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
-    //take this to error handler below
+    //pass this to error handler below
 });
 
 
