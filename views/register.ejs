@@ -13,21 +13,21 @@
 <body>
 	<h1 style="text-align: center">Register</h1>
 
-	<form id="register" method="POST" onsubmit="return false">
+	<form id="register-form" method="POST" onsubmit="return false">
 		<div>
-			<input name="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span id="errname"
+			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span id="errname"
 				style="color: red"></span>
 		</div>
 		<div>
-			<input name="email" type="email" placeholder="Email address" required> <span id="erremail"
+			<input name="email" id="email" type="email" placeholder="Email address" required> <span id="erremail"
 				style="color: red"></span>
 		</div>
 		<div>
-			<input name="password" type="password" placeholder="Enter Password" pattern=".{8,}"
+			<input name="password" id="password" type="password" placeholder="Enter Password" pattern=".{8,}"
 				title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
 		</div>
 		<div>
-			<input name="confirmPass" type="password" placeholder="Confirm Password" required> <span id="errpwd2"
+			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required> <span id="errpwd2"
 				style="color: red"></span>
 		</div>
 		<div>
@@ -39,12 +39,14 @@
 	<script>
 		/*For Register Form */
 		//checking values entered by user
-		function checkInputs() {
-			const a = document.forms["register"]["name"].value.trim();
-			const b = document.forms["register"]["email"].value.trim();
-			const c = document.forms["register"]["password"].value.trim();
-			const d = document.forms["register"]["confirmPass"].value.trim();
-
+		
+			const a = ""
+			const b = ""
+			const c = ""
+			const d = ""
+			function checkInputs() {
+				
+			
 			//reset all error texts to null
 			document.getElementById("errname").innerHTML = "";
 			document.getElementById("erremail").innerHTML = "";
