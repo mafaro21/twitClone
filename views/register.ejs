@@ -40,10 +40,10 @@
 		/*For Register Form */
 		//checking values entered by user
 		function checkInputs() {
-			var a = document.forms["register"]["name"].value.trim();
-			var b = document.forms["register"]["email"].value.trim();
-			var c = document.forms["register"]["password"].value.trim();
-			var d = document.forms["register"]["confirmPass"].value.trim();
+			const a = document.forms["register"]["name"].value.trim();
+			const b = document.forms["register"]["email"].value.trim();
+			const c = document.forms["register"]["password"].value.trim();
+			const d = document.forms["register"]["confirmPass"].value.trim();
 
 			//reset all error texts to null
 			document.getElementById("errname").innerHTML = "";
@@ -51,7 +51,7 @@
 			document.getElementById("errpwd").innerHTML = "";
 			document.getElementById("errpwd2").innerHTML = "";
 
-			var reg = new RegExp('[^ a-zA-Z0-9_]');
+			const reg = new RegExp('[^ a-zA-Z0-9_]');
 
 			if (reg.test(a)) {
 				document.getElementById("errname").innerHTML = "Name contains illegal characters ";
