@@ -4,6 +4,7 @@ const path = require("path");
 const port = process.env.PORT || 3000;
 
 const indexRouter = require('./routes/index');
+const register = require('./routes/register');
 
 
 const app = express();
@@ -16,9 +17,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//give homepage
+//Serve pages
 app.use('/', indexRouter);
-
+app.use('/register', register);
 
 //listening ports
 app.listen(port, () => {
