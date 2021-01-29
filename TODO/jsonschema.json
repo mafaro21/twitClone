@@ -24,9 +24,9 @@
         }
     },
     "$and": [
-        { "email": { "$regex": "/(^([0-9A-Za-z])[\\w\\.-]+@{1}[\\w]+\\.{1}[\\w]\\S+)$/g" } },
-        { "fullname": { "$regex": "\\w+\\s{1}" } },
-        { "username": { "$regex": "\\w+\\S+" } }
+        { "email": { "$regex": /(^([0-9A-Za-z])[\\w\\.-]+@{1}[\\w]+\\.{1}[\\w]\\S+)$/gi } },
+        { "fullname": { "$regex": /\w+\\s{1}/g } },
+        { "username": { "$regex": /\w+\S+/g } }
     ]
 
 }
