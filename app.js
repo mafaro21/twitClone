@@ -18,8 +18,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //give homepage
 app.use('/', indexRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// if visiting non-existing page, display error 404
+app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
