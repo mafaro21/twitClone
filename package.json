@@ -1,30 +1,32 @@
 {
-  "name": "twitclone",
-  "version": "1.0.0",
-  "description": "A twitter clone made by MERN Stack.",
-  "main": "app.js",
-  "scripts": {
-    "start": "nodemon app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mafaro21/twitClone.git"
-  },
-  "keywords": [
-    "twitter",
-    "clone"
-  ],
-  "author": "mafaro davis",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mafaro21/twitClone/issues"
-  },
-  "homepage": "https://github.com/mafaro21/twitClone#readme",
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "nodemon": "^2.0.7",
-    "ejs": "^3.1.5",
-    "mongodb": "^3.6.3"
-  }
+    "name": "twitclone",
+    "version": "1.0.0",
+    "description": "A twitter clone made by MERN Stack.",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mafaro21/twitClone.git"
+    },
+    "keywords": [
+        "twitter",
+        "clone"
+    ],
+    "author": "mafaro davis",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mafaro21/twitClone/issues"
+    },
+    "homepage": "https://github.com/mafaro21/twitClone#readme",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "nodemon": "^2.0.7",
+        "ejs": "^3.1.5",
+        "mongodb": "^3.6.3",
+        "bcrypt": "5.0.0",
+        "express-session": "1.17.1"
+    }
 }
