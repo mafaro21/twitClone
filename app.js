@@ -19,17 +19,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 //give homepage
 app.use('/', indexRouter);
 
-// if visiting non-existing page, display error 404
-app.use((req, res, next) => {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
 
 //listening ports
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
+
+// if visiting non-existing page, serve error 404
+app.use((req, res, next) => {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+    //take this to error handler below
+});
+
 
 // error handler
 app.use((err, req, res, next) => {
@@ -42,7 +45,5 @@ app.use((err, req, res, next) => {
     res.render('error');
     console.error(err.status);
 });
-
-
 
 module.exports = app;
