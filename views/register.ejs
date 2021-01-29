@@ -15,28 +15,63 @@
 
 	<form id="regform" method="POST" onsubmit="return false">
 		<div>
-			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span
-				id="errname" style="color: red"></span>
+			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required />
+			<p id="errname" style="color: red"></p>
 		</div>
 		<div>
-			<input name="email" id="email" type="email" placeholder="Email address" required> <span id="erremail"
-				style="color: red"></span>
+			<input name="email" id="email" type="email" placeholder="Email address" required />
+			<p id="erremail" style="color: red"></p>
 		</div>
 		<div>
 			<input name="password" id="password" type="password" placeholder="Enter Password" pattern=".{8,}"
-				title="Required 8 characters or more" required> <span id="errpwd" style="color: red"></span>
+				title="Required 8 characters or more" required />
+			<p id="errpwd" style="color: red"></p>
 		</div>
 		<div>
-			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required> <span
-				id="errpwd2" style="color: red"></span>
+			<input name="confirmPass" id="confirmPass" type="password" placeholder="Confirm Password" required />
+			<p id="errpwd2" style="color: red"></p>
 		</div>
 		<div>
-			<button type="submit" class="submit-btn">Register</button>
+			<button style="background-color:yellow;" type="submit" class="submit-btn">Register</button>
 		</div>
 	</form>
-	<br>
+	<br />
 	<a href="/"><button>go home</button></a>
-	
-</body>
+	<script>
+		/*For Register Form */
+		//checking values entered by user
+		function checkInputs() {
+			var a = document.forms["register"]["name"].value.trim();
+			var b = document.forms["register"]["email"].value.trim();
+			var c = document.forms["register"]["password"].value.trim();
+			var d = document.forms["register"]["confirmPass"].value.trim();
 
+			//reset all error texts to null
+			document.getElementById("errname").innerHTML = "";
+			document.getElementById("erremail").innerHTML = "";
+			document.getElementById("errpwd").innerHTML = "";
+			document.getElementById("errpwd2").innerHTML = "";
+
+			var reg = new RegExp('[^ a-zA-Z0-9_]');
+
+			if (reg.test(a)) {
+				document.getElementById("errname").innerHTML = "Name contains illegal characters ";
+				return false;
+			}
+		
+			if (b.indexOf('.') - b.indexOf("@") < 2) {
+				document.getElementById("erremail").innerHTML = "Invalid email address";
+				return false;
+			}
+			if (c.length < 8) {
+				document.getElementById("errpwd").innerHTML = "Required 8 or more characters";
+				return false;
+			}
+			if (c !== d) {
+				document.getElementById("errpwd2").innerHTML = "Passwords do not match";
+				return false;
+			}
+		}
+	</script>
+</body>
 </html>
