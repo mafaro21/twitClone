@@ -13,7 +13,7 @@
 <body>
 	<h1 style="text-align: center">Register</h1>
 
-	<form id="regform">
+	<form id="regform" method="POST" onsubmit="return false">
 		<div>
 			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required> <span
 				id="errname" style="color: red"></span>
@@ -36,55 +36,7 @@
 	</form>
 	<br>
 	<a href="/"><button>go home</button></a>
-	<script>
-		/*For Register Form */
-		//checking values entered by user
-		const regform = document.getElementById('regform');
-		regform.addEventListener(event => {
-			event.preventDefault();
-		})
-
-		const a = document.getElementById("fullname").value;
-		const b = document.getElementById("email").value;
-		const c = document.getElementById("password").value;
-		const d = document.getElementById("password").value;
-
-
-		function checkInputs() {
-
-			//reset all error texts to null
-			document.getElementById("errname").innerHTML = "";
-			document.getElementById("erremail").innerHTML = "";
-			document.getElementById("errpwd").innerHTML = "";
-			document.getElementById("errpwd2").innerHTML = "";
-
-			const reg = new RegExp('[^ a-zA-Z0-9_]');
-
-			if (reg.test(a)) {
-				document.getElementById("errname").innerHTML = "Name contains illegal characters ";
-				return false;
-			}
-
-			if (b.indexOf('.') - b.indexOf("@") < 2) {
-				document.getElementById("erremail").innerHTML = "Invalid email address";
-				return false;
-			}
-			if (c.length < 8) {
-				document.getElementById("errpwd").innerHTML = "Required 8 or more characters";
-				return false;
-			}
-			if (c !== d) {
-				document.getElementById("errpwd2").innerHTML = "Passwords do not match";
-				return false;
-			}
-			getthefuckoutofhere();
-		}
-		function getthefuckoutofhere{
-			if (checkInputs() === true) {
-				window.alert('you did well');
-			}
-		}
-	</script>
+	
 </body>
 
 </html>
