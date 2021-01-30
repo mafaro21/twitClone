@@ -3,12 +3,12 @@ const router = express.Router();
 
 
 /* handling GET requests  */
-router.get("/register", (req, res, next) => {
+router.get("/", (req, res, next) => {
     res.render('register', { errors: JSON.stringify([""]) });
 });
 
 /* handling POST requests */
-router.post("/register", (req, res, next) => {
+router.post("/", (req, res, next) => {
     const fullname = req.body.fullname;
     const email = req.body.email;
     const password = req.body.password;
@@ -48,9 +48,5 @@ router.post("/register", (req, res, next) => {
     }
 });
 
-router.use((req, res, next) => {
-    next();
-    //pass this to error handler
-});
 
 module.exports = router;
