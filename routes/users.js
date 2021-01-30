@@ -1,15 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-//  for '/register' 
+router.use((req, res, next) => {
+    next();
+    //pass this to error handler
+});
+
 
 /* handling GET requests  */
-router.get('/', (req, res, next) => {
+router.get("/register", (req, res, next) => {
     res.render('register', { errors: JSON.stringify([""]) });
 });
 
 /* handling POST requests */
-router.post('/', (req, res, next) => {
+router.post("/register", (req, res, next) => {
     const fullname = req.body.fullname;
     const email = req.body.email;
     const password = req.body.password;
@@ -47,11 +51,6 @@ router.post('/', (req, res, next) => {
         res.render('register', { errors: JSON.stringify(errors) });
         console.error(errors);
     }
-});
-
-router.use((req, res, next) => {
-    next();
-    //pass this to error handler
 });
 
 

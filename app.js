@@ -6,7 +6,7 @@ const app = express();
 
 //import all routers
 const indexRouter = require('./routes/index');
-const registerRouter = require('./routes/register');
+const usersRouter = require('./routes/users');
 
 
 // view engine setup
@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Serve pages accordingly
 app.use('/', indexRouter);
-app.use('/register', registerRouter);
+app.use('/users', usersRouter);
 
 
 //listening port
