@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 app.get("/register", (req, res) => {
-  res.render('register', { title: 'TwitClone : Register'});
-  console.log("we are on register page");
-});
+        res.render('register', { title: 'TwitClone : Register' });
+        console.log("we are on register page");
+    });
 
 //listening ports
 app.listen(port, () => {
