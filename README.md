@@ -2,4 +2,3 @@
 
 - A twitter clone made using the MERN Stack.
 - To test it, run `npm install` then `npm start` 
-- [https://www.facebook.com]
