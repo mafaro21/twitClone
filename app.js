@@ -4,7 +4,7 @@ const path = require("path");
 const port = process.env.PORT || 3000;
 
 const indexRouter = require('./routes/index');
-const jsrouter = require('./routes/jsrouter')
+
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Serve pages
 app.use('/', indexRouter);
-app.use('/javascript', jsrouter);
+
 
 app.get("/register", (req, res) => {
         res.render('register', { title: 'TwitClone : Register' });
