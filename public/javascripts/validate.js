@@ -1,16 +1,19 @@
 /* /*For Register Form */
+
+const e = require("express");
+
 //checking values entered by user */}
 const submit_btn = document.getElementById('submit-btn');
 const formaa = document.getElementById('register');
 
-submit_btn.addEventListener('click', () =>{
-    if (checkInput() === true) {
-        formaa.preventDefault();
-    } else {
+formaa.addEventListener('submit', (this) => {
+    this.preventDefault();
+})
+
+submit_btn.addEventListener('click', (this) => {
+    if (checkInput() === true)
         formaa.setAttribute("onsubmit", "true");
-    }
-    formaa.preventDefault();
-    checkInputs();
+
 })
 
 function checkInputs() {
