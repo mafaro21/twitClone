@@ -36,22 +36,17 @@ app.post("/register", (req, res) => {
         var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
-            errors.push("Name contains illegal characters ");
-            return false;
+            errors.push("Name contains illegal characters ");           
         }
         if (!patt.test(email)) {
-            errors.push("Required 8 or more characters");
-            return false;
+            errors.push("Required 8 or more characters");            
         }
         if (password.length < 8) {
-            errors.push("Required 8 or more characters");
-            return false;
+            errors.push("Required 8 or more characters");           
         }
         if (password !== confirmPass) {
-            errors.push("Passwords do not match");
-            return false;
-        }
-        return true;
+            errors.push("Passwords do not match");         
+        }   
     }
     if (checkInputs() === true ) {
          res.status(200).json(JSON.stringify(req.body));
