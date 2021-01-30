@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//FOR REGISTER routes ONLY
+//FOR REGISTER requests ONLY:: i.e.  '/register'
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
     res.render('register', { errors: JSON.stringify([""]) });
