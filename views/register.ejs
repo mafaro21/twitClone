@@ -5,17 +5,16 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="stylesheets/style.css" />
-	<script src="javascripts/validate.js"></script>
+	<script src="/public/javascripts/validate.js"></script>
 	<title>
 		<%= title %>
 	</title>
 </head>
 
-
 <body>
 	<h1 style="text-align: center">Create Account</h1>
 
-	<form id="register" name="register" onsubmit="return false">
+	<form id="register" onsubmit="return checkInputs()"> 
 		<div class="form-group">
 			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required />
 			<p id="errname" style="color: red"></p>
@@ -38,6 +37,7 @@
 		</div>
 	</form>
 	<br />
+	<script src="/public/javascripts/validate.js"></script>
 	<a href="/"><button>Go Home</button></a>
 </body>
 </html>
