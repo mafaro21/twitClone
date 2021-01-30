@@ -29,37 +29,38 @@ app.post("/register", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
-
-    console.log(req.body);
+    var errors = [];
 
     function checkInputs() {
+        var YY = true;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
         var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
-            document.getElementById("errname").innerHTML = "Name contains illegal characters ";
-            return false;
+            errors.push("Name contains illegal characters ");
+            YY = false
         }
         if (!patt.test(email)) {
-            document.getElementById("errpwd").innerHTML = "Required 8 or more characters";
-            return false;
+            errors.push("Required 8 or more characters");
+            YY = false;
         }
         if (password.length < 8) {
-            document.getElementById("errpwd").innerHTML = "Required 8 or more characters";
-            return false;
+            errors.push("Required 8 or more characters");
+            YY = false;
         }
         if (password !== confirmPass) {
-            document.getElementById("errpwd2").innerHTML = "Passwords do not match";
-            return false;
+            errors.push("Passwords do not match");
+            YY = false;
         }
+        return YY;
     }
-    if (checkInputs() == true) {
-         res.send(req.body);
-         console.log("hello");
-        //res.send(`${fullname}, ${email}, ${password}, ${confirmPass}`, res.status);
+    if (checkInputs() === true ) {
+         res.sendStatus(200).json(req.body);
+         console.json(req.body, res.sendStatus(200));
     } else {
-        console.log("error")
-        res.json(res.body);
+       res.sendStatus(500).json(errors.join());
+       res.redirect('./register', 422);
+       console.error(errors);
     }
 })
 
