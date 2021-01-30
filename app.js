@@ -49,10 +49,10 @@ app.post("/register", (req, res) => {
         }   
     }
     if (checkInputs() === true ) {
-         res.status(200).json(JSON.stringify(req.body));
+         res.status(200).json(req.body);
          console.json(req.body, res.sendStatus(200));
     } else {
-       res.status(422).json(JSON.stringify(errors));
+       res.status(403).json(errors);
        console.error(errors);
     }
 })
