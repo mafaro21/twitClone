@@ -5,7 +5,6 @@ const port = process.env.PORT || 3000;
 
 const indexRouter = require('./routes/index');
 
-
 const app = express();
 
 // view engine setup
