@@ -55,11 +55,10 @@ app.post("/register", (req, res) => {
         return YY;
     }
     if (checkInputs() === true ) {
-         res.sendStatus(200).json(req.body);
+         res.status(200).json(req.body);
          console.json(req.body, res.sendStatus(200));
     } else {
-       res.sendStatus(500).json(errors.join());
-       res.redirect('./register', 422);
+       res.status(422).json(errors);
        console.error(errors);
     }
 })
