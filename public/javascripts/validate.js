@@ -1,5 +1,18 @@
 /* /*For Register Form */
 //checking values entered by user */}
+const submit_btn = document.getElementById('submit-btn');
+const formaa = document.getElementById('register');
+
+submit_btn.addEventListener('click', () =>{
+    if (checkInput() === true) {
+        formaa.preventDefault();
+    } else {
+        formaa.setAttribute("onsubmit", "true");
+    }
+    formaa.preventDefault();
+    checkInputs();
+})
+
 function checkInputs() {
     const a = document.forms["register"]["name"].value.trim();
     const b = document.forms["register"]["email"].value.trim();
@@ -30,13 +43,5 @@ function checkInputs() {
     if (c !== d) {
         document.getElementById("errpwd2").innerHTML = "Passwords do not match";
         return false;
-    }
-}
-async function proceeed() {
-await checkInputs();
-    if (checkInputs() === true) {
-        const formaa = document.getElementById('register');
-
-        formaa.setAttribute("onsubmit", "true");
     }
 }
