@@ -21,7 +21,8 @@ app.use('/', indexRouter);
 
 
 app.get("/register", (req, res) => {
-        res.render('register', { title: 'TwitClone : Register' });
+       // res.render('register', { title: 'TwitClone : Register' });
+        res.sendFile('register.html');
     });
 
 //listening ports
