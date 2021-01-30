@@ -1,6 +1,5 @@
 /* /*For Register Form */
 
-const e = require("express");
 
 //checking values entered by user */}
 const submit_btn = document.getElementById('submit-btn');
