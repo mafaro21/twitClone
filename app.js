@@ -21,9 +21,44 @@ app.use('/', indexRouter);
 
 
 app.get("/register", (req, res) => {
-       // res.render('register', { title: 'TwitClone : Register' });
-        res.sendFile('register.html');
-    });
+    res.render('register', { title: 'TwitClone : Register' });
+});
+
+app.post("/register", (req, res) => {
+    var fullname = req.params.fullname;
+    var email = req.params.email;
+    var password = req.params.password;
+    var confirmPass = req.params.confirmPass;
+
+    function checkInputs() {
+        const reg = new RegExp('[^ a-zA-Z0-9_]');
+
+        if (reg.test(fullname)) {
+            document.getElementById("errname").innerHTML = "Name contains illegal characters ";
+            return false;
+        }
+
+        if (email.indexOf('.') - email.indexOf("@") < 2) {
+            document.getElementById("erremail").innerHTML = "Invalid email address";
+            return false;
+        }
+        if (password.length < 8) {
+            document.getElementById("errpwd").innerHTML = "Required 8 or more characters";
+            return false;
+        }
+        if (c !== d) {
+            document.getElementById("errpwd2").innerHTML = "Passwords do not match";
+            return false;
+        }
+    }
+    if (checkInputs() === true) {
+        res.json({ fullname, email, password, confirmPass });
+        //res.send(`${fullname}, ${email}, ${password}, ${confirmPass}`, res.status);
+    } else {
+        window.alert('fill up all info well');
+    }
+
+})
 
 //listening ports
 app.listen(port, () => {
