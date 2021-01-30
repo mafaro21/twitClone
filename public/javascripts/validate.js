@@ -1,19 +1,9 @@
 /* /*For Register Form */
 
-
 //checking values entered by user */}
 const submit_btn = document.getElementById('submit-btn');
 const formaa = document.getElementById('register');
 
-formaa.addEventListener('submit', (this) => {
-    this.preventDefault();
-})
-
-submit_btn.addEventListener('click', (this) => {
-    if (checkInput() === true)
-        formaa.setAttribute("onsubmit", "true");
-
-})
 
 function checkInputs() {
     const a = document.forms["register"]["name"].value.trim();
@@ -47,3 +37,9 @@ function checkInputs() {
         return false;
     }
 }
+
+submit_btn.addEventListener('click', (this) => {
+    if (checkInput() === true)
+        formaa.setAttribute("onsubmit", "true");
+
+})
