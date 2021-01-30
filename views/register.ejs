@@ -6,37 +6,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="stylesheets/style.css" />
 	<title>
-		<%= title %>
+		TwitClone: Create Account
 	</title>
 </head>
-
+<% if (errors) {   errors = JSON.parse(errors);  } %>
 <body>
-	<% errors[0] = '' %>  
-	<% errors[1] = '' %>  
-	<% errors[2] = '' %>  
-	<% errors[3] = '' %>  
-	<% errors[4] = ''%>  
 	
 	<h1 style="text-align: center">Create Account</h1>
-
-	<h3 class=""><%= errors[0]   %> </h3>
 	<form id="register" method="POST" action="/register"> 
 		<div class="form-group">
 			<input name="fullname" id="fullname" type="text" maxlength="20" placeholder="Your Name" required />
-			<small class="error-small"><%= errors[1] %> </small>
+			<p class="error-p"><%= errors[0] %></p>
 		</div>
 		<div class="form-group">
 			<input name="email" id="email" type="email" maxlength="30" placeholder="Email address" required />
-			<small class="error-small"><%= errors[2] %> </small>
+			<p class="error-p"><%= errors[1] %></p>
 		</div>
 		<div class="form-group">
-			<input name="password" id="password" type="password" maxlength="30" placeholder="Enter Password" pattern=".{8,}"
+			<input name="password" id="password" type="password" maxlength="20" placeholder="Enter Password" pattern=".{8,}"
 				title="Required 8 characters or more" required />
-				<small class="error-small"><%= errors[3] %> </small>
+				<p class="error-p"><%= errors[2] %> </p>
 		</div>
 		<div class="form-group">
-			<input name="confirmPass" id="confirmPass" type="password" maxlength="30" placeholder="Confirm Password" required />
-			<small class="error-small"><%= errors[4] %> </small>
+			<input name="confirmPass" id="confirmPass" type="password" maxlength="20" placeholder="Confirm Password" required />
+			<p class="error-p"><%= errors[3] %> </p>
 		</div>
 		<div>
 			<button id="submit-btn" class="btn btn-primary" type="submit">Register</button>
