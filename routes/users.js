@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-router.use((req, res, next) => {
-    next();
-    //pass this to error handler
-});
-
 
 /* handling GET requests  */
 router.get("/register", (req, res, next) => {
@@ -26,7 +21,7 @@ router.post("/register", (req, res, next) => {
         var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
-            errors.push("Name contains illegal characters ");
+            errors.push("Name contains illegal characters");
             YY = false
         }
         if (!patt.test(email)) {
@@ -53,5 +48,9 @@ router.post("/register", (req, res, next) => {
     }
 });
 
+router.use((req, res, next) => {
+    next();
+    //pass this to error handler
+});
 
 module.exports = router;
