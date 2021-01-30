@@ -24,7 +24,7 @@ app.get("/register", (req, res) => {
     res.render('register', { title: 'TwitClone : Register' });
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", (req, res, next) => {
     const fullname = req.body.fullname;
     const email = req.body.email;
     const password = req.body.password;
@@ -32,28 +32,37 @@ app.post("/register", (req, res) => {
     var errors = [];
 
     function checkInputs() {
+        var YY = true;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
         var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
-            errors.push("Name contains illegal characters ");           
+            errors.push("Name contains illegal characters ");
+            YY = false
         }
         if (!patt.test(email)) {
-            errors.push("Required 8 or more characters");            
+            errors.push("Required 8 or more characters");
+            YY = false;
         }
         if (password.length < 8) {
-            errors.push("Required 8 or more characters");           
+            errors.push("Required 8 or more characters");
+            YY = false;
         }
         if (password !== confirmPass) {
-            errors.push("Passwords do not match");         
-        }   
+            errors.push("Passwords do not match");
+            YY = false;
+        }
+        return YY;
     }
     if (checkInputs() === true ) {
          res.status(200).json(req.body);
-         console.json(req.body, res.sendStatus(200));
+         console.json(req.body);
     } else {
-       res.status(403).json(errors);
-       console.error(errors);
+        var err = new Error('Could not sign you up');
+        err.status = 422;
+        err.message = errors;
+        next(err);  
+        //console.error(errors);
     }
 })
 
