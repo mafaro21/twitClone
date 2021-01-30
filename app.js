@@ -58,11 +58,10 @@ app.post("/register", (req, res, next) => {
          res.status(200).json(req.body);
          console.json(req.body);
     } else {
-        var err = new Error('Could not sign you up');
-        err.status = 422;
-        err.message = errors;
-        next(err);  
-        //console.error(errors);
+        res.sendStatus(500).json(errors);
+        errors.unshift("Cannot register you. Try again");
+        res.render('/register', {errors: errors}, 422 );
+        console.error(errors);
     }
 })
 
