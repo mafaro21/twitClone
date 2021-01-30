@@ -22,7 +22,7 @@ app.use('/', indexRouter);
 app.use('/register', registerRouter);
 
 
-//listening ports
+//listening port
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
