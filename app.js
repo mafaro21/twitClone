@@ -32,33 +32,32 @@ app.post("/register", (req, res) => {
     var errors = [];
 
     function checkInputs() {
-        var YY = true;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
         var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
             errors.push("Name contains illegal characters ");
-            YY = false
+            return false;
         }
         if (!patt.test(email)) {
             errors.push("Required 8 or more characters");
-            YY = false;
+            return false;
         }
         if (password.length < 8) {
             errors.push("Required 8 or more characters");
-            YY = false;
+            return false;
         }
         if (password !== confirmPass) {
             errors.push("Passwords do not match");
-            YY = false;
+            return false;
         }
-        return YY;
+        return true;
     }
     if (checkInputs() === true ) {
-         res.status(200).json(req.body);
+         res.status(200).json(JSON.stringify(req.body));
          console.json(req.body, res.sendStatus(200));
     } else {
-       res.status(422).json(errors);
+       res.status(422).json(JSON.stringify(errors));
        console.error(errors);
     }
 })
