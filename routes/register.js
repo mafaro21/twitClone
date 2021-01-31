@@ -15,28 +15,28 @@ router.post("/", (req, res, next) => {
     const confirmPass = req.body.confirmPass;
     var errors = [];
 
-    function checkInputs() {
-        var YY = true;
+   function checkInputs() {
+        var OK = true;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
-        var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (reg.test(fullname)) {
             errors.push("Name contains illegal characters");
-            YY = false
+            OK = false;
         }
-        if (!patt.test(email)) {
+        if (!emailpatt.test(email)) {
             errors.push("Required 8 or more characters");
-            YY = false;
+            OK = false;
         }
         if (password.length < 8) {
             errors.push("Required 8 or more characters");
-            YY = false;
+            OK = false;
         }
         if (password !== confirmPass) {
             errors.push("Passwords do not match");
-            YY = false;
+            OK = false;
         }
-        return YY;
+        return OK;
     }
     if (checkInputs() === true) {
         res.status(200).json(req.body);
