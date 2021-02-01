@@ -25,7 +25,7 @@ router.post("/", (req, res, next) => {
             YY = false
         }
         if (!patt.test(email)) {
-            errors.push("Required 8 or more characters");
+            errors.push("Email has invalid format");
             YY = false;
         }
         if (password.length < 8) {
