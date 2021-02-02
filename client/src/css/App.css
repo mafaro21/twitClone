@@ -1,0 +1,79 @@
+/* color schemes */
+:root{
+  --accent: #ff6300;
+  --inputbk: rgba(65, 61, 61, 1);
+  --text: white;
+}
+
+.App {
+  background-color: #000;
+  text-align: center;
+  color: var(--text);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding:0;
+  margin:0;
+
+}
+
+.App-header {
+  display: flex;
+  
+
+}
+.r{
+  background-color: red;
+}
+a{
+  text-decoration: none;
+}
+
+/* homepage pictures */
+.hp-pic{
+  height: 100vh;
+  width: 50%;
+  float: left;
+}
+
+/* login buttons and inputs */
+.login-input{
+  padding: 26px;
+  border: 1px solid white;
+  border-radius: 20px;
+  height: 60px;
+  width: 200px;
+  background-color: var(--inputbk);
+  color:var(--text);
+}
+
+.login-submit{
+  height: 50px;
+  width: 100px;
+  background-color: var(--accent);
+  color: var(--text);
+}
+
+.login-input, .login-submit{
+  outline: none;
+}
+
+/* animation entrance */
+.animate-enter {
+  animation: animate-enter-frames 0.9s ease-in 0s 1 normal forwards;
+  display: block;
+  opacity: 0;
+  transform: translate(25px, 0);
+}
+@keyframes animate-enter-frames {
+  from {
+    opacity: 0;
+    transform: translate(25px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+
+
