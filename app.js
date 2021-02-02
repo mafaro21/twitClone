@@ -1,13 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 
 //import all routers
-const indexRouter = require('./routes/index');
-const toRegister = require('./routes/register');
+const indexRouter = require('./server/routes/index');
+const toRegister = require('./server/routes/register');
 
 
 // view engine setup
