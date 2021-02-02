@@ -18,13 +18,14 @@ function checkInputs() {
     document.getElementById("errpwd2").innerHTML = "";
 
     const reg = new RegExp('[^ a-zA-Z0-9_]');
+    var emailreg = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
     if (reg.test(a)) {
         document.getElementById("errname").innerHTML = "Name contains illegal characters ";
         return false;
     }
 
-    if (b.indexOf('.') - b.indexOf("@") < 2) {
+    if (emailreg.test(b)) {
         document.getElementById("erremail").innerHTML = "Invalid email address";
         return false;
     }
