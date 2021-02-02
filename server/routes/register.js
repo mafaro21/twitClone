@@ -15,37 +15,39 @@ router.post("/", (req, res, next) => {
     const confirmPass = req.body.confirmPass;
     var errors = [];
 
-    function checkInputs() {
-        var YY = true;
-        var reg = new RegExp('[^ a-zA-Z0-9_]');
-        var patt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+   
+        function checkInputs() {
+            var OK = true;
+            var reg = new RegExp('[^ a-zA-Z0-9_]');
+            var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-        if (reg.test(fullname)) {
-            errors.push("Name contains illegal characters");
-            YY = false
+            if (reg.test(fullname)) {
+                errors.push("Name contains illegal characters");
+                OK = false;
+            }
+            if (!emailpatt.test(email)) {
+                errors.push("Required 8 or more characters");
+                OK = false;
+            }
+            if (password.length < 8) {
+                errors.push("Required 8 or more characters");
+                OK = false;
+            }
+            if (password !== confirmPass) {
+                errors.push("Passwords do not match");
+                OK = false;
+            }
+            return OK;
         }
-        if (!patt.test(email)) {
-            errors.push("Email has invalid format");
-            YY = false;
+        if (checkInputs() === true) {
+            res.status(201).send( {"user": req.body} );
+           // res.send( {'user:' : req.body});
+            console.log(JSON.parse(req.body.toString()));
+        } else {
+           res.status(422);
+           res.render('register', { errors: JSON.stringify(errors) });
         }
-        if (password.length < 8) {
-            errors.push("Required 8 or more characters");
-            YY = false;
-        }
-        if (password !== confirmPass) {
-            errors.push("Passwords do not match");
-            YY = false;
-        }
-        return YY;
-    }
-    if (checkInputs() === true) {
-        res.status(200).json(req.body);
-        console.json(req.body);
-    } else {
-        res.status(422);
-        res.render('register', { errors: JSON.stringify(errors) });
-        console.error(errors);
-    }
+    
 });
 
 
