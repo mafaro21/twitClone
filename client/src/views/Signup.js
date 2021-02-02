@@ -1,6 +1,6 @@
 import React from 'react';
-import './css/App.css';
-import './css/Signup.css';
+import '../css/App.css';
+import '../css/Signup.css';
 import 'tachyons';
 
 
@@ -13,32 +13,38 @@ function Signup() {
                     <h4>Create an Account</h4>
                     <form className="pa4">
                         <div>
-                            <input type="email" placeholder="Email" class="login-input ma3" required />
+                            <input name="fullname" id="fullname" type="text" class="login-input ma3" maxlength="20" placeholder="Your Name" required />
+                            <p class="error-p"></p>
                         </div>
 
                         <div>
-                            <input type="email" placeholder="Email" class="login-input ma3" required />
+                            <input name="email" id="email" type="email" class="login-input ma3" maxlength="30" placeholder="Email address" required />
+                            <p class="error-p"></p>
                         </div>
 
                         <div>
-                            <input type="email" placeholder="Email" class="login-input ma3" required />
+                            <input name="password" id="password" type="password" class="login-input ma3" maxlength="20" placeholder="Enter Password" pattern=".{8,}"
+                                title="Required 8 characters or more" required />
+                            <p class="error-p"></p>
                         </div>
 
-                        <div>
-                            <input type="email" placeholder="Email" class="login-input ma3" required />
+                        <div >
+                            <input name="confirmPass" id="confirmPass" type="password" class="login-input ma3" maxlength="20" placeholder="Confirm Password" required />
+                            <p class="error-p"></p>
                         </div>
 
-                        <button type="submit" class="br-pill login-submit grow mt2"> Sign Up</button>
+                        <button id="submit-btn" class="br-pill login-submit grow mt2" type="submit">Sign Up</button>
                         {/* axios here */}
 
                     </form>
 
                 </div>
             </div>
-        </div>
+        </div >
 
     );
 }
 export default Signup;
 
 //style={{ backgroundImage: `url(${charisse})` }}  
+

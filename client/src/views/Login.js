@@ -1,7 +1,7 @@
 import React from 'react';
-import './css/App.css';
-import clarisse from './images/clarisse-meyer.jpg';
-import derick from './images/derick-anies.jpg';
+import '../css/App.css';
+import clarisse from '../images/clarisse-meyer.jpg';
+import derick from '../images/derick-anies.jpg';
 import 'tachyons';
 import { Link } from 'react-router-dom';
 

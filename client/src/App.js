@@ -1,10 +1,10 @@
 import React from 'react';
 import './css/App.css';
-import Footer from './components/Footer';
+import Footer from './Footer';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
-import Header from './components/Header';
+import Header from './Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
