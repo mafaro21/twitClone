@@ -1,5 +1,4 @@
 const express = require('express');
-const { reset } = require('nodemon');
 const router = express.Router();
 
 //FOR REGISTER requests ONLY:: i.e.  '/register'
