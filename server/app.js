@@ -6,8 +6,8 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 //import all routers
-const indexRouter = require('./server/routes/index');
-const toRegister = require('./server/routes/register');
+const indexRouter = require('./routes/index');
+const toRegister = require('./routes/register');
 
 
 // view engine setup
