@@ -26,14 +26,14 @@ function Signup() {
       .then((res) => {
         console.log(res.data);
         let x = res.data.success;
-        if (x === true) alert("Sign up successful!");
+        if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
       })
       .catch((error) => {
-        console.error(error.response.data);
+        console.error(error.response.data); /* display the errors */
       });
 
-    //  this.setState({ name: '', email: '' })
   };
+
   return (
     <div className="App fgh ">
       <div className="flex justify-center">
