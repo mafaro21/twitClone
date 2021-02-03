@@ -107,6 +107,7 @@ function Signup() {
               Sign Up
             </button>
           </form>
+          {/* ---- END OF FORM --- */}
         </div>
       </div>
     </div>
