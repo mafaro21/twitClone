@@ -26,8 +26,7 @@ function Signup() {
       .then((res) => {
         console.log(res.data);
         let x = res.data.success;
-        if(x === true) alert("Sign up successful!");
-        else alert("Sign up failed. See console (F12) for details");
+        if (x === true) alert("Sign up successful!");
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -39,7 +38,7 @@ function Signup() {
     <div className="App fgh ">
       <div className="flex justify-center">
         <div className="form ma6 br4 animate-enter">
-          <h4>Create an Account</h4>
+          <h3>Create an Account</h3>
           <form className="pa4" onSubmit={(e) => handleSubmit(e)}>
             <div>
               <input
