@@ -1,12 +1,10 @@
-﻿TWITTER CLONE :
-1stED: Jan 27 2021
+﻿TWIT CLONE: 
 last update: 2021-02-04
 --
 
-- -
 App Name:... twitClone?
 
-## PLAN OUTLINE:
+## TO-DO LIST:
 
 
 - [x] Sketch/Design the UI/UX of each page
