@@ -40,12 +40,12 @@ router.post("/", (req, res, next) => {
             return OK;
         }
         if (checkInputs() === true) {
-            res.status(201).send( {"user": req.body} );
-           // res.send( {'user:' : req.body});
-            console.log(JSON.parse(req.body.toString()));
+            res.status(201).send( [{"user": req.body}, {"success": true}] );
+            
+           // console.log(JSON.parse(req.body.toString()));
         } else {
-           res.status(422);
-           res.render('register', { errors: JSON.stringify(errors) });
+           res.sendStatus(422);
+          // res.render('register', { errors: JSON.stringify(errors) });
         }
     
 });
