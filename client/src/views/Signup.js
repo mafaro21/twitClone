@@ -25,9 +25,12 @@ function Signup() {
       .post("/register", userObject)
       .then((res) => {
         console.log(res.data);
+        let x = res.data.success;
+        if(x === true) alert("Sign up successful!");
+        else alert("Sign up failed. See console (F12) for details");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error.response.data);
       });
 
     //  this.setState({ name: '', email: '' })
@@ -45,7 +48,7 @@ function Signup() {
                 value={fullname}
                 onChange={(e) => setfullName(e.target.value)}
                 className="login-input ma3"
-                maxlength="20"
+                maxLength="20"
                 placeholder="Your Name"
                 required
               />
@@ -59,7 +62,7 @@ function Signup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="login-input ma3"
-                maxlength="30"
+                maxLength="30"
                 placeholder="Email address"
                 required
               />
@@ -73,7 +76,7 @@ function Signup() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="login-input ma3"
-                maxlength="20"
+                maxLength="20"
                 placeholder="Enter Password"
                 pattern=".{8,}"
                 title="Required 8 characters or more"
@@ -89,7 +92,7 @@ function Signup() {
                 value={confirmPass}
                 onChange={(e) => setconfirmPass(e.target.value)}
                 className="login-input ma3"
-                maxlength="20"
+                maxLength="20"
                 placeholder="Confirm Password"
                 required
               />

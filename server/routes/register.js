@@ -26,7 +26,7 @@ router.post("/", (req, res, next) => {
                 OK = false;
             }
             if (!emailpatt.test(email)) {
-                errors.push("Required 8 or more characters");
+                errors.push("Email is invalid.");
                 OK = false;
             }
             if (password.length < 8) {
@@ -40,11 +40,11 @@ router.post("/", (req, res, next) => {
             return OK;
         }
         if (checkInputs() === true) {
-            res.status(201).send( [{"user": req.body}, {"success": true}] );
+            res.status(201).send( {"user": req.body, "success": true} );
             
            // console.log(JSON.parse(req.body.toString()));
         } else {
-           res.sendStatus(422);
+           res.status(422).send({"errors" : errors , "success": false});
           // res.render('register', { errors: JSON.stringify(errors) });
         }
     
