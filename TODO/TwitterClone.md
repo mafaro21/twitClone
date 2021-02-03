@@ -1,16 +1,18 @@
 ﻿TWITTER CLONE :
 1stED: Jan 27 2021
+last update: 2021-02-04
 --
 
 - -
-Suggest App Name:... twitClone?
+App Name:... twitClone?
 
-PLAN OUTLINE:
+## PLAN OUTLINE:
 
-^^ Sketch/Design the UI/UX of each page
-^^ Make database model
-- Make the frontend.*** 
-- Connect barebones frontend with backend
+
+- [x] Sketch/Design the UI/UX of each page
+- [x] Design database model
+- [x] Make the frontend.  (_continuous_)
+- [x] Connect barebones frontend with backend
 - add User auth: username[30] :no spaces, email, password.
 - Add Google Captcha in Register (free).
 - Add Chat (DM) feature
