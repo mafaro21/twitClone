@@ -30,9 +30,8 @@ function Signup() {
       })
       .catch((error) => {
         console.error(error.response.data); 
-        alert("Sign up failed. Press F12 for details") /* display the errors properly */
+        alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
       });
-
   };
 
   return (
@@ -40,6 +39,7 @@ function Signup() {
       <div className="flex justify-center">
         <div className="form ma6 br4 animate-enter">
           <h3>Create an Account</h3>
+          {/* ---- START OF FORM --- */}
           <form className="pa4" onSubmit={(e) => handleSubmit(e)}>
             <div>
               <input
@@ -106,7 +106,6 @@ function Signup() {
             >
               Sign Up
             </button>
-            {/* axios here */}
           </form>
         </div>
       </div>
