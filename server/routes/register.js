@@ -41,11 +41,9 @@ router.post("/", (req, res, next) => {
         }
         if (checkInputs() === true) {
             res.status(201).send( {"user": req.body, "success": true} );
-            console.log({"user": req.body, "success": true});
 
         } else {
             res.status(422).send({"errors" : errors , "success": false});
-            console.error(errors);
         }
     
 });

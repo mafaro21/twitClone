@@ -8,7 +8,7 @@ function Header() {
     return (
         <header className="App-header">
             <nav>
-                <a>hello</a>
+                <p>hello</p>
             </nav>
         </header>
     );
