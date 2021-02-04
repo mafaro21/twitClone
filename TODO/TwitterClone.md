@@ -1,16 +1,19 @@
-﻿TWITTER CLONE :
-1stED: Jan 27 2021
+﻿TWIT CLONE: 
+last update: 2021-02-04
 --
 
-- -
-Suggest App Name:... twitClone?
+App Name:... twitClone?
 
-PLAN OUTLINE:
+## TO-DO LIST:
 
-^^ Sketch/Design the UI/UX of each page
-^^ Make database model
-- Make the frontend.*** 
-- Connect barebones frontend with backend
+
+- [x] Design the login and register pages
+- [x] Design database model
+- [x] Make the frontend.  (_continuous_)
+- [x] Connect frontend with backend
+- [ ] Validating user input in register 
+- [ ] Registering users to database
+- [ ] Logging in users.
 - add User auth: username[30] :no spaces, email, password.
 - Add Google Captcha in Register (free).
 - Add Chat (DM) feature
@@ -24,17 +27,13 @@ PLAN OUTLINE:
 
 ## HASHTAGS ## (tough^)
 - Add auto hashtags feature. (Maybe we can limit hashtags to 5 MAX per tweet - auto) (live as typing)
-
 - record the hashtags on the tweet in the DB (in an array). [ ]
 - enable search by clicking on the hashtag , check the DB’s***{OmG!!!}
 
 
 ## TAGGING ##
 
-- enable tagging by adding an @before a name when tweeting:: (DAMN:: we may need a faster DB engine to quickly search + display suggestions results as you type)
-
-- if @tagged name not exists, it should NOT auto- generate link. Just appears as plain text
-
+- Enable tagging by adding an @before a name when tweeting:: (DAMN:: we may need a faster DB engine to quickly search + display suggestions results as you type)
+- If @tagged name not exists, it should NOT auto- generate link. Just appears as plain text
 - ELSE, if exists, allow getting the person profile by clicking the @tagged name.
-
 - (maybe later) allow PROFILE preview by hovering mouse on @tagged name!! (Faster DB needed)
