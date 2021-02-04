@@ -14,6 +14,11 @@ App Name:... twitClone?
 - [x] Validating user input in register 
 - [ ] Registering users to database
 - [ ] Logging in users.
+
+- [ ] Regex.
+- [ ] UI Errors.
+- [ ] 404 Page.
+
 - add User auth: username[30] :no spaces, email, password.
 - Add Google Captcha in Register (free).
 - Add Chat (DM) feature
