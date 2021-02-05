@@ -2,8 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const port = process.env.PORT || 5000;
+const { MongoClient } = require('mongodb');
 
 const app = express();
+const uri = process.env.MONGO_URL;
+
 
 //import all routers
 const indexRouter = require('./routes/index');
@@ -27,6 +30,20 @@ app.use('/register', toRegister);
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
+
+//connect to Mongodb
+MongoClient.connect(uri, {
+    useUnifiedTopology: true,  
+    useNewUrlParser: true 
+}).then(client =>{
+    const db = client.db('twitclone');
+    console.log(`connected to database ${db.databaseName}`);
+    /* do whatever operations here to DB, then finally close: */
+    client.close();
+}).catch( err =>{
+    console.error(err);
+});
+    
 
 // if visiting non-existing page, serve error 404
 app.use((req, res, next) => {

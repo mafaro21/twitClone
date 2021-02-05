@@ -115,4 +115,3 @@ function Signup() {
 }
 export default Signup;
 
-//style={{ backgroundImage: `url(${charisse})` }}
