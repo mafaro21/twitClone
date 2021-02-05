@@ -3,9 +3,9 @@ const express = require("express");
 const path = require("path");
 const port = process.env.PORT || 5000;
 const { MongoClient } = require('mongodb');
+const uri = process.env.MONGO_URL;
 
 const app = express();
-const uri = process.env.MONGO_URL;
 
 
 //import all routers
