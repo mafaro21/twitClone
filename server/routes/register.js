@@ -57,7 +57,7 @@ router.post("/", (req, res, next) => {
             const users = client.db('twitclone').collection("users");
             users.insertOne(userObject, (error, result) => {
                 // handle ERRORS WELL!!!!
-                if (error) throw new Error(err); // <------------ handle ERRORS PROPERLY w/o CRASHING SERVER!!!!
+                if (error) throw error; // <------------ handle ERRORS PROPERLY w/o CRASHING SERVER!!!!
                 console.log(result.ops);
                 res.status(201).send({ "user": result.ops[0], "success": true });
                 client.close();
