@@ -21,7 +21,6 @@ function Signup() {
             password: password,
             confirmPass: confirmPass,
         };
-
         axios
             .post("/register", userObject)
             .then((res) => {
