@@ -37,7 +37,7 @@ function Login() {
 
                         <h3 className="pt6 animate-enter">Join TwitClone Today...</h3>
 
-                        <Link to="/signup" ><button classname="br-pill login-submit grow " >Sign Up</button> </Link>
+                        <Link to="/signup" ><button classname="br-pill login-submit grow" >Sign Up</button> </Link>
 
 
 
