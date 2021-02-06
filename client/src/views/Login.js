@@ -1,58 +1,42 @@
 import React from 'react';
 import '../css/App.css';
-import clarisse from '../images/clarisse-meyer.jpg';
-import derick from '../images/derick-anies.jpg';
-import 'tachyons';
+import '../css/custom.scss';
+// import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
 
 function Login() {
     return (
-        <div className="App">
-            <div className="App-header">
-                <div className="content-left fl w-50">
-                    <div>
-                        <img src={clarisse} className="hp-pic mw-100" alt="leftPic" />
-                    </div>
-                    <div>
-                        <img src={derick} className="hp-pic mw-100" alt="rightPic" />
-                    </div>
-                </div>
+        <div className="general fghh d-flex">
+            <div className="container mt-5">
 
-                <div className="fl w-50">
-                    <div className=" ma6 ">
+                <div className="container mt-5 p-5 form1">
+                    <h2>LOGO HERE</h2>
+                    <form className="mt-2">
 
-                        <form>
-                            <div>
-                                <input type="email" placeholder="Email" class="login-input ma3" required />
-                                <input type="password" placeholder="Password" class="login-input" required />
-                            </div>
+                        <div className="">
+                            <input type="email" placeholder="Email" class="login-input m-2" required />
+                            <input type="password" placeholder="Password" class="login-input" required />
+                        </div>
 
-                            <input type="submit" value="Log In" class="br-pill login-submit grow " />
+                        <input type="submit" value="Log In" class="btn login-submit btn-outline-primary rounded-pill mt-4" />
 
-                        </form>
+                    </form>
 
-                        <h2 className="animate-enter">See what’s happening around <br />
+                    <h3 className="animate-enter mt-5">See what’s happening around <br />
                                 the world
-                            </h2>
+                            </h3>
 
-                        <h3 className="pt6 animate-enter">Join TwitClone Today...</h3>
+                    <h4 className="animate-enter mt-5">Join TwitClone Today...</h4>
 
-                        <Link to="/signup" ><button class="br-pill login-submit grow " >Sign Up</button> </Link>
-
-
-
-                    </div>
-
+                    <Link to="/signup" ><button class="btn login-submit btn-outline-primary rounded-pill mt-1" >Sign Up</button> </Link>
 
 
 
                 </div>
-
-
 
             </div>
 
-
+            {/* </div> */}
 
         </div >
     );
