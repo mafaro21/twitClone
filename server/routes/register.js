@@ -16,9 +16,9 @@ router.post("/", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
-    var errors = [];
+    var errors = []; // input errors
 
-    
+
     function checkInputs() {
         var OK = true;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
