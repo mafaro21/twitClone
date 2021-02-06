@@ -1,6 +1,6 @@
 /* color schemes */
 :root{
-  --accent: #95a8ba;
+  --accent: #F29C50;
   --darkaccent: #508689;
   --inputbk: #bc856f;
   --text: #fbfafa;
@@ -24,24 +24,14 @@
   
 }
 
-.fghh{
-    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/mihai-surdu-Ma3FsU1YuM4-unsplash.jpg");
-    /* min-width: 100vh; */
-    min-height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: cover;
-    
-}
+
 
 .App-header {
   display: flex;
   
 
 }
-.r{
-  background-color: red;
-}
+
 a{
   text-decoration: none;
 }
@@ -60,13 +50,27 @@ a{
     border-radius: 26px;
 }
 
+button{
+  outline: none;
+}
+
+.fghh{
+    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/mihai-surdu-Ma3FsU1YuM4-unsplash.jpg");
+    /* min-width: 100vh; */
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: cover;
+    
+}
+
 .login-input{
   padding: 26px;
   border: 1px solid var(--text);
   border-radius: 20px;
   height: 60px;
   width: 30%;
-  background-color: var(--darkaccent);
+  background-color: var(--background);
   color:var(--text);
   outline: none;
 }
@@ -77,7 +81,7 @@ a{
   border-radius: 20px;
   height: 60px;
   width: 100%;
-  background-color: var(--darkaccent);
+  background-color: var(--background);
   color:var(--text);
   outline: none;
 }
@@ -90,6 +94,7 @@ a{
   transition: all .3s ease-in-out;
   transform: translateZ(0);
   border: 2px solid var(--text);
+  outline: none;
 }
 
 .login-submit:hover{

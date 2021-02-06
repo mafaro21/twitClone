@@ -28,7 +28,7 @@ function Login() {
 
                     <h4 className="animate-enter mt-5">Join TwitClone Today...</h4>
 
-                    <Link to="/signup" ><button class="btn login-submit btn-outline-primary rounded-pill mt-1" >Sign Up</button> </Link>
+                    <Link to="/signup" ><input value="Sign Up" class="btn login-submit btn-outline-primary rounded-pill mt-1" /></Link>
 
 
 
@@ -36,7 +36,6 @@ function Login() {
 
             </div>
 
-            {/* </div> */}
 
         </div >
     );
