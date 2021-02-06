@@ -1,19 +1,37 @@
 /* color schemes */
 :root{
-  --accent: #ff6300;
-  --inputbk: rgba(65, 61, 61, 1);
-  --text: white;
+  --accent: #95a8ba;
+  --darkaccent: #508689;
+  --inputbk: #bc856f;
+  --text: #fbfafa;
+  --background: #2e2b3b; 
+
+
 }
 
 .App {
-  background-color: #000;
+  height: 100vh;
+  width: 100vw;
+  
+
+}
+
+.general{
+  background-color: var(--background);
   text-align: center;
   color: var(--text);
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  padding:0;
-  margin:0;
+  
+}
 
+.fghh{
+    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/mihai-surdu-Ma3FsU1YuM4-unsplash.jpg");
+    /* min-width: 100vh; */
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: cover;
+    
 }
 
 .App-header {
@@ -30,20 +48,38 @@ a{
 
 /* homepage pictures */
 .hp-pic{
-  height: 100vh;
-  width: 50%;
+  height: 99vh;
+  width: 25%;
   float: left;
 }
 
-/* login buttons and inputs */
+/* login/signup forms */
+.form1{
+    /* background-color: var(--background); */
+    width: 90%;
+    border-radius: 26px;
+}
+
 .login-input{
   padding: 26px;
-  border: 1px solid white;
+  border: 1px solid var(--text);
   border-radius: 20px;
   height: 60px;
-  width: 200px;
-  background-color: var(--inputbk);
+  width: 30%;
+  background-color: var(--darkaccent);
   color:var(--text);
+  outline: none;
+}
+
+.signup-input{
+  padding: 26px;
+  border: 1px solid var(--text);
+  border-radius: 20px;
+  height: 60px;
+  width: 100%;
+  background-color: var(--darkaccent);
+  color:var(--text);
+  outline: none;
 }
 
 .login-submit{
@@ -51,6 +87,13 @@ a{
   width: 100px;
   background-color: var(--accent);
   color: var(--text);
+  transition: all .3s ease-in-out;
+  transform: translateZ(0);
+  border: 2px solid var(--text);
+}
+
+.login-submit:hover{
+  transform: scale(1.1);
 }
 
 .login-input, .login-submit{

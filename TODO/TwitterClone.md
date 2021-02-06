@@ -11,9 +11,14 @@ App Name:... twitClone?
 - [x] Design database model
 - [x] Make the frontend.  (_continuous_)
 - [x] Connect frontend with backend
-- [ ] Validating user input in register 
+- [x] Validating user input in register 
 - [ ] Registering users to database
 - [ ] Logging in users.
+
+- [ ] Regex.
+- [ ] UI Errors.
+- [ ] 404 Page.
+
 - add User auth: username[30] :no spaces, email, password.
 - Add Google Captcha in Register (free).
 - Add Chat (DM) feature

@@ -1,13 +1,28 @@
 :root{
-  --accent: #ff6300;
-  --inputbk: rgba(65, 61, 61, 1);
-  --text: white;
-  --background: black;
+ 
+
+  /* --accent: #dfbb29;
+  --darkaccent: #ba537f;
+  --inputbk: #9ea8b0;
+  --text: #f7f6f3;
+  --background: #2f486e; */
+
+  --accent: #95a8ba;
+  --darkaccent: #508689;
+  --inputbk: #bc856f;
+  --text: #fbfafa;
+  --background: #2e2b3b; 
+
+   /* --accent: #f15a45;
+  --darkaccent: #b99592;
+  --inputbk: #a3a4ab;
+  --text: #f8f8f5;
+  --background: #575162; */
 }
 
 .fgh{
-    background: url("../images/charisse-kenion.jpg");
-    min-width: 100vh;
+    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/charisse-kenion.jpg");
+    /* min-width: 100vh; */
     min-height: 100vh;
     background-size: cover;
     background-repeat: no-repeat;
@@ -21,4 +36,5 @@
 .form{
     background-color: var(--background);
     width: 50%;
+    border-radius: 26px;
 }
