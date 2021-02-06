@@ -23,11 +23,11 @@ function Login() {
 
                         <form>
                             <div>
-                                <input type="email" placeholder="Email" classname="login-input ma3" required />
-                                <input type="password" placeholder="Password" classname="login-input" required />
+                                <input type="email" placeholder="Email" class="login-input ma3" required />
+                                <input type="password" placeholder="Password" class="login-input" required />
                             </div>
 
-                            <input type="submit" value="Log In" classname="br-pill login-submit grow " />
+                            <input type="submit" value="Log In" class="br-pill login-submit grow " />
 
                         </form>
 
@@ -37,7 +37,7 @@ function Login() {
 
                         <h3 className="pt6 animate-enter">Join TwitClone Today...</h3>
 
-                        <Link to="/signup" ><button classname="br-pill login-submit grow" >Sign Up</button> </Link>
+                        <Link to="/signup" ><button class="br-pill login-submit grow " >Sign Up</button> </Link>
 
 
 
