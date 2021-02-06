@@ -54,22 +54,24 @@ router.post("/", (req, res, next) => {
             useUnifiedTopology: true,
             useNewUrlParser: true
         }).then(client => {
-            const users = client.db('twitclone').collection("users");
+            const users = client.db("twitclone").collection("users");
             users.insertOne(userObject, (error, result) => {
-                // handle ERRORS WELL!!!!
-                if (error) throw error; // <------------ handle ERRORS PROPERLY w/o CRASHING SERVER!!!!
-                console.log(result.ops);
-                res.status(201).send({ "user": result.ops[0], "success": true });
+                if (error) {
+                    console.error(error);
+                    res.status(422).send({ "error": error.errmsg, "success": false } );
+                } else {
+                    console.log(result.ops);
+                    res.status(201).send({ "user": result.ops[0], "success": true })
+                }
                 client.close();
-            });
+            })
         }).catch(err => {
-            res.sendStatus(500);
+            res.sendStatus(500)
             console.error(err);
         });
     } else {
-        res.status(422).send({ "errors": errors, "success": false });
+        res.status(422).send({ "error": errors, "success": false });
     }
-
 });
 
 
