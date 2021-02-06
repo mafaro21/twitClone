@@ -61,7 +61,7 @@ router.post("/", (req, res, next) => {
                     res.status(422).send({ "message":  error.errmsg, "success": false} );
                 } else {
                     console.log(result.ops);
-                    res.status(201).send({ "user": result.ops[0], "success": true })
+                    res.status(201).send({ "userAdded": result.ops[0], "success": true })
                 }
                 client.close();
             })
