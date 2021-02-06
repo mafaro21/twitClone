@@ -55,10 +55,11 @@ router.post("/", (req, res, next) => {
             useNewUrlParser: true
         }).then(client => {
             const users = client.db("twitclone").collection("users");
-            users.insertOne(userObject, (error, result) => {
+            users.insertOne("userObject", (error, result) => {
                 if (error) {
                     console.error(error);
-                    res.status(422).send({ "error": error.errmsg, "success": false } );
+                    next(new Error(error));
+                   // res.status(422).send({ "error": error.errmsg, "success": false } );
                 } else {
                     console.log(result.ops);
                     res.status(201).send({ "user": result.ops[0], "success": true })
@@ -66,7 +67,8 @@ router.post("/", (req, res, next) => {
                 client.close();
             })
         }).catch(err => {
-            res.sendStatus(500)
+            // res.sendStatus(500);
+            next(new Error(err));
             console.error(err);
         });
     } else {
