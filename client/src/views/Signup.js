@@ -29,7 +29,7 @@ function Signup() {
         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
       })
       .catch((error) => {
-        console.error(error.response.data); 
+        console.error(error.response.data); /*  KILL THIS LATER... */
         alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
       });
   };
