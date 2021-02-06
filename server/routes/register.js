@@ -58,7 +58,7 @@ router.post("/", (req, res, next) => {
             users.insertOne(userObject, (error, result) => {
                 if (error) {
                     console.error(error);
-                    res.status(422).send({ "error":  error.errmsg, "success": true} );
+                    res.status(422).send({ "message":  error.errmsg, "success": false} );
                 } else {
                     console.log(result.ops);
                     res.status(201).send({ "user": result.ops[0], "success": true })
@@ -70,7 +70,7 @@ router.post("/", (req, res, next) => {
             console.error(err);
         });
     } else {
-        res.status(422).send({ "error": errors, "success": false });
+        res.status(422).send({ "message": errors, "success": false });
     }
 });
 
