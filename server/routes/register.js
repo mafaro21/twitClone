@@ -58,7 +58,7 @@ router.post("/", (req, res, next) => {
             users.insertOne(userObject, (error, result) => {
                 if (error) {
                     console.error(error);
-                    res.status(422).send({ "message":  error.errmsg, "success": false} );
+                    res.status(422).send({ "message":  error.message, "success": false} );
                 } else {
                     console.log(result.ops);
                     res.status(201).send({ "userAdded": result.ops[0], "success": true })
