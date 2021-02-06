@@ -34,7 +34,26 @@ function Signup() {
                 alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
             });
     };
-
+    return (
+      <div className="general fgh d-flex">
+          <div className="container mt-5">
+              <div className="form animate-enter container mt-5 p-5" >
+                  <h3>Create an Account</h3>
+                  {/* ---- START OF FORM --- */}
+                  <form className="container" onSubmit={(e) => handleSubmit(e)}>
+                      <div>
+                          <input
+                              name="fullname"
+                              type="text"
+                              value={fullname}
+                              onChange={(e) => setfullName(e.target.value)}
+                              className="signup-input mt-4"
+                              maxLength="20"
+                              placeholder="Your Name"
+                              required
+                          />
+                          <p className="error"></p>
+                      </div>
                         <div>
                             <input
                                 name="email"
