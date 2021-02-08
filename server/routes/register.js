@@ -61,7 +61,7 @@ router.post("/", (req, res, next) => {
                     res.status(422).send({ "message":  error.message, "success": false} );
                 } else {
                     console.log(result.ops);
-                    res.status(201).send({ "userAdded": result.ops[0], "success": true })
+                    res.status(201).send({ "userAdded": result.insertedCount, "success": true })
                 }
                 client.close();
             })
@@ -70,7 +70,7 @@ router.post("/", (req, res, next) => {
             console.error(err);
         });
     } else {
-        res.status(422).send({ "message": errors, "success": false });
+        res.status(422).send({ "error": errors, "success": false });
     }
 });
 
