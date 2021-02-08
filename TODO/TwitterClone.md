@@ -12,12 +12,12 @@ App Name:... twitClone?
 - [x] Make the frontend.  (_continuous_)
 - [x] Connect frontend with backend
 - [x] Validating user input in register 
-- [ ] Registering users to database
+- [x] Registering users to database
 - [ ] Logging in users.
 
-- [ ] Regex.
-- [ ] UI Errors.
-- [ ] 404 Page.
+- [x] Regex.
+- [x] UI Errors.
+- [x] 404 Page.
 
 - add User auth: username[30] :no spaces, email, password.
 - Add Google Captcha in Register (free).
