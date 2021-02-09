@@ -43,9 +43,10 @@ router.post("/", (req, res, next) => {
         return OK;
     }
     if (checkInputs() === true) {
+        let randnum = Math.floor(Math.random() * 100 - 10);
         const userObject = {
             fullname: fullname,
-            username: email.split('@')[0],
+            username: email.split('@')[0] + randnum,
             email: email,
             password: password,
             datejoined: new Date(),
@@ -61,7 +62,7 @@ router.post("/", (req, res, next) => {
                     res.status(422).send({ "message":  error.message, "success": false} );
                 } else {
                     console.log(result.ops);
-                    res.status(201).send({ "userAdded": result.ops[0], "success": true })
+                    res.status(201).send({ "userAdded": result.insertedCount, "success": true });
                 }
                 client.close();
             })
@@ -70,9 +71,8 @@ router.post("/", (req, res, next) => {
             console.error(err);
         });
     } else {
-        res.status(422).send({ "message": errors, "success": false });
-    }
+        res.status(422).send({ "error": errors, "success": false });
+    } 
 });
-
 
 module.exports = router;
