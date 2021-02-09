@@ -14,13 +14,14 @@ App Name:... twitClone?
 - [x] Validating user input in register 
 - [x] Registering users to database
 - [ ] Logging in users.
+- [ ] Sessions
 
 - [x] Regex.
 - [x] UI Errors.
 - [x] 404 Page.
 
-- add User auth: username[30] :no spaces, email, password.
-- Add Google Captcha in Register (free).
+- [x] add User auth: username[30] :no spaces, email, password.
+- [ ] Add Google Captcha in Register (free).
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
 - Add dark mode to each page.
