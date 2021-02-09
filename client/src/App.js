@@ -4,16 +4,15 @@ import './css/App.css';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
-// import Header from './Header';
+import Navbar from './Navbar';
 import NotFound404 from './NotFound404';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
 
 function App() {
   return (
     <Router>
       <div className="App">
-        {/* <Header /> */}
+        {window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}
         <Switch>
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
