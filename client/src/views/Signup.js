@@ -24,17 +24,25 @@ function Signup() {
         e.preventDefault();
         const isValid = formValidation(); /* <--- react validation */
         if (isValid) {
-            // axios
-            //     .post("/register", userObject)      /* <---- CURRENT ERROR IS RIGHT HERE*/
-            //     .then((res) => {
-            //         console.log(res.data);
-            //         let x = res.data.success;
-            //         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
-            //     })
-            //     .catch((error) => {
-            //         console.error(error.response.data);
-            //         alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
-            //     });
+
+            const userObject = {
+                fullname: fullname,
+                email: email,
+                password: password,
+                confirmPass: confirmPass,
+            };
+
+            axios
+                .post("/register", userObject)
+                .then((res) => {
+                    console.log(res.data);
+                    let x = res.data.success;
+                    if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
+                })
+                .catch((error) => {
+                    console.error(error.response.data);
+                    alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                });
         }
     }
 
@@ -47,6 +55,7 @@ function Signup() {
         const passwordErr = {};
         const confirmpasswordErr = {};
         var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var reg = new RegExp('[^ a-zA-Z0-9_]');
 
         let isValid = true;
 
@@ -71,6 +80,11 @@ function Signup() {
             isValid = false;
         }
 
+        if (reg.test(fullname)) {
+            fullnameErr.fullnameinvalid = "Name contains illegal characters";
+            isValid = false;
+        }
+
         setfullNameErr(fullnameErr);
         setemailErr(emailErr);
         setpasswordErr(passwordErr);
@@ -79,12 +93,7 @@ function Signup() {
 
     }
 
-    // const userObject = {
-    //     fullname: fullname,
-    //     email: email,
-    //     password: password,
-    //     confirmPass: confirmPass,
-    // };
+
 
 
 

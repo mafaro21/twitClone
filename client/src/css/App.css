@@ -7,7 +7,7 @@
 
 
 }
-
+/* main */
 .App {
   height: 100vh;
   width: 100vw;
@@ -65,7 +65,7 @@ a:hover, .link:hover{
   float: left;
 }
 
-/* login/signup forms */
+/* inputs/ submits/ buttons*/
 .form1{
     /* background-color: var(--background); */
     width: 90%;
@@ -92,6 +92,17 @@ button{
   border-radius: 20px;
   height: 60px;
   width: 30%;
+  background-color: var(--background);
+  color:var(--text);
+  outline: none;
+}
+
+.search-input{
+  padding: 18px;
+  border: 1px solid var(--text);
+  border-radius: 20px;
+  height: 1px;
+  width: 330px;
   background-color: var(--background);
   color:var(--text);
   outline: none;
@@ -145,5 +156,7 @@ button{
   }
 }
 
-
+.search{
+  width:40%;
+}
 
