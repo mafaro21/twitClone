@@ -43,9 +43,10 @@ router.post("/", (req, res, next) => {
         return OK;
     }
     if (checkInputs() === true) {
+        let randnum = Math.floor(Math.random() * 100 - 10);
         const userObject = {
             fullname: fullname,
-            username: email.split('@')[0],
+            username: email.split('@')[0] + randnum,
             email: email,
             password: password,
             datejoined: new Date(),
@@ -71,8 +72,7 @@ router.post("/", (req, res, next) => {
         });
     } else {
         res.status(422).send({ "error": errors, "success": false });
-    }
+    } 
 });
-
 
 module.exports = router;
