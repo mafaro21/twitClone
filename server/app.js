@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/register', toRegister);
 
-
 //listening port
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
@@ -40,7 +39,7 @@ MongoClient.connect(uri, {
     console.log(`connected to database ${db.databaseName}`);
     /* do whatever operations here to DB, then finally close: */
     client.close();
-}).catch( err =>{
+}).catch(err =>{
     console.error(err);
 });
     
