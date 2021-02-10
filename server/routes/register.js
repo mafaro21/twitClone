@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URL;
+const bcrypt = require("bcrypt");
 const router = express.Router();
 
 
@@ -42,36 +43,39 @@ router.post("/", (req, res, next) => {
         return OK;
     }
     if (checkInputs() === true) {
-        let randnum = Math.floor(Math.random() * 100 - 10);
-        const userObject = {
-            fullname: fullname,
-            username: email.split('@')[0] + randnum,
-            email: email,
-            password: password,
-            datejoined: new Date(),
-        };
-        MongoClient.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        }).then(client => {
-            const users = client.db("twitclone").collection("users");
-            users.insertOne(userObject, (error, result) => {
-                if (error) {
-                    console.error(error);
-                    res.status(422).send({ "message": error.message, "success": false });
-                } else {
-                    console.log(result.ops);
-                    res.status(201).send({ "userAdded": result.insertedCount, "success": true });
-                }
-                client.close();
+        async function addtoDatabase() {
+            let randnum = Math.floor(Math.random() * 100 - 10);
+            let newPass = await bcrypt.hash(password, 10);
+            const userObject = {
+                fullname: fullname,
+                username: email.split('@')[0] + randnum,
+                email: email,
+                password: newPass,
+                datejoined: new Date(),
+            };
+            MongoClient.connect(uri, {
+                useUnifiedTopology: true,
+                useNewUrlParser: true
+            }).then(client => {
+                const users = client.db("twitclone").collection("users");
+                users.insertOne(userObject, (error, result) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(422).send({ "message": error.message, "success": false });
+                    } else {
+                        console.log(result.ops);
+                        res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                    }
+                    client.close();
+                })
+            }).catch(err => {
+                res.sendStatus(500);
+                console.error(err);
             })
-        }).catch(err => {
-            res.sendStatus(500);
-            console.error(err);
-        });
-    } else {
-        res.status(422).send({ "error": errors, "success": false });
-    } 
+        }; addtoDatabase().catch(err => console.error(err)); 
+     } /*else {
+    //     res.status(422).send({ "error": errors, "success": false });
+     }*/
 });
 
 module.exports = router;
