@@ -14,7 +14,7 @@ router.post("/", (req, res, next) => {
     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
     if (!emailpatt.test(email)) {
-        res.status(422).send({ message: "Invalid email", success: false});
+        res.status(400).send({ message: "Invalid email", success: false});
         res.end();
     }
     else {
