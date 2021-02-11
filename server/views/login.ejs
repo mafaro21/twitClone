@@ -8,9 +8,9 @@
     <title>TwitClone: Login</title>
 </head>
 <body>
-    
+
     <h1 style="text-align: center">Login Here</h1>
-    <form  id="register" method="POST" action="/login">
+    <form  id="login" method="POST" action="/login" onsubmit="return false">
         <div class="form-group">
 			<input name="email" id="email" type="email" maxlength="30" placeholder="Email address" required />
 		</div>
@@ -18,6 +18,9 @@
 			<input name="password" id="password" type="password" maxlength="20" placeholder="Enter Password" pattern=".{8,}"
 				title="Required 8 characters or more" required />
 		</div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
     </form>
     <br />
 	<a href="/register"><button class="btn btn-primary"> &lt; New User? Create Account</button></a>
