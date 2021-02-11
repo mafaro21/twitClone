@@ -4,8 +4,8 @@ const uri = process.env.MONGO_URL;
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
+//FOR REGISTER ONLY:: i.e.  '/register'
 
-//FOR REGISTER requests ONLY:: i.e.  '/register'
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
     res.render('register', { errors: JSON.stringify([""]) });
@@ -74,7 +74,7 @@ router.post("/", (req, res, next) => {
                 res.sendStatus(500);
                 console.error(err);
             });
-        };
+        }; // <--end of function
     } else {
         res.status(422).send({ "error": errors, "success": false });
     }
