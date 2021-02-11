@@ -26,7 +26,7 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.findOne({ email: email }, (error, result) => {
                 if (result == null) {
-                    res.status(401).send({ "message": "User not found", "success": false });;
+                    res.status(401).send({ "message": "User not found", "success": false });
                 } else {
                     //login the user + create Session
                     loginUser();

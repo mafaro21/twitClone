@@ -77,6 +77,7 @@ router.post("/", (req, res, next) => {
         }; // <--end of function
     } else {
         res.status(400).send({ "error": errors, "success": false });
+        res.end();
     }
 });
 
