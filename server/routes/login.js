@@ -1,14 +1,14 @@
-const express = require('express');
-const { MongoClient } = require('mongodb');
+const express = require("express");
+const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    res.render('login');
+router.get("/", (req, res, next) => {
+    res.render("login");
 });
 
-router.post('/', (req, res, next) => {
+router.post("/", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     var errors = []; // input errors
@@ -28,31 +28,35 @@ router.post('/', (req, res, next) => {
         return OK;
     }
     if (checkInputs() === true) {
-        findAndLoginUser();
-        async function findAndLoginUser() {
-            // continue here.
-            MongoClient.connect(uri, {
-                useUnifiedTopology: true,
-                useNewUrlParser: true
-            }).then(client => {
-                const users = client.db("twitclone").collection("users");
-                users.findOne({email: email}, (err, result)=>{
-                    if(!result){
-                        res.status(404).send({message: "user doesnt exist", success: false});
-                        res.end;
+        MongoClient.connect(uri, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        }).then((client) => {
+            const users = client.db("twitclone").collection("users");
+            users.findOne({ "": email }, (error, result) => {
+                if (result == null) {
+                    res.sendStatus(404);
+                } else {
+                    //login the user + create Session
+                    loginUser();
+                    async function loginUser() {
+                        let hashedPass = result.password;
+                        let match = await bcrypt.compare(password, hashedPass);
+                        if (!match)
+                            res.status(401).send({ "message": "Wrong email or password", "success": false });
+                        else {
+                            // BINGO! User authenticated. Please create session 
+                        }
                     }
-                })
-            }).catch(err => {
-                console.error(err);
-                res.sendStatus(500);
+                }
             });
-        }
-
+        }).catch((err) => {
+            console.error(err);
+            res.sendStatus(500);
+        });
     } else {
-        res.status(401).send({ "error": errors, "success": false });
+        res.status(401).send({ "error": errors, success: false });
     }
-
 });
-
 
 module.exports = router;
