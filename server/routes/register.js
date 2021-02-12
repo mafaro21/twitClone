@@ -21,9 +21,14 @@ router.post("/", (req, res, next) => {
 
     function checkInputs() {
         var OK = true;
-        var reg = new RegExp('[^ a-zA-Z0-9_]');
+        var reg = new RegExp("[^ a-zA-Z0-9_]");
         var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
+        if (!fullname || !email || !password || !confirmPass) {
+            // if any empty, die immediately
+            errors.push("No field can be empty");
+            return false;
+        }
         if (reg.test(fullname)) {
             errors.push("Name contains illegal characters");
             OK = false;
