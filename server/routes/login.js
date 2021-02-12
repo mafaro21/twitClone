@@ -13,7 +13,7 @@ router.post("/", (req, res, next) => {
     const password = req.body.password;
     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-    if (!emailpatt.test(email)) {
+    if (!emailpatt.test(email)) {  
         res.status(401).send({ message: "Invalid email", success: false});
         res.end();
     }
@@ -27,6 +27,7 @@ router.post("/", (req, res, next) => {
             users.findOne({ email: email }, (error, result) => {
                 if (result == null) {
                     res.status(401).send({ "message": "User not found", "success": false });
+                    res.end();
                 } else {
                     //login the user + create Session
                     loginUser();

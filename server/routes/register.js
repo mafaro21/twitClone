@@ -25,7 +25,7 @@ router.post("/", (req, res, next) => {
         var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
-            // if any empty, END immediately
+            //☹ if any empty, END immediately!
             errors.push("No field can be empty");
             return false;
         }
@@ -81,7 +81,7 @@ router.post("/", (req, res, next) => {
             });
         }; // <--end of function
     } else {
-        res.status(400).send({ "message": errors, "success": false });
+        res.status(422).send({ "message": errors, "success": false });
         res.end();
     }
 });
