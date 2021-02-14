@@ -28,26 +28,31 @@ router.post("/", (req, res, next) => {
                 if (result == null) {
                     res.status(401).send({ "message": "User not found", "success": false });
                     res.end();
-                } else {
-                    //login the user + create Session
+                } else {    
+                    // see function at bottom         
                     loginUser();
-                    async function loginUser() {
-                        let hashedPass = result.password;
-                        let match = await bcrypt.compare(password, hashedPass);
-                        if (!match)
-                            res.status(401).send({ "message": "Wrong email or password", "success": false });
-                        else {
-                            // BINGO! User authenticated. Now create session.
-                            res.status(200).send({ "success": true });
-                        }
-                    }
                 }
-            });
+                client.close();
+            }); 
         }).catch((err) => {
             console.error(err);
             res.sendStatus(500);
         });
     }
 });
+
+
+//login the user + create Session
+async function loginUser() {
+    let hashedPass = result.password;
+    let match = await bcrypt.compare(password, hashedPass);
+    if (!match)
+        res.status(401).send({ "message": "Wrong email or password", "success": false });
+    else {
+        // BINGO! User authenticated. 
+        res.status(200).send({ "success": true });
+        // Now, create session here:
+    }
+}
 
 module.exports = router;
