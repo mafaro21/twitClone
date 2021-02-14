@@ -22,7 +22,7 @@ router.post("/", (req, res, next) => {
     function checkInputs() {
         var OK = true;
         var reg = new RegExp("[^ a-zA-Z0-9_]");
-        var emailpatt = /(^([0-9A-Za-z])[\w\.]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
             //☹ if any empty, END immediately!
@@ -55,7 +55,7 @@ router.post("/", (req, res, next) => {
 
             const userObject = {
                 fullname: fullname,
-                username: email.split('@')[0] + randnum,
+                username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
                 email: email,
                 password: newPass,
                 datejoined: new Date(),
