@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    var emailpatt = /(^([0-9A-Za-z])[\w\.-\+]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+    var emailpatt = /(^([0-9A-Za-z])[\w\.]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
     
     if (!emailpatt.test(email) || !email || !password) {
