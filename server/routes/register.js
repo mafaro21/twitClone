@@ -67,14 +67,15 @@ router.post("/", (req, res, next) => {
                 const users = client.db("twitclone").collection("users");
                 users.insertOne(userObject, (error, result) => {
                     if (error) {
+                        //next(error); /* for EJS exclusive apps only */
                         console.error(error);
                         res.status(422).send({ "message": error.message, "success": false });
                     } else {
                         console.log(result.ops);
                         res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                     }
-                });
-                client.close();
+                    client.close();
+                });      
             }).catch(err => {
                 res.sendStatus(500);
                 console.error(err);

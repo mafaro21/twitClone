@@ -13,6 +13,7 @@ router.post("/", (req, res, next) => {
     const password = req.body.password;
     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
+
     if (!emailpatt.test(email)) {
         res.status(401).send({ message: "Invalid email", success: false });
         res.end();
@@ -24,8 +25,8 @@ router.post("/", (req, res, next) => {
             useNewUrlParser: true,
         }).then((client) => {
             const users = client.db("twitclone").collection("users");
-            users.findOne({ email: email }, (error, result) => {
-                if (result == null) {
+            users.findOne({ "email": email }, (error, result) => {
+                if (!result) {
                     res.status(401).send({ "message": "User not found", "success": false });
                     res.end();
                 } else {
@@ -37,14 +38,13 @@ router.post("/", (req, res, next) => {
                         if (!match)
                             res.status(401).send({ "message": "Wrong email or password", "success": false });
                         else {
-                            // BINGO! User authenticated. 
-                            //Now, create session here.
+                            // BINGO! User authenticated. Now, create session.
                             res.status(200).send({ "success": true });     
                         }
                     }
                 }
-            });
-            client.close();
+                client.close();
+            });        
         }).catch((err) => {
             console.error(err);
             res.sendStatus(500);
