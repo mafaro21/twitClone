@@ -15,7 +15,7 @@ router.post("/", (req, res, next) => {
 
 
     if (!emailpatt.test(email) || !email || !password) {
-        res.status(401).send({ message: "Invalid or empty input!", success: false });
+        res.status(401).send({ message: "Invalid email or empty password!", success: false });
         res.end();
         return;
     }
@@ -26,7 +26,7 @@ router.post("/", (req, res, next) => {
             useNewUrlParser: true,
         }).then((client) => {
             const users = client.db("twitclone").collection("users");
-            users.findOne({ "email": email }, (error, result) => {
+            users.findOne({ email: email }, (error, result) => {
                 if (!result) {
                     res.status(401).send({ "message": "User not found", "success": false });
                     res.end();
