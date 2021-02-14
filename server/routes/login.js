@@ -29,8 +29,19 @@ router.post("/", (req, res, next) => {
                     res.status(401).send({ "message": "User not found", "success": false });
                     res.end();
                 } else {
-                    // Continue. see function at bottom         
+                    // Continue. verify password.      
                     loginUser();
+                    async function loginUser() {
+                        let hashedPass = result.password;
+                        let match = await bcrypt.compare(password, hashedPass);
+                        if (!match)
+                            res.status(401).send({ "message": "Wrong email or password", "success": false });
+                        else {
+                            // BINGO! User authenticated. 
+                            //Now, create session here.
+                            res.status(200).send({ "success": true });     
+                        }
+                    }
                 }
             });
             client.close();
@@ -43,17 +54,6 @@ router.post("/", (req, res, next) => {
 
 
 //login the user + create Session
-async function loginUser() {
-    let hashedPass = result.password;
-    let match = await bcrypt.compare(password, hashedPass);
-    if (!match)
-        res.status(401).send({ "message": "Wrong email or password", "success": false });
-    else {
-        // BINGO! User authenticated. 
-        //Now, create session here, then send success response:
-        res.status(200).send({ "success": true });
 
-    }
-}
 
 module.exports = router;
