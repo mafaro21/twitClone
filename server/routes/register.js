@@ -73,8 +73,8 @@ router.post("/", (req, res, next) => {
                         console.log(result.ops);
                         res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                     }
-                    client.close();
                 });
+                client.close();
             }).catch(err => {
                 res.sendStatus(500);
                 console.error(err);

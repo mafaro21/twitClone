@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-    res.render("login", {"title" : "Twitclone: Login"});
+    res.render("login", { "title": "Twitclone: Login" });
 });
 
 router.post("/", (req, res, next) => {
@@ -13,12 +13,12 @@ router.post("/", (req, res, next) => {
     const password = req.body.password;
     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-    if (!emailpatt.test(email)) {  
-        res.status(401).send({ message: "Invalid email", success: false});
+    if (!emailpatt.test(email)) {
+        res.status(401).send({ message: "Invalid email", success: false });
         res.end();
     }
     else {
-        //email is valid. So proceed
+        //email has valid format. So proceed
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
@@ -28,12 +28,12 @@ router.post("/", (req, res, next) => {
                 if (result == null) {
                     res.status(401).send({ "message": "User not found", "success": false });
                     res.end();
-                } else {    
-                    // see function at bottom         
+                } else {
+                    // Continue. see function at bottom         
                     loginUser();
                 }
-                client.close();
-            }); 
+            });
+            client.close();
         }).catch((err) => {
             console.error(err);
             res.sendStatus(500);
@@ -50,8 +50,9 @@ async function loginUser() {
         res.status(401).send({ "message": "Wrong email or password", "success": false });
     else {
         // BINGO! User authenticated. 
+        //Now, create session here, then send success response:
         res.status(200).send({ "success": true });
-        // Now, create session here:
+
     }
 }
 
