@@ -11,9 +11,9 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+    var emailpatt = /(^([0-9A-Za-z])[\w\.-\+]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-
+    
     if (!emailpatt.test(email) || !email || !password) {
         res.status(401).send({ message: "Invalid email or empty password!", success: false });
         res.end();
@@ -28,7 +28,7 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.findOne({ email: email }, (error, result) => {
                 if (!result) {
-                    res.status(401).send({ "message": "User not found", "success": false });
+                    res.status(401).send({ "message": "User account not found", "success": false });
                     res.end();
                 } else {
                     // Continue. verify password.      
