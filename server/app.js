@@ -11,7 +11,7 @@ const app = express();
 //import all routers
 const indexRouter = require('./routes/index');
 const toRegister = require('./routes/register');
-
+const toLogin = require('./routes/login');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Serve pages accordingly
 app.use('/', indexRouter);
 app.use('/register', toRegister);
-
+app.use('/login', toLogin);
 
 //listening port
 app.listen(port, () => {
@@ -40,7 +40,7 @@ MongoClient.connect(uri, {
     console.log(`connected to database ${db.databaseName}`);
     /* do whatever operations here to DB, then finally close: */
     client.close();
-}).catch( err =>{
+}).catch(err =>{
     console.error(err);
 });
     
