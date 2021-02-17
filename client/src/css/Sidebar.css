@@ -1,0 +1,26 @@
+/* color schemes */
+:root{
+  --accent: #F29C50;
+  --darkaccent: #b45235;
+  --text: #fbfafa;
+  --background: #080603; 
+}
+
+.sidebar{
+    border: 1px solid var(--text);
+    border-radius: 15px;
+    text-align: left;
+    /* position:fixed; */
+}
+
+.sticky{
+     /* position: -webkit-sticky; */
+    position: sticky;
+    top: 60px;
+}
+
+.footer{
+  font-size: 13px;
+  text-align: left;
+
+}

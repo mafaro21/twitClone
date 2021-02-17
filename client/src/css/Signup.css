@@ -19,21 +19,18 @@
   --background: #575162; */
 }
 
-.fgh{
-    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/charisse-kenion.jpg");
-    /* min-width: 100vh; */
-    min-height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: cover;
-}
+/* media breakpoints */
+@media screen and (max-width: 500px){   /*phone view*/
+  .sign-form{
+    width: auto;
+    height: auto;
+  }
+  .sign-pic{
+    background-position: center;
+  }
+  h3, h4{
+      font-size: 20px;
+  }
 
-.top{
-    margin-top: 150px;
-}
-
-.form{
-    background-color: var(--background);
-    width: 50%;
-    border-radius: 26px;
+  
 }

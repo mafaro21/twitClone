@@ -3,7 +3,7 @@ import {
     useState
 } from "react";
 import "../css/App.css";
-import "../css/Signup.css";
+// import "../css/Signup.css";
 import '../css/custom.scss';
 import { Link } from 'react-router-dom';
 import axios from "axios";
@@ -101,9 +101,9 @@ function Signup() {
 
 
     return (
-        <div className="general fgh d-flex" >
+        <div className="general sign-pic d-flex" >
             <div className="container mt-5" >
-                <div className="form animate-enter container mt-5 p-5" >
+                <div className="sign-form animate-enter container mt-4 p-5" >
                     <h3> Create an Account </h3>
 
                     <form className="container" onSubmit={(e) => handleSubmit(e)} >
@@ -119,7 +119,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(fullnameErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} > {fullnameErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
                             })}
                         </div>
                         <div>
@@ -134,7 +134,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(emailErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} > {emailErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
                             })}
                         </div>
 
@@ -151,7 +151,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} > {passwordErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
                             })}
                         </div>
 
@@ -167,7 +167,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(confirmpasswordErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} > {confirmpasswordErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
                             })}
                         </div>
 
@@ -180,7 +180,7 @@ function Signup() {
                         </button>
 
                     </form>
-                    <Link to="/" ><p className="mt-3">Already have an account?</p></Link>
+                    <Link to="/" ><p className="mt-3 login-text">Already have an account?</p></Link>
                 </div>
             </div>
         </div>
