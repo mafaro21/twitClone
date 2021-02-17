@@ -49,7 +49,7 @@ router.post("/", (req, res, next) => {
     };
 
     if (checkInputs() === false) {
-        res.status(422).send({ "message": errors, "success": false });
+        res.status(422).json({ "message": errors, "success": false });
         res.end();
     } else {
         //inputs are clean, proceed.
