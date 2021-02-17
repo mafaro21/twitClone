@@ -2,4 +2,5 @@
 /.vscode
 .env
 node_modules
+backupReg.js
 

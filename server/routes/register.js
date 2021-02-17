@@ -4,7 +4,7 @@ const uri = process.env.MONGO_URL;
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
-//FOR REGISTER ONLY:: i.e.  '/register'
+//FOR REGISTER ONLY::
 
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
@@ -46,13 +46,17 @@ router.post("/", (req, res, next) => {
             OK = false;
         }
         return OK;
-    }
-    if (checkInputs() === true) {
+    };
+
+    if (checkInputs() === false) {
+        res.status(422).send({ "message": errors, "success": false });
+        res.end();
+    } else {
+        //inputs are clean, proceed.
         addUserToDatabase();
         async function addUserToDatabase() {
             let randnum = Math.floor(Math.random() * 100 - 10);
             let newPass = await bcrypt.hash(password, 10);
-
             const userObject = {
                 fullname: fullname,
                 username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
@@ -60,30 +64,22 @@ router.post("/", (req, res, next) => {
                 password: newPass,
                 datejoined: new Date(),
             };
+
             MongoClient.connect(uri, {
                 useUnifiedTopology: true,
                 useNewUrlParser: true
             }).then(client => {
                 const users = client.db("twitclone").collection("users");
-                users.insertOne(userObject, (error, result) => {
-                    if (error) {
-                        //next(error); /* for EJS exclusive apps only */
-                        console.error(error);
-                        res.status(422).send({ "error-code": error.code, "success": false });
-                    } else {
-                        console.log(result.ops);
-                        res.status(201).send({ "userCreated": result.insertedCount, "success": true });
-                    }
-                    client.close();
-                });      
+                return users;
+            }).then(async (users) => {
+                const result = await users.insertOne(userObject);
+                console.log(result.ops);
+                res.status(201).send({ "userCreated": result.insertedCount, "success": true });
             }).catch(err => {
                 res.sendStatus(500);
                 console.error(err);
             });
         }; // <--end of function
-    } else {
-        res.status(422).send({ "message": errors, "success": false });
-        res.end();
     }
 });
 
