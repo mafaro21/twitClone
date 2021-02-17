@@ -74,10 +74,10 @@ router.post("/", (req, res, next) => {
                     if (error) {
                         //next(error); /* for EJS exclusive apps only */
                         console.error(error);
-                        res.status(422).send({ "message": error.message, "success": false });
+                        res.status(422).json({ "message": error.message, "success": false });
                     } else {
                         console.log(result.ops);
-                        res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                        res.status(201).json({ "userCreated": result.insertedCount, "success": true });
                     }
                     client.close();
                 });      
