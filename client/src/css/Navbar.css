@@ -1,0 +1,39 @@
+/* color schemes */
+:root{
+  --accent: #ff6300;
+  --inputbk: rgba(65, 61, 61, 1);
+  --text: white;
+  --nav: rgb(47, 47, 43, 1)
+}
+
+.search{
+  width:40%;
+}
+
+.search-input{
+  padding: 18px;
+  border: 1px solid var(--text);
+  border-radius: 20px;
+  height: 1px;
+  width: 330px;
+  background-color: var(--background);
+  color:var(--text);
+  outline: none;
+}
+
+/* media breakpoints */
+@media screen and (max-width: 500px){   /*phone view*/
+ .search-input{
+   width: auto;
+   font-size: 11px;
+   /* margin-right: 35px; */
+ }
+ .navbar-brand{
+   font-size: 15px;
+ }
+ .nav-link{
+   font-size: 13px;
+ }
+
+  
+}

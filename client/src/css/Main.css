@@ -1,0 +1,44 @@
+/* color schemes */
+:root{
+  --accent: #F29C50;
+  --darkaccent: #b45235;
+  --text: #fbfafa;
+  --background: #080603; 
+}
+
+.main-view{
+  border: 1px solid var(--text);
+    border-radius: 15px;
+    text-align: left;
+}
+
+.view{
+    border-bottom: .02px solid var(--text);
+    text-align: left;
+}
+
+.tweet-img{
+  width: 60%;
+  height: 60%;
+  border-radius: 25px;
+}
+
+.user-logo{
+  width:50px;
+  height: 50px;
+  border-radius: 50%;
+  float:left;
+}
+
+.user-content{
+  display: flex;
+}
+
+
+span{
+  color: grey;
+}
+
+
+@media screen and (max-width: 500px){   /*phone view*/
+}
