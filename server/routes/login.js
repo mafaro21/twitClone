@@ -27,7 +27,7 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.findOne({ email: email }, (error, result) => {
                 if (!result) {
-                    res.status(401).send({ "message": "User account not found", "success": false });
+                    res.status(401).send({ "message": "User doesnt exist", "success": false });
                     res.end();
                 } else {
                     // Continue. verify password.      
