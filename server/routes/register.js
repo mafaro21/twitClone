@@ -70,11 +70,17 @@ router.post("/", (req, res, next) => {
                 useNewUrlParser: true
             }).then(client => {
                 const users = client.db("twitclone").collection("users");
-                return users;
-            }).then(async (users) => {
-                const result = await users.insertOne(userObject);
-                console.log(result.ops);
-                res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                users.insertOne(userObject, (error, result) => {
+                    if (error) {
+                        //next(error); /* for EJS exclusive apps only */
+                        console.error(error);
+                        res.status(422).send({ "message": error.message, "success": false });
+                    } else {
+                        console.log(result.ops);
+                        res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                    }
+                    client.close();
+                });      
             }).catch(err => {
                 res.sendStatus(500);
                 console.error(err);
