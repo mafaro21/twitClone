@@ -13,7 +13,7 @@ App Name:... twitClone?
 - [x] Connect frontend with backend
 - [x] Validating user input in register 
 - [x] Registering users to database
-- [ ] Logging in users.
+- [x] Logging in users.
 - [ ] Sessions
 
 - [x] Regex.
@@ -24,7 +24,7 @@ App Name:... twitClone?
 - [ ] Add Google Captcha in Register (free).
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
-- Add dark mode to each page.
+- [x] Add dark mode to each page.
 - Add Sound to new message
 - Or popup notifications when new message arrives (chat)
 - also send notifications when User get a follow / liked tweet.
