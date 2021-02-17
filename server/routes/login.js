@@ -14,7 +14,7 @@ router.post("/", (req, res, next) => {
     var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
    
     if (!emailpatt.test(email) || !email || !password) {
-        res.status(401).json({ message: "Invalid or empty input!", success: false });
+        res.status(401).send({ message: "Invalid or empty input!", success: false });
         res.end();
         return;
     }
@@ -27,7 +27,7 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.findOne({ email: email }, (error, result) => {
                 if (!result) {
-                    res.status(401).json({ "message": "User doesnt exist", "success": false });
+                    res.status(401).send({ "message": "User doesnt exist", "success": false });
                     res.end();
                 } else {
                     // Continue. verify password.      
@@ -36,10 +36,10 @@ router.post("/", (req, res, next) => {
                         let hashedPass = result.password;
                         let match = await bcrypt.compare(password, hashedPass);
                         if (!match)
-                            res.status(401).json({ "message": "Wrong email or password", "success": false });
+                            res.status(401).send({ "message": "Wrong email or password", "success": false });
                         else {
                             // BINGO! User authenticated. Now, create session.
-                            res.status(200).json({ "success": true });     
+                            res.status(200).send({ "success": true });     
                         }
                     }
                 }
