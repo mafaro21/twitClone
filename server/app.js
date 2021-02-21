@@ -33,17 +33,17 @@ app.listen(port, () => {
 
 //connect to Mongodb
 MongoClient.connect(uri, {
-    useUnifiedTopology: true,  
-    useNewUrlParser: true 
-}).then(client =>{
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+}).then(client => {
     const db = client.db('twitclone');
     console.log(`connected to database ${db.databaseName}`);
     /* do whatever operations here to DB, then finally close: */
     client.close();
-}).catch(err =>{
+}).catch(err => {
     console.error(err);
 });
-    
+
 
 // if visiting non-existing page, serve error 404
 app.use((req, res, next) => {
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
     // render the error page
     res.status(err.status || 500);
     res.render('error');
-   // res.send(err);
+    // res.send(err);
     console.error(err.status);
 });
 

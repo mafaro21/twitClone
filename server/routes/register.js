@@ -1,7 +1,7 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URL;
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 const router = express.Router();
 
 //FOR REGISTER ONLY:: i.e.  '/register'
@@ -75,7 +75,7 @@ router.post("/", (req, res, next) => {
                         res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                     }
                     client.close();
-                });      
+                });
             }).catch(err => {
                 res.sendStatus(500);
                 console.error(err);

@@ -1,4 +1,5 @@
 import React from 'react';
+import dotenv from 'dotenv';
 import './css/App.css';
 // import Footer from './Footer';
 import Login from './views/Login';
@@ -7,6 +8,7 @@ import Home from './views/Home';
 import Navbar from './components/Navbar';
 import NotFound404 from './NotFound404';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+dotenv.config();
 
 function App() {
   return (
