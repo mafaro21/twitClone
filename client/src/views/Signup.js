@@ -35,47 +35,42 @@ function Signup() {
         }
     }, []);
 
-    async function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        const isCaptchaValid = await window.grecaptcha.ready(function () {
-            window.grecaptcha.execute("6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB", { action: 'submit' }).then(function (responseToken) {
 
-                axios.post("/captchaverify", responseToken)
-                    .then((res) => {
-                        console.log(res.data);
-                        return res.data.success;
-                    })
-                    .catch((error) => {
-                        console.error(error.response);
-                    });
-            });
+        window.grecaptcha.ready(function () {
+            window.grecaptcha.execute("6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB", { action: 'submit' })
+                .then(function (responseToken) {
+                    sendtoServer(responseToken); // send this to the server with User Data
+                });
         });
 
         const isValid = formValidation(); /* <--- react validation */
-        if (isValid && isCaptchaValid) {
-            alert('successful captcha validation');
-            const userObject = {
-                fullname: fullname,
-                email: email,
-                password: password,
-                confirmPass: confirmPass,
-            };
 
-            // axios
-            //     .post("/register", userObject)
-            //     .then((res) => {
-            //         console.log(res.data);
-            //         let x = res.data.success;
-            //         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
-            //     })
-            //     .catch((error) => {
-            //         console.error(error.response.data);
-            //         alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
-            //     }); 
-        }
-        else {
-            alert('you are damn robot');
+        async function sendtoServer(token) {
+            if (isValid) {
+                const userObject = {
+                    fullname: fullname,
+                    email: email,
+                    password: password,
+                    confirmPass: confirmPass,
+                    responseToken: token
+                };
+                console.log(token);
+
+                axios
+                    .post("/register", userObject)
+                    .then((res) => {
+                        console.log(res.data);
+                        let x = res.data.success;
+                        if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
+                    })
+                    .catch((error) => {
+                        console.error(error.response.data);
+                        alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                    });
+            }
         }
     }
 
@@ -87,7 +82,7 @@ function Signup() {
         const emailErr = {};
         const passwordErr = {};
         const confirmpasswordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
 
         let isValid = true;
