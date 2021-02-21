@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const port = process.env.PORT || 5000;
+const helmet = require("helmet");
 const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URL;
 
@@ -20,6 +21,7 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet({hsts: false}));
 
 //Serve pages accordingly
 app.use('/', indexRouter);
