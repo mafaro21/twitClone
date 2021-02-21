@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import React from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
@@ -5,6 +6,8 @@ import '../css/custom.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from "react";
+dotenv.config();
+
 
 function Login() {
 
@@ -72,9 +75,8 @@ function Login() {
                 <div className="container mt-5 p-5 login-form">
 
 
-
                     <h3>LOGO HERE</h3>
-                    <form className="mt-2" onSubmit={(e) => handleSubmit(e)}>
+                    <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
 
                         <div className="">
                             {Object.keys(emailErr).map((key) => {       /* <--- react validation */

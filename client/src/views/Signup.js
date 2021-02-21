@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     useState
 } from "react";
@@ -7,6 +7,8 @@ import "../css/App.css";
 import '../css/custom.scss';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+
+
 
 function Signup() {
     const [fullname, setfullName] = useState("");
@@ -19,30 +21,53 @@ function Signup() {
     const [passwordErr, setpasswordErr] = useState({}); /* <--- react validation */
     const [confirmpasswordErr, setconfirmpasswordErr] = useState({}); /* <--- react validation */
 
+    const loadCaptcha = useEffect(() => {
+        const script = document.createElement('script');
+
+        script.src = "https://www.google.com/recaptcha/api.js?render=6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB";
+
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        }
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const isValid = formValidation(); /* <--- react validation */
-        if (isValid) {
 
-            const userObject = {
-                fullname: fullname,
-                email: email,
-                password: password,
-                confirmPass: confirmPass,
-            };
 
-            axios
-                .post("/register", userObject)
-                .then((res) => {
-                    console.log(res.data);
-                    let x = res.data.success;
-                    if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
-                })
-                .catch((error) => {
-                    console.error(error.response.data);
-                    alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+        window.grecaptcha.ready(function () {
+            window.grecaptcha.execute("6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB", { action: 'submit' })
+                .then(function (responseToken) {
+                    sendtoServer(responseToken); // send this to the server with User Data
                 });
+        });
+
+        const isValid = formValidation(); /* <--- react validation */
+
+        async function sendtoServer(token) {
+            if (isValid) {
+                const userObject = {
+                    fullname: fullname,
+                    email: email,
+                    password: password,
+                    confirmPass: confirmPass,
+                    responseToken: token
+                };
+
+                axios
+                    .post("/register", userObject)
+                    .then((res) => {
+                        console.log(res.data);
+                        let x = res.data.success;
+                        if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
+                    })
+                    .catch((error) => {
+                        console.error(error.response.data);
+                        alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                    });
+            }
         }
     }
 
@@ -54,13 +79,13 @@ function Signup() {
         const emailErr = {};
         const passwordErr = {};
         const confirmpasswordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
 
         let isValid = true;
 
-        if (fullname.trim().length < 7) {
-            fullnameErr.fullnameErrShort = "Fullname should be atleast 7 characters long";
+        if (fullname.trim().length < 3) {
+            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
             isValid = false;
         }
 
@@ -94,16 +119,11 @@ function Signup() {
     }
 
 
-
-
-
-
-
-
     return (
-        <div className="general sign-pic d-flex" >
+
+        <body className="general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
-                <div className="sign-form animate-enter container mt-4 p-5" >
+                <div className=" animate-enter container mt-4 p-5" >
                     <h3> Create an Account </h3>
 
                     <form className="container" onSubmit={(e) => handleSubmit(e)} >
@@ -183,7 +203,11 @@ function Signup() {
                     <Link to="/" ><p className="mt-3 login-text">Already have an account?</p></Link>
                 </div>
             </div>
-        </div>
+            <div id="demo"></div>
+
+            {/* <div dangerouslySetInnerHTML={{ __html: codeStr }} /> */}
+        </body>
+
     );
 }
 

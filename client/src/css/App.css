@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+
 /* color schemes */
 :root{
   --accent: #F29C50;
@@ -18,14 +20,14 @@
   background-color: var(--background);
   text-align: center;
   color: var(--text);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Source Sans Pro', system-ui, sans-serif;
   
 }
 
 .text{
   text-align: center;
   color: var(--text);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Source Sans Pro', system-ui, sans-serif;
 }
 
 .App-header {
@@ -87,7 +89,7 @@ button{
 }
 
 .login-pic{
-    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/mihai-surdu-Ma3FsU1YuM4-unsplash.jpg");
+    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/vinicius-amnx-amano.jpg");
     /* min-width: 100vh; */
     min-height: 100vh;
     background-size: cover;
@@ -97,7 +99,7 @@ button{
 }
 
 .sign-pic{
-    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5)),url("../images/hari-nandakumar.jpg");
+    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/paul-carmona.jpg");
     /* min-width: 100vh; */
     min-height: 100vh;
     background-size: cover;
@@ -112,7 +114,7 @@ button{
   border-radius: 20px;
   height: 60px;
   width: 30%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.3);
   color:var(--text);
   outline: none;
 }
@@ -124,7 +126,7 @@ button{
   border: 1px solid var(--text);
   border-radius: 20px;
   height: 60px;
-  width: 100%;
+  width: 50%;
   background-color:rgba(0, 0, 0, 0.2);
   color:var(--text);
   outline: none;
