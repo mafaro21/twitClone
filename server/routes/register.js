@@ -64,7 +64,7 @@ router.post("/", (req, res, next) => {
                 password: newPass,
                 datejoined: new Date(),
             };
-
+                
             MongoClient.connect(uri, {
                 useUnifiedTopology: true,
                 useNewUrlParser: true
