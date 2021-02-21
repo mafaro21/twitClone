@@ -21,7 +21,8 @@ App Name:... twitClone?
 - [x] 404 Page.
 
 - [x] add User auth: username[30] :no spaces, email, password.
-- [ ] Add Google Captcha in Register (free).
+- [x] Add Google Captcha in Register (free).
+- [ ] Verify Google Captcha
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
 - [x] Add dark mode to each page.
