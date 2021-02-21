@@ -36,31 +36,27 @@ function Signup() {
         }
     }, []);
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         //let SITE_KEY = process.env.SITE_KEY;
         e.preventDefault();
 
-        window.grecaptcha.ready(function () {
+        const isCaptchaValid = await window.grecaptcha.ready(function () {
             window.grecaptcha.execute("6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB", { action: 'submit' }).then(function (responseToken) {
-                const botVerify = {
-                    secret: "6LfctFAaAAAAAP750bz-QwFu66uFIczKDY37i-aG",
-                    response: responseToken
-                }
 
-                axios.post("https://www.google.com/recaptcha/api/siteverify", botVerify)
+                axios.post("/captchaverify", responseToken)
                     .then((res) => {
                         console.log(res.data);
+                        return res.data.success;
                     })
                     .catch((error) => {
                         console.error(error.response);
                     });
-
             });
         });
 
         const isValid = formValidation(); /* <--- react validation */
-        if (isValid) {
-
+        if (isValid && isCaptchaValid) {
+            alert('successful captcha validation');
             const userObject = {
                 fullname: fullname,
                 email: email,
@@ -79,6 +75,9 @@ function Signup() {
             //         console.error(error.response.data);
             //         alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
             //     }); 
+        }
+        else {
+            alert('you are damn robot');
         }
     }
 
