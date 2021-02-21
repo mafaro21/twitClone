@@ -18,8 +18,8 @@
 }
 
 .tweet-img{
-  width: 60%;
-  height: 60%;
+  width: 100%;
+  height: 70%;
   border-radius: 25px;
 }
 
@@ -34,11 +34,31 @@
   display: flex;
 }
 
+.heart{
+  height: 3px;
+  width:auto;
+}
+
+
 
 span{
   color: grey;
 }
 
 
+
+
 @media screen and (max-width: 500px){   /*phone view*/
+  .user-name-tweet{
+    margin-left: 26px;
+  }
+
+  .main-view{
+    font-size: 13px;
+  }
+
+  .tweet-img{
+    width: 100%;
+    height: 70%;
+  }
 }

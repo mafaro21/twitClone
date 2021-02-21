@@ -13,7 +13,7 @@ function Sidebar() {
                 <h5>People You May Know</h5>
                 <p>dfdsafdsafd</p>
             </div>
-            <div className="p-3 mt-4  sticky ">
+            <div className="p-3 mt-4 sticky ">
                 <div className="footer row">
                     <div className="col">
                         <p>About</p>

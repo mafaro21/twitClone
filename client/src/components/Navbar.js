@@ -7,7 +7,7 @@ import Search from './Search';
 
 function Navbar() {
     return (
-        <nav class="navbar sticky-top  navbar-nav-scroll  navbar-dark bg-secondary text">
+        <nav class="navbar sticky-top  navbar-nav-scroll navbar-dark bg-secondary text">
             <div class="container-fluid ">
                 <Link class="navbar-brand" to="/home">TwitClone</Link>
 
