@@ -24,3 +24,73 @@
   text-align: left;
 
 }
+
+.header{
+  /* position: fixed; */
+  /* background-color: brown; */
+  text-align: left;
+  font-size: 23px;
+  
+}
+
+.fixed{
+  position: fixed;
+  width:20%;
+}
+
+.icon{
+  height:25px;
+  /* width:auto; */
+  fill: var(--text);
+  /*  */
+}
+
+.header-link, .icon{
+  text-decoration: none;
+  color: white;
+  width: auto;
+  
+}
+
+.icon:hover, .header-link:hover{
+  fill: black;
+  color: black;
+  background-color: rgb(242,156,80,1);
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+.header-link:hover{
+    width: 160px;
+
+}
+
+
+@media screen and (max-width: 500px){   /*phone view*/
+  .header-title {
+    display: none;
+  }
+
+  .header{
+    display: flex;
+    position: fixed;
+    /* bottom: 0; */
+    background-color: green;
+
+  }
+
+  .phone-header{
+    flex-direction: row;
+
+  }
+
+  .header-link{
+    flex-direction: column;
+  }
+
+  .header-link:hover{
+    width: auto;
+    height: auto;
+  }
+
+}
