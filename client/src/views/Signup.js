@@ -27,8 +27,6 @@ function Signup() {
         script.src = "https://www.google.com/recaptcha/api.js?render=6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB";
 
         document.body.appendChild(script);
-        // let mybox = document.getElementById("demo");
-        // mybox.appendChild(script);
 
         return () => {
             document.body.removeChild(script);
@@ -57,7 +55,6 @@ function Signup() {
                     confirmPass: confirmPass,
                     responseToken: token
                 };
-                console.log(token);
 
                 axios
                     .post("/register", userObject)
