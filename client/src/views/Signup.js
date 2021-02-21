@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import dotenv from 'dotenv';
 import {
     useState
 } from "react";
@@ -8,7 +7,7 @@ import "../css/App.css";
 import '../css/custom.scss';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-dotenv.config();
+
 
 
 function Signup() {
@@ -37,7 +36,6 @@ function Signup() {
     }, []);
 
     async function handleSubmit(e) {
-        //let SITE_KEY = process.env.SITE_KEY;
         e.preventDefault();
 
         const isCaptchaValid = await window.grecaptcha.ready(function () {
