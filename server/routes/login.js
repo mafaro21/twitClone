@@ -17,8 +17,7 @@ router.post("/", (req, res, next) => {
         res.status(401).send({ message: "Invalid or empty input!", success: false });
         res.end();
         return;
-    }
-    else {
+    } else {
         //email has valid format. So proceed
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
@@ -36,10 +35,11 @@ router.post("/", (req, res, next) => {
                         let hashedPass = result.password;
                         let match = await bcrypt.compare(password, hashedPass);
                         if (!match)
-                            res.status(401).send({ "message": "Wrong email or password", "success": false });
+                           res.status(401).send({ "message": "Wrong email or password", "success": false });
                         else {
-                            // BINGO! User authenticated. Now, create session.
-                            res.status(200).send({ "success": true });     
+                            // BINGO! User authenticated. 
+                            //Now, create session here.
+                           res.status(200).send({ "success": true });     
                         }
                     }
                 }

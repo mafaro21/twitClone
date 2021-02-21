@@ -52,7 +52,7 @@ router.post("/", (req, res, next) => {
         res.status(422).json({ "message": errors, "success": false });
         res.end();
     } else {
-        //inputs are clean, proceed.
+        //ALL inputs are clean, proceed.
         addUserToDatabase();
         async function addUserToDatabase() {
             let randnum = Math.floor(Math.random() * 100 - 10);
@@ -77,6 +77,7 @@ router.post("/", (req, res, next) => {
                         res.status(422).json({ "message": error.message, "success": false });
                     } else {
                         console.log(result.ops);
+                        //Now, create session here.
                         res.status(201).json({ "userCreated": result.insertedCount, "success": true });
                     }
                     client.close();
