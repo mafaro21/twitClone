@@ -52,7 +52,11 @@ router.post("/", (req, res, next) => {
         return OK;
     };
     const axiosOptions = {
+<<<<<<< HEAD
         url: process.env.VERIFY_LINK,
+=======
+        url: "https://www.google.com/recaptcha/api/siteverify",
+>>>>>>> 7a2d80a27b9dd0d4465418090eef3eadd3fdcc14
         method: "POST",
         params: {
             secret: secret,

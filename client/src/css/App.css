@@ -120,6 +120,9 @@ button{
   outline: none;
 }
 
+.error-msg{
+  /* font-weight: 700; */
+}
 
 
 .signup-input{
