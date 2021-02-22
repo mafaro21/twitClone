@@ -52,7 +52,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
     const axiosOptions = {
-        url: "https://www.google.com/recaptcha/api/siteverify/",
+        url: process.env.VERIFY_LINK,
         method: "POST",
         params: {
             secret: secret,
@@ -76,7 +76,10 @@ router.post("/", (req, res, next) => {
                 res.status(200).send({ "message": "NOT A ROBOT", "success": true });
                 // addUserToDatabase(); 
             };
-        }).catch(next);
+        }).catch(err =>{
+            console.error(err.response.data);
+            res.sendStatus(500);
+        });
 
     async function addUserToDatabase() {
         let randnum = Math.floor(Math.random() * 100 - 10);
