@@ -61,7 +61,7 @@ router.post("/", (req, res, next) => {
     };
     axios.request(axiosOptions)
         .then(res => {
-            console.log(res.data); // show the object
+            console.log(res.data);
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
             if (prob) console.error(prob);
