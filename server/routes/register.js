@@ -52,7 +52,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
     const axiosOptions = {
-        url: "https://www.google.com/recaptcha/api/siteverify/",
+        url: "https://www.google.com/recaptcha/api/siteverify",
         method: "POST",
         params: {
             secret: secret,

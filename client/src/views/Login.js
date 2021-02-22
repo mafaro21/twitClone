@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 // import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from "react";
-dotenv.config();
 
 
 function Login() {
@@ -17,27 +15,48 @@ function Login() {
     const [emailErr, setemailErr] = useState({}); /* <--- react validation */
     const [passwordErr, setpasswordErr] = useState({}); /* <--- react validation */
 
+    const loadCaptcha = useEffect(() => {
+        const script = document.createElement('script');
+        script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        }
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        const isValid = formValidation(); /* <--- react validation */
-        if (isValid) {
 
-            const userObject = {
-                email: email,
-                password: password,
-            };
-
-            axios
-                .post("/login", userObject)
-                .then((res) => {
-                    console.log(res.data);
-                    let x = res.data.success;
-                    if (x === true) alert("Login up successful!"); /* then take user to dashboard */
-                })
-                .catch((error) => {
-                    console.error(error.response.data);
-                    alert("Login up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+        window.grecaptcha.ready(function () {
+            window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
+                .then(function (responseToken) {
+                    sendtoServer(responseToken); // send this to the server with User Data
                 });
+        });
+
+        const isValid = formValidation(); /* <--- react validation */
+
+        async function sendtoServer(token) {
+            if (isValid) {
+
+                const userObject = {
+                    email: email,
+                    password: password,
+                };
+
+                axios
+                    .post("/login", userObject)
+                    .then((res) => {
+                        console.log(res.data);
+                        let x = res.data.success;
+                        if (x === true) alert("Login up successful!"); /* then take user to dashboard */
+                    })
+                    .catch((error) => {
+                        console.error(error.response.data);
+                        alert("Login up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                    });
+            }
         }
     }
 
@@ -68,7 +87,7 @@ function Login() {
 
 
     return (
-        <div className="general login-pic d-flex">
+        <body className="general login-pic d-flex" onLoad={loadCaptcha} >
 
             <div className="container mt-4">
 
@@ -126,7 +145,7 @@ function Login() {
             </div>
 
 
-        </div >
+        </body >
     );
 }
 
