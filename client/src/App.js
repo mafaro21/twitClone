@@ -8,9 +8,10 @@ import Home from './views/Home';
 import Navbar from './components/Navbar';
 import NotFound404 from './NotFound404';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-dotenv.config();
 
 function App() {
+  dotenv.config();
+
   return (
     <Router>
       <div className="App">
