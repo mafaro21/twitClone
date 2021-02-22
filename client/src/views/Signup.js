@@ -23,9 +23,7 @@ function Signup() {
 
     const loadCaptcha = useEffect(() => {
         const script = document.createElement('script');
-
         script.src = "https://www.google.com/recaptcha/api.js?render=6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB";
-
         document.body.appendChild(script);
 
         return () => {
@@ -35,7 +33,6 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
 
         window.grecaptcha.ready(function () {
             window.grecaptcha.execute("6LfctFAaAAAAAMyuFMgr3a2J3lK4RYZF7xK9gMFB", { action: 'submit' })

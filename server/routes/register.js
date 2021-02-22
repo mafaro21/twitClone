@@ -1,7 +1,9 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URL;
+const secret = process.env.SECRET_KEY;
 const bcrypt = require('bcrypt');
+const axios = require('axios').default;
 const router = express.Router();
 
 //FOR REGISTER ONLY::
@@ -17,7 +19,9 @@ router.post("/", (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
+    const responseToken = req.body.responseToken;
     var errors = []; // input errors
+    var isValid = false; // captcha result
 
     function checkInputs() {
         var OK = true;
@@ -47,47 +51,67 @@ router.post("/", (req, res, next) => {
         }
         return OK;
     };
-
-    if (checkInputs() === false) {
-        res.status(422).json({ "message": errors, "success": false });
-        res.end();
-    } else {
-        //ALL inputs are clean, proceed.
-        addUserToDatabase();
-        async function addUserToDatabase() {
-            let randnum = Math.floor(Math.random() * 100 - 10);
-            let newPass = await bcrypt.hash(password, 10);
-            const userObject = {
-                fullname: fullname,
-                username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
-                email: email,
-                password: newPass,
-                datejoined: new Date(),
+    const axiosOptions = {
+        url: "https://www.google.com/recaptcha/api/siteverify",
+        method: "POST",
+        params: {
+            secret: secret,
+            response: responseToken
+        }
+    };
+    axios.request(axiosOptions)
+        .then(res => {
+            console.log(res.data);
+            isValid = res.data.success;
+            let prob = res.data['error-codes'];
+            if (prob) errors.push(prob);
+            return isValid;
+        }).then(isValid => {
+            if ((isValid && checkInputs()) === false) {
+                res.status(422).send({ "message": errors, "success": false });
+                res.end();
+            } else {
+                res.status(200).send({ "message": 'NOT A ROBOT', "success": true });
+                // addUserToDatabase(); 
             };
-                
-            MongoClient.connect(uri, {
-                useUnifiedTopology: true,
-                useNewUrlParser: true
-            }).then(client => {
-                const users = client.db("twitclone").collection("users");
-                users.insertOne(userObject, (error, result) => {
-                    if (error) {
-                        //next(error); /* for EJS exclusive apps only */
-                        console.error(error);
-                        res.status(422).json({ "message": error.message, "success": false });
-                    } else {
-                        console.log(result.ops);
-                        //Now, create session here.
-                        res.status(201).json({ "userCreated": result.insertedCount, "success": true });
-                    }
-                    client.close();
-                });
-            }).catch(err => {
-                res.sendStatus(500);
-                console.error(err);
+        }).catch(err => {
+            console.error(err);
+        });
+
+    async function addUserToDatabase() {
+        let randnum = Math.floor(Math.random() * 100 - 10);
+        let newPass = await bcrypt.hash(password, 10);
+        const userObject = {
+            fullname: fullname,
+            username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
+            email: email,
+            password: newPass,
+            datejoined: new Date(),
+        };
+
+        MongoClient.connect(uri, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        }).then(client => {
+            const users = client.db("twitclone").collection("users");
+            users.insertOne(userObject, (error, result) => {
+                if (error) {
+                    //next(error); /* for EJS exclusive apps only */
+                    console.error(error);
+                    res.status(422).json({ "message": error.message, "success": false });
+                } else {
+                    console.log(result.ops);
+                    //Now, create session here.
+                    res.status(201).json({ "userCreated": result.insertedCount, "success": true });
+                }
+                client.close();
             });
-        }; // <--end of function
-    }
+        }).catch(err => {
+            res.sendStatus(500);
+            console.error(err);
+        });
+    }; // <--end of function
+
 });
 
 module.exports = router;
