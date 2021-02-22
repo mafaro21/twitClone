@@ -20,7 +20,7 @@ router.post("/", (req, res, next) => {
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
     const responseToken = req.body.responseToken;
-    var errors = []; // input errors
+    let errors = []; // input errors
     var isValid = false; // captcha result
 
     function checkInputs() {
@@ -61,22 +61,21 @@ router.post("/", (req, res, next) => {
     };
     axios.request(axiosOptions)
         .then(res => {
-            console.log(res.data);
-            isValid = res.data.success;
+            isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
-            if (prob) errors.push(prob);
+            if (prob) console.error(prob);
             return isValid;
-        }).then(isValid => {
+        })
+        .then( isValid => {
             if ((isValid && checkInputs()) === false) {
+                errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
                 res.end();
             } else {
-                res.status(200).send({ "message": 'NOT A ROBOT', "success": true });
+                res.status(200).send({ "message": "NOT A ROBOT", "success": true });
                 // addUserToDatabase(); 
             };
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(next);
 
     async function addUserToDatabase() {
         let randnum = Math.floor(Math.random() * 100 - 10);
