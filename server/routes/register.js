@@ -52,7 +52,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
     const axiosOptions = {
-        url: "https://www.google.com/recaptcha/api/siteverify",
+        url: "https://www.google.com/recaptcha/api/siteverify/",
         method: "POST",
         params: {
             secret: secret,
@@ -61,12 +61,13 @@ router.post("/", (req, res, next) => {
     };
     axios.request(axiosOptions)
         .then(res => {
+            console.log(res.data);
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
             if (prob) console.error(prob);
             return isValid;
         })
-        .then( isValid => {
+        .then(isValid => {
             if ((isValid && checkInputs()) === false) {
                 errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
