@@ -72,7 +72,8 @@ router.post("/", (req, res, next) => {
                 res.status(422).send({ "message": errors, "success": false });
             }
             else addUserToDatabase(); // <--- can call this fn now 😀
-        }).catch(err => {
+        })
+        .catch(err => {
             console.error("AXIOS", err.message);
             res.sendStatus(500);
         });

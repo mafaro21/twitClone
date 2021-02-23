@@ -49,10 +49,13 @@ router.post("/", (req, res, next) => {
             if ((isValid && checkInputsResult) === false) {
                 errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
-                res.end();
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
-        }).catch(next);
+        })
+        .catch(err => {
+            console.error("AXIOS", err.message);
+            res.sendStatus(500);
+        });
 
     function operateDB() {
         //continue with LOGIN operations
