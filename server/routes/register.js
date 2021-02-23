@@ -53,7 +53,7 @@ router.post("/", (req, res, next) => {
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
-        setTimeout: 5000,
+        timeout: 5000,
         params: {
             secret: secret,
             response: responseToken
