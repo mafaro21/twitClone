@@ -34,7 +34,7 @@ router.post("/", (req, res, next) => {
             OK = false;
         }
         if (!emailpatt.test(email)) {
-            errors.push("Email is invalid.");
+            errors.push("Email is invalid");
             OK = false;
         }
         if (password.length < 8) {
@@ -48,10 +48,12 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //First, verify captcha responseToken
+    //First, verify captcha token
+    const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
+        setTimeout: 5000,
         params: {
             secret: secret,
             response: responseToken
@@ -59,23 +61,19 @@ router.post("/", (req, res, next) => {
     };
     axios.request(axiosOptions)
         .then(res => {
-            console.log(res.data);
-            isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
+            isValid = res.data.success && (res.data.score >= 0.5); //check if both == TRUE
             let prob = res.data['error-codes'];
-            if (prob) console.error(prob);
+            if (prob) console.error("CAPTCHA", prob);
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputs()) === false) {
+            if ((isValid && checkInputsResult) === false) {
                 errors.push("CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
-                res.end();
-            } else {
-                //😊 ALL is OK, call the function:
-                //addUserToDatabase();
             }
+            else addUserToDatabase(); // <--- can call this fn now 😀
         }).catch(err => {
-            console.error(err.message); // AXIOS error, if any
+            console.error("AXIOS", err.message);
             res.sendStatus(500);
         });
 
@@ -98,7 +96,7 @@ router.post("/", (req, res, next) => {
             users.insertOne(userObject, (error, result) => {
                 if (error) {
                     console.error(error);
-                    res.status(422).json({ "message": error.message, "success": false });
+                    res.status(422).json({ "message": error.code, "success": false });
                     res.end();
                 } else {
                     console.log(result.ops);

@@ -30,7 +30,8 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //First, Verify captcha responseToken
+    //First, verify captcha token
+    const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
@@ -45,14 +46,14 @@ router.post("/", (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputs()) === false) {
+            if ((isValid && checkInputsResult) === false) {
                 errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
                 res.end();
-            } 
-            else operateDB(); // <-- HURRAY!😄 Call the fn now.
+            }
+            else operateDB(); // <-- HURRAY!😀 Call this fn now.
         }).catch(next);
- 
+
     function operateDB() {
         //continue with LOGIN operations
         MongoClient.connect(uri, {
@@ -80,10 +81,7 @@ router.post("/", (req, res, next) => {
                 }
                 client.close();
             });
-        }).catch((err) => {
-            console.error(err);
-            res.sendStatus(500);
-        });
+        }).catch(next);
     } // <--end of function
 
 });
