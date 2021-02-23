@@ -6,14 +6,17 @@ const bcrypt = require("bcrypt");
 const axios = require('axios').default;
 const router = express.Router();
 
+//FOR LOGIN ONLY::
+
+/* handling GET requests  */
 router.get("/", (req, res, next) => {
     res.render("login", { "title": "Twitclone: Login" });
 });
 
+/* handling POST requests */
 router.post("/", (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const responseToken = req.body.responseToken;
+    const { email, password, responseToken } = req.body;
+    let errors = []; // input errors
     let isValid = false; // captcha result
 
     function checkInputs() {
@@ -21,12 +24,13 @@ router.post("/", (req, res, next) => {
         var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!emailpatt.test(email) || !email || !password) {
-            OK = false;
+            errors.push("Invalid or empty inputs");
+            return false;
         }
         return OK;
     };
 
-    //email has valid format. So proceed
+    //First, Verify captcha responseToken
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
@@ -45,15 +49,10 @@ router.post("/", (req, res, next) => {
                 errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
                 res.end();
-            } else {
-                operateDB();
-            };
-        }).catch(err => {
-            console.error(err.response.data);
-            res.sendStatus(500);
-        });
-
-
+            } 
+            else operateDB(); // <-- HURRAY!😄 Call the fn now.
+        }).catch(next);
+ 
     function operateDB() {
         //continue with LOGIN operations
         MongoClient.connect(uri, {
@@ -85,7 +84,8 @@ router.post("/", (req, res, next) => {
             console.error(err);
             res.sendStatus(500);
         });
-    }
+    } // <--end of function
+
 });
 
 

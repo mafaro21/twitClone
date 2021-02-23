@@ -93,12 +93,12 @@ function Signup() {
 
 
         if (password.trim().length < 8) {
-            passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
+            passwordErr.passwordErrShort = "Required 8 or more characters";
             isValid = false;
         }
 
         if (password !== confirmPass) {
-            confirmpasswordErr.passwordsNotSame = "Passwords are not matching";
+            confirmpasswordErr.passwordsNotSame = "Passwords do not match";
             isValid = false;
         }
 

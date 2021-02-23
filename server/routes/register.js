@@ -15,13 +15,9 @@ router.get("/", (req, res, next) => {
 
 /* handling POST requests */
 router.post("/", (req, res, next) => {
-    const fullname = req.body.fullname;
-    const email = req.body.email;
-    const password = req.body.password;
-    const confirmPass = req.body.confirmPass;
-    const responseToken = req.body.responseToken;
+    const { fullname, email, password, confirmPass, responseToken } = req.body;
     let errors = []; // input errors
-    var isValid = false; // captcha result
+    let isValid = false; // captcha result
 
     function checkInputs() {
         var OK = true;
@@ -51,6 +47,8 @@ router.post("/", (req, res, next) => {
         }
         return OK;
     };
+
+    //First, verify captcha responseToken
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
@@ -69,15 +67,15 @@ router.post("/", (req, res, next) => {
         })
         .then(isValid => {
             if ((isValid && checkInputs()) === false) {
-                errors.push("CAPTCHA failed");
+                errors.push("CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
                 res.end();
             } else {
-                res.status(200).send({ "message": "NOT A ROBOT", "success": true });
-                // addUserToDatabase(); 
-            };
-        }).catch(err =>{
-            console.error(err.response.data);
+                //😊 ALL is OK, call the function:
+                //addUserToDatabase();
+            }
+        }).catch(err => {
+            console.error(err.message); // AXIOS error, if any
             res.sendStatus(500);
         });
 
@@ -99,9 +97,9 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.insertOne(userObject, (error, result) => {
                 if (error) {
-                    //next(error); /* for EJS exclusive apps only */
                     console.error(error);
                     res.status(422).json({ "message": error.message, "success": false });
+                    res.end();
                 } else {
                     console.log(result.ops);
                     //Now, create session here.
@@ -109,10 +107,7 @@ router.post("/", (req, res, next) => {
                 }
                 client.close();
             });
-        }).catch(err => {
-            res.sendStatus(500);
-            console.error(err);
-        });
+        }).catch(next);
     }; // <--end of function
 
 });
