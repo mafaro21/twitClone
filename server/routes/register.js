@@ -20,9 +20,9 @@ router.post("/", (req, res, next) => {
     let isValid = false; // captcha result
 
     function checkInputs() {
-        var OK = true;
-        var reg = new RegExp("[^ a-zA-Z0-9_]");
-        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        let OK = true;
+        let reg = new RegExp("[^ a-zA-Z0-9_]");
+        let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
             //☹ if any empty, END immediately!
@@ -49,6 +49,7 @@ router.post("/", (req, res, next) => {
     };
 
     //First, verify captcha token
+    //-----------------BEGIN VERIFICATION HERE ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -77,7 +78,6 @@ router.post("/", (req, res, next) => {
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
-
     async function addUserToDatabase() {
         let randnum = Math.floor(Math.random() * 100 - 10);
         let newPass = await bcrypt.hash(password, 10);
@@ -88,7 +88,7 @@ router.post("/", (req, res, next) => {
             password: newPass,
             datejoined: new Date(),
         };
-        
+
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true

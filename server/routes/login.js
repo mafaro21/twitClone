@@ -30,7 +30,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //First, verify captcha token
+    //Verify captcha token
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
