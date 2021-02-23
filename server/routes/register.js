@@ -20,9 +20,9 @@ router.post("/", (req, res, next) => {
     let isValid = false; // captcha result
 
     function checkInputs() {
-        var OK = true;
-        var reg = new RegExp("[^ a-zA-Z0-9_]");
-        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        let OK = true;
+        let reg = new RegExp("[^ a-zA-Z0-9_]");
+        let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
             //☹ if any empty, END immediately!
@@ -49,11 +49,12 @@ router.post("/", (req, res, next) => {
     };
 
     //First, verify captcha token
+    //-----------------BEGIN VERIFICATION HERE ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
-        setTimeout: 5000,
+        timeout: 5000,
         params: {
             secret: secret,
             response: responseToken
@@ -65,18 +66,17 @@ router.post("/", (req, res, next) => {
             let prob = res.data['error-codes'];
             if (prob) console.error("CAPTCHA", prob);
             return isValid;
-        })
-        .then(isValid => {
+        }).then(isValid => {
             if ((isValid && checkInputsResult) === false) {
                 errors.push("CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
             }
             else addUserToDatabase(); // <--- can call this fn now 😀
-        })
-        .catch(err => {
+        }).catch(err => {
             console.error("AXIOS", err.message);
             res.sendStatus(500);
         });
+    //---------------------END OF VERIFICATION ABOVE ---------------------//
 
     async function addUserToDatabase() {
         let randnum = Math.floor(Math.random() * 100 - 10);
@@ -97,12 +97,11 @@ router.post("/", (req, res, next) => {
             users.insertOne(userObject, (error, result) => {
                 if (error) {
                     console.error(error);
-                    res.status(422).json({ "message": error.code, "success": false });
-                    res.end();
+                    res.status(422).send({ "message": error.code, "success": false });
                 } else {
                     console.log(result.ops);
                     //Now, create session here.
-                    res.status(201).json({ "userCreated": result.insertedCount, "success": true });
+                    res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                 }
                 client.close();
             });

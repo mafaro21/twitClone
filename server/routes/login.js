@@ -30,11 +30,12 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //First, verify captcha token
+    //Verify captcha token
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
+        timeout: 5000,
         params: {
             secret: secret,
             response: responseToken
@@ -44,18 +45,17 @@ router.post("/", (req, res, next) => {
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             return isValid;
-        })
-        .then(isValid => {
+        }).then(isValid => {
             if ((isValid && checkInputsResult) === false) {
                 errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
-        })
-        .catch(err => {
+        }).catch(err => {
             console.error("AXIOS", err.message);
             res.sendStatus(500);
         });
+        //---------------------END OF VERIFICATION ABOVE ---------------------//
 
     function operateDB() {
         //continue with LOGIN operations
