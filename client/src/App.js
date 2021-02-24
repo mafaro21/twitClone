@@ -7,6 +7,7 @@ import Signup from './views/Signup';
 import Home from './views/Home';
 import Navbar from './components/Navbar';
 import NotFound404 from './NotFound404';
+import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
+          <Route path="/error" component={Error} />
           <Route component={NotFound404} />
         </Switch>
         {/* <Footer /> */}
