@@ -3,9 +3,8 @@ import {
     useState
 } from "react";
 import "../css/App.css";
-// import "../css/Signup.css";
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -38,6 +37,11 @@ function Signup() {
         }
     }, []);
 
+    const internalError = () => {
+        return <Redirect to="./Error" />;
+        // return window.location = "./Error";
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -68,9 +72,12 @@ function Signup() {
                         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
                     })
                     .catch((error) => {
-                        if (error.response.status == 500) setError("Internal Server Error");
-                        else setError(error.response.data.message);
-                        console.error(error.response.data);
+                        if (error.response.status == 500) {
+                            internalError();
+                        } else {
+                            setError(error.response.data.message);
+                        }
+                        // console.error(error.response.data);
                         // alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
                     });
             }
@@ -210,9 +217,6 @@ function Signup() {
                     <Link to="/" ><p className="mt-3 login-text">Already have an account?</p></Link>
                 </div>
             </div>
-            <div id="demo"></div>
-
-            {/* <div dangerouslySetInnerHTML={{ __html: codeStr }} /> */}
         </body>
 
     );
