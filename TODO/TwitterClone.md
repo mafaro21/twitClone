@@ -21,7 +21,7 @@ App Name:... twitClone?
 - [x] Add Google Captcha in LOGIN and REGISTER(free).
 - [x] Verify Google Captcha LOGIN and REGISTER
 
-- [ ] Display Errors from DB in Client (browser)
+- [x] Display Errors from DB in Client (browser)
 - [ ] Sessions.
 - [ ] User Dashboard
 - [ ] User Logout
