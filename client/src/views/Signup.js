@@ -21,6 +21,13 @@ function Signup() {
     const [passwordErr, setpasswordErr] = useState({}); /* <--- react validation */
     const [confirmpasswordErr, setconfirmpasswordErr] = useState({}); /* <--- react validation */
 
+    const [error, setError] = useState([]); //using array, data comes that way
+    const errorDiv = error
+        ? <div>
+            {error}
+        </div>
+        : '';
+
     const loadCaptcha = useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
@@ -41,10 +48,10 @@ function Signup() {
                 });
         });
 
-        const isValid = formValidation(); /* <--- react validation */
+        // const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-            if (isValid) {
+            if (true) {
                 const userObject = {
                     fullname: fullname,
                     email: email,
@@ -61,59 +68,62 @@ function Signup() {
                         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
                     })
                     .catch((error) => {
+                        if (error.response.status == 500) setError("Internal Server Error");
+                        else setError(error.response.data.message);
                         console.error(error.response.data);
-                        alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                        // alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
                     });
             }
         }
-    }
-
-
-
-    const formValidation = () => {           /* <--- react validation */
-
-        const fullnameErr = {};
-        const emailErr = {};
-        const passwordErr = {};
-        const confirmpasswordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-        var reg = new RegExp('[^ a-zA-Z0-9_]');
-
-        let isValid = true;
-
-        if (fullname.trim().length < 3) {
-            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
-            isValid = false;
-        }
-
-        if (!emailpatt.test(email)) {
-            emailErr.emailErrNoAt = "Email is invalid!";
-            isValid = false;
-        }
-
-
-        if (password.trim().length < 8) {
-            passwordErr.passwordErrShort = "Required 8 or more characters";
-            isValid = false;
-        }
-
-        if (password !== confirmPass) {
-            confirmpasswordErr.passwordsNotSame = "Passwords do not match";
-            isValid = false;
-        }
-
-        if (reg.test(fullname)) {
-            fullnameErr.fullnameinvalid = "Name contains illegal characters";
-            isValid = false;
-        }
-
-        setfullNameErr(fullnameErr);
-        setemailErr(emailErr);
-        setpasswordErr(passwordErr);
-        setconfirmpasswordErr(confirmpasswordErr);
-        return isValid;
 
     }
+
+
+
+    // const formValidation = () => {           /* <--- react validation */
+
+    //     const fullnameErr = {};
+    //     const emailErr = {};
+    //     const passwordErr = {};
+    //     const confirmpasswordErr = {};
+    //     var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+    //     var reg = new RegExp('[^ a-zA-Z0-9_]');
+
+    //     let isValid = true;
+
+    //     if (fullname.trim().length < 3) {
+    //         fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
+    //         isValid = false;
+    //     }
+
+    //     if (!emailpatt.test(email)) {
+    //         emailErr.emailErrNoAt = "Email is invalid!";
+    //         isValid = false;
+    //     }
+
+
+    //     if (password.trim().length < 8) {
+    //         passwordErr.passwordErrShort = "Required 8 or more characters";
+    //         isValid = false;
+    //     }
+
+    //     if (password !== confirmPass) {
+    //         confirmpasswordErr.passwordsNotSame = "Passwords do not match";
+    //         isValid = false;
+    //     }
+
+    //     if (reg.test(fullname)) {
+    //         fullnameErr.fullnameinvalid = "Name contains illegal characters";
+    //         isValid = false;
+    //     }
+
+    //     setfullNameErr(fullnameErr);
+    //     setemailErr(emailErr);
+    //     setpasswordErr(passwordErr);
+    //     setconfirmpasswordErr(confirmpasswordErr);
+    //     return isValid;
+
+    // }
 
 
     return (
@@ -122,7 +132,7 @@ function Signup() {
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
                     <h3> Create an Account </h3>
-
+                    <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
                     <form className="container" onSubmit={(e) => handleSubmit(e)} >
                         <div>
                             <input
