@@ -26,30 +26,30 @@ router.post("/", (req, res, next) => {
 
         if (!fullname || !email || !password || !confirmPass) {
             //☹ if any empty, END immediately!
-            errors.push("No field can be empty");
+            errors.push("No field can be empty |");
             return false;
         }
         if (reg.test(fullname)) {
-            errors.push("Name contains illegal characters");
+            errors.push(" Name contains illegal characters |");
             OK = false;
         }
         if (!emailpatt.test(email)) {
-            errors.push("Email is invalid");
+            errors.push(" Email is invalid |");
             OK = false;
         }
         if (password.length < 8) {
-            errors.push("Required 8 or more characters");
+            errors.push(" Required 8 or more characters |");
             OK = false;
         }
         if (password !== confirmPass) {
-            errors.push("Passwords do not match");
+            errors.push(" Passwords do not match |");
             OK = false;
         }
         return OK;
     };
 
-    //First, verify captcha token
     //-----------------BEGIN VERIFICATION HERE ---------------------------//
+    //First, verify captcha token
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -68,7 +68,7 @@ router.post("/", (req, res, next) => {
             return isValid;
         }).then(isValid => {
             if ((isValid && checkInputsResult) === false) {
-                errors.push("CAPTCHA error");
+                errors.push(" CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
             }
             else addUserToDatabase(); // <--- can call this fn now 😀

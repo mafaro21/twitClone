@@ -30,7 +30,8 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //Verify captcha token
+    //-----------------BEGIN VERIFICATION HERE ---------------------------//
+    //First, verify captcha token
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -55,7 +56,7 @@ router.post("/", (req, res, next) => {
             console.error("AXIOS", err.message);
             res.sendStatus(500);
         });
-        //---------------------END OF VERIFICATION ABOVE ---------------------//
+    //---------------------END OF VERIFICATION ABOVE ---------------------//
 
     function operateDB() {
         //continue with LOGIN operations
