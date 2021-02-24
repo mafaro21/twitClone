@@ -49,7 +49,7 @@ router.post("/", (req, res, next) => {
     };
 
     //-----------------BEGIN VERIFICATION HERE ---------------------------//
-    //First, verify captcha token
+    //Verify captcha token
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: "process.env.VERIFY_LINK",
@@ -60,6 +60,7 @@ router.post("/", (req, res, next) => {
             response: responseToken
         }
     };
+
     axios.request(axiosOptions)
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both == TRUE
@@ -71,7 +72,7 @@ router.post("/", (req, res, next) => {
                 errors.push(" CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
             }
-            else addUserToDatabase(); // <--- can call this fn now 😀
+            else addUserToDatabase(); // <-- HURRAY!😀 Call this fn now.
         }).catch(err => {
             console.error("AXIOS", err.message);
             res.sendStatus(500);
@@ -96,8 +97,15 @@ router.post("/", (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             users.insertOne(userObject, (error, result) => {
                 if (error) {
-                    console.error(error);
-                    res.status(422).send({ "message": error.code, "success": false });
+                    switch (error.code) {
+                        case 11000:
+                            res.status(422).send({ "message": "Email already in use!", "success": false });
+                            break;
+
+                        default:
+                            next(error);
+                            break;
+                    }
                 } else {
                     console.log(result.ops);
                     //Now, create session here.

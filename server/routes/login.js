@@ -42,6 +42,7 @@ router.post("/", (req, res, next) => {
             response: responseToken
         }
     };
+    
     axios.request(axiosOptions)
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
