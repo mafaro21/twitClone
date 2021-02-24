@@ -23,7 +23,7 @@ function Signup() {
     const [error, setError] = useState([]); //using array, data comes that way
     const errorDiv = error
         ? <div>
-            {error}
+            {error.join(", ")}
         </div>
         : '';
 
@@ -72,20 +72,16 @@ function Signup() {
                         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
                     })
                     .catch((error) => {
-                        if (error.response.status == 500) {
-                            internalError();
-                        } else {
-                            setError(error.response.data.message);
+                        //console.error(error.response.data);
+                        if (error.response.status === 500) {
+                            internalError();    /* serve error page 500 */
                         }
-                        // console.error(error.response.data);
-                        // alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                        else setError(error.response.data.message); /* display errors on this PAGE */
                     });
             }
         }
 
     }
-
-
 
     // const formValidation = () => {           /* <--- react validation */
 
