@@ -45,9 +45,9 @@ function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.grecaptcha.ready(function () {
+        window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
-                .then(function (responseToken) {
+                .then((responseToken) => {
                     sendtoServer(responseToken); // send this to the server with User Data
                 });
         });
