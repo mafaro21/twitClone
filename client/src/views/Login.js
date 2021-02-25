@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
-// import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from "react";
+import Loader from "react-loader-spinner";
 
 
 function Login() {
@@ -12,8 +11,19 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [emailErr, setemailErr] = useState({}); /* <--- react validation */
-    const [passwordErr, setpasswordErr] = useState({}); /* <--- react validation */
+    const [emailErr, setemailErr] = useState({});   /* <--- react validation */
+    const [passwordErr, setpasswordErr] = useState({});     /* <--- react validation */
+
+    const [disabled, setDisabled] = useState(false);    // button disabler during request
+
+    const [loading, setLoading] = useState(false);      // loading animation
+
+    const [error, setError] = useState([]);     //using array, data comes that way
+    const errorDiv = error
+        ? <div>
+            {error}
+        </div>
+        : '';
 
     const loadCaptcha = useEffect(() => {
         const script = document.createElement('script');
@@ -25,8 +35,38 @@ function Login() {
         }
     }, []);
 
+    const internalError = () => {       //redirect when there is a server error
+        // return <Redirect to="./Error" />;
+        return window.location = "./Error";
+    }
+
+    const Loading = (color) => {        //the loading div
+
+        // function colorChanger(color) {
+        //     if (color) {
+        //         setTimeout(() => {
+        //             return color = "orange";
+        //         }, 3000);
+        //     } else {
+        //         return color = "red";
+
+        //     }
+        // }
+
+        return <div>
+            <Loader type="Watch"
+                color="orange"
+                height={30}
+                width={30}
+            />
+
+        </div>
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setDisabled(true);  //disable button
+        setLoading(true);
 
         window.grecaptcha.ready(function () {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
@@ -35,10 +75,10 @@ function Login() {
                 });
         });
 
-        const isValid = formValidation(); /* <--- react validation */
+        // const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-            if (isValid) {
+            if (true) {
 
                 const userObject = {
                     email: email,
@@ -53,37 +93,46 @@ function Login() {
                         if (x === true) alert("Login up successful!"); /* then take user to dashboard */
                     })
                     .catch((error) => {
+                        if (error.response.status === 500) {
+                            internalError();
+                        }
+                        else setError(error.response.data.message)      //get error message from axios
+
+                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
+                            setDisabled(false);
+                            setLoading(false);
+                        }, 100);                   // delay after error warning shows up
+
                         console.error(error.response.data);
-                        alert("Login up failed. Press F12 for details"); /* TO FIX: display the errors properly */
                     });
             }
         }
     }
 
-    const formValidation = () => {           /* <--- react validation */
+    // const formValidation = () => {           /* <--- react validation */
 
-        const emailErr = {};
-        const passwordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+    //     const emailErr = {};
+    //     const passwordErr = {};
+    //     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-        let isValid = true;
+    //     let isValid = true;
 
-        if (!emailpatt.test(email)) {
-            emailErr.emailErrNoAt = "Email is invalid!";
-            isValid = false;
-        }
+    //     if (!emailpatt.test(email)) {
+    //         emailErr.emailErrNoAt = "Email is invalid!";
+    //         isValid = false;
+    //     }
 
-        if (password.trim().length < 8) {
-            passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
-            isValid = false;
-        }
+    //     if (password.trim().length < 8) {
+    //         passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
+    //         isValid = false;
+    //     }
 
 
-        setemailErr(emailErr);
-        setpasswordErr(passwordErr);
-        return isValid;
+    //     setemailErr(emailErr);
+    //     setpasswordErr(passwordErr);
+    //     return isValid;
 
-    }
+    // }
 
 
     return (
@@ -95,6 +144,8 @@ function Login() {
 
 
                     <h3>LOGO HERE</h3>
+                    <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
 
                         <div className="">
@@ -125,9 +176,17 @@ function Login() {
                                 return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
                             })}
                         </div>
+                        <br />
+                        {loading ? <Loading /> : null}
 
-                        <input type="submit" value="Log In" class="btn login-submit btn-outline-primary rounded-pill mt-4" />
-
+                        <button
+                            id="submit-btn"
+                            className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                            type="submit"
+                            disabled={disabled}         //button disabler
+                        >
+                            Log In
+                        </button>
                     </form>
 
                     <h3 className="animate-enter login-text mt-5">See what’s happening around <br />

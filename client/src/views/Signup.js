@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
-import {
-    useState
-} from "react";
+import React, { useEffect, useState } from "react";
 import "../css/App.css";
 import '../css/custom.scss';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
-
+import Loader from "react-loader-spinner";
 
 
 function Signup() {
@@ -19,6 +16,10 @@ function Signup() {
     const [emailErr, setemailErr] = useState({}); /* <--- react validation */
     const [passwordErr, setpasswordErr] = useState({}); /* <--- react validation */
     const [confirmpasswordErr, setconfirmpasswordErr] = useState({}); /* <--- react validation */
+
+    const [disabled, setDisabled] = useState(false);// button disabler during request
+
+    const [loading, setLoading] = useState(false);// loading animation
 
     const [error, setError] = useState([]); //using array, data comes that way
     const errorDiv = error
@@ -37,14 +38,27 @@ function Signup() {
         }
     }, []);
 
-    const internalError = () => {
+    const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;
-         return window.location = "./Error";
+        return window.location = "./Error";
     }
+
+    const Loading = () => { //the loading div
+        return <div>
+            <Loader type="Watch"
+                color="orange"
+                height={30}
+                width={30}
+            />
+        </div>
+    }
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setDisabled(true);  //disable button
+        setLoading(true);
         window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
                 .then((responseToken) => {
@@ -64,6 +78,8 @@ function Signup() {
                     responseToken: token
                 };
 
+
+
                 axios
                     .post("/register", userObject)
                     .then((res) => {
@@ -75,12 +91,19 @@ function Signup() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message);                     
+                        else setError(error.response.data.message)      //get error message from axios
+
+                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
+                            setDisabled(false);
+                            setLoading(false);
+                        }, 100);                   //1.5 second delay after error warning shows up
+
                         console.error(error.response.data);
-                        // alert("Sign up failed.");
+
                     });
             }
         }
+
 
     }
 
@@ -130,13 +153,15 @@ function Signup() {
     // }
 
 
+
+
     return (
 
         <body className="general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
                     <h3> Create an Account </h3>
-                    <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+                    <div style={{ color: "#A40000" }} className="error-msg ">{errorDiv}</div>
                     <form className="container" onSubmit={(e) => handleSubmit(e)} >
                         <div>
                             <input
@@ -201,20 +226,24 @@ function Signup() {
                                 return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
                             })}
                         </div>
+                        <br />
+
+                        {loading ? <Loading /> : null}
 
                         <button
                             id="submit-btn"
                             className="btn login-submit btn-outline-primary rounded-pill mt-3"
                             type="submit"
+                            disabled={disabled}         //button disabler
                         >
+
                             Sign Up
                         </button>
-
                     </form>
                     <Link to="/" ><p className="mt-3 login-text">Already have an account?</p></Link>
                 </div>
             </div>
-        </body>
+        </body >
 
     );
 }

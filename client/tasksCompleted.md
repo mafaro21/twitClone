@@ -1,4 +1,4 @@
-phone view tweet fix
-image tweet fix
-installed react-animated-heart
-added left sidebar
+added disabled button when user signs up
+login now similar to signup
+new signup pic
+added a loader for inbetween events
