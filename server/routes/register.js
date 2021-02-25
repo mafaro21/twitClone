@@ -33,7 +33,7 @@ router.post("/", (req, res, next) => {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
-        if (fullname.length() < 3) {
+        if (fullname.length < 3) {
             errors.push("Name should be at least 3 chars");
             OK = false;
         }
