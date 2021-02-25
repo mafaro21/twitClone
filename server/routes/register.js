@@ -48,8 +48,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //-----------------BEGIN VERIFICATION HERE ---------------------------//
-    //Verify captcha token
+    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -73,15 +72,16 @@ router.post("/", (req, res, next) => {
                 res.status(422).send({ "message": errors, "success": false });
                 return;
             }
-            else addUserToDatabase(); // <-- YAY!!😀 
+            else addUserToDatabase(); 
         })
         .catch(err => {
-            console.error("AXIOS", err.message);
             res.sendStatus(500);
+            console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
     async function addUserToDatabase() {
+        //IF ALL IS OK..😀
         let randnum = Math.floor(Math.random() * 100 - 10);
         let newPass = await bcrypt.hash(password, 10);
         const userObject = {
@@ -123,6 +123,6 @@ router.post("/", (req, res, next) => {
 router.use((err, req, res, next) => {
     res.sendStatus(500);
     console.error(err.message);
-})
+});
 
 module.exports = router;

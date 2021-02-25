@@ -30,8 +30,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //-----------------BEGIN VERIFICATION HERE ---------------------------//
-    //First, verify captcha token
+    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -42,20 +41,23 @@ router.post("/", (req, res, next) => {
             response: responseToken
         }
     };
-    
+
     axios.request(axiosOptions)
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
+            let prob = res.data['error-codes'];
+            if (prob) errors.push("CAPTCHA error");
             return isValid;
-        }).then(isValid => {
+        })
+        .then(isValid => {
             if ((isValid && checkInputsResult) === false) {
-                errors.push("CAPTCHA failed");
                 res.status(422).send({ "message": errors, "success": false });
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
-        }).catch(err => {
-            console.error("AXIOS", err.message);
+        })
+        .catch(err => {
             res.sendStatus(500);
+            console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
@@ -91,5 +93,11 @@ router.post("/", (req, res, next) => {
 
 });
 
+
+/*error handler */
+router.use((err, req, res, next) => {
+    res.sendStatus(500);
+    console.error(err.message);
+});
 
 module.exports = router;
