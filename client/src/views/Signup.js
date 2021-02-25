@@ -57,8 +57,6 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setDisabled(true);  //disable button
-        setLoading(true);
 
         window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
@@ -70,7 +68,11 @@ function Signup() {
         const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
+
             if (isValid) {
+                setDisabled(true);  //disable button
+                setLoading(true);
+
                 const userObject = {
                     fullname: fullname,
                     email: email,
@@ -149,6 +151,7 @@ function Signup() {
         setemailErr(emailErr);
         setpasswordErr(passwordErr);
         setconfirmpasswordErr(confirmpasswordErr);
+
         return isValid;
 
     }
