@@ -75,10 +75,10 @@ function Login() {
                 });
         });
 
-        // const isValid = formValidation(); /* <--- react validation */
+        const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-            if (true) {
+            if (isValid) {
 
                 const userObject = {
                     email: email,
@@ -110,30 +110,30 @@ function Login() {
         }
     }
 
-    // const formValidation = () => {           /* <--- react validation */
+    const formValidation = () => {           /* <--- react validation */
 
-    //     const emailErr = {};
-    //     const passwordErr = {};
-    //     var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        const emailErr = {};
+        const passwordErr = {};
+        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
-    //     let isValid = true;
+        let isValid = true;
 
-    //     if (!emailpatt.test(email)) {
-    //         emailErr.emailErrNoAt = "Email is invalid!";
-    //         isValid = false;
-    //     }
+        if (!emailpatt.test(email)) {
+            emailErr.emailErrNoAt = "Email is invalid!";
+            isValid = false;
+        }
 
-    //     if (password.trim().length < 8) {
-    //         passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
-    //         isValid = false;
-    //     }
+        if (password.trim().length < 8) {
+            passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
+            isValid = false;
+        }
 
 
-    //     setemailErr(emailErr);
-    //     setpasswordErr(passwordErr);
-    //     return isValid;
+        setemailErr(emailErr);
+        setpasswordErr(passwordErr);
+        return isValid;
 
-    // }
+    }
 
 
     return (
