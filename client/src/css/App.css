@@ -100,7 +100,7 @@ button{
 }
 
 .sign-pic{
-    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/paul-carmona.jpg");
+    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/ruslan-bardash.jpg");
     /* min-width: 100vh; */
     min-height: 100vh;
     background-size: cover;
@@ -121,7 +121,7 @@ button{
 }
 
 .error-msg{
-  /* font-weight: 700; */
+  font-weight: 500;
 }
 
 
