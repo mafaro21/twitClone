@@ -33,7 +33,7 @@ router.post("/", (req, res, next) => {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
-        if(fullname.length() < 3){
+        if (fullname.length() < 3) {
             errors.push("Name should be at least 3 chars");
             OK = false;
         }
@@ -96,7 +96,7 @@ router.post("/", (req, res, next) => {
             datejoined: new Date(),
         };
 
-        MongoClient.connect("uri", {
+        MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true
         }).then(client => {
