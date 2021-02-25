@@ -78,7 +78,7 @@ function Login() {
         const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-            if (true) {
+            if (isValid) {
 
                 const userObject = {
                     email: email,

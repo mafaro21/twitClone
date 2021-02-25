@@ -67,10 +67,10 @@ function Signup() {
                 });
         });
 
-        // const isValid = formValidation(); /* <--- react validation */
+        const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-            if (true) {
+            if (isValid) {
                 const userObject = {
                     fullname: fullname,
                     email: email,
