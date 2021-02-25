@@ -44,7 +44,7 @@ MongoClient.connect(uri, {
 }).catch(err => {
     console.error(err);
     process.exit(-1);
-    //if cannot connect to db, KILL THE SERVER
+    //if cannot connect, KILL THE SERVER
 });
 
 
