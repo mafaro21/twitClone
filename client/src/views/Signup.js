@@ -59,6 +59,7 @@ function Signup() {
         e.preventDefault();
         setDisabled(true);  //disable button
         setLoading(true);
+
         window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
                 .then((responseToken) => {
