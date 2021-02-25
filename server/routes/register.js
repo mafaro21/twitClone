@@ -18,6 +18,7 @@ router.post("/", (req, res, next) => {
     const { fullname, email, password, confirmPass, responseToken } = req.body;
     let errors = []; // input errors
     let isValid = false; // captcha result
+    let stringo = "mama";
 
     function checkInputs() {
         let OK = true;
@@ -33,7 +34,7 @@ router.post("/", (req, res, next) => {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
-        if (fullname.length() < 3) {
+        if (fullname.length < 3) {
             errors.push("Name should be at least 3 chars");
             OK = false;
         }
