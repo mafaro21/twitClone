@@ -107,50 +107,50 @@ function Signup() {
 
     }
 
-    // const formValidation = () => {           /* <--- react validation */
+    const formValidation = () => {           /* <--- react validation */
 
-    //     const fullnameErr = {};
-    //     const emailErr = {};
-    //     const passwordErr = {};
-    //     const confirmpasswordErr = {};
-    //     var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-    //     var reg = new RegExp('[^ a-zA-Z0-9_]');
+        const fullnameErr = {};
+        const emailErr = {};
+        const passwordErr = {};
+        const confirmpasswordErr = {};
+        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var reg = new RegExp('[^ a-zA-Z0-9_]');
 
-    //     let isValid = true;
+        let isValid = true;
 
-    //     if (fullname.trim().length < 3) {
-    //         fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
-    //         isValid = false;
-    //     }
+        if (fullname.trim().length < 3) {
+            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
+            isValid = false;
+        }
 
-    //     if (!emailpatt.test(email)) {
-    //         emailErr.emailErrNoAt = "Email is invalid!";
-    //         isValid = false;
-    //     }
+        if (!emailpatt.test(email)) {
+            emailErr.emailErrNoAt = "Email is invalid!";
+            isValid = false;
+        }
 
 
-    //     if (password.trim().length < 8) {
-    //         passwordErr.passwordErrShort = "Required 8 or more characters";
-    //         isValid = false;
-    //     }
+        if (password.trim().length < 8) {
+            passwordErr.passwordErrShort = "Required 8 or more characters";
+            isValid = false;
+        }
 
-    //     if (password !== confirmPass) {
-    //         confirmpasswordErr.passwordsNotSame = "Passwords do not match";
-    //         isValid = false;
-    //     }
+        if (password !== confirmPass) {
+            confirmpasswordErr.passwordsNotSame = "Passwords do not match";
+            isValid = false;
+        }
 
-    //     if (reg.test(fullname)) {
-    //         fullnameErr.fullnameinvalid = "Name contains illegal characters";
-    //         isValid = false;
-    //     }
+        if (reg.test(fullname)) {
+            fullnameErr.fullnameinvalid = "Name contains illegal characters";
+            isValid = false;
+        }
 
-    //     setfullNameErr(fullnameErr);
-    //     setemailErr(emailErr);
-    //     setpasswordErr(passwordErr);
-    //     setconfirmpasswordErr(confirmpasswordErr);
-    //     return isValid;
+        setfullNameErr(fullnameErr);
+        setemailErr(emailErr);
+        setpasswordErr(passwordErr);
+        setconfirmpasswordErr(confirmpasswordErr);
+        return isValid;
 
-    // }
+    }
 
 
 
