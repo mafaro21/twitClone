@@ -21,38 +21,37 @@ router.post("/", (req, res, next) => {
 
     function checkInputs() {
         let OK = true;
-        let reg = new RegExp("[^ a-zA-Z0-9_]");
+        let reg = new RegExp("[^ a-zA-Z0-9_\.]");
         let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
             //☹ if any empty, END immediately!
-            errors.push("No field can be empty |");
+            errors.push("No field can be empty, ");
             return false;
         }
         if (reg.test(fullname)) {
-            errors.push(" Name contains illegal characters |");
+            errors.push("Name contains illegal characters, ");
             OK = false;
         }
         if (!emailpatt.test(email)) {
-            errors.push(" Email is invalid |");
+            errors.push("Email is invalid, ");
             OK = false;
         }
         if (password.length < 8) {
-            errors.push(" Required 8 or more characters |");
+            errors.push("Required 8 or more characters, ");
             OK = false;
         }
         if (password !== confirmPass) {
-            errors.push(" Passwords do not match |");
+            errors.push("Passwords do not match, ");
             OK = false;
         }
         return OK;
     };
 
-    //-----------------BEGIN VERIFICATION HERE ---------------------------//
-    //First, verify captcha token
+    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
-        url: "process.env.VERIFY_LINK",
+        url: process.env.VERIFY_LINK,
         method: "POST",
         timeout: 5000,
         params: {
@@ -60,25 +59,29 @@ router.post("/", (req, res, next) => {
             response: responseToken
         }
     };
+
     axios.request(axiosOptions)
         .then(res => {
-            isValid = res.data.success && (res.data.score >= 0.5); //check if both == TRUE
+            isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
-            if (prob) console.error("CAPTCHA", prob);
+            if (prob) errors.push("CAPTCHA error");
             return isValid;
-        }).then(isValid => {
+        })
+        .then(isValid => {
             if ((isValid && checkInputsResult) === false) {
-                errors.push(" CAPTCHA error");
                 res.status(422).send({ "message": errors, "success": false });
+                return;
             }
-            else addUserToDatabase(); // <--- can call this fn now 😀
-        }).catch(err => {
-            console.error("AXIOS", err.message);
+            else addUserToDatabase(); 
+        })
+        .catch(err => {
             res.sendStatus(500);
+            console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
     async function addUserToDatabase() {
+        //IF ALL IS OK..😀
         let randnum = Math.floor(Math.random() * 100 - 10);
         let newPass = await bcrypt.hash(password, 10);
         const userObject = {
@@ -89,18 +92,24 @@ router.post("/", (req, res, next) => {
             datejoined: new Date(),
         };
 
-        MongoClient.connect(uri, {
+        MongoClient.connect("uri", {
             useUnifiedTopology: true,
             useNewUrlParser: true
         }).then(client => {
             const users = client.db("twitclone").collection("users");
             users.insertOne(userObject, (error, result) => {
                 if (error) {
-                    console.error(error);
-                    res.status(422).send({ "message": error.code, "success": false });
+                    switch (error.code) {
+                        case 11000:
+                            res.status(409).send({ "message": "Error: Email already in use", "success": false });
+                            break;
+                        default:
+                            next(error);
+                            break;
+                    }
                 } else {
+                    // SUCCESSFUL INSERT. Now, create session here.
                     console.log(result.ops);
-                    //Now, create session here.
                     res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                 }
                 client.close();
@@ -108,6 +117,12 @@ router.post("/", (req, res, next) => {
         }).catch(next);
     }; // <--end of function
 
+});
+
+/*error handler */
+router.use((err, req, res, next) => {
+    res.sendStatus(500);
+    console.error(err.message);
 });
 
 module.exports = router;

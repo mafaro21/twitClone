@@ -40,10 +40,11 @@ MongoClient.connect(uri, {
 }).then(client => {
     const db = client.db('twitclone');
     console.log(`connected to database ${db.databaseName}`);
-    /* do whatever operations here to DB, then finally close: */
     client.close();
 }).catch(err => {
     console.error(err);
+    process.exit(-1);
+    //if cannot connect to db, KILL THE SERVER
 });
 
 
@@ -64,9 +65,9 @@ app.use((err, req, res, next) => {
 
     // render the error page
     res.status(err.status || 500);
-    // res.render('error');
+    //res.render('error');
     res.send(err);
-    console.error(err.status, err.message);
+    console.error(err);
 });
 
 module.exports = app;

@@ -38,16 +38,16 @@ function Signup() {
     }, []);
 
     const internalError = () => {
-        return <Redirect to="./Error" />;
-        // return window.location = "./Error";
+        // return <Redirect to="./Error" />;
+         return window.location = "./Error";
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.grecaptcha.ready(function () {
+        window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
-                .then(function (responseToken) {
+                .then((responseToken) => {
                     sendtoServer(responseToken); // send this to the server with User Data
                 });
         });
@@ -72,20 +72,17 @@ function Signup() {
                         if (x === true) alert("Sign up successful!"); /* then take user to dashboard */
                     })
                     .catch((error) => {
-                        if (error.response.status == 500) {
+                        if (error.response.status === 500) {
                             internalError();
-                        } else {
-                            setError(error.response.data.message);
                         }
-                        // console.error(error.response.data);
-                        // alert("Sign up failed. Press F12 for details"); /* TO FIX: display the errors properly */
+                        else setError(error.response.data.message);                     
+                        console.error(error.response.data);
+                        // alert("Sign up failed.");
                     });
             }
         }
 
     }
-
-
 
     // const formValidation = () => {           /* <--- react validation */
 
