@@ -20,8 +20,8 @@ router.post("/", (req, res, next) => {
     let isValid = false; // captcha result
 
     function checkInputs() {
-        var OK = true;
-        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        let OK = true;
+        let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!emailpatt.test(email) || !email || !password) {
             errors.push("Invalid or empty inputs");
