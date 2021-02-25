@@ -161,15 +161,15 @@ function Signup() {
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
                     <h3> Create an Account </h3>
-                    <div style={{ color: "#A40000" }} className="error-msg ">{errorDiv}</div>
-                    <form className="container" onSubmit={(e) => handleSubmit(e)} >
+                    <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+                    <form className="container signup" onSubmit={(e) => handleSubmit(e)} >
                         <div>
                             <input
                                 name="fullname"
                                 type="text"
                                 value={fullname}
                                 onChange={(e) => setfullName(e.target.value)}
-                                className="signup-input mt-4"
+                                className="signup-input mt-4 change"
                                 maxLength="20"
                                 placeholder="Your Name"
                                 required
@@ -184,7 +184,7 @@ function Signup() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="signup-input mt-1"
+                                className="signup-input mt-1 change"
                                 maxLength="30"
                                 placeholder="Email address"
                                 required
@@ -200,7 +200,7 @@ function Signup() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="signup-input mt-1"
+                                className="signup-input mt-1 change"
                                 maxLength="20"
                                 placeholder="Enter Password"
                                 title="Required 8 characters or more"
@@ -217,7 +217,7 @@ function Signup() {
                                 type="password"
                                 value={confirmPass}
                                 onChange={(e) => setconfirmPass(e.target.value)}
-                                className="signup-input mt-1"
+                                className="signup-input mt-1 change"
                                 maxLength="20"
                                 placeholder="Confirm Password"
                                 required

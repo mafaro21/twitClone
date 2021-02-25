@@ -100,7 +100,7 @@ button{
 }
 
 .sign-pic{
-    background:  linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/ruslan-bardash.jpg");
+    background:  linear-gradient(rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.6)),url("../images/ruslan-bardash.jpg");
     /* min-width: 100vh; */
     min-height: 100vh;
     background-size: cover;
@@ -121,9 +121,12 @@ button{
 }
 
 .error-msg{
-  font-weight: 500;
+  font-weight: 900;
 }
 
+.change::placeholder{
+  color: black;
+}
 
 .signup-input{
   padding: 26px;
@@ -132,7 +135,7 @@ button{
   height: 60px;
   width: 50%;
   background-color:rgba(0, 0, 0, 0.2);
-  color:var(--text);
+  color: var(--text);
   outline: none;
 }
 
@@ -223,6 +226,9 @@ button{
   .error-msg{
     font-size: 10px;
   }
+  .change::placeholder{
+  color: #C9C9C9;
+}
   
 
 }
