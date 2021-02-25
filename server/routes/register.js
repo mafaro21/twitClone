@@ -34,7 +34,7 @@ router.post("/", (req, res, next) => {
             OK = false;
         }
         if (fullname.length < 3) {
-            errors.push("Name should be at least 3 chars");
+            errors.push("Name should be at least 3 chars, ");
             OK = false;
         }
         if (!emailpatt.test(email)) {
@@ -76,7 +76,7 @@ router.post("/", (req, res, next) => {
                 res.status(422).send({ "message": errors, "success": false });
                 return;
             }
-            else addUserToDatabase(); 
+            else addUserToDatabase();
         })
         .catch(err => {
             res.sendStatus(500);
@@ -105,7 +105,7 @@ router.post("/", (req, res, next) => {
                 if (error) {
                     switch (error.code) {
                         case 11000:
-                            res.status(409).send({ "message": "Error: Email already in use", "success": false });
+                            res.status(409).send({ "message": "Email already in use. Sign in?", "success": false });
                             break;
                         default:
                             next(error);

@@ -1,7 +1,9 @@
 ## What are these Files?
 These are **Data Models** as well as **Validation rules** that you can *optionally* set up for each ``Collection`` in your MongoDb Database. They enforce data structure and integrity at **Database Level** during inserting and updating, *independent of the application* used to interact with the database. They are called JSON Schema. Learn more about them here: [https://docs.mongodb.com/manual/core/schema-validation/]
 
-## How to use them in your database.
+## How to use them.
+Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED IN YOUR SOURCE CODE. THEY ARE SPECIFICALLY MEANT FOR MONGODb ONLY (the database-side alone).
+
 - First, download the free [MongoDB Compass](https://www.mongodb.com/products/compass) (available for Mac, Linux and Windows).
 - Install it and then connect to your existing **database** (or create New one). Then follow these steps:
 
