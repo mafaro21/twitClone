@@ -31,7 +31,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
 
     function checkInputs() {
         let OK = true;
-        let reg = new RegExp("[^ a-zA-Z0-9_\.]");
+        let reg = new RegExp("[^ a-zA-Z0-9_\\.]");
         let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {

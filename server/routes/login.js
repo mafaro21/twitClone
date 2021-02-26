@@ -5,6 +5,16 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require('axios').default;
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+
+//setup rate limit
+const LoginLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour window
+    max: 5, // start blocking after 5 requests
+    message: { "message": "Too many tries, try again in 1 hour", "success": false }
+});
+
 
 //FOR LOGIN ONLY::
 
@@ -14,7 +24,7 @@ router.get("/", (req, res, next) => {
 });
 
 /* handling POST requests */
-router.post("/", (req, res, next) => {
+router.post("/", LoginLimiter, (req, res, next) => {
     const { email, password, responseToken } = req.body;
     let errors = []; // input errors
     let isValid = false; // captcha result
