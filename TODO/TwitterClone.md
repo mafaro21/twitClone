@@ -24,7 +24,8 @@ App Name:... twitClone?
 
 - [x] Display Errors from DB in Client (browser)
 - [ ] Sessions.
-- [ ] User Dashboard
+- [ ] User Profile (view)
+- [ ] Edit User Profile
 - [ ] User Logout
 - [ ] Load Tweets from DB to client
 - Add Chat (DM) feature
