@@ -1,6 +1,7 @@
-﻿TWITTER CLONE:
+ ﻿TWITTER CLONE:
 Rough Database model
 2021-01-27
+Last updated: 2021-02-27
 - - - -
 
 ____
@@ -10,15 +11,16 @@ Uid
 Username 
 Email
 Password
+avatar: (external_link)
 datejoined (DateTime)
 
 ____
 Tweets
 ——
 id
+by_user_id
 tweetBody(max 140 chars)
 Hashtags [array of 5 max]
-UserTags_id [array of 5 max]
 Likes (int) *
 Retweets (int) *
 DateTime()
