@@ -92,8 +92,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
                             res.status(401).send({ "message": "Wrong email or password", "success": false });
                         else {
                             // BINGO! User authenticated. Now, create session.
-                            req.session.user = {id: result._id, email: result.email};
-                            res.status(200).send({"success": true});
+                            req.session.user = { id: result._id, email: result.email };
+                            res.status(200).send({ "success": true });
                         }
                     }
                 }
