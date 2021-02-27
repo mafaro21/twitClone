@@ -58,7 +58,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
         return OK;
     };
 
-    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
+    //-----------------BEGIN CAPTCHA VERIFY BELOW ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -119,8 +119,8 @@ router.post("/", RegisterLimiter, (req, res, next) => {
                     }
                 } else {
                     // SUCCESSFUL INSERT. Now, create session here.
-                    console.log(result.ops);
                     res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                    console.log(result.insertedId);
                 }
                 client.close();
             });

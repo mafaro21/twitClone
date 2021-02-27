@@ -68,7 +68,6 @@ function Signup() {
         const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-
             if (isValid) {
                 setDisabled(true);  //disable button
                 setLoading(true);
@@ -80,8 +79,6 @@ function Signup() {
                     confirmPass: confirmPass,
                     responseToken: token
                 };
-
-
 
                 axios
                     .post("/register", userObject)
@@ -106,8 +103,6 @@ function Signup() {
                     });
             }
         }
-
-
     }
 
     const formValidation = () => {           /* <--- react validation */

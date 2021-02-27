@@ -60,7 +60,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputsResult) === false) {
+            if ((checkInputsResult) === false) {
                 res.status(422).send({ "message": errors, "success": false });
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
@@ -92,7 +92,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
                             res.status(401).send({ "message": "Wrong email or password", "success": false });
                         else {
                             // BINGO! User authenticated. Now, create session.
-                            res.status(200).send({ "success": true });
+                            req.session.user = {id: result._id, email: result.email};
+                            res.status(200).json(req.session.user);
                         }
                     }
                 }
