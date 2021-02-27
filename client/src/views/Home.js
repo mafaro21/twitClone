@@ -10,16 +10,14 @@ import { useState } from "react";
 
 
 function Home() {
-    const [isClick, setClick] = useState(false);
+    // const [isClick, setClick] = useState(false);
 
 
     return (
         <div className="App general ">
             <div className="container ">
                 {/* <h3 className="text-start">Welcome, $Username</h3> */}
-                <br />
-                <div className="row pt-4 ">
-                    <br />
+                <div className="row ">
 
                     <Header />
 

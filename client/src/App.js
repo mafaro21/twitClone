@@ -5,6 +5,7 @@ import './css/App.css';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
+import Profile from './views/Profile';
 import Navbar from './components/Navbar';
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
+          <Route path="/profile" component={Profile} />
           <Route component={NotFound404} />
         </Switch>
         {/* <Footer /> */}

@@ -9,7 +9,7 @@ export default function Header() {
             <div className="fixed phone-header ">
 
                 <div className="d-flex">
-                    <Link class="header-link d-flex pl-2">
+                    <Link class="header-link d-flex pl-2 " to="/home">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -49,7 +49,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <Link class="header-link d-flex pl-2">
+                    <Link class="header-link d-flex pl-2" to="/profile">
                         <div>
                             <svg viewBox="0 0 26 26" class="icon mr-2">
                                 <g>
