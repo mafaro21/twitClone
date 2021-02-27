@@ -13,6 +13,9 @@ Email
 Password
 avatar: (external_link)
 datejoined (DateTime)
+bio
+tweet count
+
 
 ____
 Tweets
