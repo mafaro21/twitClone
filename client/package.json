@@ -12,7 +12,6 @@
     "dotenv": "^8.2.0",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
-    "react-animated-heart": "0.0.5",
     "react-dom": "^17.0.1",
     "react-loader-spinner": "^4.0.0",
     "react-router-dom": "^5.2.0",

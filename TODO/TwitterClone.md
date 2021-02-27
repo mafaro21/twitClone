@@ -1,6 +1,7 @@
-﻿TWIT CLONE: 
-last update: 2021-02-04
+﻿TWIT CLONE: TO-Do List
 --
+
+`last update: 2021-02-27`
 
 App Name:... twitClone?
 
@@ -23,9 +24,13 @@ App Name:... twitClone?
 
 - [x] Display Errors from DB in Client (browser)
 - [ ] Sessions.
-- [ ] User Dashboard
+- [ ] User Profile (view)
+- [ ] Edit User Profile
 - [ ] User Logout
 - [ ] Load Tweets from DB to client
+- [ ] Like & retweet Tweets
+- [ ] Follow & unfollow other users
+
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
 - [x] Add dark mode to each page.

@@ -30,16 +30,16 @@
   /* background-color: brown; */
   text-align: left;
   font-size: 23px;
+  width: 15%;
   
 }
 
 .fixed{
   position: fixed;
-  width:20%;
 }
 
 .icon{
-  height:25px;
+  height:26px;
   /* width:auto; */
   fill: var(--text);
   /*  */
@@ -52,6 +52,10 @@
   
 }
 
+.header-title{
+  font-size: 21px;
+}
+
 .icon:hover, .header-link:hover{
   fill: black;
   color: black;
@@ -62,6 +66,8 @@
 
 .header-link:hover{
     width: 160px;
+    /* height: 47px; */
+    /* height: 10%; */
 
 }
 
@@ -72,25 +78,34 @@
   }
 
   .header{
-    display: flex;
-    position: fixed;
-    /* bottom: 0; */
-    background-color: green;
-
+    position: absolute;
   }
 
   .phone-header{
+    display: flex;
+    position: fixed;
     flex-direction: row;
-
+    bottom: 0;
+    background-color: var(--background);
+    z-index: 99 !important;
+    width: 100vw !important;
+    height: 56px;
+    justify-content: space-evenly;
+    white-space: nowrap;
   }
 
   .header-link{
-    flex-direction: column;
+    padding: 7px;
+    width: 100%;
   }
 
   .header-link:hover{
-    width: auto;
+    width: 46px;
     height: auto;
+  }
+
+  .phone-sidebar{
+    display: none;
   }
 
 }

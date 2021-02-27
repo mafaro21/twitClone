@@ -6,15 +6,21 @@
   --background: #080603; 
 }
 
+/* mainly home properties */
+.main{
+  width: 40%;
+}
 .main-view{
   border: 1px solid var(--text);
     border-radius: 15px;
     text-align: left;
+    width: 100%;
 }
 
 .view{
     border-bottom: .02px solid var(--text);
     text-align: left;
+    width: auto;
 }
 
 .tweet-img{
@@ -34,24 +40,75 @@
   display: flex;
 }
 
-.heart{
-  height: 3px;
-  width:auto;
-}
-
-
-
 span{
   color: grey;
+}
+/* home properties */
+
+/* profile props */
+
+
+.profile-header{
+  font-size: 18px;
+  font-weight: bold;
+  position: sticky;
+  top: 50px;
+  background-color: #080603;
+  width: auto;
+  height: 64px;
+}
+
+/* .banner{
+  width: 100%;
+  height: 20%;
+} */
+.header-photo{
+  height: 200px;
+  width: 100%;
+}
+
+.profile-logo{
+  width:90px;
+  height:90px;
+  border-radius: 50%;
+  margin-top: -6%;
+}
+.banner-right{
+  display: flex;
+  float:right;
+  justify-content: space-between;
+}
+.banner-msg{
+   height:20px;
+  fill: var(--accent);
+    border-radius: 50%;
+}
+.banner-follow{
+  height: 40px;
+  width: 80px;
+  color: var(--accent);
+  transition: all .3s ease-in-out;
+  /* transform: translateZ(0); */
+  border: 2px solid var(--accent);
+  outline: none;
+}
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+button{
+  background-color: #080603;
+  border: 0;
 }
 
 
 
 
 @media screen and (max-width: 500px){   /*phone view*/
-  .user-name-tweet{
-    margin-left: 26px;
-  }
+  /* .user-name-tweet{
+     margin-left: 26px; 
+  } */
 
   .main-view{
     font-size: 13px;
@@ -61,4 +118,9 @@ span{
     width: 100%;
     height: 70%;
   }
+  .profile-logo{
+    margin-top: -14%;
+  }
+
+  
 }
