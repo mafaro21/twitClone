@@ -24,6 +24,15 @@
         "description": "must be at least 8 characters long",
         "maxLength": 70
       },
+      "avatar": {
+        "bsonType": "string",
+        "description": "link for user profile picture"
+      },
+      "bio": {
+        "bsonType": "string",
+        "maxLength": 80,
+        "description": "user twitclone bio"
+      },
       "datejoined": {
         "bsonType": "date",
         "description": "Must be a valid date"

@@ -5,6 +5,8 @@ const port = process.env.PORT || 5000;
 const helmet = require("helmet");
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
+var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 const app = express();
 
@@ -47,6 +49,18 @@ MongoClient.connect(uri, {
     process.exit(-1);
     //if cannot connect, KILL THE SERVER
 });
+
+const sessionStore = new MongoDBStore({
+    uri: uri,
+    databaseName: "twitclone",
+    collection: "sessions",
+    connectionOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+}, (error => {
+    if (error) console.error("MongoDBStore", error);
+}));
 
 
 // if visiting non-existing page, serve error 404
