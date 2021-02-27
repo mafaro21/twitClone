@@ -33,6 +33,7 @@ export default function Profile() {
                             </div>
                         </div>
 
+
                         <div className=" banner row">
                             <img src={deer} alt="example" className="header-photo " />
 
