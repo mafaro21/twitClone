@@ -33,7 +33,6 @@
 
 .App-header {
   display: flex;
-  
 
 }
 
@@ -181,19 +180,8 @@ button{
 
 
 
-/* media breakpoints */
-/* @media screen and (max-width: 700px){    tablet view most likely
-  .form1{
-    width: auto;
-    height: auto;
-  }
-  .login-input{
-    width: 90%;
-  }
-  
-  
-} */
-
+/*media breakpoints*/
+ 
 @media screen and (max-width: 500px){   /*phone view*/
   .login-form, .sign-form{
     width: auto;
@@ -224,12 +212,130 @@ button{
       font-size: 18px;
   }
   .error-msg{
-    font-size: 10px;
+    font-size: 12px;
+  }
+  .change::placeholder{
+  color: #C9C9C9;
+  }
+
+  
+  
+
+}
+
+@media screen and (min-width: 500px){    /*phone view and screens between*/
+  .login-form, .sign-form{
+    width: auto;
+    height: auto;  
+  }
+
+  .login-form{
+    margin-top: 50%;
+  }
+
+  .login-input{
+    width: 90%;
+  }
+  .login-pic, .sign-pic{
+    background-position: center;
+  }
+  .signup-input{
+    width: 100%;
+  }
+
+  .signup-input, .login-input{
+    font-size: 18px;
+    padding: 18px;
+  }
+
+  .login-text{
+      font-size: 18px;
+  }
+  .error-msg{
+    font-size: 14px;
+  }
+  .change::placeholder{
+  color: #C9C9C9;
+  }
+
+  
+  
+  
+} 
+
+
+@media screen and (min-width: 768px){    /*tablet view most likely*/
+  .login-form, .sign-form{
+    width: auto;
+    height: auto;  
+  }
+
+  .login-form{
+    margin-top: 50%;
+  }
+
+  .login-input{
+    width: 40%;
+  }
+  .login-pic, .sign-pic{
+    background-position: center;
+  }
+  .signup-input{
+    width: 100%;
+  }
+
+  .signup-input, .login-input{
+    font-size: 18px;
+    padding: 18px;
+  }
+
+  .login-text{
+      font-size: 18px;
+  }
+  .error-msg{
+    font-size: 14px;
   }
   .change::placeholder{
   color: #C9C9C9;
 }
   
+  
+} 
 
+@media screen and (min-width: 992px){    /*desktop view most likely*/
+  .login-form, .sign-form{
+    width: auto;
+    height: auto;  
+  }
+
+  .login-form{
+    margin-top: 50%;
+  }
+
+  .login-input{
+    width: 32%;
+  }
+  .login-pic, .sign-pic{
+    background-position: center;
+  }
+  .signup-input{
+    width: 50%;
+  }
+
+  .signup-input, .login-input{
+    font-size: 18px;
+    padding: 18px;
+  }
+
+  .login-text{
+      font-size: 18px;
+  }
+  .error-msg{
+    font-size: 15px;
+  }
+  .change::placeholder{
+  color: #C9C9C9;
 }
-
+  
+  
+} 

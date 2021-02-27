@@ -4,7 +4,7 @@ import '../css/custom.scss';
 
 function Sidebar() {
     return (
-        <div className="col-sm-4 p-3 ">
+        <div className="col-sm-4 p-3 phone-sidebar">
             <div className="p-3 sidebar">
                 <h5>Trending Topics</h5>
                 <p>dfdsafdsafd</p>

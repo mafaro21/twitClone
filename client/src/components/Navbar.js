@@ -9,11 +9,11 @@ function Navbar() {
     return (
         <nav class="navbar sticky-top  navbar-nav-scroll navbar-dark bg-secondary text">
             <div class="container-fluid ">
-                <Link class="navbar-brand" to="/home">TwitClone</Link>
+                <Link class="text nav-logo" to="/home">TwitClone</Link>
 
                 <Search />
 
-                <div class=" d-flex ">
+                <div class="d-flex nav-links ">
                     <Link class="nav-link text" to="/signup">signup</Link>
                     <Link class="nav-link text" to="/">login</Link>
                     <Link class="nav-link text" to="#">Logout</Link>
