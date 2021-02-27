@@ -93,7 +93,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
                         else {
                             // BINGO! User authenticated. Now, create session.
                             req.session.user = {id: result._id, email: result.email};
-                            res.status(200).json(req.session.user);
+                            res.status(200).send({"success": true});
                         }
                     }
                 }
