@@ -96,7 +96,7 @@ function Login() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message)      //get error message from axios
+                        else setError(error.response.data.message)      //show error message from axios
 
                         setTimeout(() => {          //reduce time for button to be clickable to reduce spam
                             setDisabled(false);

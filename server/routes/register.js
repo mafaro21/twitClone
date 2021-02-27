@@ -5,6 +5,16 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require('bcrypt');
 const axios = require('axios').default;
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
+
+
+//setup rate limit
+const RegisterLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour window
+    max: 5, // start blocking after 5 requests
+    message: { "message": "Too many tries, try again in 1 hour", "success": false }
+});
+
 
 //FOR REGISTER ONLY::
 
@@ -14,14 +24,14 @@ router.get("/", (req, res, next) => {
 });
 
 /* handling POST requests */
-router.post("/", (req, res, next) => {
+router.post("/", RegisterLimiter, (req, res, next) => {
     const { fullname, email, password, confirmPass, responseToken } = req.body;
     let errors = []; // input errors
     let isValid = false; // captcha result
 
     function checkInputs() {
         let OK = true;
-        let reg = new RegExp("[^ a-zA-Z0-9_\.]");
+        let reg = new RegExp("[^ a-zA-Z0-9_\\.]");
         let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
@@ -31,10 +41,6 @@ router.post("/", (req, res, next) => {
         }
         if (reg.test(fullname)) {
             errors.push("Name contains illegal characters, ");
-            OK = false;
-        }
-        if (fullname.length < 3) {
-            errors.push("Name should be at least 3 chars, ");
             OK = false;
         }
         if (!emailpatt.test(email)) {
@@ -52,7 +58,7 @@ router.post("/", (req, res, next) => {
         return OK;
     };
 
-    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
+    //-----------------BEGIN CAPTCHA VERIFY BELOW ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -113,7 +119,7 @@ router.post("/", (req, res, next) => {
                     }
                 } else {
                     // SUCCESSFUL INSERT. Now, create session here.
-                    console.log(result.ops);
+                    req.session.user = { id: result._id, email: result.email };
                     res.status(201).send({ "userCreated": result.insertedCount, "success": true });
                 }
                 client.close();
