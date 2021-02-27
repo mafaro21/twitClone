@@ -28,6 +28,9 @@ App Name:... twitClone?
 - [ ] Edit User Profile
 - [ ] User Logout
 - [ ] Load Tweets from DB to client
+- [ ] Like & retweet Tweets
+- [ ] Follow & unfollow other users
+
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
 - [x] Add dark mode to each page.
