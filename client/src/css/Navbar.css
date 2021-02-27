@@ -10,6 +10,10 @@
   width:40%;
 }
 
+.nav-logo{
+  font-size: 20px;
+}
+
 .search-input{
   padding: 18px;
   border: 1px solid var(--text);
@@ -24,7 +28,8 @@
 /* media breakpoints */
 @media screen and (max-width: 500px){   /*phone view*/
  .search-input{
-   width: auto;
+   /* width: 190px; */
+   width: 100%;
    font-size: 11px;
    /* margin-right: 35px; */
  }
@@ -34,6 +39,20 @@
  .nav-link{
    font-size: 13px;
  }
+
+ .nav-links{
+    display: none;
+    visibility: hidden;
+  }
+
+  .navbar{
+    height: 56px;
+  }
+
+  .nav-logo{
+  font-size: 18px;
+  margin-right: 70px;
+  }
 
   
 }
