@@ -41,6 +41,7 @@ const toLogin = require('./routes/login');
 const toProfile = require('./routes/profile');
 const tweetRouter = require('./routes/tweet');
 const toLogout = require('./routes/logout');
+const { abort } = require("process");
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,6 +65,7 @@ app.use('/logout', toLogout);
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
+
 
 //connect to Mongodb
 MongoClient.connect(uri, {
@@ -97,9 +99,10 @@ app.use((err, req, res, next) => {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
-    //res.send(err);
+    //res.render('error');
+    res.send(err);
     console.error(err.status);
 });
+
 
 module.exports = app;
