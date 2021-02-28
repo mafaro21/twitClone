@@ -11,11 +11,8 @@ Uid
 Username 
 Email
 Password
-avatar: (external_link)
 bio
 datejoined (DateTime)
-bio
-tweet count
 
 
 ____
