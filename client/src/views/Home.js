@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import tobias from '../images/mihai-surdu.jpg';
 import derick from '../images/derick-anies.jpg';
-import { useState } from "react";
+// import { useState } from "react";
 
 
 function Home() {

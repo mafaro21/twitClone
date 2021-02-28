@@ -90,7 +90,7 @@ function Login() {
                     .then((res) => {
                         console.log(res.data);
                         let x = res.data.success;
-                        if (x === true) alert("Login up successful!"); /* then take user to dashboard */
+                        if (x === true) return window.location = "./Home";
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {
