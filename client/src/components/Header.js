@@ -77,6 +77,19 @@ export default function Header() {
                         <p className="header-title">More</p>
                     </Link>
                 </div>
+
+                <div className="d-flex">
+                    <Link class=" d-flex pl-2">
+                        <div>
+                            <button
+                                className="btn login-submit btn-primary rounded-pill mt-3"
+                                style={{ width: "140px" }}
+                            >
+                                Tweet
+                        </button>
+                        </div>
+                    </Link>
+                </div>
             </div>
         </header >
     );
