@@ -141,12 +141,12 @@ button{
 .login-submit{
   height: 50px;
   width: 100px;
-  background-color: var(--accent);
-  color: var(--text);
   transition: all .3s ease-in-out;
+  /*background-color: var(--accent);
+  color: var(--text);
   transform: translateZ(0);
   border: 2px solid var(--text);
-  outline: none;
+  outline: none; */
 }
 
 .login-submit:hover{
