@@ -68,7 +68,6 @@ function Signup() {
         const isValid = formValidation(); /* <--- react validation */
 
         async function sendtoServer(token) {
-
             if (isValid) {
                 setDisabled(true);  //disable button
                 setLoading(true);
@@ -81,8 +80,6 @@ function Signup() {
                     responseToken: token
                 };
 
-
-
                 axios
                     .post("/register", userObject)
                     .then((res) => {
@@ -94,20 +91,18 @@ function Signup() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message)      //get error message from axios
+                        else setError(error.response.data.message)      //show error message from axios
 
-                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
+                        setTimeout(() => {          
                             setDisabled(false);
                             setLoading(false);
-                        }, 100);                   //1.5 second delay after error warning shows up
+                        }, 100);                // <--delay for button to be clickable to reduce spam   
 
                         console.error(error.response.data);
 
                     });
             }
         }
-
-
     }
 
     const formValidation = () => {           /* <--- react validation */
@@ -240,7 +235,6 @@ function Signup() {
                             type="submit"
                             disabled={disabled}         //button disabler
                         >
-
                             Sign Up
                         </button>
                     </form>

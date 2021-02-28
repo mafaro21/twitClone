@@ -1,7 +1,7 @@
  ﻿TWITTER CLONE:
 Rough Database model
 2021-01-27
-Last updated: 2021-02-27
+Last updated: 2021-02-28
 - - - -
 
 ____
@@ -12,6 +12,7 @@ Username
 Email
 Password
 avatar: (external_link)
+bio
 datejoined (DateTime)
 bio
 tweet count
