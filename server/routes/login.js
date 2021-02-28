@@ -60,7 +60,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputsResult) === false) {
+            if ((checkInputsResult) === false) {
                 res.status(422).send({ "message": errors, "success": false });
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.

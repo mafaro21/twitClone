@@ -119,8 +119,9 @@ router.post("/", RegisterLimiter, (req, res, next) => {
                     }
                 } else {
                     // SUCCESSFUL INSERT. Now, create session here.
-                    req.session.user = { id: result._id, email: result.email };
+                    req.session.user = { id: result.ops[0]._id, email: result.ops[0].email };
                     res.status(201).send({ "userCreated": result.insertedCount, "success": true });
+                    console.log(req.session.user);
                 }
                 client.close();
             });

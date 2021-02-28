@@ -1,5 +1,5 @@
 const isLoggedin = (req, res, next) => {
-    if(!req.sessions || !req.sessions.user){
+    if(!req.session.user){
         return res.status(401).send({"message": "Required to login first", "success": false});   
     } else next();
 };

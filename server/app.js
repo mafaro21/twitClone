@@ -97,8 +97,8 @@ app.use((err, req, res, next) => {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
-    //res.send(err);
+    //res.render('error');
+    res.send(err);
     console.error(err.status);
 });
 
