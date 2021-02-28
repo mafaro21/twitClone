@@ -10,28 +10,30 @@ const router = express.Router();
 /* GETTING MY PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
     let userid = req.session.user.id;
+    //retrieve data from db
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
-
-    }).then(client => {
+    })
+    .then(client => {
         const users = client.db('twitclone').collection('users');
-        const projection = { _id: 0, password: 0, email: 0 };
-        users.findOne({ _id: userid },  { projection: projection}, async (err, result) => {
-                if (err)  next(err);
-                else { res.json(result); }
-             await client.close();
-            });
+        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+        users.findOne({ _id: userid }, { projection: projection }, async (err, result) => {
+            if (err) next(err);
+            else if (!result) res.status(404).send("user not found!");
+            else res.json(result);
+            await client.close();
+        });
     }).catch(next);
 });
 
-/*  GETTING OTHER PEOPLEL */
+/*  GETTING OTHER user profile */
 router.get("/user/:userid", (req, res, next) => {
     let userid = req.params.userid;
     res.send(`Profile belongs to  ${userid}`);
 });
 
-/* handling PUT/(UPDATE PROFILE) requests */
+/* handling UPDATE PROFILE  */
 router.put("/mine", isLoggedin, (req, res, next) => {
 
 });

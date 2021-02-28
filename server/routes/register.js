@@ -98,6 +98,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             fullname: fullname,
             username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
             email: email,
+            bio: "Hello Twitclone, This is my default bio",
             password: newPass,
             datejoined: new Date(),
         };
@@ -121,7 +122,6 @@ router.post("/", RegisterLimiter, (req, res, next) => {
                     // SUCCESSFUL INSERT. Now, create session here.
                     req.session.user = { id: result.ops[0]._id, email: result.ops[0].email };
                     res.status(201).send({ "userCreated": result.insertedCount, "success": true });
-                    console.log(req.session.user);
                 }
                 client.close();
             });
