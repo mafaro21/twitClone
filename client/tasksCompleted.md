@@ -1,3 +1,3 @@
-displaying users data 
-dark navbar
-logout button
+- displaying users data 
+- dark navbar
+- logout button
