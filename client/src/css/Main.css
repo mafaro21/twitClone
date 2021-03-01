@@ -17,6 +17,10 @@
     width: 100%;
 }
 
+/* .main-view:hover{
+  box-shadow: 0 0 10px var(--accent);
+} */
+
 .view{
     border-bottom: .02px solid var(--text);
     text-align: left;
