@@ -7,16 +7,14 @@ import Search from './Search';
 
 function Navbar() {
     return (
-        <nav class="navbar sticky-top  navbar-nav-scroll navbar-dark bg-secondary text">
+        <nav class="navbar sticky-top  navbar-nav-scroll navbar-dark bg-dark text">
             <div class="container-fluid ">
                 <Link class="text nav-logo" to="/home">TwitClone</Link>
 
                 <Search />
 
                 <div class="d-flex nav-links ">
-                    <Link class="nav-link text" to="/signup">signup</Link>
-                    <Link class="nav-link text" to="/">login</Link>
-                    <Link class="nav-link text" to="#">Logout</Link>
+                    <Link class="nav-link text"></Link>
                 </div>
             </div>
 

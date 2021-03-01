@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -6,6 +6,8 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
+import axios from 'axios';
+import Loader from "react-loader-spinner";
 // import derick from '../images/derick-anies.jpg';
 
 export default function Profile() {
@@ -15,6 +17,13 @@ export default function Profile() {
 
     const [settingsModal, setSettingsModal] = useState(false);//settings modal
     const settingsToggle = () => setSettingsModal(!settingsModal);
+
+    const [loading, setLoading] = useState(true);      // loading animation
+
+    const [fullname, setFullname] = useState();
+    const [username, setUsername] = useState();
+    const [bio, setBio] = useState();
+    const [date, setDate] = useState();
 
     const EditModal = () => {
         return <div>
@@ -101,7 +110,7 @@ export default function Profile() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Edit
+                                    Save Changes
                         </button>
                             </form>
                         </div>
@@ -199,7 +208,7 @@ export default function Profile() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Edit
+                                    Save Changes
                         </button>
                             </form>
                         </div>
@@ -212,8 +221,42 @@ export default function Profile() {
         </div >
     }
 
-    const Dim = () => {
-        return document.getElementById("dim").style.opacity = "0.3";
+    // const Dim = () => {
+    //     return document.getElementById("dim").style.opacity = "0.3";
+    // }
+
+    useEffect(() => {
+        axios.get("/profile/mine")
+            .then((res) => {
+                console.log(res.data);
+                setFullname(res.data.fullname);
+                setUsername(res.data.username);
+                setBio(res.data.bio);
+                setDate(res.data.date);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
+
+    const Loading = () => {        //the loading div
+
+        return <div>
+            <Loader type="TailSpin"
+                color="orange"
+                height={60}
+                width={60}
+            />
+
+        </div>
+    }
+
+    const Check = () => {
+        setLoading(false)
+        return <div>
+            LOG IN OR SIGN UP
+        </div>
     }
 
 
@@ -223,19 +266,41 @@ export default function Profile() {
             <div className="container  " >
                 <div className="row " id="dim">
 
+                    {/* {profileData.map((profile) => (
+                        <div key={profile.fullname}>
+                            {profile.fullname}
+                        </div>
+                    ))} */}
+
+                    {/* {Object.keys(profileData).map((j) => {
+                        return <div style={{ color: "red" }}> {profileData[j]} </div>
+                    })} */}
+
+                    {/* {Object.keys(profileData).forEach((j, i) => {
+                        console.log(j, i)
+                        return <div style={{ color: "red" }}> {profileData.i} {i} {profileData[j]}</div>
+                    })} */}
+
                     <Header />
                     {editModal ? <EditModal /> : null}
-                    {editModal ? <Dim /> : null}
+                    {/* {editModal ? <Dim /> : null} */}
                     {settingsModal ? <SettingsModal /> : null}
+
+
+
+                    {/* {fullname || username || date == 0 ? null : <Check />} */}
+
                     <div className="col main-view  phone-home w-100 " >
+                        {loading ? <Loading /> : null}
                         <div className="row profile-header">
+
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
                                     <BackButton />
                                 </div>
                                 <div className="col ">
                                     <div className="">
-                                        first user
+                                        {fullname}
                                     </div>
                                     <p><span>0 Tweets</span></p>
                                 </div>
@@ -249,7 +314,7 @@ export default function Profile() {
 
                             <div className="p-2 view col ">
                                 <div className="">
-                                    <img src="https://avatars.dicebear.com/api/identicon/.svg" alt="example" className="profile-logo" />
+                                    <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="profile-logo" />
 
                                     <div className="banner-right ">
                                         <button
@@ -267,7 +332,6 @@ export default function Profile() {
                                                 </g>
                                             </svg>
                                         </button>
-                                        <br />
                                         <button
                                             className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
@@ -275,14 +339,26 @@ export default function Profile() {
                                         >
                                             Edit Profile
                                         </button>
+
                                     </div>
+
+
                                 </div>
+
                                 <div className="p-2 col">
-                                    first user
-                                    <p><span>@firstuser69</span></p>
+                                    <div className="banner-right">
+                                        <button
+                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill"
+                                            type="submit"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                    {fullname}
+                                    <p><span>@{username}</span></p>
 
                                     <div>
-                                        bio
+                                        {bio}
                                     </div>
                                     <div>
                                         <span>
@@ -301,7 +377,7 @@ export default function Profile() {
                                                 </g>
                                             </svg>
                                             &nbsp;
-                                            Joined...
+                                            {date}
                                         </span>
                                     </div>
                                     <div>
@@ -314,11 +390,11 @@ export default function Profile() {
 
                         <div className="p-2 view row">             {/* <--- standard tweet*/}
                             <div className="col-1.5">              {/* <--- user avi */}
-                                <img src="https://avatars.dicebear.com/api/identicon/.svg" alt="example" className="user-logo" />
+                                <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="user-logo" />
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">
-                                    first user &nbsp; <span>@firstuser69</span>
+                                    {fullname} &nbsp; <span>@{username}</span>
                                 </div>
                                 <p>this is my first tweet</p>
 
@@ -330,6 +406,8 @@ export default function Profile() {
                         </div>
 
                     </div>
+
+
 
                     <Sidebar />
                 </div>

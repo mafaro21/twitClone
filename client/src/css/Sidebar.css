@@ -10,7 +10,11 @@
     border: 1px solid var(--text);
     border-radius: 15px;
     text-align: left;
-    /* position:fixed; */
+    
+}
+
+.sidebar:hover{
+  box-shadow: 0 0 8px var(--accent);
 }
 
 .sticky{
@@ -62,6 +66,7 @@
   background-color: rgb(242,156,80,1);
   border-radius: 20px;
   text-decoration: none;
+  /* box-shadow: 0 0 8px var(--accent); */
 }
 
 .header-link:hover{
