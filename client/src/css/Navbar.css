@@ -24,6 +24,10 @@
   color:var(--text);
   outline: none;
 }
+.search-input:focus{
+  box-shadow: 0 0 13px var(--accent);
+  border: 1px solid var(--accent);
+}
 
 /* media breakpoints */
 @media screen and (max-width: 500px){   /*phone view*/
