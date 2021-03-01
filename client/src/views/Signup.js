@@ -93,7 +93,7 @@ function Signup() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Edit
+                                    Save Changes
                         </button>
                             </form>
                         </div>
