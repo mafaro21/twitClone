@@ -110,7 +110,7 @@ export default function Profile() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Edit
+                                    Save Changes
                         </button>
                             </form>
                         </div>
