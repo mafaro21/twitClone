@@ -41,15 +41,11 @@ const toLogin = require('./routes/login');
 const toProfile = require('./routes/profile');
 const tweetRouter = require('./routes/tweet');
 const toLogout = require('./routes/logout');
-const { abort } = require("process");
+const statuslogin = require('./routes/statusLogin');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
 
@@ -60,6 +56,7 @@ app.use('/login', toLogin);
 app.use('/profile', toProfile);
 app.use('/tweet', tweetRouter);
 app.use('/logout', toLogout);
+app.use('/statuslogin', statuslogin);
 
 //listening port
 app.listen(port, () => {
@@ -99,7 +96,6 @@ app.use((err, req, res, next) => {
 
     // render the error page
     res.status(err.status || 500);
-    //res.render('error');
     res.send(err);
     console.error(err.status);
 });

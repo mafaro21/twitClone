@@ -20,7 +20,7 @@ const LoginLimiter = rateLimit({
 
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
-    res.render("login", { "title": "Twitclone: Login" });
+    res.send({ "title": "Twitclone: Login" });
 });
 
 /* handling POST requests */

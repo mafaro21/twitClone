@@ -51,6 +51,10 @@ span{
 
 /* profile props */
 
+strong {
+  font-weight: 700;
+  /* for fullname. You can turn it to a Class. */
+}
 
 .profile-header{
   font-size: 18px;
