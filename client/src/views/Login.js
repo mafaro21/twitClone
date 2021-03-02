@@ -37,7 +37,7 @@ function Login() {
 
     const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;
-        return window.location = "./Error";
+        return window.location.replace("/Error");
     }
 
     const Loading = (color) => {        //the loading div
@@ -90,7 +90,7 @@ function Login() {
                     .then((res) => {
                         console.log(res.data);
                         let x = res.data.success;
-                        if (x === true) return window.location = "./Home";
+                        if (x === true) return window.location.replace("/Home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {
@@ -113,7 +113,7 @@ function Login() {
 
         const emailErr = {};
         const passwordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         let isValid = true;
 
@@ -122,8 +122,8 @@ function Login() {
             isValid = false;
         }
 
-        if (password.trim().length < 8) {
-            passwordErr.passwordErrShort = "Password should be atleast 8 characters long";
+        if (password.trim().length < 1) {
+            passwordErr.passwordErrShort = "Password cannot be empty";
             isValid = false;
         }
 

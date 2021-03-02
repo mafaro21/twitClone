@@ -5,7 +5,7 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require('axios').default;
 const router = express.Router();
-const rateLimit = require("express-rate-limit");
+const rateLimit = require("express-rate-limit"); //store it later in REDIS
 
 
 //setup rate limit
@@ -20,7 +20,7 @@ const LoginLimiter = rateLimit({
 
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
-    res.render("login", { "title": "Twitclone: Login" });
+    res.send({"title":" Twitclone: Login"});
 });
 
 /* handling POST requests */

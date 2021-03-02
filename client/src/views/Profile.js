@@ -23,7 +23,7 @@ export default function Profile() {
     const [fullname, setFullname] = useState();
     const [username, setUsername] = useState();
     const [bio, setBio] = useState();
-    const [date, setDate] = useState();
+    const [datejoined, setDatejoined] = useState();
 
     const EditModal = () => {
         return <div>
@@ -110,7 +110,7 @@ export default function Profile() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Save Changes
+                                    Save
                         </button>
                             </form>
                         </div>
@@ -208,7 +208,7 @@ export default function Profile() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Save Changes
+                                    Save
                         </button>
                             </form>
                         </div>
@@ -228,15 +228,18 @@ export default function Profile() {
     useEffect(() => {
         axios.get("/profile/mine")
             .then((res) => {
-                console.log(res.data);
+                //console.log(res.data);
                 setFullname(res.data.fullname);
                 setUsername(res.data.username);
                 setBio(res.data.bio);
-                setDate(res.data.date);
+                setDatejoined(res.data.datejoined);
+                document.title = "TwitClone: @" +res.data.username; //change DOCTITLE according to username.
                 setLoading(false);
             })
             .catch((err) => {
-                console.log(err);
+                //alert(err.message);
+                window.location.replace("/"); // <--- REDIRECT TO LOGIN immediately
+                console.error(err); 
             })
     }, []);
 
@@ -288,7 +291,7 @@ export default function Profile() {
 
 
 
-                    {/* {fullname || username || date == 0 ? null : <Check />} */}
+                    {/* {fullname || username || datejoined == 0 ? null : <Check />} */}
 
                     <div className="col main-view  phone-home w-100 " >
                         {loading ? <Loading /> : null}
@@ -300,7 +303,7 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div className="">
-                                        {fullname}
+                                     <strong>{fullname}</strong>
                                     </div>
                                     <p><span>0 Tweets</span></p>
                                 </div>
@@ -354,7 +357,7 @@ export default function Profile() {
                                             Logout
                                         </button>
                                     </div>
-                                    {fullname}
+                                    <strong>{fullname}</strong>
                                     <p><span>@{username}</span></p>
 
                                     <div>
@@ -377,7 +380,7 @@ export default function Profile() {
                                                 </g>
                                             </svg>
                                             &nbsp;
-                                            {date}
+                                            Joined {datejoined}
                                         </span>
                                     </div>
                                     <div>
@@ -394,7 +397,7 @@ export default function Profile() {
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">
-                                    {fullname} &nbsp; <span>@{username}</span>
+                                <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
                                 </div>
                                 <p>this is my first tweet</p>
 

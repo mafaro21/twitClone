@@ -93,7 +93,7 @@ function Signup() {
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
-                                    Save Changes
+                                    Save
                         </button>
                             </form>
                         </div>
@@ -138,7 +138,6 @@ function Signup() {
                 axios
                     .post("/register", userObject)
                     .then((res) => {
-                        console.log(res.data);
                         let x = res.data.success;
                         if (x === true) setWelcomeModal(true); /* then take user to dashboard */
                     })
@@ -146,14 +145,12 @@ function Signup() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message)      //show error message from axios
+                        else  setError(error.response.data.message);     //show error message from axios
 
                         setTimeout(() => {
                             setDisabled(false);
                             setLoading(false);
                         }, 100);                // <--delay for button to be clickable to reduce spam   
-
-                        console.error(error.response.data);
 
                     });
             }
