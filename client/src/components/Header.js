@@ -1,8 +1,50 @@
+import React, { useState, useEffect } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Header() {
+
+    const [fullname, setFullname] = useState();
+    const [username, setUsername] = useState();
+
+    const [userModal, setUserModal] = useState(false);
+    const userToggle = () => setUserModal(!userModal);
+
+    useEffect(() => {
+        axios.get("/profile/mine")
+            .then((res) => {
+                //console.log(res.data);
+                setFullname(res.data.fullname);
+                setUsername(res.data.username);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    }, []);
+
+    const UserModal = () => {
+        return <div className="user-modal modal-enter mr-1">
+            <button
+                className="text p-2 user-modal-btn "
+                type="submit"
+                onClick={Logout}
+            >
+                Log out @{username}
+            </button>
+        </div >
+    }
+
+    const Logout = () => {  //logout function
+        axios.get("logout")
+            .then((res) => {
+                window.location.replace("/");
+                console.log("logged out")
+            })
+    }
+
+
     return (
         <header className=" header pt-3">
             {/* col-sm-2 */}
@@ -90,6 +132,20 @@ export default function Header() {
                         </div>
                     </Link>
                 </div>
+
+                {userModal ? <UserModal /> : null}
+
+                <button className="user-data d-flex row" onClick={userToggle}>
+                    <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="user-data-img" />
+
+                    <div className="col">
+                        {fullname}
+                        <div>
+                            <span>@{username}</span>
+                        </div>
+                    </div>
+
+                </button>
             </div>
         </header >
     );

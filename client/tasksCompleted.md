@@ -1,3 +1,2 @@
-- displaying users data 
-- dark navbar
-- logout button
+log out working
+bottom left user details
