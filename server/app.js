@@ -23,14 +23,18 @@ const sessionStore = new MongoDBStore({
     if (error) throw error;
 }));
 
-//setup the session.
+//setup the session. ONE HOUR ONLY.
 app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     store: sessionStore,
     resave: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 1, httpOnly: true }
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 1, // 1 hour session.
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? true : false
+    }
 }));
 
 
