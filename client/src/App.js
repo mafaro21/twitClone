@@ -7,14 +7,29 @@ import Signup from './views/Signup';
 import Home from './views/Home';
 import Profile from './views/Profile';
 import Navbar from './components/Navbar';
+// import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import axios from 'axios';
+
 
 function App() {
   dotenv.config();
 
+  // let Status = axios.get("/statuslogin", { withCredentials: true })
+  //   .then((res) => {
+  //     console.log(res.data.loggedin)
+  //     return res.data.loggedin ? true : false;
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+
+
+
   return (
+
     <Router>
       <div className="App">
         {window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}

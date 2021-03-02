@@ -6,6 +6,45 @@
   --background: #080603; 
 }
 
+.user-data{
+  position: fixed;
+  bottom: 50px;
+  /* background-color: blue; */
+  font-size: 19px;
+  color:white;
+  text-align: left;
+}
+.user-data:hover{
+  background-color: #F29C50;
+  border-radius: 25px;
+  color: white;
+}
+.user-data-img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+.user-modal{
+  z-index: -1;
+  position: absolute;
+  box-shadow: 0 0 13px var(--accent);
+  color: white;
+  font-size: 19px;
+  width: 180px;
+  bottom: -200px;
+  border-radius: 12px;
+  /* margin-top: 210px; */
+  background-color: black;
+}
+.user-modal-btn{
+  background-color: black;
+}
+.user-modal:hover{
+  box-shadow: 0 0 35px red;
+  transition: all .2s ease-in-out;
+}
+
 .sidebar{
     border: 1px solid var(--text);
     border-radius: 15px;
@@ -34,7 +73,7 @@
   /* background-color: brown; */
   text-align: left;
   font-size: 23px;
-  width: 15%;
+  width: 16%;
   
 }
 
