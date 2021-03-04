@@ -12,6 +12,7 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 const RegisterLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour window
     max: 5, // start blocking after 5 requests
+    skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 1 hour", "success": false }
 });
 
