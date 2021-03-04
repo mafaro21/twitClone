@@ -17,9 +17,9 @@
     width: 100%;
 }
 
-/* .main-view:hover{
-  box-shadow: 0 0 10px var(--accent);
-} */
+.main-view:before{
+  filter: blur(5px);
+}
 
 .view{
     border-bottom: .02px solid var(--text);
@@ -126,7 +126,7 @@ button{
 
 /* modal edit */
 .modaltest{
-  z-index: 1 ;
+  z-index: 1000 ;
   position: absolute;
   width: 52%;
   transition: all .3s ease-in-out;

@@ -21,7 +21,7 @@ const RegisterLimiter = rateLimit({
 
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
-    res.send({"title":" Twitclone: Register"});
+    res.send({ "title": " Twitclone: Register" });
 });
 
 /* handling POST requests */

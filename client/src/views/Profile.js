@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
+import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
 export default function Profile() {
@@ -221,26 +222,20 @@ export default function Profile() {
         </div >
     }
 
+
     // const Dim = () => {
     //     return document.getElementById("dim").style.opacity = "0.3";
     // }
 
-    useEffect(() => {
-        axios.get("/profile/mine")
-            .then((res) => {
-                //console.log(res.data);
-                setFullname(res.data.fullname);
-                setUsername(res.data.username);
-                setBio(res.data.bio);
-                setDatejoined(res.data.datejoined);
-                document.title = "TwitClone: @" +res.data.username; //change DOCTITLE according to username.
-                setLoading(false);
-            })
-            .catch((err) => {
-                //alert(err.message);
-                window.location.replace("/"); // <--- REDIRECT TO LOGIN immediately
-                console.error(err); 
-            })
+    useEffect(() => {   //fetching data for logged in users
+
+        setFullname(localStorage.getItem('fullname'));
+        setUsername(localStorage.getItem('username'));
+        setBio(localStorage.getItem('bio'));
+        setDatejoined(localStorage.getItem('datejoined'));
+        document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
+        setLoading(false);
+
     }, []);
 
     const Loading = () => {        //the loading div
@@ -255,11 +250,13 @@ export default function Profile() {
         </div>
     }
 
-    const Check = () => {
-        setLoading(false)
-        return <div>
-            LOG IN OR SIGN UP
-        </div>
+    const Logout = () => {  //logout function
+        axios.get("/logout")
+            .then((res) => {
+                localStorage.clear();
+                window.location.replace("/");
+                // console.log("logged out")
+            })
     }
 
 
@@ -267,31 +264,13 @@ export default function Profile() {
     return (
         <div className="App general " >
             <div className="container  " >
-                <div className="row " id="dim">
-
-                    {/* {profileData.map((profile) => (
-                        <div key={profile.fullname}>
-                            {profile.fullname}
-                        </div>
-                    ))} */}
-
-                    {/* {Object.keys(profileData).map((j) => {
-                        return <div style={{ color: "red" }}> {profileData[j]} </div>
-                    })} */}
-
-                    {/* {Object.keys(profileData).forEach((j, i) => {
-                        console.log(j, i)
-                        return <div style={{ color: "red" }}> {profileData.i} {i} {profileData[j]}</div>
-                    })} */}
+                <div className="row " >
 
                     <Header />
                     {editModal ? <EditModal /> : null}
                     {/* {editModal ? <Dim /> : null} */}
                     {settingsModal ? <SettingsModal /> : null}
 
-
-
-                    {/* {fullname || username || datejoined == 0 ? null : <Check />} */}
 
                     <div className="col main-view  phone-home w-100 " >
                         {loading ? <Loading /> : null}
@@ -303,7 +282,7 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div className="">
-                                     <strong>{fullname}</strong>
+                                        <strong>{fullname}</strong>
                                     </div>
                                     <p><span>0 Tweets</span></p>
                                 </div>
@@ -353,6 +332,7 @@ export default function Profile() {
                                         <button
                                             className="btn login-submit banner-edit btn-outline-primary rounded-pill"
                                             type="submit"
+                                            onClick={Logout}
                                         >
                                             Logout
                                         </button>
@@ -397,7 +377,7 @@ export default function Profile() {
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">
-                                <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
+                                    <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
                                 </div>
                                 <p>this is my first tweet</p>
 

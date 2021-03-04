@@ -1,3 +1,4 @@
-- displaying users data 
-- dark navbar
-- logout button
+- saving data on the local storage when user logs in
+- local storage data clears when user logs out
+- data is retrieved faster
+- 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/App.css";
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 
@@ -139,13 +139,13 @@ function Signup() {
                     .post("/register", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        if (x === true) setWelcomeModal(true); /* then take user to dashboard */
+                        // if (x === true) setWelcomeModal(true); /* then take user to dashboard */
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else  setError(error.response.data.message);     //show error message from axios
+                        else setError(error.response.data.message);     //show error message from axios
 
                         setTimeout(() => {
                             setDisabled(false);
