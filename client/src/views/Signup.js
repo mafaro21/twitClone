@@ -163,7 +163,7 @@ function Signup() {
         const emailErr = {};
         const passwordErr = {};
         const confirmpasswordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
         var reg = new RegExp('[^ a-zA-Z0-9_]');
 
         let isValid = true;
