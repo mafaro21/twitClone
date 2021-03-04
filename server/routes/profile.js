@@ -19,7 +19,7 @@ router.get("/mine", isLoggedin, (req, res, next) => {
         const users = client.db('twitclone').collection('users');
         const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
         users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
-            if (!result) res.status(404).send("user not found!");
+            if (!result) res.sendStatus(404);
             else res.json(result);
             client.close();
         });

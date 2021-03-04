@@ -66,8 +66,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
         })
-        .catch(err => {
-            res.sendStatus(500);
+        .catch(err => { 
+            res.sendStatus(500);  //<--- TODO, handle CAPTCHA errors gracefully****err400
             console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
