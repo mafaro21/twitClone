@@ -10,8 +10,8 @@ import Navbar from './components/Navbar';
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import axios from 'axios';
 
 
 function App() {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/App.css";
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 
