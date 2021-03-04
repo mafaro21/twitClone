@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
+import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
 export default function Profile() {
@@ -221,36 +222,20 @@ export default function Profile() {
         </div >
     }
 
-    // const Date = (date) => {
-    //     let check = new Date(date);
-    //     console.log(check.toString());
-    // }
-
 
     // const Dim = () => {
     //     return document.getElementById("dim").style.opacity = "0.3";
     // }
 
     useEffect(() => {   //fetching data for logged in users
-        axios.get("/profile/mine")
-            .then((res) => {
-                //console.log(res.data);
-                setFullname(res.data.fullname);
-                setUsername(res.data.username);
-                setBio(res.data.bio);
-                let check = res.data.datejoined;
-                let date = new Date(check);
-                // console.log(date.toString())
-                let x = date.toString();
-                setDatejoined(x);
-                document.title = "TwitClone: @" + res.data.username; //change DOCTITLE according to username.
-                setLoading(false);
 
-            })
-            .catch((err) => {
-                //alert(err.message);
-                window.location.replace("/"); // <--- REDIRECT TO LOGIN immediately
-            })
+        setFullname(localStorage.getItem('fullname'));
+        setUsername(localStorage.getItem('username'));
+        setBio(localStorage.getItem('bio'));
+        setDatejoined(localStorage.getItem('datejoined'));
+        document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
+        setLoading(false);
+
     }, []);
 
     const Loading = () => {        //the loading div
@@ -268,6 +253,7 @@ export default function Profile() {
     const Logout = () => {  //logout function
         axios.get("/logout")
             .then((res) => {
+                localStorage.clear();
                 window.location.replace("/");
                 // console.log("logged out")
             })

@@ -15,16 +15,15 @@ router.get("/mine", isLoggedin, (req, res, next) => {
         useUnifiedTopology: true,
         useNewUrlParser: true,
     })
-    .then(client => {
-        const users = client.db('twitclone').collection('users');
-        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
-        users.findOne({ _id: userid }, { projection: projection }, async (err, result) => {
-            if (err) next(err);
-            else if (!result) res.status(404).send("user not found!");
-            else res.json(result);
-            await client.close();
-        });
-    }).catch(next);
+        .then(client => {
+            const users = client.db('twitclone').collection('users');
+            const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+            users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
+                if (!result) res.status(404).send("user not found!");
+                else res.json(result);
+                client.close();
+            });
+        }).catch(next);
 });
 
 /*  GETTING OTHER user profile */
