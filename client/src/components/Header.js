@@ -12,6 +12,8 @@ export default function Header() {
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
 
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
     useEffect(() => {
 
         getData();
@@ -27,7 +29,7 @@ export default function Header() {
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
-                let finalDate = months[date.getMonth()] + " " +  date.getFullYear();
+                let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
                 getData();
 
@@ -40,7 +42,7 @@ export default function Header() {
             setFullname(localStorage.getItem('fullname'));
             setUsername(localStorage.getItem('username'));
         }
-    }, []);
+    }, [fullname]);
 
 
 
@@ -59,10 +61,11 @@ export default function Header() {
     }
 
     const Logout = () => {  //logout function
-        axios.get("logout")
+        axios.get("/logout")
             .then((res) => {
+                localStorage.clear();
                 window.location.replace("/");
-                console.log("logged out")
+
             })
     }
 
@@ -159,7 +162,7 @@ export default function Header() {
 
 
                 <button className="user-data d-flex row " onClick={userToggle}>
-                    <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="user-data-img" />
+                    <img src={icon} alt="example" className="user-data-img" />
 
                     <div className="col">
                         {fullname}

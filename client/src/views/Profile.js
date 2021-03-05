@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
 export default function Profile() {
@@ -26,27 +26,42 @@ export default function Profile() {
     const [bio, setBio] = useState();
     const [datejoined, setDatejoined] = useState();
 
+    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ");
+
+
+
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
     const EditModal = () => {
         return <div>
             <div class="modaltest mt-5 modal-enter" >
                 <div class="">
                     <div class="modal-view">
-                        <div class="">
-                            <h3 class="mt-3">Edit Your Profile</h3>
-                            {/* <p>Your current username is <i>firstuser69</i>, you can choose to keep it or change it down below</p> */}
+                        <div class="modal-header">
+                            <h3 class="mt-3 ">Edit Your Profile</h3>
+                            <button className="" onClick={editToggle}>
+                                <svg viewBox="0 0 24 24" class="icon ">
+                                    <g>
+                                        <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </button>
                         </div>
-                        <div class="modal-body">
-                            <form className="container signup"  >
+
+                        <form class="modal-body">
+                            <form className=" signup"  >
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
+
                                 <div>
                                     <input
                                         name="fullname"
                                         type="text"
-                                        // value={fullname}
-                                        // onChange={(e) => setfullName(e.target.value)}
-                                        className="signup-input change"
+                                        value={editFullname}
+                                        onChange={(e) => setEditFullname(e.target.value)}
+                                        className="signup-input change "
                                         maxLength="20"
-                                        placeholder="New Name"
+                                        placeholder="New Fullname"
                                         required
                                     />
                                     {/* {Object.keys(fullnameErr).map((key) => {
@@ -55,52 +70,36 @@ export default function Profile() {
                                 </div>
                                 <div>
                                     <input
-                                        name="email"
-                                        type="email"
-                                        // value={email}
+                                        name="username"
+                                        type="text"
+                                        // value={localStorage.getItem('username')}
                                         // onChange={(e) => setEmail(e.target.value)}
                                         className="signup-input mt-1 change"
                                         maxLength="30"
-                                        placeholder="New Email address"
+                                        placeholder="New Username"
                                         required
                                     />
                                     {/* {Object.keys(emailErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
                                     })} */}
                                 </div>
-
                                 <div>
-                                    <input
-                                        name="password"
-                                        type="password"
-                                        // value={password}
-                                        // onChange={(e) => setPassword(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="20"
-                                        placeholder="New Password"
-                                        title="Required 8 characters or more"
-                                        required
-                                    />
-                                    {/* {Object.keys(passwordErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
-                                    })} */}
-                                </div>
-
-                                <div>
-                                    <input
-                                        name="confirmPass"
-                                        type="password"
-                                        // value={confirmPass}
-                                        // onChange={(e) => setconfirmPass(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="20"
-                                        placeholder="Confirm New Password"
+                                    <textarea
+                                        name="bio"
+                                        type="test"
+                                        // value={localStorage.getItem('bio')}
+                                        // onChange={ }
+                                        rows="4"
+                                        className="edit-input mt-1 change"
+                                        maxLength="100"
+                                        placeholder="Bio"
                                         required
                                     />
                                     {/* {Object.keys(confirmpasswordErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
                                     })} */}
                                 </div>
+
                                 <br />
 
                                 {/* {loading ? <Loading /> : null} */}
@@ -114,7 +113,7 @@ export default function Profile() {
                                     Save
                         </button>
                             </form>
-                        </div>
+                        </form>
                         <div class="modal-footer">
                             <button type="button" onClick={editToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
                         </div>
@@ -129,53 +128,46 @@ export default function Profile() {
             <div class="modaltest mt-5 modal-enter" >
                 <div class="">
                     <div class="modal-view">
-                        <div class="">
+                        <div class="modal-header">
                             <h3 class="mt-3">Settings</h3>
-                            {/* <button type="button" onClick={toggle} class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> */}
+                            <button className="" onClick={settingsToggle}>
+                                <svg viewBox="0 0 24 24" class="icon ">
+                                    <g>
+                                        <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </button>
                         </div>
+
                         <div class="modal-body">
-                            <form className="container signup"  >
+                            <form className=" signup"  >
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
                                 <div>
                                     <input
-                                        name="fullname"
-                                        type="text"
+                                        name="oldPass"
+                                        type="password"
                                         // value={fullname}
                                         // onChange={(e) => setfullName(e.target.value)}
-                                        className="signup-input change"
+                                        className="signup-input change edit-modal"
                                         maxLength="20"
-                                        placeholder="New Name"
+                                        placeholder="Enter Old Password"
                                         required
                                     />
                                     {/* {Object.keys(fullnameErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
                                     })} */}
                                 </div>
-                                <div>
-                                    <input
-                                        name="email"
-                                        type="email"
-                                        // value={email}
-                                        // onChange={(e) => setEmail(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="30"
-                                        placeholder="New Email address"
-                                        required
-                                    />
-                                    {/* {Object.keys(emailErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
-                                    })} */}
-                                </div>
 
                                 <div>
                                     <input
-                                        name="password"
+                                        name="newPassword"
                                         type="password"
                                         // value={password}
                                         // onChange={(e) => setPassword(e.target.value)}
                                         className="signup-input mt-1 change"
                                         maxLength="20"
-                                        placeholder="New Password"
+                                        placeholder="Enter New Password"
                                         title="Required 8 characters or more"
                                         required
                                     />
@@ -296,7 +288,7 @@ export default function Profile() {
 
                             <div className="p-2 view col ">
                                 <div className="">
-                                    <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="profile-logo" />
+                                    <img src={icon} alt="example" className="profile-logo" />
 
                                     <div className="banner-right ">
                                         <button
@@ -373,7 +365,7 @@ export default function Profile() {
 
                         <div className="p-2 view row">             {/* <--- standard tweet*/}
                             <div className="col-1.5">              {/* <--- user avi */}
-                                <img src="https://avatars.dicebear.com/api/identicon/{username}.svg" alt="example" className="user-logo" />
+                                <img src={icon} alt="example" className="user-logo" />
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">

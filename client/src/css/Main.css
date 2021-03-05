@@ -128,7 +128,7 @@ button{
 .modaltest{
   z-index: 1000 ;
   position: absolute;
-  width: 52%;
+  width: 42%;
   transition: all .3s ease-in-out;
 }
 .modal-welcome{
