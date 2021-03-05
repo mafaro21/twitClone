@@ -122,7 +122,9 @@ button{
 .error-msg{
   font-weight: 900;
 }
-
+.change{
+    width: 90%;
+  }
 .change::placeholder{
   color: black;
 }
@@ -154,6 +156,15 @@ button{
 }
 
 .login-input, .login-submit{
+  outline: none;
+}
+.edit-input{
+  width: 50%;
+  padding: 26px;
+  border: 1px solid var(--text);
+ border-radius: 20px;
+  background-color:rgba(0, 0, 0, 0.2);
+  color: var(--text);
   outline: none;
 }
 
@@ -202,6 +213,9 @@ button{
   .signup-input{
     width: 100%;
   }
+  .edit-input{
+  width: 100%;
+  }
 
   .signup-input, .login-input{
     font-size: 15px;
@@ -214,6 +228,7 @@ button{
   .error-msg{
     font-size: 12px;
   }
+  
   .change::placeholder{
   color: #C9C9C9;
   }
