@@ -22,12 +22,12 @@ export default function Header() {
                 localStorage.setItem('fullname', res.data.fullname);
                 localStorage.setItem('username', res.data.username);
                 localStorage.setItem('bio', res.data.bio);
-                let check = res.data.datejoined;
-                let date = new Date(check);
+                let date = new Date(res.data.datejoined);
                 // let x = date.getFullYear();
-                let months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+                let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
-                let finalDate = date.getFullYear() + " " + months[date.getMonth()];
+                let finalDate = months[date.getMonth()] + " " +  date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
                 getData();
 

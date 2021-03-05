@@ -12,6 +12,7 @@ const rateLimit = require("express-rate-limit"); //store it later in REDIS
 const LoginLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour window
     max: 5, // start blocking after 5 requests
+    skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 1 hour", "success": false }
 });
 
@@ -65,8 +66,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
         })
-        .catch(err => {
-            res.sendStatus(500);
+        .catch(err => { 
+            res.sendStatus(500);  //<--- TODO, handle CAPTCHA errors gracefully****err400
             console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
