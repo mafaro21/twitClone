@@ -26,7 +26,6 @@ function App() {
   //     console.log(err)
   //   })
 
-  let username = "/" + localStorage.getItem('username')
 
   return (
 
@@ -38,7 +37,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
-          <Route path={username} component={Profile} />
+          <Route path="/myprofile" component={Profile} />
           <Route path="/edit" component={Edit} />
           <Route component={NotFound404} />
         </Switch>

@@ -12,12 +12,11 @@ export default function Header() {
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
 
-    let username1 = "/" + localStorage.getItem('username')
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-       // getData();
+        getData();
 
         axios.get("/profile/mine")
             .then((res) => {
@@ -32,11 +31,16 @@ export default function Header() {
                 // let y = months[date.getMonth()];
                 let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
+                getData();
 
             }).catch((err) => {
                 window.location.replace("/");
             })
-      
+        function getData() {
+            setFullname(localStorage.getItem('fullname'));
+            setUsername(localStorage.getItem('username'));
+        }
+
     }, []);
 
 
@@ -66,7 +70,7 @@ export default function Header() {
 
 
     return (
-        <header className=" header pt-3" onLoad={getData}>
+        <header className=" header pt-3" >
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
@@ -111,7 +115,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <Link class="header-link d-flex pl-2" to={username1}>
+                    <Link class="header-link d-flex pl-2" to="/myprofile">
                         <div>
                             <svg viewBox="0 0 26 26" class="icon mr-2">
                                 <g>
