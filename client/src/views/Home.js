@@ -12,6 +12,8 @@ import derick from '../images/derick-anies.jpg';
 function Home() {
     // const [isClick, setClick] = useState(false);
 
+    let username = localStorage.getItem('username')
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     return (
         <div className="App general ">
@@ -24,7 +26,7 @@ function Home() {
                     <div className="col main-view phone-home ">
                         <div className="p-2 view row">             {/* <--- standard tweet*/}
                             <div className="col-1.5">              {/* <--- user avi */}
-                                <img src={derick} alt="example" className="user-logo" />
+                                <img src={icon} alt="example" className="user-logo" />
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">
@@ -41,7 +43,7 @@ function Home() {
 
                         <div className="p-2 view row">
                             <div className="col-1.5 ">
-                                <img src={derick} alt="example" className="user-logo" />
+                                <img src={icon} alt="example" className="user-logo" />
                             </div>
                             <div className="col user-name-tweet">
                                 <div className="user-content">
@@ -62,7 +64,7 @@ function Home() {
 
                         <div className="p-2 view row">
                             <div className="col-1.5 ">
-                                <img src={derick} alt="example" className="user-logo" />
+                                <img src={icon} alt="example" className="user-logo" />
                             </div>
                             <div className="col user-name-tweet">
                                 <div className="user-content">

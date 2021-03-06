@@ -80,7 +80,7 @@ function Login() {
                 setDisabled(true);  //disable button
                 setLoading(true);
                 const userObject = {
-                    email: email,
+                    email: email.trim(),
                     password: password,
                     responseToken: token
                 };

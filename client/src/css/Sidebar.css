@@ -46,10 +46,10 @@
 }
 
 .sidebar{
-    border: 1px solid var(--text);
+    /* border: 0.1px solid var(--text); */
     border-radius: 15px;
     text-align: left;
-    
+    background-color: #201e1c;
 }
 
 .sidebar:hover{
@@ -79,6 +79,17 @@
 
 .fixed{
   position: fixed;
+}
+ul{
+  list-style-type: none;
+  
+}
+.api-text{
+  color: white;
+}
+.api-image{
+  height: 70px;
+  width: auto;
 }
 
 .icon{

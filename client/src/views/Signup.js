@@ -128,8 +128,8 @@ function Signup() {
                 setLoading(true);
 
                 const userObject = {
-                    fullname: fullname,
-                    email: email,
+                    fullname: fullname.trim(),
+                    email: email.trim(),
                     password: password,
                     confirmPass: confirmPass,
                     responseToken: token

@@ -62,13 +62,13 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
     };
     const filter = /[<>]/g;
     const newValues = {
-        fullname: fullname.replaceAll(filter, ""),
-        username: username.replaceAll(filter, ""),
-        bio: bio.replaceAll(filter, "")
+        fullname: fullname.replace(filter, ""),
+        username: username.replace(filter, ""),
+        bio: bio.replace(filter, "")
     };
 
     const checkInputsResult = checkInputs();
-    if(checkInputsResult === false) {
+    if (checkInputsResult === false) {
         res.status(422).send({ "message": errors, "success": false });
         return;
     } else updateUserData();
@@ -87,6 +87,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
                 } else {
                     //RE-WrITE THE SESSION VARIABLES HERE.
                     res.status(204).json({ "message": result.modifiedCount, "success": true });
+                    console.log(result.modifiedCount)
                 }
                 client.close();
             });

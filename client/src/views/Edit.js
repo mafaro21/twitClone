@@ -22,6 +22,7 @@ export default function Edit() {
     const [count, setCount] = useState(0) //word counter
     const [click, setclick] = useState(false);
 
+
     const onChange = (e) => {
         setEditBio(e.target.value)
         setCount(e.target.value.length)
@@ -57,20 +58,20 @@ export default function Edit() {
             let bioSafe = editBio.replaceAll(open, "")
 
             const userObject = {
-                fullname: fullnameSafe,
-                username: usernameSafe,
-                bio: bioSafe
+                fullname: fullnameSafe.trim(),
+                username: usernameSafe.trim(),
+                bio: bioSafe.trim()
             }
 
             console.log(userObject)
 
-            // axios.post("", userObject)
-            //     .then((res) => {
-            //         console.log(res.data);
-            //     })
-            //     .catch((err) => {
-            //         console.error(err);
-            //     })
+            axios.put("/profile/mine/edit", userObject)
+                .then((res) => {
+                    window.location.replace("./profile")
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
         }
     }
 
@@ -79,19 +80,23 @@ export default function Edit() {
         const fullnameErr = {}
         const usernameErr = {}
         const bioErr = {}
-        let reg = new RegExp('[^ a-zA-Z0-9_]');
         let userReg = /^[\w\S]+$/gi;
+        let filter = /^[<>&gt;&lt;]+$/g;
 
         let isValid = true;
 
-        // if (reg.test(editFullname)) {
-        //     fullnameErr.fullnameinvalid = "Name contains illegal characters";
-        //     isValid = false;
-        // }
-        // if (!userReg.test(editUsername)) {
-        //     usernameErr.fullnameinvalid = "Name contains illegal characters";
-        //     isValid = false;
-        // }
+        if (filter.test(editFullname)) {
+            fullnameErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (filter.test(editBio)) {
+            bioErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (!userReg.test(editUsername)) {
+            usernameErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
         if (editFullname.trim().length < 3) {
             fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
             isValid = false;
@@ -211,7 +216,7 @@ export default function Edit() {
                                             </button>
                                     </form>
                                     <div class="modal-footer">
-                                        <Link to="/profile" type="button" className="btn login-submit btn-primary rounded-pill mt-2">Cancel</Link>
+                                        <Link to="/myprofile" type="button" className="btn login-submit btn-primary rounded-pill mt-2">Cancel</Link>
                                     </div>
                                 </div>
                             </div>
