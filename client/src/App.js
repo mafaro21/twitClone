@@ -26,11 +26,8 @@ function App() {
   //     console.log(err)
   //   })
 
-<<<<<<< HEAD
-=======
   let username = "/" + localStorage.getItem('username')
 
->>>>>>> 9da49cdd8db829aabb40b096f0c14ef59440b9fd
   return (
 
     <Router>
