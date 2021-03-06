@@ -1,5 +1,5 @@
 {
- "$jsonSchema": {
+  "$jsonSchema": {
     "bsonType": "object",
     "required": [
       "fullname",
@@ -24,14 +24,14 @@
         "description": "must be at least 8 characters long",
         "maxLength": 70
       },
-      "avatar": {
-        "bsonType": "string",
-        "description": "link for user profile picture"
-      },
       "bio": {
         "bsonType": "string",
-        "maxLength": 80,
+        "maxLength": 100,
         "description": "user twitclone bio"
+      },
+      "username": {
+        "bsonType": "string",
+        "maxLength": 20
       },
       "datejoined": {
         "bsonType": "date",
@@ -47,14 +47,8 @@
       }
     },
     {
-      "fullname": {
-        "$regex": "^[ 0-9A-Za-z_\\.]+$",
-        "$options": "gi"
-      }
-    },
-    {
       "username": {
-        "$regex": "^[\\w\\S]+$",
+        "$regex": "^[0-9a-zA-Z_\\S]+$",
         "$options": "gi"
       }
     }

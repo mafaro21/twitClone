@@ -14,17 +14,17 @@ router.get("/mine", isLoggedin, (req, res, next) => {
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
-    })
-        .then(client => {
-            const users = client.db('twitclone').collection('users');
-            const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
-            users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
-                if (!result) res.sendStatus(404);
-                else res.json(result);
-                client.close();
-            });
-        }).catch(next);
+    }).then(client => {
+        const users = client.db('twitclone').collection('users');
+        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+        users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
+            if (!result) res.sendStatus(404);
+            else res.json(result);
+            client.close();
+        });
+    }).catch(next);
 });
+
 
 /*  GETTING OTHER user profile */
 router.get("/user/:userid", (req, res, next) => {
@@ -32,16 +32,18 @@ router.get("/user/:userid", (req, res, next) => {
     res.send(`Profile belongs to  ${userid}`);
 });
 
+
 /* handling UPDATE MY PROFILE  */
 router.put("/mine/edit", isLoggedin, (req, res, next) => {
     let userid = req.session.user.id;
     const { fullname, username, bio } = req.body;
+    let errors = []; // input errors
 
     //do validation first
     function checkInputs() {
         let OK = true;
         let reg = new RegExp("[^ a-zA-Z0-9_\\.]");
-        let userReg = /^[\w\S]+$/gi;
+        let userReg = /^[0-9a-zA-Z_\S]+$/gi;
 
         if (!fullname || !username || !bio) {
             //☹ if any empty, END immediately!
@@ -52,26 +54,31 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
-        if (userReg.test(username)) {
+        if (!userReg.test(username)) {
             errors.push("Username contains illegal characters, ");
-            OK = false;
-        }
-        if (reg.test(bio)) {
-            errors.push("Bio contains illegal characters, ");
             OK = false;
         }
         return OK;
     };
-    //--------------here--------------------//
+    const filter = /[<>&gt&lt]/g;
+    const newValues = {
+        fullname: fullname.replaceAll(filter, ""),
+        username: username.replaceAll(filter, ""),
+        bio: bio.replaceAll(filter, "")
+    };
+
     const checkInputsResult = checkInputs();
+    if(checkInputsResult === false) {
+        res.status(422).send({ "message": errors, "success": false });
+        return;
+    } else updateUserData();
 
     function updateUserData() {
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         }).then(client => {
-            const users = client.db('twitclone').collection('users');
-            const newValues = { fullname: '', username: '', bio: '' }; // <--newValues
+            const users = client.db("twitclone").collection("users");
             users.updateOne({ _id: userid }, { $set: newValues }, (err, result) => {
                 if (err) {
                     res.status(400).send({ "message": err.message, "success": false });
@@ -79,14 +86,15 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
                     console.error(err);
                 } else {
                     //RE-WrITE THE SESSION VARIABLES HERE.
-                    res.json({ "message": result.modifiedCount, "success": true });
+                    res.status(204).json({ "message": result.modifiedCount, "success": true });
                 }
                 client.close();
             });
-        }).catch(next);    
+        }).catch(next);
     }
 
 });
+
 
 /*error handler */
 router.use((err, req, res, next) => {
