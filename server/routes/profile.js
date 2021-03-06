@@ -60,7 +60,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
         }
         return OK;
     };
-    const filter = /[<>&gt&lt]/g;
+    const filter = /[<>]/g;
     const newValues = {
         fullname: fullname.replaceAll(filter, ""),
         username: username.replaceAll(filter, ""),
