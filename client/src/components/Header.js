@@ -17,8 +17,7 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-
-        getData();
+       // getData();
 
         axios.get("/profile/mine")
             .then((res) => {
@@ -33,17 +32,11 @@ export default function Header() {
                 // let y = months[date.getMonth()];
                 let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
-                getData();
 
-            })
-            .catch((err) => {
+            }).catch((err) => {
                 window.location.replace("/");
             })
-
-        function getData() {
-            setFullname(localStorage.getItem('fullname'));
-            setUsername(localStorage.getItem('username'));
-        }
+      
     }, []);
 
 
@@ -73,11 +66,11 @@ export default function Header() {
 
 
     return (
-        <header className=" header pt-3">
+        <header className=" header pt-3" onLoad={getData}>
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
-                <div className="d-flex">
+                <div className="d-flex" >
                     <Link class="header-link d-flex pl-2 " to="/home">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
