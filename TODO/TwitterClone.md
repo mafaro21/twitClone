@@ -1,9 +1,9 @@
 ﻿TWIT CLONE: TO-Do List
 --
 
-`last update: 2021-02-27`
+`last update: 2021-03-07`
 
-App Name:... twitClone?
+App Name:... twitClone
 
 ## TO-DO LIST:
 
@@ -23,10 +23,10 @@ App Name:... twitClone?
 - [x] Verify Google Captcha LOGIN and REGISTER
 
 - [x] Display Errors from DB in Client (browser)
-- [ ] Sessions.
-- [ ] User Profile (view)
-- [ ] Edit User Profile
-- [ ] User Logout
+- [x] Sessions.
+- [x] User Profile (view)
+- [x] Edit User Profile
+- [x] User Logout
 - [ ] Load Tweets from DB to client
 - [ ] Like & retweet Tweets
 - [ ] Follow & unfollow other users
