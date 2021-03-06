@@ -159,13 +159,18 @@ button{
   outline: none;
 }
 .edit-input{
-  width: 50%;
+  width: 100%;
+  height: 60px;
   padding: 26px;
   border: 1px solid var(--text);
- border-radius: 20px;
+  border-radius: 20px;
   background-color:rgba(0, 0, 0, 0.2);
   color: var(--text);
   outline: none;
+}
+textarea.edit-input{
+  width: 100%;
+  height: auto;
 }
 
 /* animation entrance */

@@ -1,4 +1,4 @@
-- saving data on the local storage when user logs in
-- local storage data clears when user logs out
-- data is retrieved faster
+- made separate edit page
+- word counter for bio
+- some front-end validation
 - 

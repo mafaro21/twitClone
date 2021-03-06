@@ -12,6 +12,8 @@ export default function Header() {
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
 
+    let username1 = "/" + localStorage.getItem('username')
+
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function Header() {
             setFullname(localStorage.getItem('fullname'));
             setUsername(localStorage.getItem('username'));
         }
-    }, [fullname]);
+    }, []);
 
 
 
@@ -116,7 +118,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <Link class="header-link d-flex pl-2" to="/profile">
+                    <Link class="header-link d-flex pl-2" to={username1}>
                         <div>
                             <svg viewBox="0 0 26 26" class="icon mr-2">
                                 <g>
