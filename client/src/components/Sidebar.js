@@ -10,40 +10,44 @@ function Sidebar() {
     const [deaths, setDeaths] = useState();
     const [recovered, setRecovered] = useState();
 
-    useEffect(() => {
+    // const corona = useEffect(() => {
 
-        getData();
+    //     // getData();
 
-        const options = {
-            method: 'GET',
-            url: 'https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/total',
-            params: { country: 'USA' },
-            headers: {
-                'x-rapidapi-key': '34cf492dbamshf4c3cf2197f8267p138e57jsn2e008248382d',
-                'x-rapidapi-host': 'covid-19-coronavirus-statistics.p.rapidapi.com'
-            }
-        };
+    //     const options = {
+    //         method: 'GET',
+    //         url: 'https://newsapi.org/v2/top-headlines',
+    //         params: {
+    //             category: 'general',
+    //             pageSize: 4,
+    //             country: 'us',
+    //             apiKey: process.env.REACT_APP_NEWS_API_KEY
+    //         }
 
-        axios.request(options).then(function (res) {
-            localStorage.setItem('confirmed', res.data.data.confirmed);
-            localStorage.setItem('deaths', res.data.data.deaths);
-            localStorage.setItem('location', res.data.data.location);
-            localStorage.setItem('recovered', res.data.data.recovered);
-        }).catch(function (error) {
-            console.error(error);
-        });
+    //     };
 
-        function getData() {
-            setConfirmed(localStorage.getItem('confirmed'));
-            setDeaths(localStorage.getItem('deaths'));
-            setLocation(localStorage.getItem('location'));
-            setRecovered(localStorage.getItem('recovered'));
-        }
+    //     axios.request(options).then(function (res) {
+    //         // localStorage.setItem('confirmed', res.data.data.confirmed);
+    //         // localStorage.setItem('deaths', res.data.data.deaths);
+    //         // localStorage.setItem('location', res.data.data.location);
+    //         // localStorage.setItem('recovered', res.data.data.recovered);
+    //         // getData();
+    //         console.log(res.data);
+    //     }).catch(function (error) {
+    //         console.error(error);
+    //     });
 
-    }, [])
+    //     // function getData() {
+    //     //     setConfirmed(localStorage.getItem('confirmed'));
+    //     //     setDeaths(localStorage.getItem('deaths'));
+    //     //     setLocation(localStorage.getItem('location'));
+    //     //     setRecovered(localStorage.getItem('recovered'));
+    //     // }
+
+    // }, [])
 
     return (
-        <div className="col-sm-4 p-3 phone-sidebar">
+        <div className="col-sm-4 p-3 phone-sidebar" >
             <div className="p-3 sidebar">
                 <h5>Trending Topics</h5>
                 <p>dfdsafdsafd</p>

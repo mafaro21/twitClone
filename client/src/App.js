@@ -6,6 +6,7 @@ import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
 import Profile from './views/Profile';
+import Edit from './views/Edit';
 import Navbar from './components/Navbar';
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
@@ -25,6 +26,11 @@ function App() {
   //     console.log(err)
   //   })
 
+<<<<<<< HEAD
+=======
+  let username = "/" + localStorage.getItem('username')
+
+>>>>>>> 9da49cdd8db829aabb40b096f0c14ef59440b9fd
   return (
 
     <Router>
@@ -35,7 +41,8 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
-          <Route path="/profile" component={Profile} />
+          <Route path={username} component={Profile} />
+          <Route path="/edit" component={Edit} />
           <Route component={NotFound404} />
         </Switch>
         {/* <Footer /> */}
