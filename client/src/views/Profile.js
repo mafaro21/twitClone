@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
+import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
@@ -306,13 +307,14 @@ export default function Profile() {
                                                 </g>
                                             </svg>
                                         </button>
-                                        <button
+                                        <Link
+                                            to="/edit"
                                             className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
-                                            onClick={editToggle}
+                                        // onClick={editToggle}
                                         >
                                             Edit Profile
-                                        </button>
+                                        </Link>
 
                                     </div>
 
