@@ -42,7 +42,7 @@ function Signup() {
 
     const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;
-        return window.location = "./Error";
+        return window.location.replace("/Error");
     }
 
     const Loading = () => { //the loading div
