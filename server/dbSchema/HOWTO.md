@@ -1,8 +1,8 @@
 ## What are these Files?
-Any of these files define 2 things:  **Data Model** as well as **Schema Validation** for each ``Collection`` in your MongoDb Database. They ensure data integrity and Security at **DATABASE LEVEL** during inserting and updating, *independent of the application* used. They are called JSON Schema. Learn more about them here: [https://docs.mongodb.com/manual/core/schema-validation/]
+These files define 2 things:  **Data Model** as well as **Validation Rules** for each ``Collection`` in your MongoDb Database. They ensure data integrity and Security at **DATABASE LEVEL** during inserting and updating, *independent of the application* used. They are called JSON Schema. Learn more about them here: [https://docs.mongodb.com/manual/core/schema-validation/]
 
 ## How to use them.
-Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED IN YOUR APP SOURCE CODE. THEY ARE SPECIFICALLY MEANT to be uploaded to MONGODb ONLY (in the *Validation* section). Also can be used as reference when modeling your app.
+Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED IN YOUR APP SOURCE CODE. THEY ARE SPECIFICALLY MEANT to be uploaded to MONGODb ONLY (in the *Validation* section). Also can be used as reference when developing your app.
 
 - First, download the free [MongoDB Compass](https://www.mongodb.com/products/compass) (available for Mac, Linux and Windows).
 - Install it and then connect to your existing **database** (or create New one). Then follow these steps:

@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
@@ -248,7 +248,7 @@ export default function Profile() {
             .then((res) => {
                 localStorage.clear();
                 window.location.replace("/");
-                // console.log("logged out")
+
             })
     }
 
