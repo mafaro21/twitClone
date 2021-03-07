@@ -51,6 +51,18 @@
         "$regex": "^[0-9a-zA-Z_\\S]+$",
         "$options": "gi"
       }
+    },
+    {
+      "bio": {
+        "$regex": "^[^><]+$",
+        "$options": "gi"
+      }
+    },
+    {
+      "fullname": {
+        "$regex": "^[ \\p{Han}0-9a-zA-Z_\\.\\-\\']+$",
+        "$options": "gi"
+      }
     }
   ]
 }

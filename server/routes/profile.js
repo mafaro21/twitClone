@@ -42,7 +42,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
     //do validation first
     function checkInputs() {
         let OK = true;
-        let reg = new RegExp("[^ a-zA-Z0-9_\\.]");
+        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
         let userReg = /^[0-9a-zA-Z_\S]+$/gi;
 
         if (!fullname || !username || !bio) {
@@ -60,13 +60,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
         }
         return OK;
     };
-    const filter = /[<>]/g;
-    const newValues = {
-        fullname: fullname.replace(filter, ""),
-        username: username.replace(filter, ""),
-        bio: bio.replace(filter, "")
-    };
-
+    
     const checkInputsResult = checkInputs();
     if (checkInputsResult === false) {
         res.status(422).send({ "message": errors, "success": false });
@@ -79,15 +73,15 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             useNewUrlParser: true,
         }).then(client => {
             const users = client.db("twitclone").collection("users");
+            const newValues = { fullname: fullname, username: username, bio: bio};        
             users.updateOne({ _id: userid }, { $set: newValues }, (err, result) => {
                 if (err) {
                     res.status(400).send({ "message": err.message, "success": false });
-                    res.end();
                     console.error(err);
                 } else {
                     //RE-WrITE THE SESSION VARIABLES HERE.
-                    res.status(204).json({ "message": result.modifiedCount, "success": true });
-                    console.log(result.modifiedCount)
+                    res.send({ "message": result.modifiedCount, "success": true });
+                    console.log("UPDATED", result.result);
                 }
                 client.close();
             });

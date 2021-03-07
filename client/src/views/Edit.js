@@ -42,36 +42,28 @@ export default function Edit() {
 
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        console.log("working")
         const isValid = editValidation();
 
-
-
-        if (isValid) {
-
-            let open = /[<>]/g
-
-            let fullnameSafe = editFullname.replaceAll(open, "")
-            let usernameSafe = editUsername.replaceAll(open, "")
-            let bioSafe = editBio.replaceAll(open, "")
+        if (isValid === true) {
+            let newlines = /\n/g;
 
             const userObject = {
-                fullname: fullnameSafe.trim(),
-                username: usernameSafe.trim(),
-                bio: bioSafe.trim()
+                fullname: editFullname.trim(),
+                username: editUsername.trim(),
+                bio: editBio.replace(newlines, " ").trim()
             }
 
-            console.log(userObject)
-
-            axios.put("/profile/mine/edit", userObject)
+            axios.put("/profile/mine/edit", userObject) 
                 .then((res) => {
-                    window.location.replace("./profile")
+                    let x = res.data.success;                       //add loading
+                    if(x===true) window.location.replace("/Home"); // HOME, to refresh localStorage
                 })
                 .catch((err) => {
+                    alert("Error! Could not update profile"); /* TO FIX: display ERRORS properly */
                     console.error(err);
-                })
+                });
         }
     }
 
@@ -80,16 +72,17 @@ export default function Edit() {
         const fullnameErr = {}
         const usernameErr = {}
         const bioErr = {}
-        let userReg = /^[\w\S]+$/gi;
-        let filter = /^[<>&gt;&lt;]+$/g;
+        let userReg = /^[0-9a-zA-Z_\S]+$/gi;
+        let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
+        let bioReg = /[<>]+/gi;
 
         let isValid = true;
 
-        if (filter.test(editFullname)) {
+        if (!fullnameReg.test(editFullname)) {
             fullnameErr.fullnameinvalid = "Contains illegal characters";
             isValid = false;
         }
-        if (filter.test(editBio)) {
+        if (bioReg.test(editBio)) {
             bioErr.fullnameinvalid = "Contains illegal characters";
             isValid = false;
         }
@@ -101,13 +94,14 @@ export default function Edit() {
             fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
             isValid = false;
         }
-
+        if (editUsername.trim().length < 3) {
+            fullnameErr.fullnameErrShort = "Username should be atleast 3 characters long";
+            isValid = false;
+        }
 
         setFullnameErr(fullnameErr);
         setBioErr(bioErr);
         setUsernameErr(usernameErr);
-
-
 
         return isValid;
     }
@@ -210,7 +204,7 @@ export default function Edit() {
                                             className="btn align-content-center login-submit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
-                                        // disabled={disabled}         //button disabler
+                                        // disabled={disabled}    // <--- PLEASE DISABLE IF NO CHANGE DETECTED
                                         >
                                             Save
                                             </button>

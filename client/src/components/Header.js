@@ -16,8 +16,7 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-        getData();
-
+      
         axios.get("/profile/mine")
             .then((res) => {
                 //console.log(res.data); 
@@ -36,16 +35,13 @@ export default function Header() {
             }).catch((err) => {
                 window.location.replace("/");
             })
-        function getData() {
-            setFullname(localStorage.getItem('fullname'));
-            setUsername(localStorage.getItem('username'));
-        }
-
+      
     }, []);
 
-
-
-
+    function getData() {
+        setFullname(localStorage.getItem('fullname'));
+        setUsername(localStorage.getItem('username'));
+    }
 
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1">
@@ -70,7 +66,7 @@ export default function Header() {
 
 
     return (
-        <header className=" header pt-3" >
+        <header className=" header pt-3" onLoad={getData} >
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 

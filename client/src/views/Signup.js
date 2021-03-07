@@ -164,8 +164,8 @@ function Signup() {
         const emailErr = {};
         const passwordErr = {};
         const confirmpasswordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-        var reg = new RegExp('[^ a-zA-Z0-9_]');
+        let emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
 
         let isValid = true;
 
@@ -179,7 +179,6 @@ function Signup() {
             isValid = false;
         }
 
-
         if (password.trim().length < 8) {
             passwordErr.passwordErrShort = "Required 8 or more characters";
             isValid = false;
@@ -190,7 +189,7 @@ function Signup() {
             isValid = false;
         }
 
-        if (reg.test(fullname)) {
+        if (!reg.test(fullname)) {
             fullnameErr.fullnameinvalid = "Name contains illegal characters";
             isValid = false;
         }

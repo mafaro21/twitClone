@@ -11,7 +11,7 @@ function Sidebar() {
 
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
+/*    useEffect(() => {
         setLoading(true)
 
         const options = {
@@ -23,7 +23,6 @@ function Sidebar() {
                 country: 'us',
                 apiKey: process.env.REACT_APP_NEWS_API_KEY
             }
-
         };
 
         axios.request(options).then(function (res) {
@@ -32,10 +31,8 @@ function Sidebar() {
         }).catch(function (error) {
             console.error(error);
         });
-
-
-
-    }, [])
+    }, []); 
+    */
 
     const Loading = () => {        //the loading div
 

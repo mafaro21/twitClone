@@ -32,7 +32,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
 
     function checkInputs() {
         let OK = true;
-        let reg = new RegExp("[^ a-zA-Z0-9_\\.]");
+        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
         let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
@@ -40,7 +40,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             errors.push("No field can be empty, ");
             return false;
         }
-        if (reg.test(fullname)) {
+        if (!reg.test(fullname)) {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
@@ -134,7 +134,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
 /*error handler */
 router.use((err, req, res, next) => {
     res.sendStatus(500);
-    console.error(err.message);
+    console.error(err);
 });
 
 module.exports = router;
