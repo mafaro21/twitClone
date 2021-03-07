@@ -50,7 +50,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             errors.push("No field can be empty, ");
             return false;
         }
-        if (reg.test(fullname)) {
+        if (!reg.test(fullname)) {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
