@@ -1,5 +1,5 @@
 ## What are these Files?
-ANY SINGLE one of the files define 2 things:  **Data Model** as well as **Validation Rules** for each ``Collection`` in your MongoDb Database. They ensure data integrity and Security at **DATABASE LEVEL** during inserting and updating, *independent of the application* used. They are called JSON Schema. Learn more about them here: [https://docs.mongodb.com/manual/core/schema-validation/]
+ANY SINGLE one of the files define 2 things:  **The Schema** as well as **Validation Rules** for each ``Collection`` in your MongoDb Database. They ensure data integrity and Security at **DATABASE LEVEL** during inserting and updating, *independent of the application* used. They are called JSON Schema. Learn more about them here: [https://docs.mongodb.com/manual/core/schema-validation/]
 
 ## How to use them.
 Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED DIRECTLY IN YOUR APP SOURCE CODE. THEY ARE SPECIFICALLY MEANT for MONGODb Compass ONLY (in the *Validation* section). Or simply, to be used as _reference_ during your app development. And best of all, it is totally OPTIONAL to use them at all! 😀. They just make life easier and your data consistent.
