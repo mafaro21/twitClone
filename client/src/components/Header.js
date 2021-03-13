@@ -35,7 +35,7 @@ export default function Header() {
             }
         }
 
-        if (localStorage.fullname == undefined || localStorage.username == undefined) {
+        if (localStorage.fullname === undefined || localStorage.username === undefined) {
             fetchData();
         } else displayData();
 

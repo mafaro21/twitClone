@@ -88,7 +88,6 @@ function Login() {
                 axios
                     .post("/login", userObject)
                     .then((res) => {
-                        console.log(res.data);
                         let x = res.data.success;
                         if (x === true) return window.location.replace("/Home");
                     })
@@ -103,7 +102,6 @@ function Login() {
                             setLoading(false);
                         }, 100);                   // delay after error warning shows up
 
-                        console.error(error.response.data);
                     });
             }
         }

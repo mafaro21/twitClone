@@ -58,7 +58,7 @@ function Sidebar() {
                     {loading ? <Loading /> : null}
                     {api.articles.map(item => (
                         <li key={item.url} >
-                            <a href={item.url} target="_blank" className="row view">
+                            <a href={item.url} target="_blank" rel="noreferrer" className="row view">
                                 <img src={item.urlToImage} className="col-5 api-image row " />
                                 <p className="col api-text">{item.title} </p>
                             </a>
