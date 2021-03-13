@@ -57,7 +57,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
-            if (prob) errors.push("CAPTCHA Error");
+            if (prob) throw prob;
             return isValid;
         })
         .then(isValid => {
@@ -66,9 +66,9 @@ router.post("/", LoginLimiter, (req, res, next) => {
             }
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
         })
-        .catch(err => { 
-            res.status(400).send({"message": "CAPTCHA Error"});
-            console.error("AXIOS", err.message);
+        .catch(err => {
+            res.status(400).send({ "message": "CAPTCHA Error" });
+            console.error("AXIOS", err);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
@@ -85,8 +85,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
                     res.end();
                 } else {
                     // Continue. verify password.      
-                    loginUser();
-                    async function loginUser() {
+                    (async () => {
                         let hashedPass = result.password;
                         let match = await bcrypt.compare(password, hashedPass);
                         if (!match)
@@ -96,7 +95,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
                             req.session.user = { id: result._id, email: result.email };
                             res.status(200).send({ "success": true });
                         }
-                    }
+                    })();
                 }
                 client.close();
             });

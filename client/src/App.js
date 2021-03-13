@@ -6,7 +6,7 @@ import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
 import Profile from './views/Profile';
-import Edit from './views/Edit';
+import EditProfile from './views/EditProfile';
 import Navbar from './components/Navbar';
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
@@ -38,7 +38,7 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
           <Route path="/myprofile" component={Profile} />
-          <Route path="/edit" component={Edit} />
+          <Route path="/edit" component={EditProfile} />
           <Route component={NotFound404} />
         </Switch>
         {/* <Footer /> */}
