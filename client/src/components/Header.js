@@ -16,29 +16,32 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-      
-        axios.get("/profile/mine")
-            .then((res) => {
-                //console.log(res.data); 
+
+        const fetchData = async () => {
+            try {
+                const res = await axios.get("/profile/mine");
                 localStorage.setItem('fullname', res.data.fullname);
                 localStorage.setItem('username', res.data.username);
                 localStorage.setItem('bio', res.data.bio);
                 let date = new Date(res.data.datejoined);
-                // let x = date.getFullYear();
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
                 let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
-                getData();
-
-            }).catch((err) => {
+                displayData();
+            } catch (err) {
                 window.location.replace("/");
-            })
-      
+            }
+        }
+
+        if (localStorage.fullname == undefined || localStorage.username == undefined) {
+            fetchData();
+        } else displayData();
+
     }, []);
 
-    function getData() {
+    function displayData() {
         setFullname(localStorage.getItem('fullname'));
         setUsername(localStorage.getItem('username'));
     }
@@ -66,7 +69,7 @@ export default function Header() {
 
 
     return (
-        <header className=" header pt-3" onLoad={getData} >
+        <header className=" header pt-3" onLoad={displayData} >
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
