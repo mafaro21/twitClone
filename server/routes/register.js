@@ -59,7 +59,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
         return OK;
     };
 
-    //-----------------BEGIN CAPTCHA VERIFY BELOW ---------------------------//
+    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
     const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -86,7 +86,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             else addUserToDatabase();
         })
         .catch(err => {
-            res.sendStatus(500);
+            res.status(400).send({"message": "CAPTCHA Error"});
             console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
@@ -113,7 +113,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
                 if (error) {
                     switch (error.code) {
                         case 11000:
-                            res.status(409).send({ "message": "Email already in use. Sign in?", "success": false });
+                            res.status(409).send({ "message": "Email already in use.", "success": false });
                             break;
                         default:
                             next(error);

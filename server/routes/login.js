@@ -57,7 +57,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
-            if (prob) errors.push("CAPTCHA error");
+            if (prob) errors.push("CAPTCHA Error");
             return isValid;
         })
         .then(isValid => {
@@ -67,7 +67,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
             else operateDB(); // <-- HURRAY!😀 Call this fn now.
         })
         .catch(err => { 
-            res.sendStatus(500);  //<--- TODO, handle CAPTCHA errors gracefully****err400
+            res.status(400).send({"message": "CAPTCHA Error"});
             console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
