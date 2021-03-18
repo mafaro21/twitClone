@@ -28,6 +28,7 @@ App Name:... twitClone
 - [x] Edit User Profile
 - [x] User Logout
 - [ ] Load Tweets from DB to client
+- [ ] Display timestamps for tweets similar to Twitter (1h, 18m, 1m)
 - [ ] Like & retweet Tweets
 - [ ] Follow & unfollow other users
 
@@ -38,7 +39,7 @@ App Name:... twitClone
 - Or popup notifications when new message arrives (chat)
 - also send notifications when User get a follow / liked tweet.
 - record / display/ update #Likes on a tweet
--chat template -> https://socketio-chat-template.templates.repl.co/
+- chat template -> https://socketio-chat-template.templates.repl.co/
 
 ## HASHTAGS ## (tough^)
 - Add auto hashtags feature. (Maybe we can limit hashtags to 5 MAX per tweet - auto) (live as typing)
