@@ -11,28 +11,28 @@ function Sidebar() {
 
     const [loading, setLoading] = useState(false)
 
-/*    useEffect(() => {
-        setLoading(true)
+    // useEffect(() => {
+    //     setLoading(true)
 
-        const options = {
-            method: 'GET',
-            url: 'https://newsapi.org/v2/top-headlines',
-            params: {
-                category: 'general',
-                pageSize: 5,
-                country: 'us',
-                apiKey: process.env.REACT_APP_NEWS_API_KEY
-            }
-        };
+    //     const options = {
+    //         method: 'GET',
+    //         url: 'https://newsapi.org/v2/top-headlines',
+    //         params: {
+    //             category: 'general',
+    //             pageSize: 6,
+    //             country: 'us',
+    //             apiKey: process.env.REACT_APP_NEWS_API_KEY
+    //         }
+    //     };
 
-        axios.request(options).then(function (res) {
-            setApi(res.data)
-            setLoading(false);
-        }).catch(function (error) {
-            console.error(error);
-        });
-    }, []); 
-    */
+    //     axios.request(options).then(function (res) {
+    //         setApi(res.data)
+    //         setLoading(false);
+    //     }).catch(function (error) {
+    //         console.error(error);
+    //     });
+    // }, []);
+
 
     const Loading = () => {        //the loading div
 

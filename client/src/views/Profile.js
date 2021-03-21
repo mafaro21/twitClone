@@ -252,6 +252,15 @@ export default function Profile() {
             })
     }
 
+    // const isLoggedIn = () => {
+    //     let x = localStorage.getItem('fullname');
+
+    //     if (x.length > 0) {
+    //         console.log("logged in");
+    //     } else {
+    //         console.log("not logged in");
+    //     }
+    // }
 
 
     return (

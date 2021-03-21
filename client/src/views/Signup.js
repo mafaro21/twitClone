@@ -140,7 +140,7 @@ function Signup() {
                     .then((res) => {
                         let x = res.data.success;
                         //if (x === true) setWelcomeModal(true); /* then take user to dashboard */
-                         if(x===true) window.location.replace("/Home");
+                        if (x === true) window.location.replace("/Home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {

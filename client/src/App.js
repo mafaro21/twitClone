@@ -1,7 +1,6 @@
 import React from 'react';
 import dotenv from 'dotenv';
 import './css/App.css';
-// import Footer from './Footer';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
@@ -26,6 +25,17 @@ function App() {
   //     console.log(err)
   //   })
 
+  // const isLoggedIn = () => {
+  //   fullname = localStorage.getItem('fullname');
+
+  //   if (fullname.length > 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+
 
   return (
 
@@ -36,12 +46,12 @@ function App() {
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
+
           <Route path="/error" component={Error} />
           <Route path="/myprofile" component={Profile} />
           <Route path="/edit" component={EditProfile} />
           <Route component={NotFound404} />
         </Switch>
-        {/* <Footer /> */}
       </div>
     </Router>
   );
