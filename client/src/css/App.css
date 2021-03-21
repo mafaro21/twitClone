@@ -167,6 +167,7 @@ button{
   background-color:rgba(0, 0, 0, 0.2);
   color: var(--text);
   outline: none;
+  
 }
 textarea.edit-input{
   width: 100%;
