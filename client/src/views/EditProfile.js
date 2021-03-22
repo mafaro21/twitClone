@@ -55,10 +55,10 @@ export default function Edit() {
                 bio: editBio.replace(newlines, " ").trim()
             }
 
-            axios.put("/profile/mine/edit", userObject) 
+            axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
                     let x = res.data.success;                       //add loading
-                    if(x===true) window.location.replace("/Home"); // HOME, to refresh localStorage
+                    if (x === true) window.location.replace("/Home"); // HOME, to refresh localStorage
                 })
                 .catch((err) => {
                     alert("Error! Could not update profile"); /* TO FIX: display ERRORS properly */
@@ -204,7 +204,7 @@ export default function Edit() {
                                             className="btn align-content-center login-submit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
-                                        // disabled={disabled}    // <--- PLEASE DISABLE IF NO CHANGE DETECTED
+                                        // disabled={disabled}    // 
                                         >
                                             Save
                                             </button>
