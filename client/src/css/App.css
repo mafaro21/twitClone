@@ -13,16 +13,18 @@
   min-height: 100vh;
   max-width: 100vw;
   font-family: 'Source Sans Pro', system-ui, sans-serif;
-  
+  text-align: center;
 
 }
 
 .general{
   background-color: var(--background);
-  text-align: center;
   color: var(--text);
-  font-family: 'Source Sans Pro', system-ui, sans-serif;
-  
+}
+
+.light-mode{
+  background-color: var(--text);
+  color: var(--background);
 }
 
 .text{

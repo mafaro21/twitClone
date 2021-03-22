@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import { Link } from 'react-router-dom';
@@ -12,10 +12,10 @@ export default function Header() {
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
 
-    const [settingsModal, setSettingsModal] = useState(false);//settings modal
-    const settingsToggle = () => setSettingsModal(!settingsModal);
+    const [tweetModal, setTweetModal] = useState(false);//tweet modal
+    const tweetToggle = () => setTweetModal(!tweetModal);
 
-    const [count, setCount] = useState(0) //word counter
+    // const [count, setCount] = useState(0) //word counter
 
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
@@ -72,19 +72,45 @@ export default function Header() {
             })
     }
 
-    const onChange = (e) => {
-        setCount(e.target.value.length)
+    // const onChange = useCallback(e => {
+    //     setCount(e.target.value.length)
+    //     console.log("onchange")
+    // }, []);
+
+    const wordCount = () => {   //live word counter
+        document.getElementById("tweet").addEventListener('input', function () {
+            var text = this.value,
+                count = text.trim().replace(/\s+/g, ' ').length;
+
+            if (count == 280) {
+                document.getElementById('show').style.color = "red"
+            } else if (count >= 250) {
+                document.getElementById('show').style.color = "#FF8000"
+            } else if (count >= 200) {
+                document.getElementById('show').style.color = "#FFB400"
+            } else if (count >= 150) {
+                document.getElementById('show').style.color = "#FFF800"
+            } else {
+                document.getElementById('show').style.color = "grey"
+            }
+
+            document.getElementById('show').textContent = count;
+
+        }
+        )
     }
 
 
-    const SettingsModal = () => {
+
+
+    const TweetModal = () => {
         return <div>
             <div class="tweettest mt-5 modal-enter" >
                 <div class="">
                     <div class="modal-view">
                         <div class="modal-header">
-                            {/* <h3 class="mt-3">Settings</h3> */}
-                            <button className="" onClick={settingsToggle}>
+                            {/* <h3 class="mt-3">tweet</h3> */}
+                            <button className="" onClick={tweetToggle}>
                                 <svg viewBox="0 0 24 24" class="icon ">
                                     <g>
                                         <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
@@ -103,13 +129,14 @@ export default function Header() {
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
                                 <div>
                                     <textarea
+                                        id="tweet"
                                         name="tweet"
                                         type="text"
                                         // value={fullname}
-                                        onChange={onChange}
+                                        onChange={wordCount}
                                         className=" edit-input "
                                         maxLength="280"
-                                        rows="5"
+                                        rows="7"
                                         placeholder="Any Hot Takes?"
                                         required
                                     />
@@ -117,7 +144,8 @@ export default function Header() {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
                                     })} */}
                                     <div className="container counter">
-                                        {count}/280
+                                        {/* {count}/280 */}
+                                        <span id="show">0</span><span>/280</span>
                                     </div>
                                 </div>
 
@@ -134,18 +162,18 @@ export default function Header() {
                             </form>
                         </div>
                         {/* <div class="modal-footer">
-                            <button type="button" onClick={settingsToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
+                            <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
                         </div> */}
                     </div>
                 </div>
             </div>
         </div >
-    }
+    };
 
 
     return (
         <header className=" header pt-3" onLoad={displayData} >
-            {settingsModal ? <SettingsModal /> : null}
+            {tweetModal ? <TweetModal /> : null}
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
@@ -225,7 +253,7 @@ export default function Header() {
                             <button
                                 className="btn login-submit btn-primary rounded-pill mt-3 "
                                 style={{ width: "140px" }}
-                                onClick={settingsToggle}
+                                onClick={tweetToggle}
                             >
                                 Tweet
                         </button>

@@ -27,11 +27,121 @@ export default function Profile() {
     const [bio, setBio] = useState();
     const [datejoined, setDatejoined] = useState();
 
-    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ");
+    // const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ");
 
-
+    const [light, setLight] = useState(false)
+    const lightToggle = () => setLight(!light);
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
+    // edit part
+    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ")
+    const [editUsername, setEditUsername] = useState(localStorage.getItem('username') || " ")
+    const [editBio, setEditBio] = useState(localStorage.getItem('bio') || " ")
+
+    const [fullnameErr, setFullnameErr] = useState({}) // front end validation
+    const [usernameErr, setUsernameErr] = useState({})
+    const [bioErr, setBioErr] = useState({})
+
+    const onClick = () => {
+        setFullnameErr(false);
+        setBioErr(false);
+        setUsernameErr(false);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const isValid = editValidation();
+
+        if (isValid === true) {
+            let newlines = /\n/g;
+
+            const userObject = {
+                fullname: editFullname.trim(),
+                username: editUsername.trim(),
+                bio: editBio.replace(newlines, " ").trim()
+            }
+
+            axios.put("/profile/mine/edit", userObject)
+                .then((res) => {
+                    let x = res.data.success;                       //add loading
+                    if (x === true) window.location.replace("/Home"); // HOME, to refresh localStorage
+                })
+                .catch((err) => {
+                    alert("Error! Could not update profile"); /* TO FIX: display ERRORS properly */
+                    console.error(err);
+                });
+        }
+    }
+
+    const editValidation = () => {
+
+        const fullnameErr = {}
+        const usernameErr = {}
+        const bioErr = {}
+        let userReg = /^[0-9a-zA-Z_\S]+$/gi;
+        let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
+        let bioReg = /[<>]+/gi;
+
+        let isValid = true;
+
+        if (!fullnameReg.test(editFullname)) {
+            fullnameErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (bioReg.test(editBio)) {
+            bioErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (!userReg.test(editUsername)) {
+            usernameErr.fullnameinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (editFullname.trim().length < 3) {
+            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
+            isValid = false;
+        }
+        if (editUsername.trim().length < 3) {
+            fullnameErr.fullnameErrShort = "Username should be atleast 3 characters long";
+            isValid = false;
+        }
+
+        setFullnameErr(fullnameErr);
+        setBioErr(bioErr);
+        setUsernameErr(usernameErr);
+
+        return isValid;
+    }
+
+    const wordCount = () => {   //live word counter
+        document.getElementById("bio").addEventListener('input', function () {
+            var text = this.value,
+                count = text.trim().replace(/\s+/g, ' ').length;
+
+            if (count == 280) {
+                document.getElementById('show').style.color = "red"
+            } else if (count >= 250) {
+                document.getElementById('show').style.color = "#FF8000"
+            } else if (count >= 200) {
+                document.getElementById('show').style.color = "#FFB400"
+            } else if (count >= 150) {
+                document.getElementById('show').style.color = "#FFF800"
+            } else {
+                document.getElementById('show').style.color = "grey"
+            }
+
+            document.getElementById('show').textContent = count;
+
+        }
+        )
+    }
+
+    // const onChange = (e) => {
+    //     wordCount()
+    //     setEditBio(e.target.value)
+
+    // }
 
     const EditModal = () => {
         return <div>
@@ -50,9 +160,8 @@ export default function Profile() {
                             </button>
                         </div>
 
-                        <form class="modal-body">
+                        <form class="modal-body" onSubmit={(e) => handleSubmit(e)}>
                             <form className=" signup"  >
-                                {/* onSubmit={(e) => handleSubmit(e)} */}
 
                                 <div>
                                     <input
@@ -60,45 +169,50 @@ export default function Profile() {
                                         type="text"
                                         value={editFullname}
                                         onChange={(e) => setEditFullname(e.target.value)}
-                                        className="signup-input change "
-                                        maxLength="20"
+                                        className="edit-input change "
+                                        maxLength="30"
                                         placeholder="New Fullname"
                                         required
                                     />
-                                    {/* {Object.keys(fullnameErr).map((key) => {
+                                    {Object.keys(fullnameErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })} */}
+                                    })}
                                 </div>
                                 <div>
                                     <input
                                         name="username"
                                         type="text"
-                                        // value={localStorage.getItem('username')}
-                                        // onChange={(e) => setEmail(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="30"
+                                        value={editUsername}
+                                        onChange={(e) => setEditUsername(e.target.value)}
+                                        className="edit-input change mt-1 "
+                                        maxLength="20"
                                         placeholder="New Username"
                                         required
                                     />
-                                    {/* {Object.keys(emailErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
-                                    })} */}
+                                    {Object.keys(usernameErr).map((key) => {
+                                        return <div style={{ color: "red" }} className="error-msg"> {usernameErr[key]} </div>
+                                    })}
                                 </div>
                                 <div>
                                     <textarea
+                                        id="bio"
                                         name="bio"
                                         type="test"
-                                        // value={localStorage.getItem('bio')}
-                                        // onChange={ }
+                                        value={editBio}
+                                        onChange={wordCount}
                                         rows="4"
                                         className="edit-input mt-1 change"
                                         maxLength="100"
                                         placeholder="Bio"
                                         required
                                     />
-                                    {/* {Object.keys(confirmpasswordErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
-                                    })} */}
+                                    {Object.keys(bioErr).map((key) => {
+                                        return <div style={{ color: "red" }} className="error-msg"> {bioErr[key]} </div>
+                                    })}
+                                    <div className=" counter">
+                                        {/* {count}/280 */}
+                                        <span id="show">0</span><span>/280</span>
+                                    </div>
                                 </div>
 
                                 <br />
@@ -107,7 +221,7 @@ export default function Profile() {
 
                                 <button
                                     id="submit-btn"
-                                    className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                                    className="btn login-submit btn-outline-primary rounded-pill mt-1"
                                     type="submit"
                                 // disabled={disabled}         //button disabler
                                 >
@@ -116,7 +230,7 @@ export default function Profile() {
                             </form>
                         </form>
                         <div class="modal-footer">
-                            <button type="button" onClick={editToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
+                            <button type="button" onClick={onClick} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
                         </div>
                     </div>
                 </div>
@@ -126,7 +240,7 @@ export default function Profile() {
 
     const SettingsModal = () => {
         return <div>
-            <div class="modaltest mt-5 modal-enter" >
+            <div class="fade modaltest mt-5 modal-enter" >
                 <div class="">
                     <div class="modal-view">
                         <div class="modal-header">
@@ -264,8 +378,8 @@ export default function Profile() {
 
 
     return (
-        <div className="App general " >
-            <div className="container  " >
+        <div className={light ? "light-mode" : "general"}>
+            <div className="container App " >
                 <div className="row " >
 
                     <Header />
@@ -288,7 +402,10 @@ export default function Profile() {
                                     </div>
                                     <p><span>0 Tweets</span></p>
                                 </div>
-
+                                <button className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                    onClick={lightToggle}
+                                >change
+                                </button>
                             </div>
                         </div>
 
