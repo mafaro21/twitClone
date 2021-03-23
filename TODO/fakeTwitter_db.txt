@@ -11,6 +11,8 @@ Uid
 Username 
 Email
 Password
+following (int)
+followers (int)
 bio
 datejoined (DateTime)
 
