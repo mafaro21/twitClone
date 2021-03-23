@@ -3,25 +3,25 @@ const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
-const axios = require('axios').default;
+const axios = require("axios").default;
 const router = express.Router();
 const rateLimit = require("express-rate-limit"); //store it later in REDIS
 
 
 //setup rate limit
 const LoginLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour window
+    windowMs: 15 * 60 * 1000, // 15 mins window
     max: 5, // start blocking after 5 requests
     skipSuccessfulRequests: true,
-    message: { "message": "Too many tries, try again in 1 hour", "success": false }
+    message: { "message": "Too many tries, try again in 15 mins" }
 });
 
 
 //FOR LOGIN ONLY::
 
 /* handling GET requests  */
-router.get("/", (req, res, next) => {
-    res.send({ "title": " Twitclone: Login" });
+router.get("/", (req, res) => {
+    res.send({ "title": " Twitclone Login" });
 });
 
 /* handling POST requests */
@@ -64,11 +64,11 @@ router.post("/", LoginLimiter, (req, res, next) => {
             if ((isValid && checkInputsResult) === false) {
                 res.status(422).send({ "message": errors, "success": false });
             }
-            else operateDB(); // <-- HURRAY!😀 Call this fn now.
+            else operateDB();
         })
         .catch(err => {
             res.status(400).send({ "message": "CAPTCHA Error" });
-            console.error("AXIOS", err);
+            console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
@@ -77,28 +77,27 @@ router.post("/", LoginLimiter, (req, res, next) => {
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
-        }).then((client) => {
+        }).then(async (client) => {
             const users = client.db("twitclone").collection("users");
-            users.findOne({ email: email }, (error, result) => {
+            try {
+                const result = await users.findOne({ email: email });
                 if (!result) {
-                    res.status(401).send({ "message": "User doesnt exist", "success": false });
-                    res.end();
-                } else {
-                    // Continue. verify password.      
-                    (async () => {
-                        let hashedPass = result.password;
-                        let match = await bcrypt.compare(password, hashedPass);
-                        if (!match)
-                            res.status(401).send({ "message": "Wrong email or password", "success": false });
-                        else {
-                            // BINGO! User authenticated. Now, create session.
-                            req.session.user = { id: result._id, email: result.email };
-                            res.status(200).send({ "success": true });
-                        }
-                    })();
+                    throw new Error("User doesn\'t exist");
                 }
-                client.close();
-            });
+                let hashedPass = result.password;
+                let match = await bcrypt.compare(password, hashedPass);
+                if (!match)
+                    throw new Error("Wrong email or password");
+                else {
+                    // BINGO! User authenticated. Now, create session.
+                    req.session.user = { id: result._id, email: result.email };
+                    res.status(200).send({ "success": true });
+                }
+            } catch (error) {
+                res.status(401).send({ "message": error.message });
+            } finally {
+                await client.close();
+            }
         }).catch(next);
     } // <--end of function
 
@@ -106,7 +105,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
 
 
 /*error handler */
-router.use((err, req, res, next) => {
+router.use((err, req, res) => {
     res.sendStatus(500);
     console.error(err.message);
 });
