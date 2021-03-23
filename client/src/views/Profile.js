@@ -137,11 +137,11 @@ export default function Profile() {
         )
     }
 
-    // const onChange = (e) => {
-    //     wordCount()
-    //     setEditBio(e.target.value)
+    const onChange = (e) => {
+        wordCount()
+        setEditBio(e.target.value)
 
-    // }
+    }
 
     const EditModal = () => {
         return <div>
@@ -199,7 +199,7 @@ export default function Profile() {
                                         name="bio"
                                         type="test"
                                         value={editBio}
-                                        onChange={wordCount}
+                                        onChange={onChange}
                                         rows="4"
                                         className="edit-input mt-1 change"
                                         maxLength="100"

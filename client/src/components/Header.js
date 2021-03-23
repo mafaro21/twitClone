@@ -22,9 +22,10 @@ export default function Header() {
 
     useEffect(() => {
 
-        const fetchData = async () => {
-            try {
-                const res = await axios.get("/profile/mine");
+
+
+        axios.get("/profile/mine")
+            .then(res => {
                 localStorage.setItem('fullname', res.data.fullname);
                 localStorage.setItem('username', res.data.username);
                 localStorage.setItem('bio', res.data.bio);
@@ -35,14 +36,15 @@ export default function Header() {
                 let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
                 displayData();
-            } catch (err) {
-                // window.location.replace("/");
-            }
-        }
+            })
+            .catch(err => {
+                window.location.replace("/");
+            });
 
-        if (localStorage.fullname === undefined || localStorage.username === undefined) {
-            fetchData();
-        } else displayData();
+
+        // if (localStorage.fullname === undefined || localStorage.username === undefined) {
+        // fetchData();
+        // } else displayData();
 
     }, []);
 
