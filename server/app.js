@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const path = require("path");
 const port = process.env.PORT || 5000;
 const helmet = require("helmet");
 const { MongoClient } = require("mongodb");
@@ -93,7 +92,7 @@ app.use((req, res, next) => {
 
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -101,7 +100,7 @@ app.use((err, req, res, next) => {
     // render the error page
     res.status(err.status || 500);
     res.send(err);
-    console.error(err);
+    console.error(err.message);
 });
 
 
