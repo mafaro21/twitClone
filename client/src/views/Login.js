@@ -98,11 +98,11 @@ function Login() {
                         }
                         else setError(error.response.data.message);      //show error message from axios        
                     }).finally(() => setTimeout(() => {          //finally, setTimeout for button to be clickable
-                            setDisabled(false);
-                            setLoading(false);
-                        }, 100)                         // delay after error warning shows up
+                        setDisabled(false);
+                        setLoading(false);
+                    }, 100)                         // delay after error warning shows up
                     );
-                   
+
             }
         }
     }
