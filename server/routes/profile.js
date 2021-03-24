@@ -4,8 +4,6 @@ const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const router = express.Router();
 
-//FOR PROFILE //
-
 
 /* GETTING MY PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
@@ -19,7 +17,7 @@ router.get("/mine", isLoggedin, (req, res, next) => {
         const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
         users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
             if (!result) res.sendStatus(404);
-            else res.json(result);
+            else res.send(result);
             client.close();
         });
     }).catch(next);
@@ -51,20 +49,12 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             errors.push("No field can be empty, ");
             return false;
         }
-        if (!reg.test(fullname)) {
+        if (!reg.test(fullname) || !userReg.test(username) || !bioReg.test(bio)) {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
-        if (!bioReg.test(bio)) {
-            errors.push("Bio contains illegal characters, ");
-            OK = false;
-        }
         if (bio.length > 100) {
-            errors.push("Bio requires ONLY 100 characters max");
-            OK = false;
-        }
-        if (!userReg.test(username)) {
-            errors.push("Username contains illegal characters, ");
+            errors.push("Max length for bio exceeded");
             OK = false;
         }
         return OK;

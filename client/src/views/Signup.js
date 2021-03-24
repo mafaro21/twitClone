@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/App.css";
 import '../css/custom.scss';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 
@@ -41,7 +41,6 @@ function Signup() {
     }, []);
 
     const internalError = () => {       //redirect when there is a server error
-        // return <Redirect to="./Error" />;
         return window.location.replace("/Error");
     }
 
@@ -136,8 +135,7 @@ function Signup() {
                     responseToken: token
                 };
 
-                axios
-                    .post("/register", userObject)
+                axios.post("/register", userObject)
                     .then((res) => {
                         let x = res.data.success;
                         //if (x === true) setWelcomeModal(true); /* then take user to dashboard */
@@ -148,13 +146,11 @@ function Signup() {
                             internalError();
                         }
                         else setError(error.response.data.message);     //show error message from axios
-
-                        setTimeout(() => {
-                            setDisabled(false);
-                            setLoading(false);
-                        }, 100);                // <--delay for button to be clickable to reduce spam   
-
-                    });
+                    }).finally(() => setTimeout(() => {          //finally, setTimeout for button to be clickable
+                        setDisabled(false);
+                        setLoading(false);
+                    }, 100)                         // delay after error warning shows up
+                    );
             }
         }
     }
@@ -254,7 +250,7 @@ function Signup() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="20"
+                                maxLength="30"
                                 placeholder="Enter Password"
                                 title="Required 8 characters or more"
                                 required
@@ -271,7 +267,7 @@ function Signup() {
                                 value={confirmPass}
                                 onChange={(e) => setconfirmPass(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="20"
+                                maxLength="30"
                                 placeholder="Confirm Password"
                                 required
                             />

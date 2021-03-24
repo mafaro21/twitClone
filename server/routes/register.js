@@ -1,19 +1,20 @@
-const express = require('express');
-const { MongoClient } = require('mongodb');
+const express = require("express");
+const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const secret = process.env.SECRET_KEY;
 const bcrypt = require('bcrypt');
 const axios = require('axios').default;
+const axios = require("axios").default;
 const router = express.Router();
 const rateLimit = require("express-rate-limit"); // store it later in REDIS
 
 
 //setup rate limit
 const RegisterLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour window
+    windowMs: 15 * 60 * 1000, // 15 mins window
     max: 5, // start blocking after 5 requests
     skipSuccessfulRequests: true,
-    message: { "message": "Too many tries, try again in 1 hour", "success": false }
+    message: { "message": "Too many tries, try again in 15 mins" }
 });
 
 
@@ -21,7 +22,7 @@ const RegisterLimiter = rateLimit({
 
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
-    res.send({ "title": " Twitclone: Register" });
+    res.send({ "title": " Twitclone Register" });
 });
 
 /* handling POST requests */
@@ -82,11 +83,10 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             if ((isValid && checkInputsResult) === false) {
                 res.status(422).send({ "message": errors, "success": false });
                 return;
-            }
-            else addUserToDatabase();
+            } else addUserToDatabase();
         })
         .catch(err => {
-            res.status(400).send({"message": "CAPTCHA Error"});
+            res.status(400).send({ "message": "CAPTCHA Error" });
             console.error("AXIOS", err);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
@@ -107,25 +107,21 @@ router.post("/", RegisterLimiter, (req, res, next) => {
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true
-        }).then(client => {
+        }).then(async (client) => {
             const users = client.db("twitclone").collection("users");
-            users.insertOne(userObject, (error, result) => {
-                if (error) {
-                    switch (error.code) {
-                        case 11000:
-                            res.status(409).send({ "message": "Email already in use.", "success": false });
-                            break;
-                        default:
-                            next(error);
-                            break;
-                    }
-                } else {
-                    // SUCCESSFUL INSERT. Now, create session here.
-                    req.session.user = { id: result.ops[0]._id, email: result.ops[0].email };
-                    res.status(201).send({ "userCreated": result.insertedCount, "success": true });
-                }
-                client.close();
-            });
+            try {
+                const result = await users.insertOne(userObject);
+                // IF SUCCESSFUL INSERT create session here.
+                req.session.user = { id: result.insertedId, email: result.ops[0].email, };
+                res.status(201).send({ "success": true });
+                console.log(result.insertedId);
+            } catch (error) {
+                if (error.code === 11000) {
+                    res.status(409).send({ "message": "Email already in use.", "success": false });
+                } else throw error;
+            } finally {
+                await client.close();
+            }
         }).catch(next);
     }; // <--end of function
 

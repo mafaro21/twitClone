@@ -6,8 +6,8 @@ import axios from 'axios';
 
 export default function Header() {
 
-    const [fullname, setFullname] = useState();
-    const [username, setUsername] = useState();
+    const [fullname, setFullname] = useState("");
+    const [username, setUsername] = useState("");
 
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
@@ -89,7 +89,7 @@ export default function Header() {
             var text = this.value,
                 count = text.trim().replace(/\s+/g, ' ').length;
 
-            if (count == 280) {
+            if (count === 280) {
                 document.getElementById('show').style.color = "red"
             } else if (count >= 250) {
                 document.getElementById('show').style.color = "#FF8000"
