@@ -90,24 +90,34 @@ button{
   outline: none;
 }
 
+.display{
+  display: flex;
+}
+
 .login-pic{
-    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/vinicius-amnx-amano.jpg");
-    /* min-width: 100vh; */
-    min-height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.6)),url("../images/vinicius-amnx-amano.jpg"); 
+    
     background-position: cover;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* min-height: 100vh; */
+    /* background-color: #080603; */
+    /* background-image: url("../images/login.svg");
+    background-position: right bottom 6650px;
+    display: flex; */
     
 }
 
 .sign-pic{
-    background:  linear-gradient(rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.6)),url("../images/ruslan-bardash.jpg");
+    background:  linear-gradient(rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.6)),url("../images/ruslan-bardash.jpg"); 
     /* min-width: 100vh; */
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: cover;
 
+    /* background-image: url("../images/signup.svg");
+    background-position: right bottom;
+    background-size: contain; */
 }
 
 .login-input{

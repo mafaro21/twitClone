@@ -123,6 +123,7 @@ function Signup() {
 
         async function sendtoServer(token) {
             if (isValid) {
+                setError(false)
                 setDisabled(true);  //disable button
                 setLoading(true);
 
@@ -204,7 +205,7 @@ function Signup() {
 
     return (
 
-        <body className="general sign-pic d-flex" onLoad={loadCaptcha}  >
+        <body className="App general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
                     {welcomeModal ? <WelcomeModal /> : null}
@@ -249,7 +250,7 @@ function Signup() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="30"
+                                maxLength="20"
                                 placeholder="Enter Password"
                                 title="Required 8 characters or more"
                                 required
@@ -266,7 +267,7 @@ function Signup() {
                                 value={confirmPass}
                                 onChange={(e) => setconfirmPass(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="30"
+                                maxLength="20"
                                 placeholder="Confirm Password"
                                 required
                             />

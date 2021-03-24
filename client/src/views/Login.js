@@ -78,6 +78,7 @@ function Login() {
 
         async function sendtoServer(token) {
             if (isValid) {
+                setError(false)
                 setDisabled(true);  //disable button
                 setLoading(true);
                 const userObject = {
@@ -86,7 +87,8 @@ function Login() {
                     responseToken: token
                 };
 
-                axios.post("/login", userObject)
+                axios
+                    .post("/login", userObject)
                     .then((res) => {
                         let x = res.data.success;
                         if (x === true) return window.location.replace("/Home");
@@ -95,13 +97,14 @@ function Login() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message);      //show error message from axios        
-                    }).finally(() => setTimeout(() => {          //finally, setTimeout for button to be clickable
+                        else setError(error.response.data.message)      //show error message from axios
+
+                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
                             setDisabled(false);
                             setLoading(false);
-                        }, 100)                         // delay after error warning shows up
-                    );
-                   
+                        }, 100);                   // delay after error warning shows up
+
+                    });
             }
         }
     }
@@ -133,7 +136,7 @@ function Login() {
 
 
     return (
-        <body className="general login-pic d-flex" onLoad={loadCaptcha} >
+        <body className="App general login-pic display" onLoad={loadCaptcha} >
 
             <div className="container mt-4">
 
@@ -146,7 +149,7 @@ function Login() {
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
 
                         <div className="">
-                            {Object.keys(emailErr).map((key) => {       /* <--- react validation */
+                            {Object.keys(emailErr).map((key) => {
                                 return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
                             })}
                             <input
@@ -167,10 +170,9 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
                                 className="login-input"
-                                maxLength="30"
                                 required
                             />
-                            {Object.keys(passwordErr).map((key) => {/* <--- react validation */
+                            {Object.keys(passwordErr).map((key) => {
                                 return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
                             })}
                         </div>
