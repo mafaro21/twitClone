@@ -60,10 +60,12 @@ strong {
   font-size: 18px;
   font-weight: bold;
   position: sticky;
-  top: 50px;
+  z-index: 2400;
+  top: 52px;
   background-color: #080603;
-  width: auto;
-  height: 64px;
+  width: 575px;
+  height: 66px;
+  border-radius: 15px 15px 0 0;
 }
 
 /* .banner{
@@ -126,6 +128,9 @@ button{
   height:18px;
   fill: grey;
 }
+.word-count{
+  z-index: 1000;
+}
 
 /* modal edit */
 .modaltest{
@@ -163,6 +168,37 @@ button{
   }
 }
 
+/* interactive row */
+.like, .comment{
+  color: #AEAEAE;
+}
+.like:hover{
+  background-color: rgb(254, 153, 151,0.2 );
+  border-radius: 15px;
+  color: #FD4D4A;
+}
+.comment:hover{
+  background-color: rgb(151, 252, 254,0.2 );
+  border-radius: 15px;
+  color: #37FAFE ;
+  /* #395F5F */
+}
+
+/* interactive row */
+
+
+/* post */
+.post-data{
+  font-size: 18px;
+}
+.post-comment:focus{
+  height: 230px;
+}
+.post-view{
+  border-bottom: 19px double #606060;
+  width: auto;
+}
+/* post */
 
 
 @media screen and (max-width: 500px){   /*phone view*/

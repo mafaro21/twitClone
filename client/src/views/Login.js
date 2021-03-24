@@ -78,6 +78,7 @@ function Login() {
 
         async function sendtoServer(token) {
             if (isValid) {
+                setError(false);
                 setDisabled(true);  //disable button
                 setLoading(true);
                 const userObject = {
@@ -135,7 +136,7 @@ function Login() {
 
 
     return (
-        <body className="general login-pic d-flex" onLoad={loadCaptcha} >
+        <body className="App general login-pic display" onLoad={loadCaptcha} >
 
             <div className="container mt-4">
 
@@ -148,7 +149,7 @@ function Login() {
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
 
                         <div className="">
-                            {Object.keys(emailErr).map((key) => {       /* <--- react validation */
+                            {Object.keys(emailErr).map((key) => {
                                 return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
                             })}
                             <input
@@ -171,7 +172,7 @@ function Login() {
                                 className="login-input"
                                 required
                             />
-                            {Object.keys(passwordErr).map((key) => {/* <--- react validation */
+                            {Object.keys(passwordErr).map((key) => {
                                 return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
                             })}
                         </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
+import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import tobias from '../images/mihai-surdu.jpg';
@@ -33,10 +34,7 @@ function Home() {
                                     first user &nbsp; <span>@firstuser69</span>
                                 </div>
                                 <p>this is my first tweet</p>
-
-                                <div className="interact-row">
-
-                                </div>
+                                <Interactive />
 
                             </div>
                         </div>                                     {/* <--- standard tweet*/}
@@ -59,6 +57,7 @@ function Home() {
                                     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
                                     and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                                 </p>
+                                <Interactive />
                             </div>
                         </div>
 
@@ -74,6 +73,7 @@ function Home() {
                                 <p>
                                     <img src={tobias} alt="test" className="tweet-img" />
                                 </p>
+                                <Interactive />
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import Interactive from '../components/Interactive';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
@@ -31,6 +32,8 @@ export default function Profile() {
 
     const [light, setLight] = useState(false)
     const lightToggle = () => setLight(!light);
+
+
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -113,6 +116,9 @@ export default function Profile() {
 
         return isValid;
     }
+
+
+
 
     const wordCount = () => {   //live word counter
         document.getElementById("bio").addEventListener('input', function () {
@@ -366,16 +372,6 @@ export default function Profile() {
             })
     }
 
-    // const isLoggedIn = () => {
-    //     let x = localStorage.getItem('fullname');
-
-    //     if (x.length > 0) {
-    //         console.log("logged in");
-    //     } else {
-    //         console.log("not logged in");
-    //     }
-    // }
-
 
     return (
         <div className={light ? "light-mode" : "general"}>
@@ -390,7 +386,7 @@ export default function Profile() {
 
                     <div className="col main-view  phone-home w-100 " >
                         {loading ? <Loading /> : null}
-                        <div className="row profile-header">
+                        <div className="row profile-header view">
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -402,10 +398,6 @@ export default function Profile() {
                                     </div>
                                     <p><span>0 Tweets</span></p>
                                 </div>
-                                <button className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
-                                    onClick={lightToggle}
-                                >change
-                                </button>
                             </div>
                         </div>
 
@@ -501,9 +493,7 @@ export default function Profile() {
                                 </div>
                                 <p>this is my first tweet</p>
 
-                                <div className="interact-row">
-
-                                </div>
+                                <Interactive />
 
                             </div>
                         </div>
@@ -514,7 +504,7 @@ export default function Profile() {
 
                     <Sidebar />
                 </div>
-            </div>
+            </div >
         </div >
     );
 }

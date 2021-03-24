@@ -15,6 +15,11 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
+    const [light, setLight] = useState(false)
+    const lightToggle = () => setLight(!light);
+
+    // const [disabled, setDisabled] = useState(false);
+
     // const [count, setCount] = useState(0) //word counter
 
 
@@ -94,6 +99,12 @@ export default function Header() {
                 document.getElementById('show').style.color = "#FFF800"
             } else {
                 document.getElementById('show').style.color = "grey"
+            }
+
+            if (count <= 0) {// used to disable button if textarea is empty
+                document.getElementById("submit-btn").disabled = true;
+            } else {
+                document.getElementById("submit-btn").disabled = false;
             }
 
             document.getElementById('show').textContent = count;

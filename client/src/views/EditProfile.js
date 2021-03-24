@@ -7,6 +7,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Loader from "react-loader-spinner";
 // import Loader from "react-loader-spinner";
 
 export default function Edit() {
@@ -21,6 +22,10 @@ export default function Edit() {
 
     const [count, setCount] = useState(0) //word counter
     const [click, setclick] = useState(false);
+
+    const [disabled, setDisabled] = useState(false);    // button disabler during request
+
+    const [loading, setLoading] = useState(false);      // loading animation
 
 
     const onChange = (e) => {
@@ -40,6 +45,19 @@ export default function Edit() {
         setUsernameErr(false);
     }
 
+    const Loading = () => {        //the loading div
+        return <div className="d-flex mt-2">
+            <Loader type="TailSpin"
+                color="orange"
+                height={40}
+                width={40}
+                className="d-flex "
+            />
+            <div className="mt-2 ml-3" style={{ color: 'orange' }}>Saving Changes....</div>
+
+        </div>
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -49,6 +67,9 @@ export default function Edit() {
         if (isValid === true) {
             let newlines = /\n/g;
 
+            setDisabled(true);  //disable button
+            setLoading(true);
+
             const userObject = {
                 fullname: editFullname.trim(),
                 username: editUsername.trim(),
@@ -57,11 +78,14 @@ export default function Edit() {
 
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
-                    let x = res.data.success;                       //add loading
-                    if (x === true) window.location.replace("/Home"); // HOME, to refresh localStorage
+
+                    let x = res.data.success;
+                    if (x === true) window.location.replace("/myprofile");
                 })
                 .catch((err) => {
-                    alert("Error! Could not update profile"); /* TO FIX: display ERRORS properly */
+                    setDisabled(false);
+                    setLoading(false);
+                    alert("Error! Could not update profile");
                     console.error(err);
                 });
         }
@@ -197,17 +221,18 @@ export default function Edit() {
 
                                         < br />
 
-                                        {/* {loading ? <Loading /> : null} */}
+                                        {loading ? <Loading /> : null}
 
                                         <button
                                             id="submit-btn"
                                             className="btn align-content-center login-submit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
-                                        // disabled={disabled}    // 
+                                            disabled={disabled}    // button disabler
                                         >
                                             Save
                                             </button>
+
                                     </form>
                                     <div class="modal-footer">
                                         <Link to="/myprofile" type="button" className="btn login-submit btn-primary rounded-pill mt-2">Cancel</Link>

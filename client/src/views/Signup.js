@@ -124,6 +124,7 @@ function Signup() {
 
         async function sendtoServer(token) {
             if (isValid) {
+                setError(false)
                 setDisabled(true);  //disable button
                 setLoading(true);
 
@@ -208,7 +209,7 @@ function Signup() {
 
     return (
 
-        <body className="general sign-pic d-flex" onLoad={loadCaptcha}  >
+        <body className="App general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
                     {welcomeModal ? <WelcomeModal /> : null}
