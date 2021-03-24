@@ -250,7 +250,7 @@ function Signup() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="30"
+                                maxLength="20"
                                 placeholder="Enter Password"
                                 title="Required 8 characters or more"
                                 required
@@ -267,7 +267,7 @@ function Signup() {
                                 value={confirmPass}
                                 onChange={(e) => setconfirmPass(e.target.value)}
                                 className="signup-input mt-1 change"
-                                maxLength="30"
+                                maxLength="20"
                                 placeholder="Confirm Password"
                                 required
                             />

@@ -78,7 +78,7 @@ function Login() {
 
         async function sendtoServer(token) {
             if (isValid) {
-                setError(false);
+                setError(false)
                 setDisabled(true);  //disable button
                 setLoading(true);
                 const userObject = {
@@ -87,7 +87,8 @@ function Login() {
                     responseToken: token
                 };
 
-                axios.post("/login", userObject)
+                axios
+                    .post("/login", userObject)
                     .then((res) => {
                         let x = res.data.success;
                         if (x === true) return window.location.replace("/Home");
@@ -96,13 +97,14 @@ function Login() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message);      //show error message from axios        
-                    }).finally(() => setTimeout(() => {          //finally, setTimeout for button to be clickable
-                        setDisabled(false);
-                        setLoading(false);
-                    }, 100)                         // delay after error warning shows up
-                    );
+                        else setError(error.response.data.message)      //show error message from axios
 
+                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
+                            setDisabled(false);
+                            setLoading(false);
+                        }, 100);                   // delay after error warning shows up
+
+                    });
             }
         }
     }
@@ -168,7 +170,6 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
                                 className="login-input"
-                                maxLength="30"
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {
