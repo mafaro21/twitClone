@@ -37,7 +37,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
     const { fullname, username, bio } = req.body;
     let errors = []; // input errors
 
-    //do validation first
+    //do validation FIRST
     function checkInputs() {
         let OK = true;
         let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
@@ -50,7 +50,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             return false;
         }
         if (!reg.test(fullname) || !userReg.test(username) || !bioReg.test(bio)) {
-            errors.push("Name contains illegal characters, ");
+            errors.push("One or more fields contain illegal characters, ");
             OK = false;
         }
         if (bio.length > 100) {
@@ -66,6 +66,8 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
         return;
     } else updateUserData();
 
+    //=--------------------------END OF validation ABOVE ----------------------//
+
     function updateUserData() {
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
@@ -75,11 +77,16 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
             const newValues = { fullname: fullname, username: username, bio: bio };
             users.updateOne({ _id: userid }, { $set: newValues }, (err, result) => {
                 if (err) {
-                    res.status(400).send({ "message": err.message, "success": false });
-                    console.error("UPDATErr", err);
+                    switch (err.code) {
+                        case 11000:
+                            res.status(400).send({ "message": "Username has already been taken" });
+                            break;
+                        default:
+                            next(err)
+                            break;
+                    }
                 } else {
-                    res.send({ "message": result.modifiedCount, "success": true });
-                    console.log("UPDATED", result.result);
+                    res.send({ "updated:": result.modifiedCount,  "success": true });
                 }
                 client.close();
             });
@@ -92,7 +99,7 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
 /*error handler */
 router.use((err, req, res, next) => {
     res.sendStatus(500);
-    console.error(err);
+    console.error("UPDATErr", err);
 });
 
 module.exports = router;

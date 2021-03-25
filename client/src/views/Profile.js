@@ -9,7 +9,7 @@ import Interactive from '../components/Interactive';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
@@ -58,12 +58,11 @@ export default function Profile() {
         const isValid = editValidation();
 
         if (isValid === true) {
-            let newlines = /\n/g;
 
             const userObject = {
                 fullname: editFullname.trim(),
                 username: editUsername.trim(),
-                bio: editBio.replace(newlines, " ").trim()
+                bio: editBio.replace(/\n/g, " ").trim()
             }
 
             axios.put("/profile/mine/edit", userObject)
@@ -84,6 +83,7 @@ export default function Profile() {
         const usernameErr = {}
         const bioErr = {}
         let userReg = /^[0-9a-zA-Z_\S]+$/gi;
+        // eslint-disable-next-line
         let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
         let bioReg = /[<>]+/gi;
 
@@ -120,31 +120,28 @@ export default function Profile() {
 
 
 
-    const wordCount = () => {   //live word counter
+    const bioWordCount = () => {   //live word counter
         document.getElementById("bio").addEventListener('input', function () {
             var text = this.value,
-                count = text.trim().replace(/\s+/g, ' ').length;
+                count = text.trim().replace(/\s/g, "").length;
 
-            if (count == 280) {
+            if (count === 100) {
                 document.getElementById('show').style.color = "red"
-            } else if (count >= 250) {
+            } else if (count >= 75) {
                 document.getElementById('show').style.color = "#FF8000"
-            } else if (count >= 200) {
+            } else if (count >= 50) {
                 document.getElementById('show').style.color = "#FFB400"
-            } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800"
             } else {
                 document.getElementById('show').style.color = "grey"
             }
 
             document.getElementById('show').textContent = count;
 
-        }
-        )
+        })
     }
 
     const onChange = (e) => {
-        wordCount()
+        bioWordCount()
         setEditBio(e.target.value)
 
     }
