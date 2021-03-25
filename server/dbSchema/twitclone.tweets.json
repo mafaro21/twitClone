@@ -3,7 +3,7 @@
         "bsonType": "object",
         "required": [
             "byUserId",
-            "body",
+            "content",
             "dateposted",
             "likes",
             "comments"
@@ -13,7 +13,7 @@
                 "bsonType": "objectId",
                 "description": "Pointer to user who tweeted"
             },
-            "body": {
+            "content": {
                 "bsonType": "string",
                 "description": "Main body of the tweet",
                 "maxLength": 280
@@ -36,7 +36,7 @@
     },
     "$and": [
         {
-            "body": {
+            "content": {
                 "$regex": "^[^><]+$",
                 "$options": "g"
             }
