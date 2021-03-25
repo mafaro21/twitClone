@@ -43,7 +43,9 @@ export default function Header() {
                 displayData();
             })
             .catch(err => {
+                localStorage.clear();
                 window.location.replace("/");
+
             });
 
 
