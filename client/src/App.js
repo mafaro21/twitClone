@@ -12,32 +12,10 @@ import Post from './views/Post'
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import axios from 'axios';
 
 function App() {
   dotenv.config();
-
-  // let Status = axios.get("/statuslogin", { withCredentials: true })
-  //   .then((res) => {
-  //     console.log(res.data.loggedin)
-  //     return res.data.loggedin ? true : false;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   })
-
-  // const isLoggedIn = () => {
-  //   fullname = localStorage.getItem('fullname');
-
-  //   if (fullname.length > 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-
-
+ 
   return (
 
     <Router>
@@ -47,8 +25,8 @@ function App() {
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
-
           <Route path="/error" component={Error} />
+          
           <Route path="/myprofile" component={Profile} />
           <Route path="/edit" component={EditProfile} />
           <Route path="/post" component={Post} />

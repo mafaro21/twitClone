@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Header() {
-
+   
     const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
 
@@ -15,7 +15,7 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
-    const [light, setLight] = useState(false)
+    const [light, setLight] = useState(false);
     const lightToggle = () => setLight(!light);
 
     // const [disabled, setDisabled] = useState(false);
@@ -26,8 +26,6 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-
-
 
         axios.get("/profile/mine")
             .then(res => {
@@ -43,13 +41,9 @@ export default function Header() {
                 displayData();
             })
             .catch(err => {
+                localStorage.clear();
                 window.location.replace("/");
             });
-
-
-        // if (localStorage.fullname === undefined || localStorage.username === undefined) {
-        // fetchData();
-        // } else displayData();
 
     }, []);
 
@@ -75,8 +69,7 @@ export default function Header() {
             .then((res) => {
                 localStorage.clear();
                 window.location.replace("/");
-
-            })
+            });
     }
 
     // const onChange = useCallback(e => {
@@ -87,7 +80,7 @@ export default function Header() {
     const wordCount = () => {   //live word counter
         document.getElementById("tweet").addEventListener('input', function () {
             var text = this.value,
-                count = text.trim().replace(/\s+/g, ' ').length;
+                count = text.trim().replace(/\s/g, '').length;
 
             if (count === 280) {
                 document.getElementById('show').style.color = "red"
@@ -109,8 +102,7 @@ export default function Header() {
 
             document.getElementById('show').textContent = count;
 
-        }
-        )
+        })
     }
 
 

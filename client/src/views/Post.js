@@ -40,7 +40,7 @@ export default function Post() {
             var text = this.value,
                 count = text.trim().replace(/\s+/g, ' ').length;
 
-            if (count == 280) {
+            if (count === 280) {
                 document.getElementById('show').style.color = "red"
             } else if (count >= 250) {
                 document.getElementById('show').style.color = "#FF8000"

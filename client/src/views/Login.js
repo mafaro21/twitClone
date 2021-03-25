@@ -97,13 +97,10 @@ function Login() {
                         if (error.response.status === 500) {
                             internalError();
                         }
-                        else setError(error.response.data.message)      //show error message from axios
-
-                        setTimeout(() => {          //reduce time for button to be clickable to reduce spam
-                            setDisabled(false);
-                            setLoading(false);
-                        }, 100);                   // delay after error warning shows up
-
+                        else setError(error.response.data.message);     //show error message from axios
+                    }).finally(() => {
+                        setDisabled(false);
+                        setLoading(false);      //re-enable the button + disable loading.
                     });
             }
         }
