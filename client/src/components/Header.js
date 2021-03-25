@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
+import OutsideClick from './OutsideClick.js'
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Header() {
-   
+
     const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
 
@@ -15,8 +16,9 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
-    const [light, setLight] = useState(false);
-    const lightToggle = () => setLight(!light);
+    const [tweet, setTweet] = useState()
+
+    const [tweetErr, setTweetErr] = useState({})
 
     // const [disabled, setDisabled] = useState(false);
 
@@ -106,70 +108,120 @@ export default function Header() {
         })
     }
 
+    const onClick = () => {
+        setTweetErr(false)
+    }
+
+    const onChange = (e) => {
+        wordCount()
+        setTweet(tweetRef.current.value)
+    }
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const isValid = tweetValidation()
+
+        if (isValid === true) {
+            console.log("legal tweet")
+        }
+    }
+
+
+    const tweetValidation = () => {
+
+        const tweetErr = {}
+        let tweetReg = /[<>]+/gi;
+
+        let isValid = true
+
+        if (!tweetReg.test(tweet)) {
+            tweetErr.tweetinvalid = "Contains illegal characters"
+            isValid = false;
+        }
+
+        setTweetErr(tweetErr)
+
+        return isValid;
+    }
+
+    const ref = useRef();   //clicking outside closes modal
+
+    OutsideClick(ref, () => {
+        tweetToggle()
+        // setTweetErr(false)
+    });
+
+    const tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
 
 
     const TweetModal = () => {
-        return <div>
-            <div class="tweettest mt-5 modal-enter" >
-                <div class="">
-                    <div class="modal-view">
-                        <div class="modal-header">
-                            {/* <h3 class="mt-3">tweet</h3> */}
-                            <button className="" onClick={tweetToggle}>
-                                <svg viewBox="0 0 24 24" class="icon ">
-                                    <g>
-                                        <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
-                                        </path>
-                                    </g>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="modal-body row">
-                            <div className="col-1">
-                                <img src={icon} alt="example" className="user-tweet-img" />
+        return <div >
+            {/* ref={ref} */}
+            <div className="modal-wrapper" >
+                <div class="tweettest  modal-enter" >
+                    <div class="">
+                        <div class="modal-view">
+                            <div class="modal-header">
+                                <button className="" onClick={tweetToggle}>
+                                    <svg viewBox="0 0 24 24" class="icon ">
+                                        <g>
+                                            <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </button>
                             </div>
 
-                            <form className="signup col"  >
-                                {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div>
-                                    <textarea
-                                        id="tweet"
-                                        name="tweet"
-                                        type="text"
-                                        // value={fullname}
-                                        onChange={wordCount}
-                                        className=" edit-input "
-                                        maxLength="280"
-                                        rows="7"
-                                        placeholder="Any Hot Takes?"
-                                        required
-                                    />
-                                    {/* {Object.keys(fullnameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })} */}
-                                    <div className="container counter">
-                                        {/* {count}/280 */}
-                                        <span id="show">0</span><span>/280</span>
-                                    </div>
+                            <div class="modal-body row">
+                                <div className="col-1">
+                                    <img src={icon} alt="example" className="user-tweet-img" />
                                 </div>
 
-                                {/* {loading ? <Loading /> : null} */}
+                                <form className="signup col" onSubmit={(e) => handleSubmit(e)} ref={tweetRef}>
 
-                                <button
-                                    id="submit-btn"
-                                    className="btn login-submit btn-outline-primary rounded-pill mt-3"
-                                    type="submit"
-                                // disabled={disabled}         //button disabler
-                                >
-                                    Tweet
+                                    <div>
+                                        <textarea
+                                            id="tweet"
+                                            name="tweet"
+                                            type="text"
+                                            value={tweet}
+                                            onChange={onChange}
+                                            className=" edit-input "
+                                            maxLength="280"
+                                            rows="7"
+                                            placeholder="Any Hot Takes?"
+                                            required
+                                        />
+
+                                        <div className="container counter">
+                                            {/* {count}/280 */}
+                                            <span id="show">0</span><span>/280</span>
+                                        </div>
+                                        {Object.keys(tweetErr).map((key) => {
+                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                        })}
+                                    </div>
+
+                                    {/* {loading ? <Loading /> : null} */}
+
+                                    <button
+                                        id="submit-btn"
+                                        className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                                        type="submit"
+                                        onClick={onClick}
+                                    // disabled={disabled}         //button disabler
+                                    >
+                                        Tweet
                                 </button>
-                            </form>
-                        </div>
-                        {/* <div class="modal-footer">
+                                </form>
+                            </div>
+                            {/* <div class="modal-footer">
                             <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
                         </div> */}
+                        </div>
                     </div>
                 </div>
             </div>

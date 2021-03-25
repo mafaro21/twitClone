@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import axios from "axios";
@@ -46,15 +46,17 @@ function Sidebar() {
         </div>
     }
 
+    const newsRef = useRef();
+
     return (
         <div className="col-sm-4 p-3 phone-sidebar" >
             <div className="p-3 sidebar">
                 <h5>Trending Topics</h5>
                 <p>dfdsafdsafd</p>
             </div>
-            <div className="p-1 mt-4 sidebar">
+            <div className="p-1 mt-4 sidebar" >
                 <h5 className="view p-3">Top Headlines</h5>
-                <ul className="col">
+                <ul className="col" ref={newsRef}>
                     {loading ? <Loading /> : null}
                     {api.articles.map(item => (
                         <li key={item.url} >

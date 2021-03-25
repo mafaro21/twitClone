@@ -60,7 +60,7 @@ strong {
   font-size: 18px;
   font-weight: bold;
   position: sticky;
-  z-index: 2400;
+  z-index: 1;
   top: 52px;
   background-color: #080603;
   width: 575px;
