@@ -21,7 +21,6 @@ export default function Edit() {
     const [bioErr, setBioErr] = useState({})
 
     const [count, setCount] = useState(0) //word counter
-    const [click, setclick] = useState(false);
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
@@ -33,11 +32,6 @@ export default function Edit() {
         setCount(e.target.value.length)
     }
 
-    const clickCheck = () => {
-        return <div>
-            <p class="text">i have been clicked</p>
-        </div>
-    }
 
     const onClick = () => {
         setFullnameErr(false);
@@ -64,7 +58,7 @@ export default function Edit() {
 
         const isValid = editValidation();
 
-        if (isValid === true) {     
+        if (isValid === true) {
             setDisabled(true);  //disable button
             setLoading(true);
 
@@ -202,7 +196,6 @@ export default function Edit() {
                                                 type="test"
                                                 value={editBio}
                                                 onChange={onChange}
-                                                onClick={() => setclick(true)}
                                                 rows="4"
                                                 className="edit-input mt-1 change"
                                                 maxLength="100"
@@ -214,7 +207,6 @@ export default function Edit() {
                                             })}
                                             <div className="container counter">
                                                 {count}/100
-                                                {click ? <clickCheck /> : null}
                                             </div>
                                         </div>
 
