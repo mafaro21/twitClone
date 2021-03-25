@@ -111,9 +111,8 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             try {
                 const result = await users.insertOne(userObject);
                 // IF SUCCESSFUL INSERT create session here.
-                req.session.user = { id: result.insertedId, email: result.ops[0].email, };
+                req.session.user = { id: result.ops[0]._id, email: result.ops[0].email, };
                 res.status(201).send({ "success": true });
-                console.log(result.insertedId);
             } catch (error) {
                 if (error.code === 11000) {
                     res.status(409).send({ "message": "Email already in use.", "success": false });

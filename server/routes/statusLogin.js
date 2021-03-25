@@ -5,9 +5,9 @@ const router = express.Router();
 // can be used as middleware on Frontend
 router.get("/", (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.json({ "loggedin": false });
+        return res.send({ "loggedin": false });
     } else
-        return res.json({ "loggedin": true, "user": req.session.user.email });
+        return res.send({ "loggedin": true, "user": req.session.user.email });
 });
 
 module.exports = router;

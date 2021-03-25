@@ -12,9 +12,9 @@ import Loader from "react-loader-spinner";
 
 export default function Edit() {
 
-    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ")
-    const [editUsername, setEditUsername] = useState(localStorage.getItem('username') || " ")
-    const [editBio, setEditBio] = useState(localStorage.getItem('bio') || " ")
+    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || "")
+    const [editUsername, setEditUsername] = useState(localStorage.getItem('username') || "")
+    const [editBio, setEditBio] = useState(localStorage.getItem('bio') || "")
 
     const [fullnameErr, setFullnameErr] = useState({}) // front end validation
     const [usernameErr, setUsernameErr] = useState({})
@@ -64,29 +64,27 @@ export default function Edit() {
 
         const isValid = editValidation();
 
-        if (isValid === true) {
-            let newlines = /\n/g;
-
+        if (isValid === true) {     
             setDisabled(true);  //disable button
             setLoading(true);
 
             const userObject = {
                 fullname: editFullname.trim(),
                 username: editUsername.trim(),
-                bio: editBio.replace(newlines, " ").trim()
+                bio: editBio.replace(/\n/g, " ").trim()
             }
 
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
-
                     let x = res.data.success;
                     if (x === true) window.location.replace("/myprofile");
                 })
                 .catch((err) => {
-                    setDisabled(false);
+                    alert("Error! Could not update profile"); // 😝PLEASE FIX!! DISPLAY ERRORS PROPERLY
+                })
+                .finally(() => {
+                    setDisabled(false);  //stop disable button and loading.
                     setLoading(false);
-                    alert("Error! Could not update profile");
-                    console.error(err);
                 });
         }
     }
@@ -97,6 +95,7 @@ export default function Edit() {
         const usernameErr = {}
         const bioErr = {}
         let userReg = /^[0-9a-zA-Z_\S]+$/gi;
+        // eslint-disable-next-line
         let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
         let bioReg = /[<>]+/gi;
 

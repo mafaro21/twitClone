@@ -162,6 +162,7 @@ function Signup() {
         const passwordErr = {};
         const confirmpasswordErr = {};
         let emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        // eslint-disable-next-line
         let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
 
         let isValid = true;
