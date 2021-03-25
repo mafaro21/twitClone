@@ -110,7 +110,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             try {
                 const result = await users.insertOne(userObject);
-                // IF SUCCESSFUL INSERT create session here.
+                // IF SUCCESSFUL INSERT, create session here.
                 req.session.user = { id: result.ops[0]._id, email: result.ops[0].email, };
                 res.status(201).send({ "success": true });
             } catch (error) {
@@ -128,7 +128,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
 /*error handler */
 router.use((err, req, res, next) => {
     res.sendStatus(500);
-    console.error(err);
+    console.error("REGISTER_Error ", err);
 });
 
 module.exports = router;
