@@ -42,7 +42,7 @@ const indexRouter = require('./routes/index');
 const toRegister = require('./routes/register');
 const toLogin = require('./routes/login');
 const toProfile = require('./routes/profile');
-const tweetRouter = require('./routes/tweet');
+const tweetRouter = require('./routes/tweets');
 const toLogout = require('./routes/logout');
 const statuslogin = require('./routes/statusLogin');
 
@@ -57,7 +57,7 @@ app.use('/', indexRouter);
 app.use('/register', toRegister);
 app.use('/login', toLogin);
 app.use('/profile', toProfile);
-app.use('/tweet', tweetRouter);
+app.use('/tweets', tweetRouter);
 app.use('/logout', toLogout);
 app.use('/statuslogin', statuslogin);
 
@@ -92,7 +92,7 @@ app.use((req, res, next) => {
 
 
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
