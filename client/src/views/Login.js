@@ -25,7 +25,16 @@ function Login() {
         </div>
         : '';
 
+    axios.get("/statuslogin")
+        .then((res) => {
+            if (res.data.loggedin) {
+                return window.location.replace("/Home");
+            }
+        });
+
     const loadCaptcha = useEffect(() => {
+
+
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
         document.body.appendChild(script);
@@ -33,7 +42,10 @@ function Login() {
         return () => {
             document.body.removeChild(script);
         }
+
     }, []);
+
+
 
     const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;

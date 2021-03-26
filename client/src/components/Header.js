@@ -3,6 +3,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick.js'
 import { Link, Redirect } from 'react-router-dom';
+import Loader from "react-loader-spinner";
 import axios from 'axios';
 
 export default function Header() {
@@ -16,14 +17,15 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
-    const [tweet, setTweet] = useState()
+    // const [tweet, setTweet] = useState("")
 
     const [tweetErr, setTweetErr] = useState({})
 
+    let tweetRef = useRef(" "); // this is to prevent the modal from refreshing when a user types something
+
     // const [disabled, setDisabled] = useState(false);
 
-    // const [count, setCount] = useState(0) //word counter
-
+    // const [loading, setLoading] = useState(false);      // loading animation
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -38,7 +40,7 @@ export default function Header() {
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
-                let finalDate = months[date.getMonth()] + " " + date.getFullYear();
+                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
                 displayData();
             })
@@ -75,10 +77,6 @@ export default function Header() {
             });
     }
 
-    // const onChange = useCallback(e => {
-    //     setCount(e.target.value.length)
-    //     console.log("onchange")
-    // }, []);
 
     const wordCount = () => {   //live word counter
         document.getElementById("tweet").addEventListener('input', function () {
@@ -108,35 +106,74 @@ export default function Header() {
         })
     }
 
-    const onClick = () => {
-        setTweetErr(false)
-    }
+    // const onClick = async (e) => {
+    //     setTweetErr(false)
+    //     await setTweet(tweetRef.current.value)
+    //     handleSubmit(e)
+    // }
 
-    const onChange = (e) => {
-        wordCount()
-        setTweet(tweetRef.current.value)
-    }
+    // const onChange = () => {
+    //     wordCount()
+    //     // console.log(tweetRef.current.tweet)
 
 
-    const handleSubmit = (e) => {
+    //     // console.log(tweet + ", working")
+    // }
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const isValid = tweetValidation()
+        const loading = document.createElement("div");
+        loading.innerHTML = <Loading />
+        document.getElementById("loading").appendChild(loading)
 
-        if (isValid === true) {
-            console.log("legal tweet")
+        let loginForm = document.forms.tweetForm; // Or document.forms['login']
+        const tweet = loginForm.elements.tweet.value;
+        const isValid = tweetValidation(tweet);
+        sendToDb()
+
+        // async function setContent() {
+        //     setTweet(tweetRef.current.value)
+        // }
+
+        // setContent().then(() => sendToDb())
+
+        async function sendToDb() {
+
+            if (isValid) {
+                console.log(tweet, "legal tweet")
+                // setDisabled(true);  //disable button
+
+                const tweetObject = {
+                    content: tweet.replace(/\n/g, " ").trim()
+                }
+
+                axios.post("/tweet", tweetObject)
+                    .then((res) => {
+                        let x = res.data.success;
+                        console.log(x)
+
+                    })
+                    .catch((err) => {
+                        console.error(err)
+                    })
+                    .finally(() => {
+                        // setDisabled(false);
+                        document.getElementById("loading").removeChild(loading)
+                    });
+            }
         }
     }
 
 
-    const tweetValidation = () => {
-
+    const tweetValidation = (twt) => {
         const tweetErr = {}
         let tweetReg = /[<>]+/gi;
 
         let isValid = true
 
-        if (!tweetReg.test(tweet)) {
+        if (tweetReg.test(twt)) {
             tweetErr.tweetinvalid = "Contains illegal characters"
             isValid = false;
         }
@@ -153,9 +190,21 @@ export default function Header() {
         // setTweetErr(false)
     });
 
-    const tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
 
+
+    const Loading = () => {        //the loading div
+        return <div className="d-flex mt-3">
+            <Loader type="TailSpin"
+                color="orange"
+                height={40}
+                width={40}
+                className="d-flex "
+            />
+            <div className="mt-2 ml-3" style={{ color: 'orange' }}>Tweeting....</div>
+
+        </div>
+    }
 
     const TweetModal = () => {
         return <div >
@@ -180,15 +229,17 @@ export default function Header() {
                                     <img src={icon} alt="example" className="user-tweet-img" />
                                 </div>
 
-                                <form className="signup col" onSubmit={(e) => handleSubmit(e)} ref={tweetRef}>
+                                <form id="tweetForm" className="signup col" onSubmit={(e) => handleSubmit(e)} >
 
-                                    <div>
+                                    <div >
                                         <textarea
+                                            ref={tweetRef}
                                             id="tweet"
                                             name="tweet"
                                             type="text"
-                                            value={tweet}
-                                            onChange={onChange}
+                                            // value={tweet}
+
+                                            onChange={wordCount}
                                             className=" edit-input "
                                             maxLength="280"
                                             rows="7"
@@ -206,16 +257,17 @@ export default function Header() {
                                     </div>
 
                                     {/* {loading ? <Loading /> : null} */}
+                                    <div id="loading"></div>
 
                                     <button
                                         id="submit-btn"
                                         className="btn login-submit btn-outline-primary rounded-pill mt-3"
                                         type="submit"
-                                        onClick={onClick}
-                                    // disabled={disabled}         //button disabler
+                                    // onClick={handleSubmit}
+                                    // disabled={disabled}       //button disabler
                                     >
                                         Tweet
-                                </button>
+                                    </button>
                                 </form>
                             </div>
                             {/* <div class="modal-footer">
