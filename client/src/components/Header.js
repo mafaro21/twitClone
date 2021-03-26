@@ -103,83 +103,59 @@ export default function Header() {
 
             document.getElementById('show').textContent = count;
 
-        })
+        });
     }
 
-    // const onClick = async (e) => {
-    //     setTweetErr(false)
-    //     await setTweet(tweetRef.current.value)
-    //     handleSubmit(e)
-    // }
 
-    // const onChange = () => {
-    //     wordCount()
-    //     // console.log(tweetRef.current.tweet)
-
-
-    //     // console.log(tweet + ", working")
-    // }
-
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         const loading = document.createElement("div");
-        loading.innerHTML = <Loading />
-        document.getElementById("loading").appendChild(loading)
+        loading.innerHTML = <Loading />;
+        document.getElementById("loading").appendChild(loading);
 
-        let loginForm = document.forms.tweetForm; // Or document.forms['login']
-        const tweet = loginForm.elements.tweet.value;
-        const isValid = tweetValidation(tweet);
-        sendToDb()
+        const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
+        const tweet = myForm.elements.tweet.value;
+        const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
+        if (isValid === true) sendToDb();
 
-        // async function setContent() {
-        //     setTweet(tweetRef.current.value)
-        // }
 
-        // setContent().then(() => sendToDb())
-
-        async function sendToDb() {
-
-            if (isValid) {
-                console.log(tweet, "legal tweet")
-                // setDisabled(true);  //disable button
-
-                const tweetObject = {
-                    content: tweet.replace(/\n/g, " ").trim()
-                }
-
-                axios.post("/tweet", tweetObject)
-                    .then((res) => {
-                        let x = res.data.success;
-                        console.log(x)
-
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                    })
-                    .finally(() => {
-                        // setDisabled(false);
-                        document.getElementById("loading").removeChild(loading)
-                    });
+        function sendToDb() {
+            const tweetObject = {
+                content: tweet.replace(/\n/g, " ").trim()
             }
+
+            axios.post("/tweets", tweetObject)
+                .then((res) => {
+                    let x = res.data.success;
+                    console.log(x);
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+                .finally(() => {
+                    // setDisabled(false);
+                    document.getElementById("loading").removeChild(loading);
+                });
         }
     }
 
-
-    const tweetValidation = (twt) => {
-        const tweetErr = {}
+    //validation check
+    function tweetValidation(twt) {
+        const tweetErr = {};
         let tweetReg = /[<>]+/gi;
-
-        let isValid = true
+        let isValid = true;
 
         if (tweetReg.test(twt)) {
-            tweetErr.tweetinvalid = "Contains illegal characters"
+            tweetErr.tweetinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (twt.trim().length < 1) {
+            tweetErr.tweetinvalid = "Cannot be empty";
             isValid = false;
         }
 
-        setTweetErr(tweetErr)
-
+        setTweetErr(tweetErr);
         return isValid;
     }
 

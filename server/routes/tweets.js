@@ -8,11 +8,42 @@ const router = express.Router();
 
 /* GET ALL TWEETS */
 router.get("/", (req, res, next) => {
-
+    res.send("Here are all tweets");
 });
 
-//get single tweet
+/* GET ALL tweets FROM GIVEN USER */
+router.get("/user/:userid", (req, res, next) => {
+    const userid = req.params.userid;
+    res.send(`Here are ALL tweets from USER: ${userid}`);
+});
+
+//get SINGLE tweet
 router.get("/:tweetid", (req, res, next) => {
+    const tweetid = req.params.tweetid;
+    res.send(`Here is a tweet with id: ${tweetid}</h2>`);
+});
+
+//getting all MY tweets (in profile)
+router.get("/mine/all", isLoggedin, (req, res, next) => {
+    const userid = req.session.user.id;
+    //retrieve data from db
+    MongoClient.connect(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    }).then(async (client) => {
+        const tweets = client.db("twitclone").collection("tweets");
+        try {
+            const result = await tweets.find({ byUserId: userid }, { projection: { byUserId: 0 } })
+                .sort({ dateposted: -1 })
+                .limit(20)
+                .toArray();
+            res.send(result);
+        } catch (error) {
+            throw error;
+        } finally {
+            await client.close();
+        }
+    }).catch(next);
 
 });
 
