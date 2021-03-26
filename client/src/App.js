@@ -15,7 +15,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
   dotenv.config();
- 
+
   return (
 
     <Router>
@@ -26,7 +26,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
-          
+
           <Route path="/myprofile" component={Profile} />
           <Route path="/edit" component={EditProfile} />
           <Route path="/post" component={Post} />
