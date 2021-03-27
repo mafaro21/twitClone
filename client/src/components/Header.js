@@ -17,7 +17,7 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
-    // const [tweet, setTweet] = useState("")
+    const [tweetLoading, setTweetLoading] = useState(false)
 
     const [tweetErr, setTweetErr] = useState({})
 
@@ -110,15 +110,17 @@ export default function Header() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const loading = document.createElement("div");
-        loading.innerHTML = <Loading />;
-        document.getElementById("loading").appendChild(loading);
+        // const loading = document.createElement("div");
+        // loading.innerHTML = <Loading />;
+        // document.getElementById("loading").appendChild(loading);
 
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
         const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
         if (isValid === true) sendToDb();
 
+        setTweetModal(false)
+        setTweetLoading(true)
 
         function sendToDb() {
             const tweetObject = {
@@ -134,8 +136,8 @@ export default function Header() {
                     console.error(err);
                 })
                 .finally(() => {
-                    // setDisabled(false);
-                    document.getElementById("loading").removeChild(loading);
+                    setTweetLoading(false)
+                    // document.getElementById("loading").removeChild(loading);
                 });
         }
     }
@@ -181,6 +183,23 @@ export default function Header() {
 
         </div>
     }
+
+    const TweetLoading = () => {    //loader after tweet has been sent
+        return <div className="d-flex justify-content-center">
+            <div className="modal-wrapper" >
+                <div class=" d-flex tweet-loader" >
+                    <Loader type="TailSpin"
+                        color="orange"
+                        height={40}
+                        width={40}
+                        className="d-flex "
+                    />
+                    <div className="mt-2 ml-3" style={{ color: 'orange' }}>Sending Spicy Tweet...</div>
+                </div>
+            </div>
+        </div>
+    }
+
 
     const TweetModal = () => {
         return <div >
@@ -260,6 +279,7 @@ export default function Header() {
     return (
         <header className=" header pt-3" onLoad={displayData} >
             {tweetModal ? <TweetModal /> : null}
+            {tweetLoading ? <TweetLoading /> : null}
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 

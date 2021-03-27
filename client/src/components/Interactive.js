@@ -4,6 +4,7 @@ import '../css/custom.scss';
 import '../css/Main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 
@@ -34,6 +35,10 @@ export default function Interactive() {
                     <FontAwesomeIcon icon={heartSolid} className="text-danger" />
                 ) : <FontAwesomeIcon icon={faHeart} />}
                     &nbsp; 302k
+            </button>
+
+            <button className="message col">
+                <FontAwesomeIcon icon={faEnvelope} />
             </button>
         </div>
     );

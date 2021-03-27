@@ -86,6 +86,11 @@ strong {
   border-radius: 50%;
   margin-top: -6%;
 }
+.profile-view{
+    border-bottom: 10px solid var(--darkaccent);
+    text-align: left;
+    width: auto;
+}
 .banner-right{
   display: flex;
   float:right;
@@ -131,6 +136,18 @@ button{
 .word-count{
   z-index: 1000;
 }
+.tweet-fromnow:hover + .tweet-time{
+  display: block;
+  color: black;
+  background-color: white;
+  border-radius: 3px;
+  width: auto;
+  z-index: 2 ;
+  position: absolute;
+}
+.tweet-time{
+  display: none;
+}
 
 /* modal edit */
 .modaltest{
@@ -169,8 +186,11 @@ button{
 }
 
 /* interactive row */
-.like, .comment{
+.like, .comment, .message{
   color: #AEAEAE;
+}
+.delete{
+  color: red;
 }
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
@@ -182,6 +202,16 @@ button{
   border-radius: 15px;
   color: #37FAFE ;
   /* #395F5F */
+}
+.delete:hover{
+  background-color: rgb(255, 0, 0,0.2 );
+  border-radius: 15px;
+  color: white ;
+}
+.message:hover{
+  background-color: rgb(75, 255, 0 ,0.2 );
+  border-radius: 15px;
+  color: #4BFF00 ;
 }
 
 /* interactive row */
@@ -216,6 +246,9 @@ button{
   }
   .profile-logo{
     margin-top: -14%;
+  }
+  .profile-header{
+    width: auto;
   }
 
   /* modal edit */

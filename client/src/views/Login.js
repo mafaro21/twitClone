@@ -52,18 +52,7 @@ function Login() {
         return window.location.replace("/Error");
     }
 
-    const Loading = (color) => {        //the loading div
-
-        // function colorChanger(color) {
-        //     if (color) {
-        //         setTimeout(() => {
-        //             return color = "orange";
-        //         }, 3000);
-        //     } else {
-        //         return color = "red";
-
-        //     }
-        // }
+    const Loading = () => {
 
         return <div>
             <Loader type="Watch"

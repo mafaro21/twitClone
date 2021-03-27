@@ -160,6 +160,12 @@ ul{
 }
 /* tweetModal */
 
+.tweet-loader{
+  height: auto;
+  margin-top: 303px;
+  margin-left: 40%;
+  transition: all .3s ease-in-out;
+}
 
 @media screen and (max-width: 500px){   /*phone view*/
   .header-title {
