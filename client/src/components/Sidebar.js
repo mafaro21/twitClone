@@ -11,6 +11,8 @@ function Sidebar() {
 
     const [loading, setLoading] = useState(false)
 
+    const newsRef = useRef(false);
+
     // useEffect(() => {
     //     setLoading(true)
 
@@ -26,17 +28,19 @@ function Sidebar() {
     //     };
 
     //     axios.request(options).then(function (res) {
+    //         console.log(res.data)
     //         setApi(res.data)
     //         setLoading(false);
     //     }).catch(function (error) {
     //         console.error(error);
     //     });
+
     // }, []);
 
 
     const Loading = () => {        //the loading div
 
-        return <div>
+        return <div className="d-flex justify-content-center">
             <Loader type="TailSpin"
                 color="orange"
                 height={40}
@@ -46,17 +50,17 @@ function Sidebar() {
         </div>
     }
 
-    const newsRef = useRef();
+
 
     return (
-        <div className="col-sm-4 p-3 phone-sidebar" >
+        <div className="col-sm-4 p-3 phone-sidebar" ref={newsRef}>
             <div className="p-3 sidebar">
                 <h5>Trending Topics</h5>
                 <p>dfdsafdsafd</p>
             </div>
             <div className="p-1 mt-4 sidebar" >
                 <h5 className="view p-3">Top Headlines</h5>
-                <ul className="col" ref={newsRef}>
+                <ul className="col" >
                     {loading ? <Loading /> : null}
                     {api.articles.map(item => (
                         <li key={item.url} >

@@ -26,6 +26,12 @@ export default function Edit() {
 
     const [loading, setLoading] = useState(false);      // loading animation
 
+    const [error, setError] = useState([]);     //using array, data comes that way
+    const errorDiv = error
+        ? <div>
+            {error}
+        </div>
+        : '';
 
     const onChange = (e) => {
         setEditBio(e.target.value)
@@ -74,7 +80,7 @@ export default function Edit() {
                     if (x === true) window.location.replace("/myprofile");
                 })
                 .catch((err) => {
-                    alert("Error! Could not update profile"); // 😝PLEASE FIX!! DISPLAY ERRORS PROPERLY
+                    setError(error.response.data.message);
                 })
                 .finally(() => {
                     setDisabled(false);  //stop disable button and loading.
@@ -150,6 +156,8 @@ export default function Edit() {
 
                             </div>
                         </div>
+
+                        <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                         <div class=" " >
                             <div class="">

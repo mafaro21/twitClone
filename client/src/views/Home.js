@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -6,15 +6,21 @@ import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import tobias from '../images/mihai-surdu.jpg';
-import derick from '../images/derick-anies.jpg';
-// import { useState } from "react";
-
+// import derick from '../images/derick-anies.jpg';
+// import axios from 'axios';
 
 function Home() {
     // const [isClick, setClick] = useState(false);
 
     let username = localStorage.getItem('username')
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
+    // useEffect(() => {
+    //     axios.get("/tweets/")
+    //         .then((res) => {
+    //             console.log(res.data)
+    //         })
+    // }, [])
 
     return (
         <div className="App general ">

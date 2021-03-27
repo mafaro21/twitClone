@@ -5,11 +5,17 @@ import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import Interactive from '../components/Interactive';
+// import Interactive from '../components/Interactive';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt'
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
+import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import Moment from 'react-moment'
 // import { Redirect } from 'react-router-dom';
 // import derick from '../images/derick-anies.jpg';
 
@@ -22,6 +28,7 @@ export default function Profile() {
     const settingsToggle = () => setSettingsModal(!settingsModal);
 
     const [loading, setLoading] = useState(true);      // loading animation
+    const [tweetLoading, setTweetLoading] = useState(true)
 
     const [fullname, setFullname] = useState();
     const [username, setUsername] = useState();
@@ -33,7 +40,9 @@ export default function Profile() {
     const [light, setLight] = useState(false)
     const lightToggle = () => setLight(!light);
 
+    const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
 
+    const [isLiked, setisLiked] = useState(false);
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -116,9 +125,6 @@ export default function Profile() {
 
         return isValid;
     }
-
-
-
 
     const bioWordCount = () => {   //live word counter
         document.getElementById("bio").addEventListener('input', function () {
@@ -332,11 +338,6 @@ export default function Profile() {
         </div >
     }
 
-
-    // const Dim = () => {
-    //     return document.getElementById("dim").style.opacity = "0.3";
-    // }
-
     useEffect(() => {   //fetching data for logged in users
 
         setFullname(localStorage.getItem('fullname'));
@@ -346,11 +347,23 @@ export default function Profile() {
         document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
         setLoading(false);
 
+        axios.get("/tweets/mine/all")
+            .then((res) => {
+                setTweets(res)
+
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => {
+                setTweetLoading(false)
+            })
+
     }, []);
 
     const Loading = () => {        //the loading div
 
-        return <div>
+        return <div className="d-flex justify-content-center">
             <Loader type="TailSpin"
                 color="orange"
                 height={60}
@@ -369,6 +382,13 @@ export default function Profile() {
             })
     }
 
+    const handleLike = () => {  //for liking and unliking posts
+        if (!isLiked) {
+            setisLiked(true)
+        } else {
+            setisLiked(false)
+        }
+    }
 
     return (
         <div className={light ? "light-mode" : "general"}>
@@ -402,7 +422,7 @@ export default function Profile() {
                         <div className=" banner row" >
                             <img src={deer} alt="example" className="header-photo " />
 
-                            <div className="p-2 view col ">
+                            <div className="p-2 profile-view col ">
                                 <div className="">
                                     <img src={icon} alt="example" className="profile-logo" />
 
@@ -480,20 +500,59 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        <div className="p-2 view row">             {/* <--- standard tweet*/}
-                            <div className="col-1.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">                   {/* <--- user content */}
-                                <div className="user-content">
-                                    <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
+
+                        {tweetLoading ? <Loading /> : null}
+                        {tweets.data.map(item => (
+                            <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                                <div className="col-1.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className="user-logo" />
                                 </div>
-                                <p>this is my first tweet</p>
+                                <div className="col user-name-tweet">      {/* <--- user content */}
+                                    <div >
+                                        <div className="user-content">
+                                            <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
+                                            &nbsp; <span>·</span> &nbsp;
+                                            <span>
+                                                <Moment fromNow className="tweet-fromnow">
+                                                    {item.dateposted}
+                                                </Moment>
+                                                <Moment className="tweet-time" format="&nbsp; HH:MM &nbsp; DD MMMM YYYY &nbsp;">
+                                                    {item.dateposted}
+                                                </Moment>
+                                            </span>
+                                        </div>
+                                        <p>{item.content}</p>
+                                    </div>
 
-                                <Interactive />
+                                    <div className="interact-row d-flex ">
+                                        <button className="comment col">
+                                            <FontAwesomeIcon icon={faComment} />
+                                            &nbsp; {item.comments}
+                                        </button>
 
+                                        <button
+                                            className="like col"
+                                            onClick={handleLike}
+                                        >
+                                            {isLiked ? (
+                                                <FontAwesomeIcon icon={heartSolid} className="text-danger" />
+                                            ) : <FontAwesomeIcon icon={faHeart} />}
+                                                &nbsp; {item.likes}
+                                        </button>
+
+                                        <button className="col delete">
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </button>
+
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
+                        ))}
+
+
+
+
 
                     </div>
 
