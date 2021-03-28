@@ -15,14 +15,12 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
-import Moment from 'react-moment'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+import ReactTimeAgo from 'react-time-ago'
 // import { Redirect } from 'react-router-dom';
-// import derick from '../images/derick-anies.jpg';
 
 export default function Profile() {
-
-    const [editModal, setEditModal] = useState(false);//edit modal
-    const editToggle = () => setEditModal(!editModal);
 
     const [settingsModal, setSettingsModal] = useState(false);//settings modal
     const settingsToggle = () => setSettingsModal(!settingsModal);
@@ -35,217 +33,14 @@ export default function Profile() {
     const [bio, setBio] = useState();
     const [datejoined, setDatejoined] = useState();
 
-    // const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ");
-
-    const [light, setLight] = useState(false)
-    const lightToggle = () => setLight(!light);
-
     const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
 
     const [isLiked, setisLiked] = useState(false);
 
+    const [tweetCount, setTweetCount] = useState(0)
+
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
-    // edit part
-    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || " ")
-    const [editUsername, setEditUsername] = useState(localStorage.getItem('username') || " ")
-    const [editBio, setEditBio] = useState(localStorage.getItem('bio') || " ")
-
-    const [fullnameErr, setFullnameErr] = useState({}) // front end validation
-    const [usernameErr, setUsernameErr] = useState({})
-    const [bioErr, setBioErr] = useState({})
-
-    const onClick = () => {
-        setFullnameErr(false);
-        setBioErr(false);
-        setUsernameErr(false);
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const isValid = editValidation();
-
-        if (isValid === true) {
-
-            const userObject = {
-                fullname: editFullname.trim(),
-                username: editUsername.trim(),
-                bio: editBio.replace(/\n/g, " ").trim()
-            }
-
-            axios.put("/profile/mine/edit", userObject)
-                .then((res) => {
-                    let x = res.data.success;                       //add loading
-                    if (x === true) window.location.replace("/Home"); // HOME, to refresh localStorage
-                })
-                .catch((err) => {
-                    alert("Error! Could not update profile"); /* TO FIX: display ERRORS properly */
-                    console.error(err);
-                });
-        }
-    }
-
-    const editValidation = () => {
-
-        const fullnameErr = {}
-        const usernameErr = {}
-        const bioErr = {}
-        let userReg = /^[0-9a-zA-Z_\S]+$/gi;
-        // eslint-disable-next-line
-        let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
-        let bioReg = /[<>]+/gi;
-
-        let isValid = true;
-
-        if (!fullnameReg.test(editFullname)) {
-            fullnameErr.fullnameinvalid = "Contains illegal characters";
-            isValid = false;
-        }
-        if (bioReg.test(editBio)) {
-            bioErr.fullnameinvalid = "Contains illegal characters";
-            isValid = false;
-        }
-        if (!userReg.test(editUsername)) {
-            usernameErr.fullnameinvalid = "Contains illegal characters";
-            isValid = false;
-        }
-        if (editFullname.trim().length < 3) {
-            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
-            isValid = false;
-        }
-        if (editUsername.trim().length < 3) {
-            fullnameErr.fullnameErrShort = "Username should be atleast 3 characters long";
-            isValid = false;
-        }
-
-        setFullnameErr(fullnameErr);
-        setBioErr(bioErr);
-        setUsernameErr(usernameErr);
-
-        return isValid;
-    }
-
-    const bioWordCount = () => {   //live word counter
-        document.getElementById("bio").addEventListener('input', function () {
-            var text = this.value,
-                count = text.trim().replace(/\s/g, "").length;
-
-            if (count === 100) {
-                document.getElementById('show').style.color = "red"
-            } else if (count >= 75) {
-                document.getElementById('show').style.color = "#FF8000"
-            } else if (count >= 50) {
-                document.getElementById('show').style.color = "#FFB400"
-            } else {
-                document.getElementById('show').style.color = "grey"
-            }
-
-            document.getElementById('show').textContent = count;
-
-        })
-    }
-
-    const onChange = (e) => {
-        bioWordCount()
-        setEditBio(e.target.value)
-
-    }
-
-    const EditModal = () => {
-        return <div>
-            <div class="modaltest mt-5 modal-enter" >
-                <div class="">
-                    <div class="modal-view">
-                        <div class="modal-header">
-                            <h3 class="mt-3 ">Edit Your Profile</h3>
-                            <button className="" onClick={editToggle}>
-                                <svg viewBox="0 0 24 24" class="icon ">
-                                    <g>
-                                        <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
-                                        </path>
-                                    </g>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <form class="modal-body" onSubmit={(e) => handleSubmit(e)}>
-                            <form className=" signup"  >
-
-                                <div>
-                                    <input
-                                        name="fullname"
-                                        type="text"
-                                        value={editFullname}
-                                        onChange={(e) => setEditFullname(e.target.value)}
-                                        className="edit-input change "
-                                        maxLength="30"
-                                        placeholder="New Fullname"
-                                        required
-                                    />
-                                    {Object.keys(fullnameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })}
-                                </div>
-                                <div>
-                                    <input
-                                        name="username"
-                                        type="text"
-                                        value={editUsername}
-                                        onChange={(e) => setEditUsername(e.target.value)}
-                                        className="edit-input change mt-1 "
-                                        maxLength="20"
-                                        placeholder="New Username"
-                                        required
-                                    />
-                                    {Object.keys(usernameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {usernameErr[key]} </div>
-                                    })}
-                                </div>
-                                <div>
-                                    <textarea
-                                        id="bio"
-                                        name="bio"
-                                        type="test"
-                                        value={editBio}
-                                        onChange={onChange}
-                                        rows="4"
-                                        className="edit-input mt-1 change"
-                                        maxLength="100"
-                                        placeholder="Bio"
-                                        required
-                                    />
-                                    {Object.keys(bioErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {bioErr[key]} </div>
-                                    })}
-                                    <div className=" counter">
-                                        {/* {count}/280 */}
-                                        <span id="show">0</span><span>/280</span>
-                                    </div>
-                                </div>
-
-                                <br />
-
-                                {/* {loading ? <Loading /> : null} */}
-
-                                <button
-                                    id="submit-btn"
-                                    className="btn login-submit btn-outline-primary rounded-pill mt-1"
-                                    type="submit"
-                                // disabled={disabled}         //button disabler
-                                >
-                                    Save
-                        </button>
-                            </form>
-                        </form>
-                        <div class="modal-footer">
-                            <button type="button" onClick={onClick} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div >
-    }
 
     const SettingsModal = () => {
         return <div>
@@ -338,6 +133,10 @@ export default function Profile() {
         </div >
     }
 
+    const internalError = () => {       //redirect when there is a server error
+        return window.location.replace("/Error");
+    }
+
     useEffect(() => {   //fetching data for logged in users
 
         setFullname(localStorage.getItem('fullname'));
@@ -350,10 +149,13 @@ export default function Profile() {
         axios.get("/tweets/mine/all")
             .then((res) => {
                 setTweets(res)
-
+                setTweetCount(res.data.length)
+                console.log(res.data)
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((error) => {
+                if (error.response.status === 500) {
+                    internalError();
+                }
             })
             .finally(() => {
                 setTweetLoading(false)
@@ -390,14 +192,14 @@ export default function Profile() {
         }
     }
 
+    TimeAgo.addLocale(en)
+
     return (
-        <div className={light ? "light-mode" : "general"}>
+        <div className="general">
             <div className="container App " >
                 <div className="row " >
 
                     <Header />
-                    {editModal ? <EditModal /> : null}
-                    {/* {editModal ? <Dim /> : null} */}
                     {settingsModal ? <SettingsModal /> : null}
 
 
@@ -413,7 +215,7 @@ export default function Profile() {
                                     <div className="">
                                         <strong>{fullname}</strong>
                                     </div>
-                                    <p><span>0 Tweets</span></p>
+                                    <p><span>{tweetCount} Tweets</span></p>
                                 </div>
                             </div>
                         </div>
@@ -513,12 +315,7 @@ export default function Profile() {
                                             <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
-                                                <Moment fromNow className="tweet-fromnow">
-                                                    {item.dateposted}
-                                                </Moment>
-                                                <Moment className="tweet-time" format="&nbsp; HH:MM &nbsp; DD MMMM YYYY &nbsp;">
-                                                    {item.dateposted}
-                                                </Moment>
+                                                <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
                                         </div>
                                         <p>{item.content}</p>

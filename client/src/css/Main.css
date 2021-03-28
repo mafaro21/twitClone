@@ -136,18 +136,6 @@ button{
 .word-count{
   z-index: 1000;
 }
-.tweet-fromnow:hover + .tweet-time{
-  display: block;
-  color: black;
-  background-color: white;
-  border-radius: 3px;
-  width: auto;
-  z-index: 2 ;
-  position: absolute;
-}
-.tweet-time{
-  display: none;
-}
 
 /* modal edit */
 .modaltest{

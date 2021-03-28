@@ -55,15 +55,27 @@ a:hover, .link:hover{
 }
 
 .error-page{
-    background:url("../images/krakenimages-.jpg");
+  
+    /* background:url("../images/krakenimages-.jpg"); */
     /* min-width: 100vh; */
-    height: 95vh;
-    background-size: cover;
+    background-color: #F29C50;
+    background-image: repeating-linear-gradient(147deg, #FFE53B, #f29c50, #FFE53B, #f29c50);
+    animation: gradient 6s infinite linear;
+    height: calc(100vh - 56px); 
+    background-size: 300% 100%;
     /* background-repeat: no-repeat; */
-    background-position: cover;
+    /* background-position: cover; */
     
-}
 
+}
+@keyframes gradient {
+	 0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
 /* homepage pictures */
 .hp-pic{
   height: 99vh;

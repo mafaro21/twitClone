@@ -23,9 +23,12 @@ export default function Header() {
 
     let tweetRef = useRef(" "); // this is to prevent the modal from refreshing when a user types something
 
-    // const [disabled, setDisabled] = useState(false);
-
-    // const [loading, setLoading] = useState(false);      // loading animation
+    const [error, setError] = useState([]);     //using array, data comes that way
+    const errorDiv = error
+        ? <div>
+            {error}
+        </div>
+        : '';
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -110,17 +113,17 @@ export default function Header() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // const loading = document.createElement("div");
-        // loading.innerHTML = <Loading />;
-        // document.getElementById("loading").appendChild(loading);
 
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
         const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
-        if (isValid === true) sendToDb();
+        if (isValid) {
+            sendToDb();
+            setTweetModal(false)
+            setTweetLoading(true)
+        }
 
-        setTweetModal(false)
-        setTweetLoading(true)
+
 
         function sendToDb() {
             const tweetObject = {
@@ -129,11 +132,12 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then((res) => {
-                    let x = res.data.success;
-                    console.log(x);
+                    window.location.reload();
                 })
-                .catch((err) => {
-                    console.error(err);
+                .catch((error) => {
+                    setTweetLoading(false)
+                    setTweetModal(true)
+                    setError(error.response.data.message);
                 })
                 .finally(() => {
                     setTweetLoading(false)
@@ -168,22 +172,6 @@ export default function Header() {
         // setTweetErr(false)
     });
 
-
-
-
-    const Loading = () => {        //the loading div
-        return <div className="d-flex mt-3">
-            <Loader type="TailSpin"
-                color="orange"
-                height={40}
-                width={40}
-                className="d-flex "
-            />
-            <div className="mt-2 ml-3" style={{ color: 'orange' }}>Tweeting....</div>
-
-        </div>
-    }
-
     const TweetLoading = () => {    //loader after tweet has been sent
         return <div className="d-flex justify-content-center">
             <div className="modal-wrapper" >
@@ -202,7 +190,7 @@ export default function Header() {
 
 
     const TweetModal = () => {
-        return <div >
+        return <div ref={tweetRef}>
             {/* ref={ref} */}
             <div className="modal-wrapper" >
                 <div class="tweettest  modal-enter" >
@@ -219,6 +207,8 @@ export default function Header() {
                                 </button>
                             </div>
 
+                            <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+
                             <div class="modal-body row">
                                 <div className="col-1">
                                     <img src={icon} alt="example" className="user-tweet-img" />
@@ -228,7 +218,7 @@ export default function Header() {
 
                                     <div >
                                         <textarea
-                                            ref={tweetRef}
+
                                             id="tweet"
                                             name="tweet"
                                             type="text"
@@ -251,8 +241,6 @@ export default function Header() {
                                         })}
                                     </div>
 
-                                    {/* {loading ? <Loading /> : null} */}
-                                    <div id="loading"></div>
 
                                     <button
                                         id="submit-btn"

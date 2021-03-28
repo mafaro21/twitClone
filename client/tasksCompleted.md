@@ -1,7 +1,7 @@
-- users tweets now appear on their profile
-- added a new dependancy
+- new error pages
+- new tweet time
 
-npm install --save moment react-moment
+uninstalled react-moment
+installed -> npm install react-time-ago --save
 
-- date/time when tweet was posted
-- new loader after user has tweeted
+
