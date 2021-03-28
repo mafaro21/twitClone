@@ -79,8 +79,9 @@ export default function Edit() {
                     let x = res.data.success;
                     if (x === true) window.location.replace("/myprofile");
                 })
-                .catch((err) => {
+                .catch((error) => {
                     setError(error.response.data.message);
+                    console.log(error.response.data)
                 })
                 .finally(() => {
                     setDisabled(false);  //stop disable button and loading.
@@ -157,7 +158,7 @@ export default function Edit() {
                             </div>
                         </div>
 
-                        <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+
 
                         <div class=" " >
                             <div class="">
@@ -165,7 +166,7 @@ export default function Edit() {
                                     <div class="row view">
                                         <h3 class="col text-center ">Edit Your Profile</h3>
                                     </div>
-
+                                    
                                     <form className="mt-3  " onSubmit={(e) => handleSubmit(e)}>
 
                                         <div>
@@ -219,7 +220,7 @@ export default function Edit() {
                                         </div>
 
                                         < br />
-
+                                        <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
                                         {loading ? <Loading /> : null}
 
                                         <button

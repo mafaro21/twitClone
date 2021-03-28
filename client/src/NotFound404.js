@@ -7,16 +7,13 @@ import { Link } from 'react-router-dom';
 function NotFound404() {
   return (
     <div className="pt-5 general p-4 error-page">
-      <div className="row mt-5 d-flex p-5 " >
-        <div className="col " style={{ color: "black" }}>
+      <div className=" mt-5 p-5 " >
+        <div className=" " style={{ color: "black", fontSize: "50px" }}>
 
           <h1 style={{ fontFamily: "monospace" }}> ERROR 404!</h1>
           <h3>Oops that page doesn't exist!!!</h3>
           <h3>The devs seem to have missed their deadline!</h3>
-          <Link to="/home"><button className="btn login-submit btn-outline-primary rounded-pill mt-1"> Go Home</button></Link>
-        </div>
-        <div className="col " >
-          .
+          <Link to="/home"><button className="btn login-submit btn-dark rounded-pill mt-1"> Go Home</button></Link>
         </div>
       </div>
     </div>
