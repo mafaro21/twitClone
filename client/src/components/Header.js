@@ -132,7 +132,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then((res) => {
-                    window.location.reload();
+                    // return <Redirect to="/myprofile" />
                 })
                 .catch((error) => {
                     setTweetLoading(false)
@@ -143,6 +143,8 @@ export default function Header() {
                     setTweetLoading(false)
                     // document.getElementById("loading").removeChild(loading);
                 });
+
+
         }
     }
 
