@@ -11,19 +11,38 @@ router.get("/", (req, res, next) => {
     res.send("Here are all tweets");
 });
 
-/* GET ALL tweets FROM GIVEN USER */
+
+/* GET ALL TWEETS FROM given USER */
 router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     res.send(`Here are ALL tweets from USER: ${userid}`);
 });
 
-//get SINGLE tweet
+
+/* GET SINGLE TWEET */ // <--NEEDS WORK!😐 
+//NEEDS joining to Users collection
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
-    res.send(`Here is a tweet with id: ${tweetid}</h2>`);
+    //connect to Db
+    MongoClient.connect(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    }).then(async (client) => {
+        const tweets = client.db("twitclone").collection("tweets");
+        try {
+            const result = await tweets.findOne({ _id: tweetid });
+            if (!result) throw new Error("Tweet not Found");
+            res.send(result);
+        } catch (error) {
+            res.status(404).send({ "message": error.message });
+        } finally {
+            await client.close();
+        }
+    }).catch(next);
 });
 
-//getting all MY tweets (in profile)
+
+/* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     //retrieve data from db
@@ -34,8 +53,8 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
             const result = await tweets.find({ byUserId: userid }, { projection: { byUserId: 0 } })
-                .sort({ dateposted: -1 })
-                .limit(20)
+                .sort({ dateposted: -1, byUserId: -1 })
+                .limit(50)
                 .toArray();
             res.send(result);
         } catch (error) {
@@ -44,10 +63,10 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
             await client.close();
         }
     }).catch(next);
-
 });
 
-//POST TWEET
+
+/* POST TWEET */
 router.post("/", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     const { content } = req.body;
@@ -95,8 +114,8 @@ router.post("/", isLoggedin, (req, res, next) => {
         }).then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
-                const result = await tweets.insertOne(tweetObject);
-                res.status(201).send({ "tweeted": result.insertedCount, "success": true })
+                await tweets.insertOne(tweetObject);
+                res.status(201).send({ "success": true });
             } catch (error) {
                 throw error;
             } finally {
@@ -106,9 +125,26 @@ router.post("/", isLoggedin, (req, res, next) => {
     }
 });
 
-//DELETE SINGLE TWEET
-router.delete("/:tweetid", isLoggedin, (req, res, next) => {
 
+/* DELETE SINGLE TWEET */
+router.delete("/:tweetid", isLoggedin, (req, res, next) => {
+    const tweetid = req.params.tweetid;
+    //connect to Db
+    MongoClient.connect(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    }).then(async (client) => {
+        const tweets = client.db("twitclone").collection("tweets");
+        try {
+            const result = await tweets.deleteOne({ _id: tweetid });
+            res.status(200).send({ "success": true });
+            console.log("DELETED ", result.result);
+        } catch (error) {
+            throw error;
+        } finally {
+            await client.close();
+        }
+    }).catch(next);
 });
 
 

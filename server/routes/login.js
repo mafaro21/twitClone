@@ -85,14 +85,14 @@ router.post("/", LoginLimiter, (req, res, next) => {
                     throw new Error("User doesn\'t exist");
                 }
                 let hashedPass = result.password;
-                let match = await bcrypt.compare(password, hashedPass);
-                if (!match)
-                    throw new Error("Wrong email or password");
-                else {
-                    // BINGO! User authenticated. Now, create session.
-                    req.session.user = { id: result._id, email: result.email };
-                    res.status(200).send({ "success": true });
+                const match = await bcrypt.compare(password, hashedPass);
+                if (!match) {
+                    throw new Error("Wrong email or password! Try again.");
                 }
+                // BINGO! User authenticated. Now, create session.
+                req.session.user = { id: result._id, email: result.email };
+                res.status(200).send({ "success": true });
+
             } catch (error) {
                 res.status(401).send({ "message": error.message });
             } finally {
