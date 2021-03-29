@@ -26,12 +26,12 @@ router.get("/mine", isLoggedin, (req, res, next) => {
 
 /*  GETTING OTHER user profile */
 router.get("/user/:userid", (req, res, next) => {
-    let userid = req.params.userid;
+    const userid = req.params.userid;
     res.send(`Profile belongs to  ${userid}`);
 });
 
 
-/* handling UPDATE MY PROFILE  */
+/* UPDATING MY PROFILE  */
 router.put("/mine/edit", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     const { fullname, username, bio } = req.body;
@@ -66,33 +66,27 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
         return;
     } else updateUserData();
 
-    //=--------------------------END OF validation ABOVE ----------------------//
+    //--------------------------END OF validation ABOVE ----------------------//
 
     function updateUserData() {
         MongoClient.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
-        }).then(client => {
+        }).then(async (client) => {
             const users = client.db("twitclone").collection("users");
             const newValues = { fullname: fullname, username: username, bio: bio };
-            users.updateOne({ _id: userid }, { $set: newValues }, (err, result) => {
-                if (err) {
-                    switch (err.code) {
-                        case 11000:
-                            res.status(400).send({ "message": "Username has already been taken" });
-                            break;
-                        default:
-                            next(err)
-                            break;
-                    }
-                } else {
-                    res.send({ "updated:": result.modifiedCount,  "success": true });
-                }
-                client.close();
-            });
+            try {
+                const result = await users.updateOne({ _id: userid }, { $set: newValues });
+                res.send({ "updated:": result.modifiedCount, "success": true });
+            } catch (error) {
+                if (error.code === 11000)
+                    res.status(409).send({ "message": "Username has already been taken" });
+                else throw error;
+            } finally {
+                await client.close();
+            }
         }).catch(next);
     }
-
 });
 
 

@@ -28,10 +28,10 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);      // loading animation
     const [tweetLoading, setTweetLoading] = useState(true)
 
-    const [fullname, setFullname] = useState();
-    const [username, setUsername] = useState();
-    const [bio, setBio] = useState();
-    const [datejoined, setDatejoined] = useState();
+    const [fullname, setFullname] = useState("");
+    const [username, setUsername] = useState("");
+    const [bio, setBio] = useState("");
+    const [datejoined, setDatejoined] = useState("");
 
     const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
 
@@ -148,16 +148,17 @@ export default function Profile() {
 
         axios.get("/tweets/mine/all")
             .then((res) => {
-                setTweets(res)
-                setTweetCount(res.data.length)
-                console.log(res.data)
+                setTweets(res);
+                setTweetCount(res.data.length);
             })
             .catch((error) => {
                 if (error.response.status === 500) {
-                    internalError();
-                }
-            })
-            .finally(() => {
+                    internalError(); 
+                } else { 
+                    /* if 0 tweets, add message "no tweets" */      //  <------- PLEASE FIX THIS 😑
+                    /* or "ERROR LOADING TWEETS" message  */
+                }                                            
+            }).finally(() => {
                 setTweetLoading(false)
             })
 
