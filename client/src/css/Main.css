@@ -39,7 +39,23 @@
   border-radius: 50%;
   float:left;
 }
-
+.show-detail{
+  display: none;
+}
+.show-detail-1{
+  margin-top: 57px;
+}
+.user-logo:hover + .show-detail{
+  display: block;
+  color: white;
+  background-color: black;
+  z-index: 2 ;
+  position: absolute;
+  box-shadow: 0 0 8px grey;
+  border-radius: 15px;
+  margin-top: 60px;
+  width: 250px;
+}
 .user-content{
   display: flex;
 }
@@ -215,6 +231,14 @@ button{
 .post-view{
   border-bottom: 19px double #606060;
   width: auto;
+}
+.post-link{
+  text-decoration: none;
+  color:white;
+}
+.post-link:hover{
+  text-decoration: none;
+  color:white;
 }
 /* post */
 

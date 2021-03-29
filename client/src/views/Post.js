@@ -74,7 +74,7 @@ export default function Post() {
                     <div className="col main-view  phone-home w-100 " >
                         <div className="row profile-header view">
 
-                            <div className="p-2  col row ">
+                            <div className="p-2  col row " id="top">
                                 <div className="ml-2 col-1.5">
                                     <BackButton />
                                 </div>
@@ -87,7 +87,7 @@ export default function Post() {
 
 
                         </div>
-                        <div className="p-2 view row">
+                        <div className="p-2 view row" >
                             <div className="col-1.5">              {/* <--- user avi */}
                                 <img src={icon} alt="example" className="user-logo" />
                             </div>

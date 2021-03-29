@@ -1,7 +1,4 @@
-- new error pages
-- new tweet time
+- set up for expanded tweet page
 
-uninstalled react-moment
-installed -> npm install react-time-ago --save
 
 

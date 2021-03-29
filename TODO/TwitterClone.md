@@ -27,8 +27,8 @@ App Name:... twitClone
 - [x] User Profile (view)
 - [x] Edit User Profile
 - [x] User Logout
-- [ ] Load Tweets from DB to client
-- [ ] Display timestamps for tweets similar to Twitter (1h, 18m, 1m)
+- [x] Load Tweets from DB to client
+- [x] Display timestamps for tweets similar to Twitter (1h, 18m, 1m)
 - [ ] Like & retweet Tweets
 - [ ] Follow & unfollow other users
 

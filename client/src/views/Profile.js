@@ -161,7 +161,9 @@ export default function Profile() {
                 setTweetLoading(false)
             })
 
-    }, []);
+
+    }, []); //tweets <-- this works but modal keeps refreshing
+
 
     const Loading = () => {        //the loading div
 
@@ -185,12 +187,17 @@ export default function Profile() {
     }
 
     const handleLike = () => {  //for liking and unliking posts
-        if (!isLiked) {
-            setisLiked(true)
-        } else {
-            setisLiked(false)
-        }
+        // e.preventDefault
+        // console.log(index)
+        // if (!isLiked) {
+        //     setisLiked(true)
+        // } else {
+        //     setisLiked(false)
+        // }
+
+        setisLiked(!isLiked)
     }
+
 
     TimeAgo.addLocale(en)
 
@@ -308,9 +315,27 @@ export default function Profile() {
                             <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
+                                    <div className="show-detail p-3 ">
+                                        <div>
+                                            <img src={icon} alt="example" className="user-logo " />
+                                        </div>
+                                        <div className="show-detail-1">
+                                            <div >
+                                                <strong>{fullname}</strong>
+                                            </div>
+                                            <div>
+                                                <span>@{username}</span>
+                                            </div>
+                                            <div className="mt-2">
+                                                {bio}
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <div className="col user-name-tweet">      {/* <--- user content */}
-                                    <div >
+
+                                <div className="col user-name-tweet" >      {/* <--- user content */}
+                                    <Link to={`/post/${item._id}`} className="post-link" >
                                         <div className="user-content">
                                             <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
                                             &nbsp; <span>·</span> &nbsp;
@@ -319,7 +344,7 @@ export default function Profile() {
                                             </span>
                                         </div>
                                         <p>{item.content}</p>
-                                    </div>
+                                    </Link>
 
                                     <div className="interact-row d-flex ">
                                         <button className="comment col">
