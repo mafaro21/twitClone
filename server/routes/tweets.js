@@ -25,18 +25,18 @@ router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
     const agg = [
         {
-            '$match': {
+            $match: {
                 '_id': ObjectId(tweetid) //tweetID
             }
         }, {
-            '$lookup': {
+            $lookup: {
                 'from': 'users',
                 'localField': 'byUserId',
                 'foreignField': '_id',
                 'as': 'User'
             }
         }, {
-            '$project': {
+            $project: {
                 'User._id': 0,
                 'User.email': 0,
                 'User.bio': 0,
@@ -52,16 +52,16 @@ router.get("/:tweetid", (req, res, next) => {
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
-            const result  =  tweets.aggregate(agg, (err, result)=>{
-                if(err){
-                    throw new Error(err.message);
-                }
-                res.send(result.toArray())
-            });
+            const result = await tweets.aggregate(agg).toArray();
+            if (!result) throw new Error("Tweet Not found");
+            console.log(result);
+            res.send(result);
         } catch (error) {
-
+            res.sendStatus(404);
+            console.error(error);
+        } finally {
+            await client.close();
         }
-
     }).catch(next);
 });
 
