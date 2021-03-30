@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const router = express.Router();
@@ -23,6 +23,7 @@ router.get("/user/:userid", (req, res, next) => {
 //NEEDS joining to Users collection
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
+    console.log(tweetid)
     //connect to Db
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
@@ -30,7 +31,7 @@ router.get("/:tweetid", (req, res, next) => {
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
-            const result = await tweets.findOne({ _id: tweetid });
+            const result = await tweets.findOne({ _id: ObjectId(tweetid) });
             if (!result) throw new Error("Tweet not Found");
             res.send(result);
         } catch (error) {

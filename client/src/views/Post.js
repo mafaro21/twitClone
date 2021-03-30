@@ -6,6 +6,11 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Interactive from '../components/Interactive';
+import axios from 'axios';
+import Loader from "react-loader-spinner";
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+import ReactTimeAgo from 'react-time-ago'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
@@ -13,9 +18,11 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 
 export default function Post() {
 
-    const [fullname, setFullname] = useState();
-    const [username, setUsername] = useState();
-    const [isLiked, setisLiked] = useState(false);
+    const [fullname, setFullname] = useState()
+    const [username, setUsername] = useState()
+    const [isLiked, setisLiked] = useState(false)
+    const [tweets, setTweets] = useState({})// for displaying tweets and other info
+    const [loading, setLoading] = useState(true);      // loading animation
 
     const handleLike = () => {  //for liking and unliking posts
         if (!isLiked) {
@@ -27,11 +34,49 @@ export default function Post() {
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
+
+    const ForId = () => {
+        // let fetchid = useLocation()
+        let idPath = document.location.pathname
+        let finalId = idPath.split("/post/")
+        let sendId = finalId[1]
+        // setId(sendId)
+        return sendId
+    }
+
+    const internalError = () => {       //redirect when there is a server error
+        return window.location.replace("/Error");
+    }
+
+
     useEffect(() => {   //fetching data for logged in users
+
+        const getId = ForId()
+        console.log(getId)
+
+        if (getId !== undefined) {
+            axios.get(`/tweets/${getId}`)
+                .then((res) => {
+                    setTweets(res.data);
+                    setLoading(false)
+                    console.log(res.data)
+                })
+                .catch((error) => {
+                    if (error.response.status === 500) {
+                        internalError();
+                    } else {
+                        /* if 0 tweets, add message "no tweets" */      //  <------- PLEASE FIX THIS 
+                        /* or "ERROR LOADING TWEETS" message  */
+                    }
+                })
+        }
 
         setFullname(localStorage.getItem('fullname'));
         setUsername(localStorage.getItem('username'));
         document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
+
+
+
 
     }, []);
 
@@ -64,8 +109,22 @@ export default function Post() {
         )
     }
 
+    const Loading = () => {        //the loading div
+
+        return <div className="d-flex justify-content-center mt-3">
+            <Loader type="TailSpin"
+                color="orange"
+                height={60}
+                width={60}
+            />
+
+        </div>
+    }
+
+    TimeAgo.addLocale(en)
+
     return (
-        <div className="general">
+        <div className="general" >
             <div className="container App " >
                 <div className="row " >
 
@@ -87,47 +146,52 @@ export default function Post() {
 
 
                         </div>
-                        <div className="p-2 view row" >
-                            <div className="col-1.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">                   {/* <--- user content */}
-                                <div className=" ">
-                                    <div>
-                                        <strong>{fullname}</strong>
-                                    </div>
-                                    <span>@{username}</span>
+
+                        {loading ? <Loading /> : null}
+                        {Object.keys(tweets).map((key) => (
+                            <div className="p-2 view row" key={tweets._id}>
+                                <div className="col-1.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className="user-logo" />
                                 </div>
-
-                                <p style={{ fontSize: "26px" }} className=" ">this is my first tweet</p>
-
-                                <div className="post-data ">
-                                    <div className="view ">
-                                        <span >date goes here</span>
+                                <div className="col user-name-tweet" >                   {/* <--- user content */}
+                                    <div className=" ">
+                                        <div>
+                                            <strong>{fullname}</strong>
+                                        </div>
+                                        <span>@{username}</span>
                                     </div>
 
-                                    <div className="view mt-3">
-                                        <span >x comments</span> &nbsp; <span className="col ">x likes</span>
+                                    <p style={{ fontSize: "21px" }} className=" "  >{tweets.content}</p>
+
+                                    <div className="post-data ">
+                                        <div className="view ">
+                                            <ReactTimeAgo date={tweets.dateposted} locale="en-US" timeStyle="twitter" />
+                                        </div>
+
+                                        <div className="view mt-3">
+                                            <span >{tweets.comments} comments</span> &nbsp; <span className="col ">{tweets.likes} likes</span>
+                                        </div>
+
+                                        <div className="interact-row d-flex mt-3">
+                                            <button className="comment col">
+                                                <FontAwesomeIcon icon={faComment} size="2x" />
+                                            </button>
+
+                                            <button
+                                                className="like col"
+                                                onClick={handleLike}
+                                            >
+                                                {isLiked ? (
+                                                    <FontAwesomeIcon icon={heartSolid} size="2x" className="text-danger" />
+                                                ) : <FontAwesomeIcon icon={faHeart} size="2x" />}
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <div className="interact-row d-flex mt-3">
-                                        <button className="comment col">
-                                            <FontAwesomeIcon icon={faComment} size="2x" />
-                                        </button>
-
-                                        <button
-                                            className="like col"
-                                            onClick={handleLike}
-                                        >
-                                            {isLiked ? (
-                                                <FontAwesomeIcon icon={heartSolid} size="2x" className="text-danger" />
-                                            ) : <FontAwesomeIcon icon={faHeart} size="2x" />}
-                                        </button>
-                                    </div>
                                 </div>
-
                             </div>
-                        </div>
+
+                        ))}
 
                         <div className="p-2 post-view row mt-3">
                             <div className="col-1.5">              {/* <--- user avi */}
@@ -172,7 +236,8 @@ export default function Post() {
 
                         </div>
 
-                        <div className="p-2 view row mt-3">             {/* <--- standard tweet*/}
+
+                        <div className="p-2 view row mt-3" >             {/* <--- standard tweet*/}
                             <div className="col-1.5">              {/* <--- user avi */}
                                 <img src={icon} alt="example" className="user-logo" />
                             </div>
@@ -180,12 +245,13 @@ export default function Post() {
                                 <div className="user-content">
                                     <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
                                 </div>
-                                <p>this is my first tweet</p>
+                                <p></p>
 
                                 <Interactive />
 
                             </div>
                         </div>
+
                     </div>
 
                     <Sidebar />
