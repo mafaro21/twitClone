@@ -26,7 +26,7 @@ router.get("/:tweetid", (req, res, next) => {
     const agg = [
         {
             $match: {
-                '_id': ObjectId(tweetid) //tweetID
+                '_id': tweetid //tweetID
             }
         }, {
             $lookup: {
@@ -45,7 +45,7 @@ router.get("/:tweetid", (req, res, next) => {
             }
         }
     ];
-    //connect to Db
+    //connect to DB
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
@@ -53,12 +53,10 @@ router.get("/:tweetid", (req, res, next) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
             const result = await tweets.aggregate(agg).toArray();
-            if (!result) throw new Error("Tweet Not found");
-            console.log(result);
+            if (result.length === 0) throw new Error("Tweet Not found");
             res.send(result);
         } catch (error) {
             res.sendStatus(404);
-            console.error(error);
         } finally {
             await client.close();
         }
@@ -80,10 +78,10 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 .sort({ dateposted: -1, byUserId: -1 })
                 .limit(50)
                 .toArray();
-            if (!result) throw new Error('No tweets');
+            if (result.length === 0) throw new Error('No tweets');
             res.send(result);
         } catch (error) {
-            res.status(404).send(error);
+            res.sendStatus(404);
         } finally {
             await client.close();
         }
