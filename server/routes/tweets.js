@@ -19,11 +19,32 @@ router.get("/user/:userid", (req, res, next) => {
 });
 
 
-/* GET SINGLE TWEET */ // <--NEEDS WORK!😐 
+/* GET SINGLE TWEET!😐 */
 //NEEDS joining to Users collection
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
-    console.log(tweetid)
+    const agg = [
+        {
+            $match: {
+                '_id': ObjectId(tweetid) //tweetID
+            }
+        }, {
+            $lookup: {
+                'from': 'users',
+                'localField': 'byUserId',
+                'foreignField': '_id',
+                'as': 'User'
+            }
+        }, {
+            $project: {
+                'User._id': 0,
+                'User.email': 0,
+                'User.bio': 0,
+                'User.password': 0,
+                'User.datejoined': 0
+            }
+        }
+    ];
     //connect to Db
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
@@ -31,11 +52,13 @@ router.get("/:tweetid", (req, res, next) => {
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
-            const result = await tweets.findOne({ _id: ObjectId(tweetid) });
-            if (!result) throw new Error("Tweet not Found");
+            const result = await tweets.aggregate(agg).toArray();
+            if (!result) throw new Error("Tweet Not found");
+            console.log(result);
             res.send(result);
         } catch (error) {
-            res.status(404).send({ "message": error.message });
+            res.sendStatus(404);
+            console.error(error);
         } finally {
             await client.close();
         }
@@ -57,9 +80,10 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 .sort({ dateposted: -1, byUserId: -1 })
                 .limit(50)
                 .toArray();
+            if (!result) throw new Error('No tweets');
             res.send(result);
         } catch (error) {
-            throw error;
+            res.status(404).send(error);
         } finally {
             await client.close();
         }
