@@ -39,6 +39,8 @@ export default function Profile() {
 
     const [tweetCount, setTweetCount] = useState(0)
 
+    const [noTweets, setNoTweets] = useState(false)
+
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
 
@@ -153,11 +155,10 @@ export default function Profile() {
             })
             .catch((error) => {
                 if (error.response.status === 500) {
-                    internalError(); 
-                } else { 
-                    /* if 0 tweets, add message "no tweets" */      //  <------- PLEASE FIX THIS 😑
-                    /* or "ERROR LOADING TWEETS" message  */
-                }                                            
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setNoTweets(true)
+                }
             }).finally(() => {
                 setTweetLoading(false)
             })
@@ -197,6 +198,12 @@ export default function Profile() {
         // }
 
         setisLiked(!isLiked)
+    }
+
+    const NoTweets = () => {
+        return <div>
+            YEP COCK
+        </div>
     }
 
 
@@ -310,7 +317,7 @@ export default function Profile() {
                             </div>
                         </div>
 
-
+                        {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
                         {tweets.data.map(item => (
                             <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
