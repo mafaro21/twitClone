@@ -12,7 +12,7 @@ import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt'
+import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 import TimeAgo from 'javascript-time-ago'
@@ -154,6 +154,7 @@ export default function Profile() {
                 setTweetCount(res.data.length);
             })
             .catch((error) => {
+                console.error(error)
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
@@ -190,19 +191,20 @@ export default function Profile() {
 
     const handleLike = () => {  //for liking and unliking posts
         // e.preventDefault
-        // console.log(index)
-        // if (!isLiked) {
-        //     setisLiked(true)
-        // } else {
-        //     setisLiked(false)
-        // }
 
-        setisLiked(!isLiked)
+        // console.log(item)
+        if (!isLiked) {
+            setisLiked(true)
+        } else {
+            setisLiked(false)
+        }
+
+        // setisLiked(!isLiked)
     }
 
     const NoTweets = () => {
-        return <div>
-            YEP COCK
+        return <div className="d-flex justify-content-center p-2">
+            <i><span style={{ fontSize: "18px", fontWeight: "bolder" }}>You haven't made any tweets yet</span></i>
         </div>
     }
 
@@ -250,7 +252,7 @@ export default function Profile() {
                                             onClick={settingsToggle}
                                         >
                                             {/* banner-msg */}
-                                            <svg viewBox="0 2 26 23" class="banner-msg">
+                                            <svg viewBox="0 2 26 23" className="banner-msg">
                                                 <g>
                                                     <path d="M12 8.21c-2.09 0-3.79 1.7-3.79 3.79s1.7 3.79 3.79 3.79 3.79-1.7 3.79-3.79-1.7-3.79-3.79-3.79zm0 6.08c-1.262 0-2.29-1.026-2.29-2.29S10.74 9.71 12 9.71s2.29 1.026 2.29 2.29-1.028 2.29-2.29 2.29z">
                                                     </path>
@@ -319,7 +321,7 @@ export default function Profile() {
 
                         {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
-                        {tweets.data.map(item => (
+                        {tweets.data.map((item, index) => (
                             <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
@@ -350,7 +352,9 @@ export default function Profile() {
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
+                                            <span className="three-dots">···</span>
                                         </div>
+
                                         <p>{item.content}</p>
                                     </Link>
 
@@ -358,6 +362,10 @@ export default function Profile() {
                                         <button className="comment col">
                                             <FontAwesomeIcon icon={faComment} />
                                             &nbsp; {item.comments}
+                                        </button>
+
+                                        <button className="col retweet">
+                                            <FontAwesomeIcon icon={faRetweet} />
                                         </button>
 
                                         <button
@@ -369,11 +377,6 @@ export default function Profile() {
                                             ) : <FontAwesomeIcon icon={faHeart} />}
                                                 &nbsp; {item.likes}
                                         </button>
-
-                                        <button className="col delete">
-                                            <FontAwesomeIcon icon={faTrashAlt} />
-                                        </button>
-
                                     </div>
 
                                 </div>

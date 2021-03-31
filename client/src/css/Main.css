@@ -58,6 +58,7 @@
 }
 .user-content{
   display: flex;
+  flex-direction: row;
 }
 
 span{
@@ -190,11 +191,8 @@ button{
 }
 
 /* interactive row */
-.like, .comment, .message{
+.like, .comment, .retweet{
   color: #AEAEAE;
-}
-.delete{
-  color: red;
 }
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
@@ -207,12 +205,7 @@ button{
   color: #37FAFE ;
   /* #395F5F */
 }
-.delete:hover{
-  background-color: rgb(255, 0, 0,0.2 );
-  border-radius: 15px;
-  color: white ;
-}
-.message:hover{
+.retweet:hover{
   background-color: rgb(75, 255, 0 ,0.2 );
   border-radius: 15px;
   color: #4BFF00 ;
@@ -239,6 +232,9 @@ button{
 .post-link:hover{
   text-decoration: none;
   color:white;
+}
+.three-dots{
+  justify-content: flex-end;
 }
 /* post */
 

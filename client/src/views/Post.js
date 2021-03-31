@@ -15,13 +15,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+// import { Redirect } from 'react-router-dom';
 
 export default function Post() {
 
     const [fullname, setFullname] = useState()
     const [username, setUsername] = useState()
     const [isLiked, setisLiked] = useState(false)
-    const [tweets, setTweets] = useState({})// for displaying tweets and other info
+    const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
 
     const handleLike = () => {  //for liking and unliking posts
@@ -46,28 +47,27 @@ export default function Post() {
 
     const internalError = () => {       //redirect when there is a server error
         return window.location.replace("/Error");
+        // return <Redirect to="/Error" />
     }
 
 
     useEffect(() => {   //fetching data for logged in users
 
         const getId = ForId()
-        console.log(getId)
 
         if (getId !== undefined) {
             axios.get(`/tweets/${getId}`)
                 .then((res) => {
-                    setTweets(res.data);
+                    setTweets(res);
                     setLoading(false)
                     console.log(res.data)
                 })
                 .catch((error) => {
                     if (error.response.status === 500) {
                         internalError();
-                    } else {
-                        /* if 0 tweets, add message "no tweets" */      //  <------- PLEASE FIX THIS 
-                        /* or "ERROR LOADING TWEETS" message  */
                     }
+
+
                 })
         }
 
@@ -148,28 +148,28 @@ export default function Post() {
                         </div>
 
                         {loading ? <Loading /> : null}
-                        {Object.keys(tweets).map((key) => (
-                            <div className="p-2 view row" key={tweets._id}>
+                        {tweets.data.map((item) => (
+                            <div className="p-2 view row" key={item._id}>
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
                                 <div className="col user-name-tweet" >                   {/* <--- user content */}
                                     <div className=" ">
                                         <div>
-                                            <strong>{fullname}</strong>
+                                            <strong>{item.User[0].fullname}</strong>
                                         </div>
-                                        <span>@{username}</span>
+                                        <span>@{item.User[0].username}</span>
                                     </div>
 
-                                    <p style={{ fontSize: "21px" }} className=" "  >{tweets.content}</p>
+                                    <p style={{ fontSize: "21px" }} className=" "  >{item.content}</p>
 
                                     <div className="post-data ">
                                         <div className="view ">
-                                            <ReactTimeAgo date={tweets.dateposted} locale="en-US" timeStyle="twitter" />
+                                            <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                         </div>
 
                                         <div className="view mt-3">
-                                            <span >{tweets.comments} comments</span> &nbsp; <span className="col ">{tweets.likes} likes</span>
+                                            <span >{item.comments} comments</span> &nbsp; <span className="col ">{item.likes} likes</span>
                                         </div>
 
                                         <div className="interact-row d-flex mt-3">
