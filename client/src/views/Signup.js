@@ -21,8 +21,6 @@ function Signup() {
 
     const [loading, setLoading] = useState(false);// loading animation
 
-    const [welcomeModal, setWelcomeModal] = useState(false);//welcome modal
-
     const [error, setError] = useState([]); //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -54,60 +52,6 @@ function Signup() {
         </div>
     }
 
-    const WelcomeModal = () => {
-        return <div>
-            <div class="modaltest modal-welcome mt-5 modal-enter" >
-                <div class="">
-                    <div class="modal-view">
-                        <div class="">
-                            <h3 class="mt-3">Welcome New User</h3>
-                            <p>Your current username is <i>firstuser69</i> , you can choose to keep it or change it down below</p>
-                            <p>*You can always edit your username</p>
-                        </div>
-                        <div class="modal-body">
-                            <form className="container signup"  >
-                                {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div>
-                                    <input
-                                        name="fullname"
-                                        type="text"
-                                        // value={fullname}
-                                        // onChange={(e) => setfullName(e.target.value)}
-                                        className="signup-input change"
-                                        maxLength="20"
-                                        placeholder="New Username"
-                                        required
-                                    />
-                                    {/* {Object.keys(fullnameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })} */}
-                                </div>
-                                <br />
-
-                                {/* {loading ? <Loading /> : null} */}
-
-                                <button
-                                    id="submit-btn"
-                                    className="btn login-submit  btn-outline-primary rounded-pill "
-                                    type="submit"
-                                // disabled={disabled}         //button disabler
-                                >
-                                    Save
-                        </button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <Link to="/home">
-                                <button type="button" className="btn login-submit modal-welcome-submit btn-primary rounded-pill mt-3">
-                                    I will change it later
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div >
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -138,7 +82,6 @@ function Signup() {
                 axios.post("/register", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        //if (x === true) setWelcomeModal(true); /* then take user to dashboard */
                         if (x === true) window.location.replace("/Home");
                     })
                     .catch((error) => {
@@ -209,7 +152,6 @@ function Signup() {
         <body className="App general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
-                    {welcomeModal ? <WelcomeModal /> : null}
                     <h3> Create an Account </h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
                     <form className="container signup" onSubmit={(e) => handleSubmit(e)} >

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
-import axios from "axios";
-import Loader from "react-loader-spinner";
+// import axios from "axios";
+// import Loader from "react-loader-spinner";
 
 
 function Sidebar() {
 
-    const [api, setApi] = useState({ articles: [] });
+    // const [api, setApi] = useState({ articles: [] });
 
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     const newsRef = useRef(false);
 
@@ -38,17 +38,17 @@ function Sidebar() {
     // }, []);
 
 
-    const Loading = () => {        //the loading div
+    // const Loading = () => {        //the loading div
 
-        return <div className="d-flex justify-content-center">
-            <Loader type="TailSpin"
-                color="orange"
-                height={40}
-                width={40}
-            />
+    //     return <div className="d-flex justify-content-center">
+    //         <Loader type="TailSpin"
+    //             color="orange"
+    //             height={40}
+    //             width={40}
+    //         />
 
-        </div>
-    }
+    //     </div>
+    // }
 
 
 
@@ -61,16 +61,16 @@ function Sidebar() {
             <div className="p-1 mt-4 sidebar" >
                 <h5 className="view p-3">Top Headlines</h5>
                 <ul className="col" >
-                    {loading ? <Loading /> : null}
+                    {/* {loading ? <Loading /> : null}
                     {api.articles.map(item => (
                         <li key={item.url} >
                             <a href={item.url} target="_blank" rel="noreferrer" className="row view">
-                                <img src={item.urlToImage} className="col-5 api-image row " />
+                                <img src={item.urlToImage} className="col-5 api-image row " alt="news" />
                                 <p className="col api-text">{item.title} </p>
                             </a>
 
                         </li>
-                    ))}
+                    ))} */}
                 </ul>
             </div>
             <div className="p-3 mt-4 sticky ">

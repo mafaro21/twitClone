@@ -160,13 +160,13 @@ export default function Edit() {
 
 
 
-                        <div class=" " >
-                            <div class="">
-                                <div class="">
-                                    <div class="row view">
-                                        <h3 class="col text-center ">Edit Your Profile</h3>
+                        <div className=" " >
+                            <div className="">
+                                <div className="">
+                                    <div className="row view">
+                                        <h3 className="col text-center ">Edit Your Profile</h3>
                                     </div>
-                                    
+
                                     <form className="mt-3  " onSubmit={(e) => handleSubmit(e)}>
 
                                         <div>
@@ -234,7 +234,7 @@ export default function Edit() {
                                             </button>
 
                                     </form>
-                                    <div class="modal-footer">
+                                    <div className="modal-footer">
                                         <Link to="/myprofile" type="button" className="btn login-submit btn-primary rounded-pill mt-2">Cancel</Link>
                                     </div>
                                 </div>

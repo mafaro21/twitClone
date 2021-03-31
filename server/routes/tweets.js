@@ -25,18 +25,18 @@ router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
     const agg = [
         {
-            $match: {
-                '_id': tweetid //tweetID
+            '$match': {
+                '_id': new ObjectId(tweetid) //tweetID
             }
         }, {
-            $lookup: {
+            '$lookup': {
                 'from': 'users',
                 'localField': 'byUserId',
                 'foreignField': '_id',
                 'as': 'User'
             }
         }, {
-            $project: {
+            '$project': {
                 'User._id': 0,
                 'User.email': 0,
                 'User.bio': 0,
@@ -56,7 +56,7 @@ router.get("/:tweetid", (req, res, next) => {
             if (result.length === 0) throw new Error("Tweet Not found");
             res.send(result);
         } catch (error) {
-            res.sendStatus(404);
+            res.status(404).send(error);
         } finally {
             await client.close();
         }

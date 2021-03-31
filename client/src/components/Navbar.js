@@ -8,14 +8,13 @@ import Search from './Search';
 function Navbar() {
 
     return (
-        <nav class="navbar sticky-top  navbar-nav-scroll navbar-dark bg-dark text">
-            <div class="container-fluid ">
-                <Link class="text nav-logo" to="/home">TwitClone</Link>
+        <nav className="navbar sticky-top  navbar-nav-scroll navbar-dark bg-dark text">
+            <div className="container-fluid ">
+                <Link className="text nav-logo" to="/home">TwitClone</Link>
 
                 <Search />
 
-                <div class="d-flex nav-links ">
-                    <Link class="nav-link text"></Link>
+                <div className="d-flex nav-links ">
                 </div>
 
             </div>

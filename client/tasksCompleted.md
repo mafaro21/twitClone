@@ -1,4 +1,4 @@
-- set up for expanded tweet page
+- no tweets div shows now
 
 
 
