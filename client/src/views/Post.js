@@ -19,8 +19,8 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 
 export default function Post() {
 
-    const [fullname, setFullname] = useState()
-    const [username, setUsername] = useState()
+    const [fullname, setFullname] = useState("")
+    const [username, setUsername] = useState("")
     const [isLiked, setisLiked] = useState(false)
     const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
@@ -38,11 +38,11 @@ export default function Post() {
 
     const ForId = () => {
         // let fetchid = useLocation()
-        let idPath = document.location.pathname
-        let finalId = idPath.split("/post/")
-        let sendId = finalId[1]
+        let idPath = document.location.pathname;
+        let finalId = idPath.split("/post/");
+        let sendId = finalId[1];
         // setId(sendId)
-        return sendId
+        return sendId;
     }
 
     const internalError = () => {       //redirect when there is a server error
@@ -63,11 +63,15 @@ export default function Post() {
                     console.log(res.data)
                 })
                 .catch((error) => {
+                    console.error(error);
                     if (error.response.status === 500) {
                         internalError();
                     }
-
-
+                    //if (error.response.status === 404) {
+                    //     (DO SOMETHING)           // <<-------------😐HANDLE ERROr 404 IF tweet NOT FOUND
+                    // }
+                }).finally(() => {
+                    setLoading(false);
                 })
         }
 

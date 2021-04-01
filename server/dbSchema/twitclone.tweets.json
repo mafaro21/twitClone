@@ -1,45 +1,45 @@
 {
-    "$jsonSchema": {
-        "bsonType": "object",
-        "required": [
-            "byUserId",
-            "content",
-            "dateposted",
-            "likes",
-            "comments"
-        ],
-        "properties": {
-            "byUserId": {
-                "bsonType": "objectId",
-                "description": "Pointer to user who tweeted"
-            },
-            "content": {
-                "bsonType": "string",
-                "description": "Main body of the tweet",
-                "maxLength": 280
-            },
-            "likes": {
-                "bsonType": "int",
-                "description": "Count of likes",
-                "minimum": 0
-            },
-            "comments": {
-                "bsonType": "int",
-                "description": "Count of comments",
-                "minimum": 0
-            },
-            "dateposted": {
-                "bsonType": "date",
-                "description": "date of tweet posted"
-            }
-        }
-    },
-    "$and": [
-        {
-            "content": {
-                "$regex": "^[^><]+$",
-                "$options": "g"
-            }
-        }
-    ]
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "byUserId",
+      "content",
+      "dateposted",
+      "likes",
+      "comments"
+    ],
+    "properties": {
+      "byUserId": {
+        "bsonType": "objectId",
+        "description": "Pointer to user who tweeted"
+      },
+      "content": {
+        "bsonType": "string",
+        "description": "Main body of the tweet",
+        "maxLength": 280
+      },
+      "likes": {
+        "bsonType": "int",
+        "description": "Count of likes",
+        "minimum": 0
+      },
+      "comments": {
+        "bsonType": "int",
+        "description": "Count of comments",
+        "minimum": 0
+      },
+      "dateposted": {
+        "bsonType": "date",
+        "description": "date of tweet posted"
+      }
+    }
+  },
+  "$and": [
+    {
+      "content": {
+        "$regex": "^[^><]+$",
+        "$options": "g"
+      }
+    }
+  ]
 }

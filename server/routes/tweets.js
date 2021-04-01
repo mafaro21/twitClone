@@ -19,31 +19,34 @@ router.get("/user/:userid", (req, res, next) => {
 });
 
 
-/* GET SINGLE TWEET!😐 */
-//NEEDS joining to Users collection
+/* GET SINGLE TWEET! */
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
+    if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
+    //ABOVE^: checking if tweetID is valid Mongo ObjectId. if FAIL, abort!!
     const agg = [
-        {
-            '$match': {
-                '_id': new ObjectId(tweetid) //tweetID
-            }
-        }, {
-            '$lookup': {
-                'from': 'users',
-                'localField': 'byUserId',
-                'foreignField': '_id',
-                'as': 'User'
-            }
-        }, {
-            '$project': {
-                'User._id': 0,
-                'User.email': 0,
-                'User.bio': 0,
-                'User.password': 0,
-                'User.datejoined': 0
-            }
-        }
+      {
+        $match: {
+          _id: new ObjectId(tweetid),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "byUserId",
+          foreignField: "_id",
+          as: "User",
+        },
+      },
+      {
+        $project: {
+          "User._id": 0,
+          "User.email": 0,
+          "User.bio": 0,
+          "User.password": 0,
+          "User.datejoined": 0,
+        },
+      },
     ];
     //connect to DB
     MongoClient.connect(uri, {
@@ -56,7 +59,7 @@ router.get("/:tweetid", (req, res, next) => {
             if (result.length === 0) throw new Error("Tweet Not found");
             res.send(result);
         } catch (error) {
-            res.status(404).send(error);
+            res.status(404).send({ "message": error.message });
         } finally {
             await client.close();
         }
@@ -100,15 +103,16 @@ router.post("/", isLoggedin, (req, res, next) => {
         let OK = true;
         const reg = /^[^><]+$/gi;
 
-        if (!content || content.length < 0) {
+        if (!content || content.length < 1) {
+            errors.push("Body cannot be empty");
+            return false;
+        }
+        if (content.length > 280) {
+            errors.push("Max. length of tweet exceeded");
             return false;
         }
         if (!reg.test(content)) {
             errors.push("Tweet contains invalid characters");
-            OK = false;
-        }
-        if (content.length > 280) {
-            errors.push("Max length of tweet exceeded");
             OK = false;
         }
         return OK;
@@ -152,7 +156,9 @@ router.post("/", isLoggedin, (req, res, next) => {
 /* DELETE SINGLE TWEET */
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     const tweetid = req.params.tweetid;
-    //connect to Db
+    if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
+    //ABOVE^: checking if tweetID is valid Mongo ObjectId. if FAIL, abort!!
+
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
@@ -161,7 +167,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
         try {
             const result = await tweets.deleteOne({ _id: tweetid });
             res.status(200).send({ "success": true });
-            console.log("DELETED ", result.result);
+            console.log("DELETED ", result.deletedCount);
         } catch (error) {
             throw error;
         } finally {

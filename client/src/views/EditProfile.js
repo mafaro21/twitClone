@@ -81,7 +81,7 @@ export default function Edit() {
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
-                    console.log(error.response.data)
+                    console.log(error.response.data);
                 })
                 .finally(() => {
                     setDisabled(false);  //stop disable button and loading.
@@ -114,12 +114,12 @@ export default function Edit() {
             usernameErr.fullnameinvalid = "Contains illegal characters";
             isValid = false;
         }
-        if (editFullname.trim().length < 3) {
-            fullnameErr.fullnameErrShort = "Name should be atleast 3 characters long";
+        if (editFullname.trim().length < 1) {
+            fullnameErr.fullnameErrShort = "Cannot be empty";
             isValid = false;
         }
         if (editUsername.trim().length < 3) {
-            fullnameErr.fullnameErrShort = "Username should be atleast 3 characters long";
+            fullnameErr.fullnameErrShort = "Should be atleast 3 characters long";
             isValid = false;
         }
 

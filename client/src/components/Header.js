@@ -43,7 +43,7 @@ export default function Header() {
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
-                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                let finalDate = months[date.getMonth()] + " " + date.getFullYear();
                 localStorage.setItem('datejoined', finalDate);
                 displayData();
             })
@@ -149,7 +149,7 @@ export default function Header() {
     }
 
     //validation check
-    function tweetValidation(twt) {
+    const tweetValidation = (twt) => {
         const tweetErr = {};
         let tweetReg = /[<>]+/gi;
         let isValid = true;
