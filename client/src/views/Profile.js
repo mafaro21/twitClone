@@ -189,17 +189,16 @@ export default function Profile() {
             })
     }
 
-    const handleLike = () => {  //for liking and unliking posts
+    const handleLike = async () => {  //for liking and unliking posts
         // e.preventDefault
 
-        // console.log(item)
+        /* ADD AXIOS AWAIT. FOR post LIKE, and DELETE LIKE */
         if (!isLiked) {
             setisLiked(true)
         } else {
             setisLiked(false)
         }
 
-        // setisLiked(!isLiked)
     }
 
     const NoTweets = () => {
