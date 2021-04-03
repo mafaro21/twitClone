@@ -35,7 +35,9 @@ export default function Profile() {
 
     const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
 
-    const [isLiked, setisLiked] = useState(false);
+    const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
+
+    // const [isLiked, setisLiked] = useState(false);  // <---- WE DONT NEED THIS ANYMORE!!
 
     const [tweetCount, setTweetCount] = useState(0)
 
@@ -105,22 +107,36 @@ export default function Profile() {
             })
     }
 
-    const handleLike = (id) => {  //for liking and unliking posts
 
+    const handleLike = (id) => {
+        //for liking and unliking posts
+        // NOW WORKS 🎉🎉
+        //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
-        console.log(id)
-        /* ADD AXIOS AWAIT. FOR post LIKE, and DELETE LIKE */
-        if (!isLiked) {
-            setisLiked(true)
+        if (!likedTweets[id]) {
+            setLikedTweets(prevTweets => ({
+                ...prevTweets,
+                [id]: !setLikedTweets[id]
+            }));
+
+            //ADDS A LIKE 🤍
+            //PUT CODE FOR AXIOS.POST("/LIKES") here
+
         } else {
-            setisLiked(false)
-        }
+            setLikedTweets(prevTweets => ({
+                ...prevTweets,
+                [id]: setLikedTweets[id]
+            }));
 
+            //REMOVES A LIKE 🖤
+            //PUT CODE FOR AXIOS.DELETE("/LIKES") here
+        }
+        console.log("Liked tweetid", id);
+        console.log(likedTweets);
     }
 
-    const handleDelete = () => {
+    const handleDelete = (id) => {  // <----DO THE SAME AS ABOVE.
         // e.preventDefault()
-
         return alert(tweetId)
 
         // axios.delete(`tweets/${tweetId}`)
@@ -444,10 +460,14 @@ export default function Profile() {
                                         <button
                                             className="like col"
                                             onClick={() => handleLike(item._id)}
+
                                         >
-                                            {isLiked ? (
-                                                <FontAwesomeIcon icon={heartSolid} className="text-danger" />
-                                            ) : <FontAwesomeIcon icon={faHeart} />}
+                                            {likedTweets[item._id] ?
+                                                (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
+                                                : <FontAwesomeIcon icon={faHeart} />
+                                            }
+
+
                                                 &nbsp; {item.likes}
                                         </button>
                                     </div>
