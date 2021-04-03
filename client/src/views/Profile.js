@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/App.css';
+import '../css/Sidebar.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 // import Interactive from '../components/Interactive';
+import OutsideClick from '../components/OutsideClick'
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
@@ -21,9 +24,6 @@ import ReactTimeAgo from 'react-time-ago'
 // import { Redirect } from 'react-router-dom';
 
 export default function Profile() {
-
-    const [settingsModal, setSettingsModal] = useState(false);//settings modal
-    const settingsToggle = () => setSettingsModal(!settingsModal);
 
     const [loading, setLoading] = useState(true);      // loading animation
     const [tweetLoading, setTweetLoading] = useState(true)
@@ -39,101 +39,17 @@ export default function Profile() {
 
     const [tweetCount, setTweetCount] = useState(0)
 
+    const [tweetId, setTweetId] = useState(0)
+
     const [noTweets, setNoTweets] = useState(false)
+
+    const [commentModal, setCommentModal] = useState(false)
+
+    const [dots, setDots] = useState(false)
+    const dotsToggle = () => setDots(!dots)
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
-
-    const SettingsModal = () => {
-        return <div>
-            <div class="fade modaltest mt-5 modal-enter" >
-                <div class="">
-                    <div class="modal-view">
-                        <div class="modal-header">
-                            <h3 class="mt-3">Settings</h3>
-                            <button className="" onClick={settingsToggle}>
-                                <svg viewBox="0 0 24 24" class="icon ">
-                                    <g>
-                                        <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
-                                        </path>
-                                    </g>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form className=" signup"  >
-                                {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div>
-                                    <input
-                                        name="oldPass"
-                                        type="password"
-                                        // value={fullname}
-                                        // onChange={(e) => setfullName(e.target.value)}
-                                        className="signup-input change edit-modal"
-                                        maxLength="20"
-                                        placeholder="Enter Old Password"
-                                        required
-                                    />
-                                    {/* {Object.keys(fullnameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })} */}
-                                </div>
-
-                                <div>
-                                    <input
-                                        name="newPassword"
-                                        type="password"
-                                        // value={password}
-                                        // onChange={(e) => setPassword(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="20"
-                                        placeholder="Enter New Password"
-                                        title="Required 8 characters or more"
-                                        required
-                                    />
-                                    {/* {Object.keys(passwordErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
-                                    })} */}
-                                </div>
-
-                                <div>
-                                    <input
-                                        name="confirmPass"
-                                        type="password"
-                                        // value={confirmPass}
-                                        // onChange={(e) => setconfirmPass(e.target.value)}
-                                        className="signup-input mt-1 change"
-                                        maxLength="20"
-                                        placeholder="Confirm New Password"
-                                        required
-                                    />
-                                    {/* {Object.keys(confirmpasswordErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
-                                    })} */}
-                                </div>
-                                <br />
-
-                                {/* {loading ? <Loading /> : null} */}
-
-                                <button
-                                    id="submit-btn"
-                                    className="btn login-submit btn-outline-primary rounded-pill mt-3"
-                                    type="submit"
-                                // disabled={disabled}         //button disabler
-                                >
-                                    Save
-                        </button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" onClick={settingsToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div >
-    }
 
     const internalError = () => {       //redirect when there is a server error
         return window.location.replace("/Error");
@@ -189,9 +105,10 @@ export default function Profile() {
             })
     }
 
-    const handleLike = async () => {  //for liking and unliking posts
-        // e.preventDefault
+    const handleLike = (id) => {  //for liking and unliking posts
 
+
+        console.log(id)
         /* ADD AXIOS AWAIT. FOR post LIKE, and DELETE LIKE */
         if (!isLiked) {
             setisLiked(true)
@@ -201,12 +118,160 @@ export default function Profile() {
 
     }
 
+    const handleDelete = () => {
+        // e.preventDefault()
+
+        return alert(tweetId)
+
+        // axios.delete(`tweets/${tweetId}`)
+        //     .then((res) => {
+        //         console.log(res.data)
+        //     })
+        //     .catch((error) => {
+        //         console.error(error)
+        //     })
+    }
+
+
     const NoTweets = () => {
         return <div className="d-flex justify-content-center p-2">
             <i><span style={{ fontSize: "18px", fontWeight: "bolder" }}>You haven't made any tweets yet</span></i>
         </div>
     }
 
+    const Dots = () => {
+        return <div className="dots-wrapper">
+            <div className="dots " ref={ref}>
+                <button className="p-3 dots-delete " onClick={handleDelete}>
+                    <div className="dots-button"><FontAwesomeIcon icon={faTrashAlt} /> Delete</div>
+                </button>
+                <button className="p-3 dots-delete ">
+                    <div className="dots-button">THIS DOES NOTHING </div>
+                </button>
+            </div>
+        </div>
+    }
+
+    const onClick = (id) => {
+        dotsToggle()
+        setTweetId(id)
+    }
+
+    const wordCount = () => {   //live word counter
+        document.getElementById("tweet").addEventListener('input', function () {
+            var text = this.value,
+                count = text.trim().replace(/\s/g, '').length;
+
+            if (count === 280) {
+                document.getElementById('show').style.color = "red"
+            } else if (count >= 250) {
+                document.getElementById('show').style.color = "#FF8000"
+            } else if (count >= 200) {
+                document.getElementById('show').style.color = "#FFB400"
+            } else if (count >= 150) {
+                document.getElementById('show').style.color = "#FFF800"
+            } else {
+                document.getElementById('show').style.color = "grey"
+            }
+
+            if (count <= 0) {// used to disable button if textarea is empty
+                document.getElementById("submit-btn").disabled = true;
+            } else {
+                document.getElementById("submit-btn").disabled = false;
+            }
+
+            document.getElementById('show').textContent = count;
+
+        });
+    }
+
+    const CommentModal = () => {
+        return <div >
+            {/* ref={ref} */}
+            <div className="modal-wrapper" >
+                <div className="tweettest  modal-enter" >
+                    <div className="">
+                        <div className="modal-view">
+                            <div className="modal-header">
+                                <button className="" onClick={() => setCommentModal(false)}>
+                                    <svg viewBox="0 0 24 24" className="icon ">
+                                        <g>
+                                            <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div style={{ color: "red" }} className="error-msg ">{ }</div>
+
+                            <div className="modal-body row">
+                                <div className="col-1">
+                                    <img src={icon} alt="example" className="user-tweet-img" />
+                                </div>
+
+                                <form id="tweetForm" className="signup col" >
+
+                                    <div >
+                                        <textarea
+
+                                            id="tweet"
+                                            name="tweet"
+                                            type="text"
+                                            // value={tweet}
+
+                                            onChange={wordCount}
+                                            className=" edit-input "
+                                            maxLength="280"
+                                            rows="7"
+                                            placeholder="Any Hot Takes?"
+                                            required
+                                        />
+
+                                        <div className="container counter">
+                                            {/* {count}/280 */}
+                                            <span id="show">0</span><span>/280</span>
+                                        </div>
+                                        {/* {Object.keys(tweetErr).map((key) => {
+                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                        })} */}
+                                    </div>
+
+
+                                    <button
+                                        id="submit-btn"
+                                        className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                                        type="submit"
+                                    // onClick={handleSubmit}
+                                    // disabled={disabled}       //button disabler
+                                    >
+                                        Tweet
+                                    </button>
+                                </form>
+                            </div>
+                            {/* <div class="modal-footer">
+                            <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
+                        </div> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div >
+    };
+
+    const ref = useRef();   //clicking outside closes modal
+
+    OutsideClick(ref, () => {
+        dotsToggle()
+        // setCommentModal(false)
+    });
+
+
+    // const ThreeDots = (e) => {
+    //     e.preventDefault();
+    //     return dotsToggle()
+
+    // }
 
     TimeAgo.addLocale(en)
 
@@ -216,8 +281,7 @@ export default function Profile() {
                 <div className="row " >
 
                     <Header />
-                    {settingsModal ? <SettingsModal /> : null}
-
+                    {commentModal ? <CommentModal /> : null}
 
                     <div className="col main-view  phone-home w-100 " >
                         {loading ? <Loading /> : null}
@@ -247,8 +311,7 @@ export default function Profile() {
                                     <div className="banner-right ">
                                         <button
                                             className="btn login-submit banner-settings btn-outline-primary rounded-pill mt-1"
-                                            type="submit"
-                                            onClick={settingsToggle}
+                                        // type="submit"
                                         >
                                             {/* banner-msg */}
                                             <svg viewBox="0 2 26 23" className="banner-msg">
@@ -320,7 +383,7 @@ export default function Profile() {
 
                         {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
-                        {tweets.data.map((item, index) => (
+                        {tweets.data.map((item) => (
                             <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
@@ -344,21 +407,32 @@ export default function Profile() {
                                 </div>
 
                                 <div className="col user-name-tweet" >      {/* <--- user content */}
-                                    <Link to={`/post/${item._id}`} className="post-link" >
-                                        <div className="user-content">
-                                            <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
+                                    <div  >
+                                        <div >
+                                            <strong>{fullname}</strong> <span>@{username}</span>
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
-                                            <span className="three-dots">···</span>
+                                            {dots ? <Dots /> : null}
+                                            <span className="three-dots" onClick={() => onClick(item._id)}>
+                                                {/* ··· */}
+                                                <svg viewBox="0 0 24 24" className="post-menu">
+                                                    <g>
+                                                        <circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle>
+                                                    </g>
+                                                </svg>
+                                            </span>
                                         </div>
 
-                                        <p>{item.content}</p>
-                                    </Link>
+                                        <Link to={`/post/${item._id}`} className="post-link"><p>{item.content}</p></Link>
+                                    </div>
 
                                     <div className="interact-row d-flex ">
-                                        <button className="comment col">
+                                        <button
+                                            className="comment col"
+                                            onClick={() => setCommentModal(true)}
+                                        >
                                             <FontAwesomeIcon icon={faComment} />
                                             &nbsp; {item.comments}
                                         </button>
@@ -369,7 +443,7 @@ export default function Profile() {
 
                                         <button
                                             className="like col"
-                                            onClick={handleLike}
+                                            onClick={() => handleLike(item._id)}
                                         >
                                             {isLiked ? (
                                                 <FontAwesomeIcon icon={heartSolid} className="text-danger" />

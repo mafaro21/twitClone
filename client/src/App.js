@@ -8,6 +8,7 @@ import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
 import Navbar from './components/Navbar';
 import Post from './views/Post'
+import Compose from './views/Compose'
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
@@ -26,12 +27,13 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
-
           <Route path="/myprofile" component={Profile} />
           <Route path="/edit" component={EditProfile} />
           <Route path="/post" component={Post} />
+
           <Route component={NotFound404} />
         </Switch>
+        <Route path="/compose" component={Compose} />
       </div>
     </Router>
   );

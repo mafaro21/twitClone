@@ -288,7 +288,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <div className="header-link d-flex pl-2">
+                    <div className="header-link d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -301,7 +301,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <div className="header-link d-flex pl-2">
+                    <div className="header-link d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -314,7 +314,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex">
-                    <Link className="header-link d-flex pl-2" to="/myprofile">
+                    <Link className="header-link d-flex pl-2 mt-2" to="/myprofile">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -327,7 +327,7 @@ export default function Header() {
                 </div>
 
                 <div className="d-flex more">
-                    <div className="header-link d-flex pl-2">
+                    <div className="header-link d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -346,13 +346,15 @@ export default function Header() {
                 <div className="d-flex tweet-btn">
                     <div className=" d-flex pl-2">
                         <div>
-                            <button
+                            <Link
+                                to="/compose"
                                 className="btn login-submit btn-primary rounded-pill mt-3 "
                                 style={{ width: "140px" }}
-                                onClick={tweetToggle}
+                            // onClick={tweetToggle}
+
                             >
                                 Tweet
-                        </button>
+                        </Link>
                         </div>
                     </div>
                 </div>
