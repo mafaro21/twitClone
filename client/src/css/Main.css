@@ -194,6 +194,7 @@ button{
 .like, .comment, .retweet{
   color: #AEAEAE;
 }
+
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
   border-radius: 15px;
@@ -233,8 +234,53 @@ button{
   text-decoration: none;
   color:white;
 }
+.post-menu{
+  fill: grey;
+  height:24px;
+}
+.post-menu:hover{
+  fill:#F29C50;
+}
+.dots-wrapper{
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 1);  */
+  transition: all .3s ease-in-out;
+}
+.dots{
+  background-color: black;
+  box-shadow: 0 0 8px grey;
+  border-radius: 9px;
+  float: left;
+  margin-left: 61%;
+  width: 40%;
+}
+.dots-button{
+  width: 100%;
+  text-align: left;
+}
+.dots-delete{
+  color: red;
+  background-color: inherit;
+  width: 100%;
+  border-radius: 9px;
+}
+.dots-delete:hover{
+  background-color: rgb(246, 234, 223, 0.05);
+  border-radius: 9px;
+  width: 100%;
+}
 .three-dots{
-  justify-content: flex-end;
+  float: right;
+}
+.three-dots:hover{
+  background-color: rgb(242, 156, 80,0.4);
+  border-radius: 15px;
+  /* width: 13px;  */
 }
 /* post */
 
