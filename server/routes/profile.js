@@ -41,15 +41,15 @@ router.put("/mine/edit", isLoggedin, (req, res, next) => {
     function checkInputs() {
         let OK = true;
         let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
-        let userReg = /^[0-9a-zA-Z_\S]+$/gi;
-        let bioReg = /^[^<>]+$/gi;
+        let userReg = /[^0-9a-zA-Z_\S]+/;
+        let bioReg = /[<>]/;
 
         if (!fullname || !username || !bio) {
             //☹ if any empty, END immediately!
             errors.push("No field can be empty, ");
             return false;
         }
-        if (!reg.test(fullname) || !userReg.test(username) || !bioReg.test(bio)) {
+        if (!reg.test(fullname) || userReg.test(username) || bioReg.test(bio)) {
             errors.push("One or more fields contain illegal characters, ");
             OK = false;
         }

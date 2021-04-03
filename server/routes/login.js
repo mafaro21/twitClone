@@ -20,7 +20,7 @@ const LoginLimiter = rateLimit({
 //FOR LOGIN ONLY::
 
 /* handling GET requests  */
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
     res.send({ "title": " Twitclone Login" });
 });
 

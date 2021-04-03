@@ -16,7 +16,7 @@ router.post("/:tweetid", isLoggedin, (req, res, next) => {
 });
 
 
-/* REMOVE 🖤 LIKE ON A TWEET */
+/* REMOVE ❤ LIKE ON A TWEET */
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
