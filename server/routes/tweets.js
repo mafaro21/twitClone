@@ -22,7 +22,7 @@ router.get("/user/:userid", (req, res, next) => {
 /* GET SINGLE TWEET! */
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
-    if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
+    if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
     //ABOVE^: checking if tweetID is valid Mongo ObjectId. if FAIL, abort!!
     const agg = [
       {
@@ -101,7 +101,7 @@ router.post("/", isLoggedin, (req, res, next) => {
     //-----------START VALIDATION------------//
     function checkInputs() {
         let OK = true;
-        const reg = /^[^><]+$/gi;
+        const reg = /[><]+/;
 
         if (!content || content.length < 1) {
             errors.push("Body cannot be empty");
@@ -111,7 +111,7 @@ router.post("/", isLoggedin, (req, res, next) => {
             errors.push("Max. length of tweet exceeded");
             return false;
         }
-        if (!reg.test(content)) {
+        if (reg.test(content)) {
             errors.push("Tweet contains invalid characters");
             OK = false;
         }
@@ -165,7 +165,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
-            const result = await tweets.deleteOne({ _id: tweetid });
+            const result = await tweets.deleteOne({ _id: new ObjectId(tweetid) });
             res.status(200).send({ "success": true });
             console.log("DELETED ", result.deletedCount);
         } catch (error) {
