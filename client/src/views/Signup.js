@@ -162,7 +162,7 @@ function Signup() {
                                 value={fullname}
                                 onChange={(e) => setfullName(e.target.value)}
                                 className="signup-input mt-4 change"
-                                maxLength="20"
+                                maxLength="40"
                                 placeholder="Your Name"
                                 required
                             />

@@ -98,7 +98,7 @@ export default function Edit() {
         let userReg = /^[0-9a-zA-Z_\S]+$/gi;
         // eslint-disable-next-line
         let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
-        let bioReg = /[<>]+/gi;
+        let bioReg = /[<>]+/;
 
         let isValid = true;
 

@@ -11,8 +11,8 @@ router.post("/:tweetid", isLoggedin, (req, res, next) => {
     1. ADD NEW ENTRY to `likes` collection.
     2. Increment (+) the #Likes in the `tweets` collection (for this tweetid)  
     */
-   
-  res.send(`You liked a tweet with id ${tweetid}`);
+
+  res.send({ message: `You liked a tweet with id ${tweetid}` });
 });
 
 
@@ -26,7 +26,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     2. Decrement (-) the #likes in the `tweets` collection (for this tweetid)  
     */
 
-  res.send(`You UNLIKED a tweet with id ${tweetid}`);
+  res.send({ message: `You UNLIKED a tweet with id ${tweetid}` });
 });
 
 module.exports = router;
