@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ObjectId, ReplSet } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const isLoggedin = require("../middleware/authchecker");
 const router = express.Router();
 const uri = process.env.MONGO_URL;
@@ -16,8 +16,8 @@ router.post("/:tweetid", isLoggedin, (req, res, next) => {
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
 
   const likesObject = {
-    tweetid: tweetid,
-    userid: userid,
+    tweetid: new ObjectId(tweetid),
+    userid: new ObjectId(userid),
     dateliked: new Date()
   }
 
@@ -34,7 +34,7 @@ router.post("/:tweetid", isLoggedin, (req, res, next) => {
     const tweets = client.db("twitclone").collection("tweets");
     try {
       const result1 = await likes.insertOne(likesObject);
-      const result2 = await tweets.updateOne({ _id: new ObjectId(tweetid) }, { $inc: { likes: 1 } });
+      const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: 1 } });
       if (result1.result.ok === 1 && result2.result.ok === 1)
         res.status(201).send({ success: true });
     } catch (error) {
@@ -57,8 +57,8 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
 
   const likesObject = {
-    tweetid: tweetid,
-    userid: userid,
+    tweetid: new ObjectId(tweetid),
+    userid: new ObjectId(userid)
   }
 
   /* do two operations
@@ -73,7 +73,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     const tweets = client.db("twitclone").collection("tweets");
     try {
       const result1 = await likes.deleteOne(likesObject);
-      const result2 = await tweets.updateOne({ _id: new ObjectId(tweetid) }, { $inc: { likes: -1 } });
+      const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: -1 } });
       if (result1.deletedCount === 1 && result2.modifiedCount === 1)
         res.status(200).send({ success: true });
     } catch (error) {
