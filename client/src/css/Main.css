@@ -239,7 +239,7 @@ button{
   height:24px;
 }
 .post-menu:hover{
-  fill:#F29C50;
+  fill:var(--accent)
 }
 .dots-wrapper{
   z-index: 1;
@@ -278,7 +278,7 @@ button{
   float: right;
 }
 .three-dots:hover{
-  background-color: rgb(242, 156, 80,0.4);
+  background-color: rgb(242,156,80,0.4);
   border-radius: 15px;
   /* width: 13px;  */
 }

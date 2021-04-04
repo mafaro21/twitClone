@@ -37,18 +37,16 @@ export default function Profile() {
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
-    // const [isLiked, setisLiked] = useState(false);  // <---- WE DONT NEED THIS ANYMORE!!
-
     const [tweetCount, setTweetCount] = useState(0)
 
-    const [tweetId, setTweetId] = useState(0)
+    const [tweetId, setTweetId] = useState("")
 
     const [noTweets, setNoTweets] = useState(false)
 
     const [commentModal, setCommentModal] = useState(false)
 
-    const [dots, setDots] = useState(false)
-    const dotsToggle = () => setDots(!dots)
+    const [dots, setDots] = useState({})
+
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -135,8 +133,8 @@ export default function Profile() {
         console.log(likedTweets);
     }
 
-    const handleDelete = (id) => {  // <----DO THE SAME AS ABOVE.
-        // e.preventDefault()
+    const handleDelete = () => {  // <----DO THE SAME AS ABOVE.
+
         return alert(tweetId)
 
         // axios.delete(`tweets/${tweetId}`)
@@ -149,14 +147,27 @@ export default function Profile() {
     }
 
 
-    const NoTweets = () => {
+    const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
             <i><span style={{ fontSize: "18px", fontWeight: "bolder" }}>You haven't made any tweets yet</span></i>
         </div>
     }
 
-    const Dots = () => {
-        return <div className="dots-wrapper">
+    const Dots = (id) => {
+
+        setTweetId(id)   //set tweetid whenever the dots are clicked
+
+        if (!dots[id]) {
+            setDots(prevDots => ({
+                ...prevDots,
+                [id]: !setDots[id]
+            }))
+            console.log(id)
+        }
+    }
+
+    const DotsModal = () => {       //three dots basically 'more'
+        return <div className="dots-wrapper" >
             <div className="dots " ref={ref}>
                 <button className="p-3 dots-delete " onClick={handleDelete}>
                     <div className="dots-button"><FontAwesomeIcon icon={faTrashAlt} /> Delete</div>
@@ -168,10 +179,6 @@ export default function Profile() {
         </div>
     }
 
-    const onClick = (id) => {
-        dotsToggle()
-        setTweetId(id)
-    }
 
     const wordCount = () => {   //live word counter
         document.getElementById("tweet").addEventListener('input', function () {
@@ -278,8 +285,7 @@ export default function Profile() {
     const ref = useRef();   //clicking outside closes modal
 
     OutsideClick(ref, () => {
-        dotsToggle()
-        // setCommentModal(false)
+        // setDots()
     });
 
 
@@ -430,8 +436,8 @@ export default function Profile() {
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
-                                            {dots ? <Dots /> : null}
-                                            <span className="three-dots" onClick={() => onClick(item._id)}>
+                                            {dots[item._id] ? <DotsModal /> : null}
+                                            <span className="three-dots" onClick={() => Dots(item._id)}>
                                                 {/* ··· */}
                                                 <svg viewBox="0 0 24 24" className="post-menu">
                                                     <g>

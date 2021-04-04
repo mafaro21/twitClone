@@ -32,6 +32,8 @@ function App() {
           <Route path="/post" component={Post} />
 
           <Route component={NotFound404} />
+
+
         </Switch>
         <Route path="/compose" component={Compose} />
       </div>
