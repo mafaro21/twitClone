@@ -1,0 +1,20 @@
+{
+    "$jsonSchema": {
+        "required": [
+            "userid",
+            "tweetid",
+            "dateliked"
+        ],
+        "properties": {
+            "tweetid": {
+                "bsonType": "objectId"
+            },
+            "userid": {
+                "bsonType": "objectId"
+            },
+            "dateliked": {
+                "bsonType": "date"
+            }
+        }
+    }
+}
