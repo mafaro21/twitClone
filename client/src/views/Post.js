@@ -53,6 +53,8 @@ export default function Post() {
 
     useEffect(() => {   //fetching data for logged in users
 
+        window.scrollTo(0, 0)       //scroll to top of page when it loads
+
         const getId = ForId()
 
         if (getId !== undefined) {

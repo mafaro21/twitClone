@@ -1,9 +1,10 @@
 /* color schemes */
 :root{
-  --accent: #F29C50;
+  --accent: #f29c50;
   --darkaccent: #b45235;
   --text: #fbfafa;
   --background: #080603; 
+  --hover: rgb(242,156,80,0.4);
 }
 
 .user-data{
@@ -15,7 +16,7 @@
   text-align: left;
 }
 .user-data:hover{
-  background-color: #F29C50;
+  background-color: var(--hover);
   border-radius: 25px;
   color: white;
 }
@@ -46,10 +47,10 @@
 }
 
 .sidebar{
-    /* border: 0.1px solid var(--text); */
-    border-radius: 15px;
-    text-align: left;
-    background-color: #201e1c;
+  /* border: 0.1px solid var(--text); */
+  border-radius: 15px;
+  text-align: left;
+  background-color: #201e1c;
 }
 
 .sidebar:hover{
@@ -57,9 +58,9 @@
 }
 
 .sticky{
-     /* position: -webkit-sticky; */
-    position: sticky;
-    top: 60px;
+  /* position: -webkit-sticky; */
+  position: sticky;
+  top: 60px;
 }
 
 .footer{
@@ -94,40 +95,51 @@ ul{
   height: 80px;
   width: auto;
 }
+.back-button{
+  height:26px;
+  fill: var(--accent)
+}
+.back-button:hover{
+  background-color: var(--hover);
+  border-radius: 50%;
+}
 
 .icon{
   height:26px;
   /* width:auto; */
-  fill: var(--text);
+  /* fill: var(--text); */
   /*  */
 }
+.icon-active{
+  height:26px;
+  /* fill: var(--accent); */
+}
 
-.header-link, .icon{
-  text-decoration: none;
+.header-link{
+  fill: white;
   color: white;
   width: auto;
-  
+}
+.header-link-active, .icon-active{
+  fill: var(--accent);
+  text-decoration: none;
+  color: var(--accent);
+  width: auto;
 }
 
 .header-title{
   font-size: 21px;
 }
 
-.icon:hover, .header-link:hover{
-  fill: black;
-  color: black;
-  background-color: rgb(242,156,80,1);
-  border-radius: 20px;
+.header-link:hover, .header-link-active:hover{
+  fill: var(--accent);
+  color: var(--accent);
+  background-color: var(--hover);
+  border-radius: 29px;
   text-decoration: none;
   /* box-shadow: 0 0 8px var(--accent); */
 }
 
-.header-link:hover{
-    width: 160px;
-    /* height: 47px; */
-    /* height: 10%; */
-
-}
 
 /* tweetModal */
 

@@ -265,6 +265,8 @@ export default function Header() {
         </div >
     };
 
+    const path = window.location.pathname; //for current location
+
 
     return (
         <header className=" header pt-3" onLoad={displayData} >
@@ -273,8 +275,8 @@ export default function Header() {
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
-                <div className="d-flex" >
-                    <Link className="header-link d-flex pl-2 " to="/home">
+                <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                    <div className="  d-flex pl-2 mt-2" >
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -284,11 +286,11 @@ export default function Header() {
                             </svg>
                         </div>
                         <p className="header-title">Home</p>
-                    </Link>
-                </div>
+                    </div>
+                </Link>
 
-                <div className="d-flex">
-                    <div className="header-link d-flex pl-2 mt-2">
+                <div className="d-flex header-link">
+                    <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -300,8 +302,8 @@ export default function Header() {
                     </div>
                 </div>
 
-                <div className="d-flex">
-                    <div className="header-link d-flex pl-2 mt-2">
+                <div className="d-flex header-link">
+                    <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -313,8 +315,8 @@ export default function Header() {
                     </div>
                 </div>
 
-                <div className="d-flex">
-                    <Link className="header-link d-flex pl-2 mt-2" to="/myprofile">
+                <Link className={path === '/myprofile' || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to="/myprofile">
+                    <div className=" d-flex pl-2 mt-2" >
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -323,11 +325,11 @@ export default function Header() {
                             </svg>
                         </div>
                         <p className="header-title">Profile</p>
-                    </Link>
-                </div>
+                    </div>
+                </Link>
 
-                <div className="d-flex more">
-                    <div className="header-link d-flex pl-2 mt-2">
+                <div className="d-flex more header-link">
+                    <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
                                 <g>
@@ -346,15 +348,15 @@ export default function Header() {
                 <div className="d-flex tweet-btn">
                     <div className=" d-flex pl-2">
                         <div>
-                            <Link
-                                to="/compose"
+                            <div
+                                // to="/compose"
                                 className="btn login-submit btn-primary rounded-pill mt-3 "
                                 style={{ width: "140px" }}
-                            // onClick={tweetToggle}
+                                onClick={tweetToggle}
 
                             >
                                 Tweet
-                        </Link>
+                        </div>
                         </div>
                     </div>
                 </div>

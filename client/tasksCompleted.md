@@ -1,4 +1,5 @@
-- no tweets div shows now
+- single delete modal onclick works
+- cleaned up the header
 
 
 
