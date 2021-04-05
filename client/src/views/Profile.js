@@ -33,6 +33,8 @@ export default function Profile() {
     const [bio, setBio] = useState("");
     const [datejoined, setDatejoined] = useState("");
 
+    const [disabled, setDisabled] = useState(false);    // button disabler during request
+
     const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
@@ -47,6 +49,8 @@ export default function Profile() {
 
     const [dots, setDots] = useState({})
 
+    const [dotsModal, setDotsModal] = useState(false)
+
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -57,11 +61,11 @@ export default function Profile() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        setFullname(localStorage.getItem('fullname'));
-        setUsername(localStorage.getItem('username'));
-        setBio(localStorage.getItem('bio'));
-        setDatejoined(localStorage.getItem('datejoined'));
-        document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
+        setBio(sessionStorage.getItem('bio'));
+        setDatejoined(sessionStorage.getItem('datejoined'));
+        document.title = "TwitClone: @" + sessionStorage.getItem('username'); //change DOCTITLE according to username.
         setLoading(false);
 
         axios.get("/tweets/mine/all")
@@ -99,7 +103,7 @@ export default function Profile() {
     const Logout = () => {  //logout function
         axios.get("/logout")
             .then((res) => {
-                localStorage.clear();
+                sessionStorage.clear();
                 window.location.replace("/");
 
             })
@@ -112,28 +116,44 @@ export default function Profile() {
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
         if (!likedTweets[id]) {
+            setDisabled(true)
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
-                [id]: !setLikedTweets[id]
+                [id]: !setLikedTweets[id],
+                // [id]: setDisabled(true)
             }));
 
-            //ADDS A LIKE 🤍
-            //PUT CODE FOR AXIOS.POST("/LIKES") here
+            axios.post(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
 
         } else {
+            setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
-                [id]: setLikedTweets[id]
+                [id]: setLikedTweets[id],
+                // [id]: setDisabled(true)
             }));
 
-            //REMOVES A LIKE 🖤
-            //PUT CODE FOR AXIOS.DELETE("/LIKES") here
+            axios.delete(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
-        console.log("Liked tweetid", id);
-        console.log(likedTweets);
+        // console.log("Liked tweetid", id);
+        // console.log(likedTweets);
     }
 
-    const handleDelete = () => {  // <----DO THE SAME AS ABOVE.
+    const handleDelete = () => {
 
         return alert(tweetId)
 
@@ -161,6 +181,7 @@ export default function Profile() {
             setDots(prevDots => ({
                 ...prevDots,
                 [id]: !setDots[id]
+
             }))
             console.log(id)
         }
@@ -173,7 +194,7 @@ export default function Profile() {
                     <div className="dots-button"><FontAwesomeIcon icon={faTrashAlt} /> Delete</div>
                 </button>
                 <button className="p-3 dots-delete ">
-                    <div className="dots-button">THIS DOES NOTHING </div>
+                    <div className="dots-button" onClick={window.scrollTo(0, 100)}>THIS DOES NOTHING </div>
                 </button>
             </div>
         </div>
@@ -288,13 +309,6 @@ export default function Profile() {
         // setDots()
     });
 
-
-    // const ThreeDots = (e) => {
-    //     e.preventDefault();
-    //     return dotsToggle()
-
-    // }
-
     TimeAgo.addLocale(en)
 
     return (
@@ -307,7 +321,7 @@ export default function Profile() {
 
                     <div className="col main-view  phone-home w-100 " >
                         {loading ? <Loading /> : null}
-                        <div className="row profile-header view">
+                        <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -428,7 +442,7 @@ export default function Profile() {
                                     </div>
                                 </div>
 
-                                <div className="col user-name-tweet" >      {/* <--- user content */}
+                                <div className="col user-name-tweet post-div" >      {/* <--- user content */}
                                     <div  >
                                         <div >
                                             <strong>{fullname}</strong> <span>@{username}</span>
@@ -466,6 +480,7 @@ export default function Profile() {
                                         <button
                                             className="like col"
                                             onClick={() => handleLike(item._id)}
+                                            disabled={disabled}
 
                                         >
                                             {likedTweets[item._id] ?

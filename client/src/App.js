@@ -17,6 +17,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 function App() {
   dotenv.config();
 
+  // let username = sessionStorage.getItem('username')
+  // let link = `/${username}`
+
   return (
 
     <Router>

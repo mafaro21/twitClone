@@ -84,6 +84,16 @@ strong {
   height: 66px;
   border-radius: 15px 15px 0 0;
 }
+.profile-header-scroll{
+  font-size: 18px;
+  font-weight: bold;
+  position: sticky;
+  z-index: 1;
+  top: 52px;
+  background-color: #080603;
+  width: 575px;
+  height: 66px;
+}
 
 /* .banner{
   width: 100%;
@@ -216,6 +226,9 @@ button{
 
 
 /* post */
+.post-div{
+  transition: all 3s ease-in;
+}
 .post-data{
   font-size: 18px;
 }

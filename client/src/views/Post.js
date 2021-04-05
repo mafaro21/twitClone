@@ -24,16 +24,40 @@ export default function Post() {
     const [isLiked, setisLiked] = useState(false)
     const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
+    const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const handleLike = () => {  //for liking and unliking posts
+
+    const handleLike = (id) => {  //for liking and unliking posts
+
+        setDisabled(true)
+
         if (!isLiked) {
             setisLiked(true)
+
+            axios.post(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+
         } else {
             setisLiked(false)
+
+            axios.delete(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
     }
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
 
 
     const ForId = () => {
@@ -50,6 +74,11 @@ export default function Post() {
         // return <Redirect to="/Error" />
     }
 
+    const Error = () => {       //redirect when there is a server error
+        return window.location.replace("/NotFound404");
+        // return <Redirect to="/Error" />
+    }
+
 
     useEffect(() => {   //fetching data for logged in users
 
@@ -62,29 +91,29 @@ export default function Post() {
                 .then((res) => {
                     setTweets(res);
                     setLoading(false)
-                    console.log(res.data)
+                    // console.log(res.data)
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response.status === 500) {
                         internalError();
                     }
-                    //if (error.response.status === 404) {
-                    //     (DO SOMETHING)           // <<-------------😐HANDLE ERROr 404 IF tweet NOT FOUND
-                    // }
+                    else if (error.response.status === 404) {
+                        Error()
+                    }
                 }).finally(() => {
                     setLoading(false);
                 })
         }
 
-        setFullname(localStorage.getItem('fullname'));
-        setUsername(localStorage.getItem('username'));
-        document.title = "TwitClone: @" + localStorage.getItem('username'); //change DOCTITLE according to username.
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
+        document.title = "TwitClone: @" + sessionStorage.getItem('username'); //change DOCTITLE according to username.
 
 
 
 
-    }, []);
+    }, []); //tweets
 
     const wordCount = () => {   //live word counter
         document.getElementById("tweet").addEventListener('input', function () {
@@ -129,6 +158,8 @@ export default function Post() {
 
     TimeAgo.addLocale(en)
 
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
     return (
         <div className="general" >
             <div className="container App " >
@@ -155,9 +186,10 @@ export default function Post() {
 
                         {loading ? <Loading /> : null}
                         {tweets.data.map((item) => (
+
                             <div className="p-2 view row" key={item._id}>
                                 <div className="col-1.5">              {/* <--- user avi */}
-                                    <img src={icon} alt="example" className="user-logo" />
+                                    <img src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`} alt="example" className="user-logo" />
                                 </div>
                                 <div className="col user-name-tweet" >                   {/* <--- user content */}
                                     <div className=" ">
@@ -185,7 +217,8 @@ export default function Post() {
 
                                             <button
                                                 className="like col"
-                                                onClick={handleLike}
+                                                onClick={() => handleLike(item._id)}
+                                                disabled={disabled}
                                             >
                                                 {isLiked ? (
                                                     <FontAwesomeIcon icon={heartSolid} size="2x" className="text-danger" />

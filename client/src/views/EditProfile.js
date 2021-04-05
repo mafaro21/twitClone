@@ -12,9 +12,9 @@ import Loader from "react-loader-spinner";
 
 export default function Edit() {
 
-    const [editFullname, setEditFullname] = useState(localStorage.getItem('fullname') || "")
-    const [editUsername, setEditUsername] = useState(localStorage.getItem('username') || "")
-    const [editBio, setEditBio] = useState(localStorage.getItem('bio') || "")
+    const [editFullname, setEditFullname] = useState(sessionStorage.getItem('fullname') || "")
+    const [editUsername, setEditUsername] = useState(sessionStorage.getItem('username') || "")
+    const [editBio, setEditBio] = useState(sessionStorage.getItem('bio') || "")
 
     const [fullnameErr, setFullnameErr] = useState({}) // front end validation
     const [usernameErr, setUsernameErr] = useState({})
