@@ -1,5 +1,5 @@
-- single delete modal onclick works
-- cleaned up the header
+- likes working, button disables when request is being sent
+- session storage
 
 
 

@@ -12,7 +12,7 @@ import tobias from '../images/mihai-surdu.jpg';
 function Home() {
     // const [isClick, setClick] = useState(false);
 
-    let username = localStorage.getItem('username')
+    let username = sessionStorage.getItem('username')
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     // useEffect(() => {

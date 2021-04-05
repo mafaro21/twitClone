@@ -36,19 +36,19 @@ export default function Header() {
 
         axios.get("/profile/mine")
             .then(res => {
-                localStorage.setItem('fullname', res.data.fullname);
-                localStorage.setItem('username', res.data.username);
-                localStorage.setItem('bio', res.data.bio);
+                sessionStorage.setItem('fullname', res.data.fullname);
+                sessionStorage.setItem('username', res.data.username);
+                sessionStorage.setItem('bio', res.data.bio);
                 let date = new Date(res.data.datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 // let y = months[date.getMonth()];
-                let finalDate = months[date.getMonth()] + " " + date.getFullYear();
-                localStorage.setItem('datejoined', finalDate);
+                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
+                sessionStorage.setItem('datejoined', finalDate);
                 displayData();
             })
             .catch(err => {
-                localStorage.clear();
+                sessionStorage.clear();
                 window.location.replace("/");
 
             });
@@ -56,8 +56,8 @@ export default function Header() {
     }, []);
 
     function displayData() {
-        setFullname(localStorage.getItem('fullname'));
-        setUsername(localStorage.getItem('username'));
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
     }
 
     const UserModal = () => {
@@ -75,7 +75,7 @@ export default function Header() {
     const Logout = () => {  //logout function
         axios.get("/logout")
             .then((res) => {
-                localStorage.clear();
+                sessionStorage.clear();
                 window.location.replace("/");
             });
     }
@@ -200,7 +200,7 @@ export default function Header() {
                         <div className="modal-view">
                             <div className="modal-header">
                                 <button className="" onClick={tweetToggle}>
-                                    <svg viewBox="0 0 24 24" className="icon ">
+                                    <svg viewBox="0 0 24 24" className="back-button ">
                                         <g>
                                             <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
                                             </path>
@@ -275,7 +275,7 @@ export default function Header() {
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
-                <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
