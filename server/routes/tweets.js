@@ -22,31 +22,33 @@ router.get("/user/:userid", (req, res, next) => {
 /* GET SINGLE TWEET! */
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
+    const userid = req.session.user.id || null;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
-    //ABOVE^: checking if tweetID is valid Mongo ObjectId. if FAIL, abort!!
+    //ABOVE^: verifying if tweetID is valid Mongo ObjectId.
+    // TODO: ALSO CHECK IF LOGGED IN USER LIKED THIS TWEET.💔 (from likes table)
     const agg = [
-      {
-        $match: {
-          _id: new ObjectId(tweetid),
+        {
+            $match: {
+                _id: new ObjectId(tweetid),
+            },
         },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "byUserId",
-          foreignField: "_id",
-          as: "User",
+        {
+            $lookup: {
+                from: "users",
+                localField: "byUserId",
+                foreignField: "_id",
+                as: "User",
+            },
         },
-      },
-      {
-        $project: {
-          "User._id": 0,
-          "User.email": 0,
-          "User.bio": 0,
-          "User.password": 0,
-          "User.datejoined": 0,
+        {
+            $project: {
+                "User._id": 0,
+                "User.email": 0,
+                "User.bio": 0,
+                "User.password": 0,
+                "User.datejoined": 0,
+            },
         },
-      },
     ];
     //connect to DB
     MongoClient.connect(uri, {
@@ -54,9 +56,11 @@ router.get("/:tweetid", (req, res, next) => {
         useNewUrlParser: true,
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
+        const likes = client.db("twitclone").collection("likes");
         try {
             const result = await tweets.aggregate(agg).toArray();
             if (result.length === 0) throw new Error("Tweet Not found");
+            // >>ELSE, here query the `likes` collection with { userid, tweetID } 💔
             res.send(result);
         } catch (error) {
             res.status(404).send({ "message": error.message });
@@ -70,6 +74,7 @@ router.get("/:tweetid", (req, res, next) => {
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
+    let lastTweetID = req.query.tweet || 0; //attached with the consecutive requests
     //retrieve data from db
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
@@ -157,7 +162,7 @@ router.post("/", isLoggedin, (req, res, next) => {
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     const tweetid = req.params.tweetid;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
-    //ABOVE^: checking if tweetID is valid Mongo ObjectId. if FAIL, abort!!
+    //ABOVE^: verifying if tweetID is valid Mongo ObjectId.
 
     MongoClient.connect(uri, {
         useUnifiedTopology: true,

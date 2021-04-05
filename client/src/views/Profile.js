@@ -120,34 +120,34 @@ export default function Profile() {
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
                 [id]: !setLikedTweets[id],
-                // [id]: setDisabled(true)
             }));
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data)
-                    setDisabled(false)
                 })
                 .catch((error) => {
                     console.error(error)
-                })
+                }).finally(()=>{
+                    setDisabled(false)
+                });
 
         } else {
             setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
-                [id]: setLikedTweets[id],
-                // [id]: setDisabled(true)
+                [id]: setLikedTweets[id]
             }));
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data)
-                    setDisabled(false)
                 })
                 .catch((error) => {
                     console.error(error)
-                })
+                }).finally(()=>{
+                    setDisabled(false)
+                });
         }
         // console.log("Liked tweetid", id);
         // console.log(likedTweets);
@@ -169,7 +169,7 @@ export default function Profile() {
 
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
-            <i><span style={{ fontSize: "18px", fontWeight: "bolder" }}>You haven't made any tweets yet</span></i>
+            <i><span style={{ fontSize: "18px", fontWeight: 'bolder' }}>You haven't made any tweets yet</span></i>
         </div>
     }
 

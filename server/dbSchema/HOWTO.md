@@ -1,12 +1,13 @@
 ## What are these Files?
-They are called JSON Schema, and they are constructed according to official MongoDB docs, for more see: [https://docs.mongodb.com/manual/core/schema-validation/].
+**IMPORTANT NOTE:** These files are constructed according to official MongoDB docs, for more info see: [https://docs.mongodb.com/manual/core/schema-validation/]. Also, they are NOT an excuse to skip doing _data validation_ on application level (both Server and Client side). They simply add an EXTRA layer of security at database level.
 
-ANY SINGLE one of the files define 2 things:  **Data Schema** as well as **Validation Rules** for each ``Collection`` in your MongoDb Database. They enforce data structure & integrity at **DATABASE LEVEL** during inserting and updating, *independent of the application* used (i.e, they can work for JAVA, PHP, Node, C# apps and any app that can interact with MongoDB.) 
+
+ANY SINGLE one of the files define 2 things:  **Data Schema** as well as **Validation Rules** for each corresponding ``Collection`` in your MongoDb Database. They enforce data structure & integrity at **DATABASE LEVEL** during inserting and updating, *independent of the application* used (i.e, they can work for JAVA, PHP, Node, C# applications, etc.) 
 
 ## How to use them.
-Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED DIRECTLY IN YOUR APP SOURCE CODE (LIKE MONGOOSE). THEY ARE SPECIFICALLY MEANT for MONGODb Compass. Or, simply they can be used as _reference_ during your app development.
+Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED DIRECTLY IN YOUR APP SOURCE CODE (LIKE Mongoose). THEY ARE SPECIFICALLY MEANT for MONGODb Compass (or CLI). They can also be used as _reference_ during your app development.
 
-- First, download the free [MongoDB Compass](https://www.mongodb.com/products/compass) (available for Mac, Linux and Windows).
+- First, download the free [MongoDB Compass](https://www.mongodb.com/products/compass) (available for Mac, Linux and Windows). Its' a GUI app for MongoDB.
 - Install it and then connect to your existing **database** (or create New one). Then follow these steps:
 
 1. Create a **collection**. Lets start with `users`, for example.
