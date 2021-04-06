@@ -36,13 +36,36 @@ export default function Header() {
 
     useEffect(() => {
 
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
+        function fetchData() {
+            axios.get("/profile/mine")
+                .then(res => {
+                    setIsLoggedIn(true);
+                    setFullname(res.data.fullname);
+                    setUsername(res.data.username);
+                    sessionStorage.setItem('fullname', res.data.fullname);
+                    sessionStorage.setItem('username', res.data.username);
+                    sessionStorage.setItem('bio', res.data.bio);
+                    let date = new Date(res.data.datejoined);
+                    let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+                    // let y = months[date.getMonth()];
+                    let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
+                    sessionStorage.setItem('datejoined', finalDate);
 
-        axios.get("/statuslogin")
-            .then((res) => {
-                setIsLoggedIn(res.data.loggedin)
-            });
+                }).catch(err => {
+                    if (err.response.status === 401) {
+                        setIsLoggedIn(false);
+                        sessionStorage.clear();
+                    }
+                });
+        }
+
+        if (sessionStorage.length > 3) {
+            //no need to fetch again.
+            setFullname(sessionStorage.getItem('fullname'));
+            setUsername(sessionStorage.getItem('username'));
+            setIsLoggedIn(true);
+        } else fetchData();
 
     }, []);
 
@@ -277,7 +300,7 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title">Home</p>
+                        <p className="header-title" style={{ fontWeight: "700" }}>Home</p>
                     </div>
                 </Link>
 
@@ -290,7 +313,7 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title">Explore</p>
+                        <p className="header-title" style={{ fontWeight: "700" }}>Explore</p>
                     </div>
                 </div>
 
@@ -304,7 +327,7 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title">Messages</p>
+                            <p className="header-title" style={{ fontWeight: "700" }}>Messages</p>
                         </div>
                     </div>
                     : null}
@@ -319,7 +342,7 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title">Profile</p>
+                            <p className="header-title" style={{ fontWeight: "700" }}>Profile</p>
                         </div>
                     </Link>
                     : null}
@@ -337,7 +360,7 @@ export default function Header() {
 
                             </svg>
                         </div>
-                        <p className="header-title">More</p>
+                        <p className="header-title" style={{ fontWeight: "700" }}>More</p>
                     </div>
                 </div>
 
