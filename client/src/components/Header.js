@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
-import OutsideClick from './OutsideClick.js'
+import OutsideClick from './OutsideClick'
 import { Link } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
@@ -21,7 +21,9 @@ export default function Header() {
 
     const [tweetErr, setTweetErr] = useState({})
 
-    let tweetRef = useRef(" "); // this is to prevent the modal from refreshing when a user types something
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
@@ -34,31 +36,17 @@ export default function Header() {
 
     useEffect(() => {
 
-        axios.get("/profile/mine")
-            .then(res => {
-                sessionStorage.setItem('fullname', res.data.fullname);
-                sessionStorage.setItem('username', res.data.username);
-                sessionStorage.setItem('bio', res.data.bio);
-                let date = new Date(res.data.datejoined);
-                let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-                // let y = months[date.getMonth()];
-                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
-                sessionStorage.setItem('datejoined', finalDate);
-                displayData();
-            })
-            .catch(err => {
-                sessionStorage.clear();
-                window.location.replace("/");
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
 
+        axios.get("/statuslogin")
+            .then((res) => {
+                setIsLoggedIn(res.data.loggedin)
             });
 
     }, []);
 
-    function displayData() {
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
-    }
+
 
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1">
@@ -167,12 +155,11 @@ export default function Header() {
         return isValid;
     }
 
-    const ref = useRef();   //clicking outside closes modal
 
-    OutsideClick(ref, () => {
-        tweetToggle()
-        // setTweetErr(false)
-    });
+    // OutsideClick(tweetRef, () => {
+    //     tweetToggle()
+    //     // setTweetErr(false)
+    // });
 
     const TweetLoading = () => {    //loader after tweet has been sent
         return <div className="d-flex justify-content-center">
@@ -192,8 +179,7 @@ export default function Header() {
 
 
     const TweetModal = () => {
-        return <div ref={tweetRef}>
-            {/* ref={ref} */}
+        return <div >
             <div className="modal-wrapper" >
                 <div className="tweettest  modal-enter" >
                     <div className="">
@@ -209,7 +195,8 @@ export default function Header() {
                                 </button>
                             </div>
 
-                            <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
+                            <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
+
 
                             <div className="modal-body row">
                                 <div className="col-1">
@@ -267,9 +254,14 @@ export default function Header() {
 
     const path = window.location.pathname; //for current location
 
+    const ref = useRef();   //clicking outside closes modal
+
+    OutsideClick(ref, () => {
+        setUserModal(false)
+    });
 
     return (
-        <header className=" header pt-3" onLoad={displayData} >
+        <header className=" header pt-3">
             {tweetModal ? <TweetModal /> : null}
             {tweetLoading ? <TweetLoading /> : null}
             {/* col-sm-2 */}
@@ -302,31 +294,35 @@ export default function Header() {
                     </div>
                 </div>
 
-                <div className="d-flex header-link">
-                    <div className=" d-flex pl-2 mt-2">
-                        <div>
-                            <svg viewBox="0 0 26 26" className="icon mr-2">
-                                <g>
-                                    <path d="M19.25 3.018H4.75C3.233 3.018 2 4.252 2 5.77v12.495c0 1.518 1.233 2.753 2.75 2.753h14.5c1.517 0 2.75-1.235 2.75-2.753V5.77c0-1.518-1.233-2.752-2.75-2.752zm-14.5 1.5h14.5c.69 0 1.25.56 1.25 1.25v.714l-8.05 5.367c-.273.18-.626.182-.9-.002L3.5 6.482v-.714c0-.69.56-1.25 1.25-1.25zm14.5 14.998H4.75c-.69 0-1.25-.56-1.25-1.25V8.24l7.24 4.83c.383.256.822.384 1.26.384.44 0 .877-.128 1.26-.383l7.24-4.83v10.022c0 .69-.56 1.25-1.25 1.25z"></path>
-                                </g>
-                            </svg>
+                {isLoggedIn ?
+                    <div className="d-flex header-link">
+                        <div className=" d-flex pl-2 mt-2">
+                            <div>
+                                <svg viewBox="0 0 26 26" className="icon mr-2">
+                                    <g>
+                                        <path d="M19.25 3.018H4.75C3.233 3.018 2 4.252 2 5.77v12.495c0 1.518 1.233 2.753 2.75 2.753h14.5c1.517 0 2.75-1.235 2.75-2.753V5.77c0-1.518-1.233-2.752-2.75-2.752zm-14.5 1.5h14.5c.69 0 1.25.56 1.25 1.25v.714l-8.05 5.367c-.273.18-.626.182-.9-.002L3.5 6.482v-.714c0-.69.56-1.25 1.25-1.25zm14.5 14.998H4.75c-.69 0-1.25-.56-1.25-1.25V8.24l7.24 4.83c.383.256.822.384 1.26.384.44 0 .877-.128 1.26-.383l7.24-4.83v10.022c0 .69-.56 1.25-1.25 1.25z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <p className="header-title">Messages</p>
                         </div>
-                        <p className="header-title">Messages</p>
                     </div>
-                </div>
+                    : null}
 
-                <Link className={path === '/myprofile' || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to="/myprofile">
-                    <div className=" d-flex pl-2 mt-2" >
-                        <div>
-                            <svg viewBox="0 0 26 26" className="icon mr-2">
-                                <g>
-                                    <path d="M12 11.816c1.355 0 2.872-.15 3.84-1.256.814-.93 1.078-2.368.806-4.392-.38-2.825-2.117-4.512-4.646-4.512S7.734 3.343 7.354 6.17c-.272 2.022-.008 3.46.806 4.39.968 1.107 2.485 1.256 3.84 1.256zM8.84 6.368c.162-1.2.787-3.212 3.16-3.212s2.998 2.013 3.16 3.212c.207 1.55.057 2.627-.45 3.205-.455.52-1.266.743-2.71.743s-2.255-.223-2.71-.743c-.507-.578-.657-1.656-.45-3.205zm11.44 12.868c-.877-3.526-4.282-5.99-8.28-5.99s-7.403 2.464-8.28 5.99c-.172.692-.028 1.4.395 1.94.408.52 1.04.82 1.733.82h12.304c.693 0 1.325-.3 1.733-.82.424-.54.567-1.247.394-1.94zm-1.576 1.016c-.126.16-.316.246-.552.246H5.848c-.235 0-.426-.085-.552-.246-.137-.174-.18-.412-.12-.654.71-2.855 3.517-4.85 6.824-4.85s6.114 1.994 6.824 4.85c.06.242.017.48-.12.654z"></path>
-                                </g>
-                            </svg>
+                {isLoggedIn ?
+                    <Link className={path === '/myprofile' || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to="/myprofile">
+                        <div className=" d-flex pl-2 mt-2" >
+                            <div>
+                                <svg viewBox="0 0 26 26" className="icon mr-2">
+                                    <g>
+                                        <path d="M12 11.816c1.355 0 2.872-.15 3.84-1.256.814-.93 1.078-2.368.806-4.392-.38-2.825-2.117-4.512-4.646-4.512S7.734 3.343 7.354 6.17c-.272 2.022-.008 3.46.806 4.39.968 1.107 2.485 1.256 3.84 1.256zM8.84 6.368c.162-1.2.787-3.212 3.16-3.212s2.998 2.013 3.16 3.212c.207 1.55.057 2.627-.45 3.205-.455.52-1.266.743-2.71.743s-2.255-.223-2.71-.743c-.507-.578-.657-1.656-.45-3.205zm11.44 12.868c-.877-3.526-4.282-5.99-8.28-5.99s-7.403 2.464-8.28 5.99c-.172.692-.028 1.4.395 1.94.408.52 1.04.82 1.733.82h12.304c.693 0 1.325-.3 1.733-.82.424-.54.567-1.247.394-1.94zm-1.576 1.016c-.126.16-.316.246-.552.246H5.848c-.235 0-.426-.085-.552-.246-.137-.174-.18-.412-.12-.654.71-2.855 3.517-4.85 6.824-4.85s6.114 1.994 6.824 4.85c.06.242.017.48-.12.654z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <p className="header-title">Profile</p>
                         </div>
-                        <p className="header-title">Profile</p>
-                    </div>
-                </Link>
+                    </Link>
+                    : null}
 
                 <div className="d-flex more header-link">
                     <div className=" d-flex pl-2 mt-2">
@@ -345,36 +341,41 @@ export default function Header() {
                     </div>
                 </div>
 
-                <div className="d-flex tweet-btn">
-                    <div className=" d-flex pl-2">
-                        <div>
-                            <div
-                                // to="/compose"
-                                className="btn login-submit btn-primary rounded-pill mt-3 "
-                                style={{ width: "140px" }}
-                                onClick={tweetToggle}
+                {isLoggedIn ?
+                    <div className="d-flex tweet-btn">
+                        <div className=" d-flex pl-2">
+                            <div>
+                                <div
+                                    // to="/compose"
+                                    className="btn login-submit btn-primary rounded-pill mt-3 "
+                                    style={{ width: "140px" }}
+                                    onClick={tweetToggle}
 
-                            >
-                                Tweet
+                                >
+                                    Tweet
                         </div>
-                        </div>
-                    </div>
-                </div>
-
-                {userModal ? <UserModal /> : null}
-
-
-                <button className="user-data d-flex row " onClick={userToggle}>
-                    <img src={icon} alt="example" className="user-data-img" />
-
-                    <div className="col">
-                        {fullname}
-                        <div>
-                            <span>@{username}</span>
+                            </div>
                         </div>
                     </div>
+                    : null}
 
-                </button>
+
+
+                {isLoggedIn ?
+
+                    <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
+                        {userModal ? <UserModal /> : null}
+                        <img src={icon} alt="example" className="user-data-img" />
+
+                        <div className="col">
+                            {fullname}
+                            <div>
+                                <span>@{username}</span>
+                            </div>
+                        </div>
+
+                    </button>
+                    : null}
 
 
             </div>

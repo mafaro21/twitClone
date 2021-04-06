@@ -3,6 +3,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import axios from "axios";
 import Loader from "react-loader-spinner";
+import { Link } from 'react-router-dom';
 
 
 function Sidebar() {
@@ -11,31 +12,38 @@ function Sidebar() {
 
     const [loading, setLoading] = useState(false)
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
     const newsRef = useRef(false);
 
-    // useEffect(() => {
-    //     setLoading(true)
+    useEffect(() => {
+        // setLoading(true)
 
-    //     const options = {
-    //         method: 'GET',
-    //         url: 'https://newsapi.org/v2/top-headlines',
-    //         params: {
-    //             category: 'general',
-    //             pageSize: 6,
-    //             country: 'us',
-    //             apiKey: process.env.REACT_APP_NEWS_API_KEY
-    //         }
-    //     };
+        // const options = {
+        //     method: 'GET',
+        //     url: 'https://newsapi.org/v2/top-headlines',
+        //     params: {
+        //         category: 'general',
+        //         pageSize: 6,
+        //         country: 'us',
+        //         apiKey: process.env.REACT_APP_NEWS_API_KEY
+        //     }
+        // };
 
-    //     axios.request(options).then(function (res) {
-    //         console.log(res.data)
-    //         setApi(res.data)
-    //         setLoading(false);
-    //     }).catch(function (error) {
-    //         console.error(error);
-    //     });
+        // axios.request(options).then(function (res) {
+        //     console.log(res.data)
+        //     setApi(res.data)
+        //     setLoading(false);
+        // }).catch(function (error) {
+        //     console.error(error);
+        // });
 
-    // }, []);
+        axios.get("/statuslogin")
+            .then((res) => {
+                setIsLoggedIn(res.data.loggedin)
+            });
+
+    }, []);
 
 
     const Loading = () => {        //the loading div
@@ -58,21 +66,38 @@ function Sidebar() {
                 <h5>Trending Topics</h5>
                 <p>Trending</p>
             </div>
-            <div className="p-1 mt-4 sidebar" >
-                <h5 className="view p-3">Top Headlines</h5>
-                <ul className="col" >
-                    {loading ? <Loading /> : null}
-                    {api.articles.map(item => (
-                        <li key={item.url} >
-                            <a href={item.url} target="_blank" rel="noreferrer" className="row view">
-                                <img src={item.urlToImage} className="col-5 api-image row " alt="news" />
-                                <p className="col api-text">{item.title} </p>
-                            </a>
 
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {!isLoggedIn ?
+
+                <div div className="mt-4 p-3 sidebar">
+                    <h5 style={{ fontWeight: "700" }}>First Time on TwitClone?</h5>
+                    <p>Sign in Today To Access More Features!!</p>
+
+                    <Link to="/signup" className="d-flex justify-content-center">
+                        <button className="btn login-submit btn-secondary rounded-pill"
+                            style={{ width: "90%", fontSize: "20px", fontWeight: "700", color: "white" }}>
+                            Sign Up
+                        </button>
+                    </Link>
+
+                </div>
+                :
+                <div className="p-1 mt-4 sidebar" >
+                    <h5 className="view p-3">Top Headlines</h5>
+                    <ul className="col" >
+                        {loading ? <Loading /> : null}
+                        {api.articles.map(item => (
+                            <li key={item.url} >
+                                <a href={item.url} target="_blank" rel="noreferrer" className="row view">
+                                    <img src={item.urlToImage} className="col-5 api-image row " alt="news" />
+                                    <p className="col api-text">{item.title} </p>
+                                </a>
+
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            }
             <div className="p-3 mt-4 sticky ">
                 <div className="footer row">
                     <div className="col">
@@ -86,7 +111,7 @@ function Sidebar() {
             </div>
 
 
-        </div>
+        </div >
     );
 }
 
