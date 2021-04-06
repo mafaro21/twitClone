@@ -1,5 +1,6 @@
-- likes working, button disables when request is being sent
-- session storage
+- bottom left logout
+- users can browse while logged out
+- 
 
 
 

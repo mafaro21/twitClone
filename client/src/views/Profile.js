@@ -21,7 +21,6 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import ReactTimeAgo from 'react-time-ago'
-// import { Redirect } from 'react-router-dom';
 
 export default function Profile() {
 
@@ -61,17 +60,36 @@ export default function Profile() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
-        setBio(sessionStorage.getItem('bio'));
-        setDatejoined(sessionStorage.getItem('datejoined'));
-        document.title = "TwitClone: @" + sessionStorage.getItem('username'); //change DOCTITLE according to username.
-        setLoading(false);
+
+
+        axios.get("/profile/mine")
+            .then(res => {
+                sessionStorage.setItem('fullname', res.data.fullname);
+                sessionStorage.setItem('username', res.data.username);
+                // sessionStorage.setItem('bio', res.data.bio);
+                let date = new Date(res.data.datejoined);
+                let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+                // let y = months[date.getMonth()];
+                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
+                sessionStorage.setItem('datejoined', finalDate);
+                displayData();
+                console.log(res.data)
+                setBio(res.data.bio)
+            })
+            .catch(err => {
+                sessionStorage.clear();
+                window.location.replace("/");
+
+            });
+
+
 
         axios.get("/tweets/mine/all")
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
+                console.log(res.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -87,6 +105,11 @@ export default function Profile() {
 
     }, []); //tweets <-- this works but modal keeps refreshing
 
+    function displayData() {
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
+
+    }
 
     const Loading = () => {        //the loading div
 
@@ -100,7 +123,7 @@ export default function Profile() {
         </div>
     }
 
-    const Logout = () => {  //logout function
+    const Logout = () => {          //logout function
         axios.get("/logout")
             .then((res) => {
                 sessionStorage.clear();
@@ -187,17 +210,24 @@ export default function Profile() {
         }
     }
 
+    const ref = useRef();   //clicking outside closes modal
+
+    OutsideClick(ref, () => {
+        // setDots(!dots)
+        console.log("yep cock")
+    });
+
     const DotsModal = () => {       //three dots basically 'more'
-        return <div className="dots-wrapper" >
-            <div className="dots " ref={ref}>
+        return <div className="dots-wrapper" ref={ref}>
+            <div className="dots " >
                 <button className="p-3 dots-delete " onClick={handleDelete}>
                     <div className="dots-button"><FontAwesomeIcon icon={faTrashAlt} /> Delete</div>
                 </button>
                 <button className="p-3 dots-delete ">
-                    <div className="dots-button" onClick={window.scrollTo(0, 100)}>THIS DOES NOTHING </div>
+                    <div className="dots-button" >THIS DOES NOTHING </div>
                 </button>
             </div>
-        </div>
+        </div >
     }
 
 
@@ -303,16 +333,14 @@ export default function Profile() {
         </div >
     };
 
-    const ref = useRef();   //clicking outside closes modal
 
-    OutsideClick(ref, () => {
-        // setDots()
-    });
 
-    TimeAgo.addLocale(en)
+    const path = window.location.pathname;
+
+    TimeAgo.addLocale(en)   //for the time ago
 
     return (
-        <div className="general">
+        <div className="general" onLoad={displayData} >
             <div className="container App " >
                 <div className="row " >
 
@@ -320,7 +348,7 @@ export default function Profile() {
                     {commentModal ? <CommentModal /> : null}
 
                     <div className="col main-view  phone-home w-100 " >
-                        {loading ? <Loading /> : null}
+                        {/* {loading ? <Loading /> : null} */}
                         <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
 
                             <div className="p-2  col row ">
@@ -374,15 +402,18 @@ export default function Profile() {
                                 </div>
 
                                 <div className="p-2 col">
-                                    <div className="banner-right">
-                                        <button
-                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill"
-                                            type="submit"
-                                            onClick={Logout}
-                                        >
-                                            Logout
+
+                                    {path === '/myprofile' ? null :     //follow button
+                                        <div className="banner-right">
+                                            <button
+                                                className="btn login-submit banner-edit btn-outline-primary rounded-pill"
+                                                type="submit"
+                                            >
+                                                Follow
                                         </button>
-                                    </div>
+                                        </div>
+                                    }
+
                                     <strong>{fullname}</strong>
                                     <p><span>@{username}</span></p>
 
@@ -451,6 +482,7 @@ export default function Profile() {
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
                                             {dots[item._id] ? <DotsModal /> : null}
+                                            {dotsModal ? <DotsModal /> : null}
                                             <span className="three-dots" onClick={() => Dots(item._id)}>
                                                 {/* ··· */}
                                                 <svg viewBox="0 0 24 24" className="post-menu">

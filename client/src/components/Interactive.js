@@ -11,12 +11,16 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 export default function Interactive() {
 
     const [isLiked, setisLiked] = useState(false);
+    const [count, setCount] = useState(0)
 
     const handleLike = () => {  //for liking and unliking posts
         if (!isLiked) {
             setisLiked(true)
+            setCount(count + 1)
         } else {
             setisLiked(false)
+            setCount("fuck off ")
+
         }
     }
 
@@ -39,7 +43,7 @@ export default function Interactive() {
                 {isLiked ? (
                     <FontAwesomeIcon icon={heartSolid} className="text-danger" />
                 ) : <FontAwesomeIcon icon={faHeart} />}
-                    &nbsp; 302k
+                    &nbsp; {count}
             </button>
         </div>
     );
