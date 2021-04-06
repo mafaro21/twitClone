@@ -193,7 +193,14 @@ function Login() {
 
                     <h4 className="animate-enter login-text mt-5">Join TwitClone Today...</h4>
 
-                    <Link to="/signup" ><input value="Sign Up" className="btn login-submit btn-outline-primary rounded-pill mt-1" /></Link>
+                    <Link to="/signup" >
+                        <input
+                            value="Sign Up"
+                            className="btn login-submit btn-outline-primary rounded-pill mt-1"
+                            disabled={disabled}         //button disabler
+
+                        />
+                    </Link>
 
 
 

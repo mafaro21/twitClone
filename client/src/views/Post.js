@@ -212,7 +212,7 @@ export default function Post() {
 
                                         <div className="interact-row d-flex mt-3">
                                             <button className="comment col">
-                                                <FontAwesomeIcon icon={faComment} size="2x" />
+                                                <FontAwesomeIcon icon={faComment} size="lg" />
                                             </button>
 
                                             <button
@@ -221,8 +221,8 @@ export default function Post() {
                                                 disabled={disabled}
                                             >
                                                 {isLiked ? (
-                                                    <FontAwesomeIcon icon={heartSolid} size="2x" className="text-danger" />
-                                                ) : <FontAwesomeIcon icon={faHeart} size="2x" />}
+                                                    <FontAwesomeIcon icon={heartSolid} size="lg" className="text-danger" />
+                                                ) : <FontAwesomeIcon icon={faHeart} size="lg" />}
                                             </button>
                                         </div>
                                     </div>
