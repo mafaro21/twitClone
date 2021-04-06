@@ -60,7 +60,7 @@ router.get("/:tweetid", (req, res, next) => {
         try {
             const result = await tweets.aggregate(agg).toArray();
             if (result.length === 0) throw new Error("Tweet Not found");
-            // >>ELSE, here query the `likes` collection with { userid, tweetID } 💔
+            // >>ELSE, query the `likes` with { userid, tweetID } 💔
             res.send(result);
         } catch (error) {
             res.status(404).send({ "message": error.message });
