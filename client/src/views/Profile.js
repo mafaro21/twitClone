@@ -60,36 +60,16 @@ export default function Profile() {
 
     useEffect(() => {   //fetching data for logged in users
 
-
-
-        axios.get("/profile/mine")
-            .then(res => {
-                sessionStorage.setItem('fullname', res.data.fullname);
-                sessionStorage.setItem('username', res.data.username);
-                // sessionStorage.setItem('bio', res.data.bio);
-                let date = new Date(res.data.datejoined);
-                let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-                // let y = months[date.getMonth()];
-                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
-                sessionStorage.setItem('datejoined', finalDate);
-                displayData();
-                console.log(res.data)
-                setBio(res.data.bio)
-            })
-            .catch(err => {
-                sessionStorage.clear();
-                window.location.replace("/");
-
-            });
-
+        setFullname(sessionStorage.getItem('fullname'));
+        setUsername(sessionStorage.getItem('username'));
+        setDatejoined(sessionStorage.getItem('datejoined'));
+        setBio(sessionStorage.getItem('bio'));
 
 
         axios.get("/tweets/mine/all")
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
-                console.log(res.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -97,19 +77,24 @@ export default function Profile() {
                     internalError();
                 } else if (error.response.status === 404) {
                     setNoTweets(true)
+                } else {
+                    window.location.replace("/");    // <--- not signed in
+                    sessionStorage.clear();
                 }
             }).finally(() => {
                 setTweetLoading(false)
-            })
+            });
 
 
     }, []); //tweets <-- this works but modal keeps refreshing
 
-    function displayData() {
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
+    // function displayData() {
+    //     setFullname(sessionStorage.getItem('fullname'));
+    //     setUsername(sessionStorage.getItem('username'));
+    //     setDatejoined(sessionStorage.getItem('datejoined'));
+    //     setBio(sessionStorage.getItem('bio'));
 
-    }
+    // }
 
     const Loading = () => {        //the loading div
 
@@ -151,7 +136,7 @@ export default function Profile() {
                 })
                 .catch((error) => {
                     console.error(error)
-                }).finally(()=>{
+                }).finally(() => {
                     setDisabled(false)
                 });
 
@@ -168,7 +153,7 @@ export default function Profile() {
                 })
                 .catch((error) => {
                     console.error(error)
-                }).finally(()=>{
+                }).finally(() => {
                     setDisabled(false)
                 });
         }
@@ -340,7 +325,7 @@ export default function Profile() {
     TimeAgo.addLocale(en)   //for the time ago
 
     return (
-        <div className="general" onLoad={displayData} >
+        <div className="general" >
             <div className="container App " >
                 <div className="row " >
 
@@ -414,7 +399,7 @@ export default function Profile() {
                                         </div>
                                     }
 
-                                    <strong>{fullname}</strong>
+                                    <strong style={{ fontWeight: "700" }}>{fullname}</strong>
                                     <p><span>@{username}</span></p>
 
                                     <div>

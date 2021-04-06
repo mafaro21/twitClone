@@ -81,8 +81,9 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         useNewUrlParser: true,
     }).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
+        const query = [{ byUserId: userid }, { _id: { $gt: ObjectId(lastTweetID) } }];
         try {
-            const result = await tweets.find({ byUserId: userid }, { projection: { byUserId: 0 } })
+            const result = await tweets.find({ $and: query }, { projection: { byUserId: 0 } })
                 .sort({ dateposted: -1, byUserId: -1 })
                 .limit(50)
                 .toArray();
