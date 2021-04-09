@@ -38,12 +38,20 @@ function Sidebar() {
         //     console.error(error);
         // });
 
-        axios.get("/statuslogin")
-            .then((res) => {
-                setIsLoggedIn(res.data.loggedin)
-            });
+        function auth() {
+            axios.get("/statuslogin")
+                .then((res) => {
+                    setIsLoggedIn(res.data.loggedin)
+                    console.log(res.data)
+                });
+        }
 
-    }, []);
+        if (sessionStorage.length > 3) {
+            //no need to fetch again.
+            setIsLoggedIn(true);
+        } else auth();
+
+    }, [isLoggedIn]);
 
 
     const Loading = () => {        //the loading div
@@ -67,21 +75,8 @@ function Sidebar() {
                 <p>Trending</p>
             </div>
 
-            {!isLoggedIn ?
+            {isLoggedIn ?
 
-                <div div className="mt-4 p-3 sidebar">
-                    <h5 style={{ fontWeight: "700" }}>First Time on TwitClone?</h5>
-                    <p>Sign up Today To Access More Features!!</p>
-
-                    <Link to="/signup" className="d-flex justify-content-center">
-                        <button className="btn login-submit btn-secondary rounded-pill"
-                            style={{ width: "90%", fontSize: "20px", fontWeight: "700", color: "white"}}>
-                            Sign Up
-                        </button>
-                    </Link>
-
-                </div>
-                :
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: "700" }}>Top Headlines</h5>
                     <ul className="col" >
@@ -96,6 +91,19 @@ function Sidebar() {
                             </li>
                         ))}
                     </ul>
+                </div>
+                :
+                <div div className="mt-4 p-3 sidebar">
+                    <h5 style={{ fontWeight: "700" }}>First Time on TwitClone?</h5>
+                    <p>Sign up Today To Access More Features!!</p>
+
+                    <Link to="/signup" className="d-flex justify-content-center">
+                        <button className="btn login-submit btn-secondary rounded-pill"
+                            style={{ width: "90%", fontSize: "20px", fontWeight: "700", color: "white" }}>
+                            Sign Up
+                        </button>
+                    </Link>
+
                 </div>
             }
             <div className="p-3 mt-4 sticky ">
