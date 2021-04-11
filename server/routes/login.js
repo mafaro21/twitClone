@@ -5,13 +5,14 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
+const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const rateLimit = require("express-rate-limit"); //store it later in REDIS
 
 
 //setup rate limit
 const LoginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 mins window
-    max: 5, // start blocking after 5 requests
+    windowMs: 15 * 60 * 1000, 
+    max: 5,
     skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 15 mins" }
 });
@@ -74,10 +75,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
 
     function operateDB() {
         //continue with LOGIN operations
-        MongoClient.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-        }).then(async (client) => {
+        MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
             const users = client.db("twitclone").collection("users");
             try {
                 const result = await users.findOne({ email: email });
@@ -107,7 +106,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
 /*error handler */
 router.use((err, req, res) => {
     res.sendStatus(500);
-    console.error(err.message);
+    console.error("LOGINeRR", err.message);
 });
 
 module.exports = router;

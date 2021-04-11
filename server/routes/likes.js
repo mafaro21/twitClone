@@ -3,14 +3,42 @@ const { MongoClient, ObjectId } = require("mongodb");
 const isLoggedin = require("../middleware/authchecker");
 const router = express.Router();
 const uri = process.env.MONGO_URL;
+const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
+const rateLimit = require("express-rate-limit"); // store it later in REDIS
 
 
-//ADD rate limiter!! 20hits per minute.
-//block for 5 minutes.
-//==> 100 hits in 5 minute window.
+//setup rate limit
+const LikeLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 100, //==> 100 hits in 5 minute window.
+  message: { "message": "Too many requests, try again in 5 mins" }
+});
+
+
+/* COUNT MY LIKES on A TWEET => 1 or 0 */
+router.get("/me/:tweetid", isLoggedin, (req, res, next) => {
+  const userid = req.session.user.id;
+  const tweetid = req.params.tweetid;
+  if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
+
+  MongoClient.connect(uri, MongoOptions)
+    .then(async (client) => {
+      const likes = client.db("twitclone").collection("likes");
+      try {
+        const myLike = await likes.count({ _id: tweetid, byUserid: userid });
+        res.status(200).send(myLike);
+      } catch (error) {
+        throw error;
+      } finally {
+        await client.close();
+      }
+    }).catch(next);
+
+});
+
 
 /* ADD ❤ LIKE ON A TWEET */
-router.post("/:tweetid", isLoggedin, (req, res, next) => {
+router.post("/:tweetid", isLoggedin, LikeLimiter, (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
@@ -19,38 +47,31 @@ router.post("/:tweetid", isLoggedin, (req, res, next) => {
     tweetid: new ObjectId(tweetid),
     userid: new ObjectId(userid),
     dateliked: new Date()
-  }
+  };
 
-  /* do two operations
-    1. ADD NEW ENTRY to `likes` collection.
-    2. Increment (+) the #Likes in the `tweets` collection (for this tweetid)  
-    */
-
-  MongoClient.connect(uri, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  }).then(async (client) => {
-    const likes = client.db("twitclone").collection("likes");
-    const tweets = client.db("twitclone").collection("tweets");
-    try {
-      const result1 = await likes.insertOne(likesObject);
-      const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: 1 } });
-      if (result1.result.ok === 1 && result2.result.ok === 1)
-        res.status(201).send({ success: true });
-    } catch (error) {
-      if (error.code === 11000) {
-        res.status(409).send({ "message": "Cannot like same tweet twice", "success": false });
-      } else throw error;
-    } finally {
-      await client.close();
-    }
-  }).catch(next);
+  MongoClient.connect(uri, MongoOptions)
+    .then(async (client) => {
+      const likes = client.db("twitclone").collection("likes");
+      const tweets = client.db("twitclone").collection("tweets");
+      try {
+        const result1 = await likes.insertOne(likesObject);
+        const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: 1 } });
+        if (result1.result.ok && result2.result.ok)
+          res.status(201).send({ success: true });
+      } catch (error) {
+        if (error.code === 11000) {
+          res.status(409).send({ "message": "Cannot like same tweet twice", "success": false });
+        } else throw error;
+      } finally {
+        await client.close();
+      }
+    }).catch(next);
 
 });
 
 
-/* REMOVE ❤ LIKE ON A TWEET */
-router.delete("/:tweetid", isLoggedin, (req, res, next) => {
+/* REMOVE 🤍 LIKE ON A TWEET */
+router.delete("/:tweetid", isLoggedin, LikeLimiter, (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
 
@@ -59,29 +80,23 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
   const likesObject = {
     tweetid: new ObjectId(tweetid),
     userid: new ObjectId(userid)
-  }
+  };
 
-  /* do two operations
-    1. REMOVE ENTRY from `likes` collection.
-    2. Decrement (-) the #likes in the `tweets` collection (for this tweetid)  
-    */
-  MongoClient.connect(uri, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  }).then(async (client) => {
-    const likes = client.db("twitclone").collection("likes");
-    const tweets = client.db("twitclone").collection("tweets");
-    try {
-      const result1 = await likes.deleteOne(likesObject);
-      const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: -1 } });
-      if (result1.deletedCount === 1 && result2.modifiedCount === 1)
-        res.status(200).send({ success: true });
-    } catch (error) {
-      throw error;
-    } finally {
-      await client.close();
-    }
-  }).catch(next);
+  MongoClient.connect(uri, MongoOptions)
+    .then(async (client) => {
+      const likes = client.db("twitclone").collection("likes");
+      const tweets = client.db("twitclone").collection("tweets");
+      try {
+        const result1 = await likes.deleteOne(likesObject);
+        const result2 = await tweets.updateOne({ _id: likesObject.tweetid }, { $inc: { likes: -1 } });
+        if (result1.deletedCount === 1 && result2.modifiedCount === 1)
+          res.status(200).send({ success: true });
+      } catch (error) {
+        throw error;
+      } finally {
+        await client.close();
+      }
+    }).catch(next);
 
 });
 

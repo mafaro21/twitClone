@@ -3,6 +3,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const router = express.Router();
+const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 
 //HANDLING TWEETS
 
@@ -24,8 +25,7 @@ router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
     const userid = req.session.user.id || null;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
-    //ABOVE^: verifying if tweetID is valid Mongo ObjectId.
-    // TODO: ALSO CHECK IF LOGGED IN USER LIKED THIS TWEET.💔 (from likes table)
+    //ABOVE^: verifying if tweetID is valid ObjectId.
     const agg = [
         {
             $match: {
@@ -51,39 +51,61 @@ router.get("/:tweetid", (req, res, next) => {
         },
     ];
     //connect to DB
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(async (client) => {
-        const tweets = client.db("twitclone").collection("tweets");
-        const likes = client.db("twitclone").collection("likes");
-        try {
-            const result = await tweets.aggregate(agg).toArray();
-            if (result.length === 0) throw new Error("Tweet Not found");
-            // >>ELSE, query the `likes` with { userid, tweetID } 💔
-            res.send(result);
-        } catch (error) {
-            res.status(404).send({ "message": error.message });
-        } finally {
-            await client.close();
-        }
-    }).catch(next);
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const tweets = client.db("twitclone").collection("tweets");
+            try {
+                const result = await tweets.aggregate(agg).toArray();
+                if (result.length === 0) throw new Error("Tweet Not found");
+                res.send(result);
+            } catch (error) {
+                res.status(404).send({ "message": error.message });
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
 });
 
 
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
-    let lastTweetID = req.query.tweet || 0; //attached with the consecutive requests
+    const lastTweetID = req.query.gt || 0; //attached with the consecutive requests
+    //axios.get(mine/all?gt=x12345)
+    if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(404);
+    const agg = [
+        {
+            $match: {
+                byUserId: new ObjectId(userid),
+                _id: { $gt: new ObjectId(lastTweetID) }
+            }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "byUserId",
+                foreignField: "userid",
+                as: "likedbyme"
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                content: 1,
+                likes: 1,
+                comments: 1,
+                dateposted: 1,
+                isLikedbyMe: {
+                    $in: ["$_id", "$likedbyme.tweetid"]
+                }
+            }
+        }
+    ];
     //retrieve data from db
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(async (client) => {
+    MongoClient.connect(uri, MongoOptions).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
-        const query = [{ byUserId: userid }, { _id: { $gt: ObjectId(lastTweetID) } }];
         try {
-            const result = await tweets.find({ $and: query }, { projection: { byUserId: 0 } })
+            const result = await tweets.aggregate(agg)
                 .sort({ dateposted: -1, byUserId: -1 })
                 .limit(50)
                 .toArray();
@@ -91,6 +113,7 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
             res.send(result);
         } catch (error) {
             res.sendStatus(404);
+            console.error("FETCHmyTWEETS ", error);
         } finally {
             await client.close();
         }
@@ -141,10 +164,7 @@ router.post("/", isLoggedin, (req, res, next) => {
             dateposted: new Date()
         };
 
-        MongoClient.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        }).then(async (client) => {
+        MongoClient.connect(uri, MongoOptions).then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
                 await tweets.insertOne(tweetObject);
@@ -163,12 +183,9 @@ router.post("/", isLoggedin, (req, res, next) => {
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     const tweetid = req.params.tweetid;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
-    //ABOVE^: verifying if tweetID is valid Mongo ObjectId.
+    //ABOVE^: verifying if tweetID is valid ObjectId.
 
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(async (client) => {
+    MongoClient.connect(uri, MongoOptions).then(async (client) => {
         const tweets = client.db("twitclone").collection("tweets");
         try {
             const result = await tweets.deleteOne({ _id: new ObjectId(tweetid) });
