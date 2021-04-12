@@ -173,9 +173,9 @@ ul{
 }
 .tweettest{
   margin-top: 103px;
-  width: 52%;
+  width: 35%;
   transition: all .3s ease-in-out;
-  margin-left: 24%;
+  margin-left: 32%;
   
 }
 .modal-view{
@@ -188,6 +188,15 @@ ul{
   height: 45px;
   border-radius: 50%;
   /* margin-top: 10px; */
+}
+#tweet{
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline: none;
+}
+.tweet-form{
+  margin-top: -22px;
 }
 /* tweetModal */
 

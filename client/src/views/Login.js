@@ -25,15 +25,15 @@ function Login() {
         </div>
         : '';
 
-    
+
 
     const loadCaptcha = useEffect(() => {
         axios.get("/statuslogin")
-        .then((res) => {
-            if (res.data.loggedin) {
-                return window.location.replace("/Home");
-            }
-        });
+            .then((res) => {
+                if (res.data.loggedin) {
+                    return window.location.replace("/Home");
+                }
+            });
 
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
@@ -141,7 +141,7 @@ function Login() {
                 <div className="container mt-5 p-5 login-form">
 
 
-                    <h3>LOGO HERE</h3>
+                    <h3>SIGN IN IF YOU'RE GAY</h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>

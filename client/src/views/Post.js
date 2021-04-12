@@ -26,6 +26,8 @@ export default function Post() {
     const [loading, setLoading] = useState(true);      // loading animation
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
+    const [isLikedbyMe, setIsLikedbyMe] = useState(0)
+
 
     const handleLike = (id) => {  //for liking and unliking posts
 
@@ -104,15 +106,18 @@ export default function Post() {
                 })
 
 
+            axios.get(`/likes/me/${getId}`)
+                .then((res) => {
+                    setIsLikedbyMe(res.data.count)
+                    console.log(res.data.count)
+
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
 
-        // axios.get(`likes/me/${getId}`)
-        //     .then((res) => {
-        //         console.log(res)
-        //     })
-        //     .catch((error) => {
-        //         console.error(error)
-        //     })
+
 
 
 
@@ -238,7 +243,7 @@ export default function Post() {
                                                 onClick={() => handleLike(item._id)}
                                                 disabled={disabled}
                                             >
-                                                {isLiked ? (
+                                                {isLiked || isLikedbyMe === 1 ? (
                                                     <FontAwesomeIcon icon={heartSolid} size="lg" className="text-danger" />
                                                 ) : <FontAwesomeIcon icon={faHeart} size="lg" />}
                                             </button>
