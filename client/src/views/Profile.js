@@ -70,6 +70,7 @@ export default function Profile() {
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
+                console.log(res.data);
             })
             .catch((error) => {
                 console.error(error)
@@ -163,15 +164,15 @@ export default function Profile() {
 
     const handleDelete = () => {
 
-        return alert(tweetId)
+        // return alert(tweetId)
 
-        // axios.delete(`tweets/${tweetId}`)
-        //     .then((res) => {
-        //         console.log(res.data)
-        //     })
-        //     .catch((error) => {
-        //         console.error(error)
-        //     })
+        axios.delete(`tweets/${tweetId}`)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
     }
 
 
@@ -341,10 +342,10 @@ export default function Profile() {
                                     <BackButton />
                                 </div>
                                 <div className="col ">
-                                    <div className="">
-                                        <strong>{fullname}</strong>
+                                    <div >
+                                        <strong className="text">{fullname}</strong>
                                     </div>
-                                    <p><span>{tweetCount} Tweets</span></p>
+                                    <p><span>{tweetCount}  {tweetCount === 1 ? "Tweet" : "Tweets"} </span></p>
                                 </div>
                             </div>
                         </div>
@@ -478,7 +479,7 @@ export default function Profile() {
                                             </span>
                                         </div>
 
-                                        <Link to={`/post/${item._id}`} className="post-link"><p>{item.content}</p></Link>
+                                        <Link to={`/post/${item._id}`} className="post-link "><p>{item.content}</p></Link>
                                     </div>
 
                                     <div className="interact-row d-flex ">
@@ -500,7 +501,7 @@ export default function Profile() {
                                             disabled={disabled}
 
                                         >
-                                            {likedTweets[item._id] ?
+                                            {likedTweets[item._id] || item.isLikedbyMe ?
                                                 (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                 : <FontAwesomeIcon icon={faHeart} />
                                             }

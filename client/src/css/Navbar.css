@@ -6,6 +6,22 @@
   --nav: rgb(47, 47, 43, 1)
 }
 
+html[data-theme="dark"]{
+  --accent: #ff6300;
+  --darkaccent: #b45235;
+  --text: #fbfafa;
+  --background: #080603; 
+}
+
+html[data-theme="light"]{
+  --text: #080603;
+  --background: #fbfafa;
+}
+
+.navbarbg{
+  background-color: var(--background);
+}
+
 .search{
   width:40%;
 }
