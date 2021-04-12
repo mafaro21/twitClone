@@ -11,18 +11,17 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 //setup rate limit
 const RegisterLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 mins window
-    max: 5, // start blocking after 5 requests
+    max: 5, // blocking after 5 FAILED requests
     skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 15 mins" }
 });
 
 
-//FOR REGISTER ONLY::
-
 /* handling GET requests  */
 router.get("/", (req, res, next) => {
     res.send({ "title": " Twitclone Register" });
 });
+
 
 /* handling POST requests */
 router.post("/", RegisterLimiter, (req, res, next) => {
@@ -110,7 +109,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             try {
                 const result = await users.insertOne(userObject);
-                // IF SUCCESSFUL INSERT, create session here.
+                // IF successful, create session here.
                 req.session.user = { id: result.ops[0]._id, email: result.ops[0].email };
                 res.status(201).send({ "success": true });
             } catch (error) {
@@ -124,6 +123,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
     }; // <--end of function
 
 });
+
 
 /*error handler */
 router.use((err, req, res, next) => {
