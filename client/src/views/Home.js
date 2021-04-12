@@ -6,6 +6,7 @@ import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import tobias from '../images/mihai-surdu.jpg';
+
 // import derick from '../images/derick-anies.jpg';
 // import axios from 'axios';
 
@@ -15,12 +16,7 @@ function Home() {
     let username = sessionStorage.getItem('username')
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
-    // useEffect(() => {
-    //     axios.get("/tweets/")
-    //         .then((res) => {
-    //             console.log(res.data)
-    //         })
-    // }, [])
+
 
     return (
         <div className="App general ">

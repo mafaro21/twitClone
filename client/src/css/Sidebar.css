@@ -1,9 +1,17 @@
 /* color schemes */
-:root{
-  --accent: #f29c50;
+html[data-theme="dark"]{
+  --accent: #ff6300;
   --darkaccent: #b45235;
   --text: #fbfafa;
   --background: #080603; 
+  --hover: rgb(242,156,80,0.4);
+  --sidebarbg: #201e1c;
+}
+
+html[data-theme="light"]{
+  --text: #080603;
+  --background: #fbfafa;
+  --sidebarbg: #E3E3E3;
   --hover: rgb(242,156,80,0.4);
 }
 
@@ -29,7 +37,7 @@
 .user-modal{
   z-index: -1;
   position: absolute;
-  box-shadow: 0 0 8px grey;
+  box-shadow: 0 0 9px grey;
   /* border: 1px solid var(--accent); */
   color: white;
   font-size: 19px;
@@ -43,12 +51,16 @@
   /* border: 4px solid red; */
   transition: all .5s ease-in-out;
 }
+.more-modal{
+  z-index: 1;
+  margin-top: -50px;
+}
 
 .sidebar{
   /* border: 0.1px solid var(--text); */
   border-radius: 15px;
   text-align: left;
-  background-color: #201e1c;
+  background-color: var(--sidebarbg);
 }
 
 .sidebar:hover{
@@ -87,7 +99,7 @@ ul{
   color: white;
 }
 .api-text:hover{
-  color:#F29C50;
+  color:var(--accent);
 }
 .api-image{
   height: 80px;
@@ -114,9 +126,10 @@ ul{
 }
 
 .header-link{
-  fill: white;
-  color: white;
+  fill: var(--text);
+  color: var(--text);
   width: auto;
+  cursor: pointer;
 }
 .header-link-active, .icon-active{
   fill: var(--accent);
@@ -138,6 +151,14 @@ ul{
   /* box-shadow: 0 0 8px var(--accent); */
 }
 
+.tweet{
+  display: none;
+}
+.tweet-submit{
+  width: 140px;
+  height: 50px;
+
+}
 
 /* tweetModal */
 
@@ -158,7 +179,7 @@ ul{
   
 }
 .modal-view{
-  background-color: #080603;
+  background-color: var(--background);
   border: 2px solid var(--accent);
   border-radius: 26px;
 }
@@ -177,6 +198,49 @@ ul{
   transition: all .3s ease-in-out;
 }
 
+/* toggle */
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+input[type=checkbox]:focus {
+  outline: 0;
+}
+
+.toggle {
+  height: 32px;
+  width: 52px;
+  border-radius: 16px;
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  border: 2px solid #474755;
+  background: linear-gradient(180deg, #2D2F39 0%, #1F2027 100%);
+  transition: all 0.2s ease;
+}
+.toggle:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
+  transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+}
+.toggle:checked {
+  border-color: #654FEC;
+}
+.toggle:checked:after {
+  transform: translatex(20px);
+}
+/* toggle */
+
 @media screen and (max-width: 500px){   /*phone view*/
   .header-title {
     display: none;
@@ -192,21 +256,19 @@ ul{
     flex-direction: row;
     bottom: 0;
     background-color: var(--background);
-    z-index: 99 !important;
+    z-index: 1 !important;
     width: 100vw !important;
     height: 56px;
-    justify-content: space-evenly;
-    white-space: nowrap;
+    /* justify-content: left; */
+    /* white-space: nowrap; */
+    /* align-items: stretch; */
+    /* margin-top: 20px; */
   }
 
-  .header-link{
-    padding: 7px;
+  .header-link, .header-link-active{
+    padding: 5px;
     width: 100%;
-  }
-
-  .header-link:hover{
-    width: 46px;
-    height: auto;
+    justify-content: center;
   }
 
   .phone-sidebar{
@@ -220,16 +282,26 @@ ul{
     display: none !important;
   }
   .tweet-btn{
-    z-index:-1000;
-    position: absolute;
+    z-index:1;
+    position: fixed;
     margin-top: -72px;
-    margin-left: 62px;
-    border-radius: 50%;
-    width: 10px;
+    margin-left: 75vw;
+    border-radius: 90%;
     
   }
+  .tweet-submit{
+    width: 65px;
+    height: 50px;
+  }
   .tweettest{
-    width:600%;
+    width: 600%;
+  }
+  .tweet-text{
+    display: none;
+  }
+  .tweet{
+    margin-top: 20%;
+    display: inline-block;
   }
 
 }

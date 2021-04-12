@@ -1,9 +1,18 @@
 /* color schemes */
-:root{
-  --accent: #F29C50;
+html[data-theme="dark"]{
+  --accent: #ff6300;
   --darkaccent: #b45235;
   --text: #fbfafa;
   --background: #080603; 
+  --interact: #AEAEAE;
+}/* #F29C50 */
+
+html[data-theme="light"]{
+  --text: #080603;
+  --background: #fbfafa;
+  --darkaccent: #ECD4CC;
+  --interact: #414141;
+
 }
 
 /* mainly home properties */
@@ -79,7 +88,7 @@ strong {
   position: sticky;
   z-index: 1;
   top: 52px;
-  background-color: #080603;
+  background-color: var(--background);
   width: 575px;
   height: 66px;
   border-radius: 15px 15px 0 0;
@@ -90,7 +99,7 @@ strong {
   position: sticky;
   z-index: 1;
   top: 52px;
-  background-color: #080603;
+  background-color: var(--background);
   width: 575px;
   height: 66px;
 }
@@ -132,7 +141,7 @@ strong {
 }
 .banner-msg{
   height:20px;
-  fill: #F29C50;
+  fill: var(--accent);
   border-radius: 50%;
 }
 .banner-msg:hover{
@@ -153,7 +162,7 @@ strong {
 }
 
 button{
-  background-color: #080603;
+  background-color: var(--background);
   border: 0;
 }
 .bio-icon{
@@ -201,8 +210,11 @@ button{
 }
 
 /* interactive row */
+.interact-row{
+  background-color: var(--background);
+}
 .like, .comment, .retweet{
-  color: #AEAEAE;
+  color: var(--interact);
 }
 
 .like:hover{
@@ -227,7 +239,7 @@ button{
 
 /* post */
 .post-div{
-  transition: all 3s ease-in;
+  transition: all 0.5s ease-in;
 }
 .post-data{
   font-size: 18px;
@@ -241,11 +253,11 @@ button{
 }
 .post-link{
   text-decoration: none;
-  color:white;
+  color:var(--text);
 }
 .post-link:hover{
   text-decoration: none;
-  color:white;
+  color:var(--text);
 }
 .post-menu{
   fill: grey;

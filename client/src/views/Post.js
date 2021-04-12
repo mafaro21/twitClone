@@ -57,14 +57,12 @@ export default function Post() {
         }
     }
 
-
-
-
     const ForId = () => {
         // let fetchid = useLocation()
         let idPath = document.location.pathname;
         let finalId = idPath.split("/post/");
         let sendId = finalId[1];
+        console.log(sendId)
         // setId(sendId)
         return sendId;
     }
@@ -104,7 +102,19 @@ export default function Post() {
                 }).finally(() => {
                     setLoading(false);
                 })
+
+
         }
+
+        // axios.get(`likes/me/${getId}`)
+        //     .then((res) => {
+        //         console.log(res)
+        //     })
+        //     .catch((error) => {
+        //         console.error(error)
+        //     })
+
+
 
         setFullname(sessionStorage.getItem('fullname'));
         setUsername(sessionStorage.getItem('username'));
@@ -206,9 +216,17 @@ export default function Post() {
                                             <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                         </div>
 
-                                        <div className="view mt-3">
-                                            <span >{item.comments} comments</span> &nbsp; <span className="col ">{item.likes} likes</span>
-                                        </div>
+                                        {item.comments === 0 && item.likes === 0 ? null :
+                                            <div className="view mt-3">
+                                                <span className={item.comments === 0 ? "show-detail" : null}>   {/*show/ hide whether there are comments or not */}
+                                                    {item.comments} {item.likes === 1 ? "comment" : "comments"}
+                                                </span>
+                                                &nbsp;
+                                            <span className={item.likes === 0 ? "show-detail" : null}>
+                                                    {item.likes} {item.likes === 1 ? "like" : "likes"}      {/*show/ hide the (s) depending on number of likes */}
+                                                </span>
+                                            </div>
+                                        }
 
                                         <div className="interact-row d-flex mt-3">
                                             <button className="comment col">

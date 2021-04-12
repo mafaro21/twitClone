@@ -3,17 +3,17 @@
   "name": "TwitClone",
   "icons": [
     {
-      "src": "favicon1.ico",
+      "src": "favicon0.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "twit192.png",
+      "src": "twitclone192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "twit500.png",
+      "src": "twitclone500.png",
       "type": "image/png",
       "sizes": "512x512"
     }

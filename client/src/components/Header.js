@@ -5,6 +5,10 @@ import OutsideClick from './OutsideClick'
 import { Link } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt'
+
+
 
 export default function Header() {
 
@@ -13,6 +17,9 @@ export default function Header() {
 
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
+
+    const [moreModal, setMoreModal] = useState(false);
+    const moreToggle = () => setMoreModal(!moreModal);
 
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
@@ -35,6 +42,7 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
+    
 
         function fetchData() {
             axios.get("/profile/mine")
@@ -69,7 +77,9 @@ export default function Header() {
 
     }, []);
 
+    
 
+   
 
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1">
@@ -82,6 +92,26 @@ export default function Header() {
             </button>
         </div >
     }
+
+
+
+    const MoreModal = () => {
+        return <div className="user-modal modal-enter more-modal mr-1">
+            <button
+                className="text p-2 user-modal-btn "
+                type="submit"
+                
+            >
+                Change Theme
+                  
+            </button>
+
+
+        </div >
+    }
+
+    
+
 
     const Logout = () => {  //logout function
         axios.get("/logout")
@@ -180,8 +210,8 @@ export default function Header() {
 
 
     // OutsideClick(tweetRef, () => {
-    //     tweetToggle()
-    //     // setTweetErr(false)
+    //     setMoreModal(false)
+
     // });
 
     const TweetLoading = () => {    //loader after tweet has been sent
@@ -281,6 +311,8 @@ export default function Header() {
 
     OutsideClick(ref, () => {
         setUserModal(false)
+        // setMoreModal(false)
+
     });
 
     return (
@@ -300,11 +332,11 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title" style={{ fontWeight: "700" }}>Home</p>
+                        <p className="header-title " style={{ fontWeight: "700" }}>Home</p>
                     </div>
                 </Link>
 
-                <div className="d-flex header-link">
+                <Link to="#" className="d-flex header-link">
                     <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -313,12 +345,12 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title" style={{ fontWeight: "700" }}>Explore</p>
+                        <p className="header-title " style={{ fontWeight: "700" }}>Explore</p>
                     </div>
-                </div>
+                </Link>
 
                 {isLoggedIn ?
-                    <div className="d-flex header-link">
+                    <Link to="#" className="d-flex header-link">
                         <div className=" d-flex pl-2 mt-2">
                             <div>
                                 <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -327,9 +359,9 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title" style={{ fontWeight: "700" }}>Messages</p>
+                            <p className="header-title " style={{ fontWeight: "700" }}>Messages</p>
                         </div>
-                    </div>
+                    </Link>
                     : null}
 
                 {isLoggedIn ?
@@ -342,12 +374,12 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title" style={{ fontWeight: "700" }}>Profile</p>
+                            <p className="header-title " style={{ fontWeight: "700" }}>Profile</p>
                         </div>
                     </Link>
                     : null}
 
-                <div className="d-flex more header-link">
+                <Link to="#" className="d-flex more header-link">
                     <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -360,22 +392,32 @@ export default function Header() {
 
                             </svg>
                         </div>
-                        <p className="header-title" style={{ fontWeight: "700" }}>More</p>
+                        <p className="header-title "
+                            style={{ fontWeight: "700" }}
+                            onClick={moreToggle}
+                            ref={tweetRef}
+                        >
+                            More
+                            </p>
                     </div>
-                </div>
+                </Link>
+
+                {moreModal ? <MoreModal /> : null}
 
                 {isLoggedIn ?
                     <div className="d-flex tweet-btn">
                         <div className=" d-flex pl-2">
                             <div>
+
                                 <div
                                     // to="/compose"
-                                    className="btn login-submit btn-primary rounded-pill mt-3 "
-                                    style={{ width: "140px" }}
+                                    className="btn tweet-submit btn-primary rounded-pill mt-3 "
                                     onClick={tweetToggle}
 
                                 >
-                                    Tweet
+                                    <div className="tweet-text">Tweet</div>
+                                <FontAwesomeIcon icon={faFeatherAlt} className="tweet"/>
+
                         </div>
                             </div>
                         </div>
@@ -391,7 +433,7 @@ export default function Header() {
                         <img src={icon} alt="example" className="user-data-img" />
 
                         <div className="col">
-                            {fullname}
+                            <div className="text">{fullname}</div>
                             <div>
                                 <span>@{username}</span>
                             </div>
