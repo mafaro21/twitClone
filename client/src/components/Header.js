@@ -251,14 +251,14 @@ export default function Header() {
                             <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
 
 
-                            <div className="modal-body row">
+                            <div className="modal-body row ">
                                 <div className="col-1">
                                     <img src={icon} alt="example" className="user-tweet-img" />
                                 </div>
 
-                                <form id="tweetForm" className="signup col" onSubmit={(e) => handleSubmit(e)} >
+                                <form id="tweetForm" className="signup col tweet-form" onSubmit={(e) => handleSubmit(e)} >
 
-                                    <div >
+                                    <div className="view">
                                         <textarea
 
                                             id="tweet"
@@ -269,30 +269,34 @@ export default function Header() {
                                             onChange={wordCount}
                                             className=" edit-input "
                                             maxLength="280"
-                                            rows="7"
+                                            rows="5"
                                             placeholder="Any Hot Takes?"
                                             required
                                         />
 
-                                        <div className="container counter">
-                                            {/* {count}/280 */}
-                                            <span id="show">0</span><span>/280</span>
-                                        </div>
+                                        
                                         {Object.keys(tweetErr).map((key) => {
                                             return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
                                         })}
                                     </div>
 
+                                    <div className="d-flex flex-row mt-1">
+                                        <div className="container ">
+                                            {/* {count}/280 */}
+                                            <span id="show">0</span><span>/280</span>
+                                        </div>
 
-                                    <button
-                                        id="submit-btn"
-                                        className="btn login-submit btn-outline-primary rounded-pill mt-3"
-                                        type="submit"
-                                    // onClick={handleSubmit}
-                                    // disabled={disabled}       //button disabler
-                                    >
-                                        Tweet
+                                        <button
+                                            id="submit-btn"
+                                            className="btn login-submit btn-outline-primary rounded-pill   "
+                                            type="submit"
+                                        // onClick={handleSubmit}
+                                        // disabled={disabled}       //button disabler
+                                        >
+                                            Tweet
                                     </button>
+                                    </div>
+                                        
                                 </form>
                             </div>
                             {/* <div class="modal-footer">
@@ -415,7 +419,12 @@ export default function Header() {
                                     onClick={tweetToggle}
 
                                 >
-                                    <div className="tweet-text">Tweet</div>
+                                    <div
+                                        className="tweet-text"
+                                        style={{ fontWeight: "700" }}
+                                    >
+                                        Tweet
+                                    </div>
                                 <FontAwesomeIcon icon={faFeatherAlt} className="tweet"/>
 
                         </div>

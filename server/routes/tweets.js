@@ -23,7 +23,6 @@ router.get("/user/:userid", (req, res, next) => {
 /* GET SINGLE TWEET! */
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
-    const userid = req.session.user.id || null;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
     //ABOVE^: verifying if tweetID is valid ObjectId.
     const agg = [

@@ -70,7 +70,7 @@ export default function Profile() {
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
-                console.log(res.data);
+                // console.log(res.data);
             })
             .catch((error) => {
                 console.error(error)
