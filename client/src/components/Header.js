@@ -192,7 +192,7 @@ export default function Header() {
     //validation check
     const tweetValidation = (twt) => {
         const tweetErr = {};
-        let tweetReg = /[<>]+/gi;
+        let tweetReg = /[<>]+/;
         let isValid = true;
 
         if (tweetReg.test(twt)) {
@@ -336,7 +336,7 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title " style={{ fontWeight: "700" }}>Home</p>
+                        <p className="header-title " style={{ fontWeight: 700 }}>Home</p>
                     </div>
                 </Link>
 
@@ -349,7 +349,7 @@ export default function Header() {
                                 </g>
                             </svg>
                         </div>
-                        <p className="header-title " style={{ fontWeight: "700" }}>Explore</p>
+                        <p className="header-title " style={{ fontWeight: 700 }}>Explore</p>
                     </div>
                 </Link>
 
@@ -363,7 +363,7 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title " style={{ fontWeight: "700" }}>Messages</p>
+                            <p className="header-title " style={{ fontWeight: 700 }}>Messages</p>
                         </div>
                     </Link>
                     : null}
@@ -378,7 +378,7 @@ export default function Header() {
                                     </g>
                                 </svg>
                             </div>
-                            <p className="header-title " style={{ fontWeight: "700" }}>Profile</p>
+                            <p className="header-title " style={{ fontWeight: 700 }}>Profile</p>
                         </div>
                     </Link>
                     : null}
@@ -397,7 +397,7 @@ export default function Header() {
                             </svg>
                         </div>
                         <p className="header-title "
-                            style={{ fontWeight: "700" }}
+                            style={{ fontWeight: 700 }}
                             onClick={moreToggle}
                             ref={tweetRef}
                         >
@@ -421,7 +421,7 @@ export default function Header() {
                                 >
                                     <div
                                         className="tweet-text"
-                                        style={{ fontWeight: "700" }}
+                                        style={{ fontWeight: 700 }}
                                     >
                                         Tweet
                                     </div>

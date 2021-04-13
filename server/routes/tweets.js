@@ -46,6 +46,8 @@ router.get("/:tweetid", (req, res, next) => {
                 "User.bio": 0,
                 "User.password": 0,
                 "User.datejoined": 0,
+                'User.followers': 0,
+                'User.following': 0
             },
         },
     ];
@@ -189,7 +191,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
         try {
             const result = await tweets.deleteOne({ _id: new ObjectId(tweetid) });
             res.status(200).send({ "success": true });
-            console.log("DELETED ", result.deletedCount);
+            console.log("DELETED", result.deletedCount);
         } catch (error) {
             throw error;
         } finally {
@@ -202,7 +204,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
 /*error handler */
 router.use((err, req, res, next) => {
     res.sendStatus(500);
-    console.error("TWEET_Error ", err);
+    console.error("TWEET_Error", err);
 });
 
 

@@ -141,7 +141,7 @@ function Login() {
                 <div className="container mt-5 p-5 login-form">
 
 
-                    <h3>SIGN IN IF YOU'RE GAY</h3>
+                    <h3 style={{ fontWeight: 700 }}>Welcome back. Login</h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>

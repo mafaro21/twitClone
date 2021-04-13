@@ -7,25 +7,25 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 // import Interactive from '../components/Interactive';
-import OutsideClick from '../components/OutsideClick'
+import OutsideClick from '../components/OutsideClick';
 import deer from '../images/hari-nandakumar.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt'
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet'
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
-import ReactTimeAgo from 'react-time-ago'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import ReactTimeAgo from 'react-time-ago';
 
 export default function Profile() {
 
     const [loading, setLoading] = useState(true);      // loading animation
-    const [tweetLoading, setTweetLoading] = useState(true)
+    const [tweetLoading, setTweetLoading] = useState(true);
 
     const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
@@ -34,21 +34,21 @@ export default function Profile() {
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [tweets, setTweets] = useState({ data: [] })// for displaying tweets and other info
+    const [tweets, setTweets] = useState({ data: [] });// for displaying tweets and other info
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
-    const [tweetCount, setTweetCount] = useState(0)
+    const [tweetCount, setTweetCount] = useState(0);
 
-    const [tweetId, setTweetId] = useState("")
+    const [tweetId, setTweetId] = useState("");
 
-    const [noTweets, setNoTweets] = useState(false)
+    const [noTweets, setNoTweets] = useState(false);
 
-    const [commentModal, setCommentModal] = useState(false)
+    const [commentModal, setCommentModal] = useState(false);
 
-    const [dots, setDots] = useState({})
+    const [dots, setDots] = useState({});
 
-    const [dotsModal, setDotsModal] = useState(false)
+    const [dotsModal, setDotsModal] = useState(false);
 
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
@@ -56,7 +56,7 @@ export default function Profile() {
 
     const internalError = () => {       //redirect when there is a server error
         return window.location.replace("/Error");
-    }
+    };
 
     useEffect(() => {   //fetching data for logged in users
 
@@ -73,17 +73,17 @@ export default function Profile() {
                 // console.log(res.data);
             })
             .catch((error) => {
-                console.error(error)
+                console.error(error);
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setNoTweets(true)
+                    setNoTweets(true);
                 } else {
                     window.location.replace("/");    // <--- not signed in
                     sessionStorage.clear();
                 }
             }).finally(() => {
-                setTweetLoading(false)
+                setTweetLoading(false);
             });
 
 
@@ -106,8 +106,8 @@ export default function Profile() {
                 width={60}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
     const Logout = () => {          //logout function
         axios.get("/logout")
@@ -115,8 +115,8 @@ export default function Profile() {
                 sessionStorage.clear();
                 window.location.replace("/");
 
-            })
-    }
+            });
+    };
 
 
     const handleLike = (id) => {
@@ -125,7 +125,7 @@ export default function Profile() {
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
         if (!likedTweets[id]) {
-            setDisabled(true)
+            setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
                 [id]: !setLikedTweets[id],
@@ -133,12 +133,12 @@ export default function Profile() {
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data)
+                    console.log(res.data);
                 })
                 .catch((error) => {
-                    console.error(error)
+                    console.error(error);
                 }).finally(() => {
-                    setDisabled(false)
+                    setDisabled(false);
                 });
 
         } else {
@@ -150,17 +150,17 @@ export default function Profile() {
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data)
+                    console.log(res.data);
                 })
                 .catch((error) => {
-                    console.error(error)
+                    console.error(error);
                 }).finally(() => {
-                    setDisabled(false)
+                    setDisabled(false);
                 });
         }
         // console.log("Liked tweetid", id);
         // console.log(likedTweets);
-    }
+    };
 
     const handleDelete = () => {
 
@@ -168,39 +168,39 @@ export default function Profile() {
 
         axios.delete(`tweets/${tweetId}`)
             .then((res) => {
-                console.log(res.data)
+                console.log(res.data);
             })
             .catch((error) => {
-                console.error(error)
-            })
-    }
+                console.error(error);
+            });
+    };
 
 
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
             <i><span style={{ fontSize: "18px", fontWeight: 'bolder' }}>You haven't made any tweets yet</span></i>
-        </div>
-    }
+        </div>;
+    };
 
     const Dots = (id) => {
 
-        setTweetId(id)   //set tweetid whenever the dots are clicked
+        setTweetId(id);   //set tweetid whenever the dots are clicked
 
         if (!dots[id]) {
             setDots(prevDots => ({
                 ...prevDots,
                 [id]: !setDots[id]
 
-            }))
-            console.log(id)
+            }));
+            console.log(id);
         }
-    }
+    };
 
     const ref = useRef();   //clicking outside closes modal
 
     OutsideClick(ref, () => {
         // setDots(!dots)
-        console.log("yep cock")
+        console.log("yep cock");
     });
 
     const DotsModal = () => {       //three dots basically 'more'
@@ -213,8 +213,8 @@ export default function Profile() {
                     <div className="dots-button" >THIS DOES NOTHING </div>
                 </button>
             </div>
-        </div >
-    }
+        </div >;
+    };
 
 
     const wordCount = () => {   //live word counter
@@ -223,15 +223,15 @@ export default function Profile() {
                 count = text.trim().replace(/\s/g, '').length;
 
             if (count === 280) {
-                document.getElementById('show').style.color = "red"
+                document.getElementById('show').style.color = "red";
             } else if (count >= 250) {
-                document.getElementById('show').style.color = "#FF8000"
+                document.getElementById('show').style.color = "#FF8000";
             } else if (count >= 200) {
-                document.getElementById('show').style.color = "#FFB400"
+                document.getElementById('show').style.color = "#FFB400";
             } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800"
+                document.getElementById('show').style.color = "#FFF800";
             } else {
-                document.getElementById('show').style.color = "grey"
+                document.getElementById('show').style.color = "grey";
             }
 
             if (count <= 0) {// used to disable button if textarea is empty
@@ -243,7 +243,7 @@ export default function Profile() {
             document.getElementById('show').textContent = count;
 
         });
-    }
+    };
 
     const CommentModal = () => {
         return <div >
@@ -316,14 +316,14 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
-        </div >
+        </div >;
     };
 
 
 
     const path = window.location.pathname;
 
-    TimeAgo.addLocale(en)   //for the time ago
+    TimeAgo.addLocale(en);   //for the time ago
 
     return (
         <div className="general" >
@@ -400,7 +400,7 @@ export default function Profile() {
                                         </div>
                                     }
 
-                                    <strong style={{ fontWeight: "700" }}>{fullname}</strong>
+                                    <strong style={{ fontWeight: 700 }}>{fullname}</strong>
                                     <p><span>@{username}</span></p>
 
                                     <div>
@@ -427,7 +427,9 @@ export default function Profile() {
                                         </span>
                                     </div>
                                     <div>
-                                        0 &nbsp;<span>Following</span> &nbsp;&nbsp;&nbsp; 0 &nbsp;<span>Followers</span>
+                                        <span style={{ fontWeight: 700 }}>0</span>&nbsp;<span>Following</span> 
+                                        &nbsp;&nbsp;&nbsp;
+                                        <span style={{ fontWeight: 700 }}>0</span> &nbsp;<span>Followers</span>
                                     </div>
 
                                 </div>
@@ -505,7 +507,7 @@ export default function Profile() {
                                                 (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                 : <FontAwesomeIcon icon={faHeart} />
                                             }
-
+                                            {/* Doesnt live-update. SAD */}
 
                                                 &nbsp; {item.likes}
                                         </button>

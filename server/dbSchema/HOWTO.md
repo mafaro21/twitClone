@@ -1,12 +1,10 @@
+## IMPORTANT ⚠:
+Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED DIRECTLY IN YOUR APP SOURCE CODE (LIKE Mongoose Schema). THEY ARE SPECIFICALLY MEANT for MongoDB Compass (read more below). They can also be used as _reference_ during your app development. Also, They are NOT an excuse to skip doing _data validation_ on both Server AND Client side. They simply add an EXTRA RIGID layer of security at DATABASE level.
+
 ## What are these Files?
-**IMPORTANT NOTE:** These files are constructed according to official MongoDB docs, for more info see: [https://docs.mongodb.com/manual/core/schema-validation/]. Also, they are NOT an excuse to skip doing _data validation_ on application level (both Server and Client side). They simply add an EXTRA layer of security at database level.
-
-
-ANY SINGLE one of the files define 2 things:  **Data Schema** as well as **Validation Rules** for each corresponding ``Collection`` in your MongoDb Database. They enforce data structure & integrity at **DATABASE LEVEL** during inserting and updating, *independent of the application* used (i.e, they can work with JAVA, PHP, Node, C# applications, etc.) 
+ANY SINGLE one of the files define 2 things:  **Data Schema** as well as **Validation Rules** for each corresponding ``Collection`` in your MongoDb Database. They enforce data structure & integrity at **DATABASE LEVEL** during inserting and updating, *independent of the application* used (i.e, they can work with JAVA, PHP, Node, C# applications, etc.). To learn more, see [official MongoDB docs:](https://docs.mongodb.com/manual/core/schema-validation/).
 
 ## How to use them.
-Please note, these files ARE NOT MEANT TO BE INCLUDED OR USED DIRECTLY IN YOUR APP SOURCE CODE (LIKE Mongoose). THEY ARE SPECIFICALLY MEANT for MONGODb Compass (or CLI). They can also be used as _reference_ during your app development.
-
 - First, download the free [MongoDB Compass](https://www.mongodb.com/products/compass) (available for Mac, Linux and Windows). It's a GUI app for MongoDB.
 - Install it and then connect to your existing **database** (or create New one). Then follow these steps:
 

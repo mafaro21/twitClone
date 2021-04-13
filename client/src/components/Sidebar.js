@@ -71,14 +71,14 @@ function Sidebar() {
     return (
         <div className="col-sm-4 p-3 phone-sidebar" ref={newsRef}>
             <div className="p-3 sidebar">
-                <h5 style={{ fontWeight: "700" }}>Trending Topics</h5>
+                <h5 style={{ fontWeight: 700 }}>Trending Topics</h5>
                 <p>Trending</p>
             </div>
 
             {isLoggedIn ?
 
                 <div className="p-1 mt-4 sidebar" >
-                    <h5 className="view p-3" style={{ fontWeight: "700" }}>Top Headlines</h5>
+                    <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Headlines</h5>
                     <ul className="col" >
                         {loading ? <Loading /> : null}
                         {api.articles.map(item => (
@@ -94,12 +94,12 @@ function Sidebar() {
                 </div>
                 :
                 <div div className="mt-4 p-3 sidebar">
-                    <h5 style={{ fontWeight: "700" }}>First Time on TwitClone?</h5>
+                    <h5 style={{ fontWeight: 700 }}>First Time on TwitClone?</h5>
                     <p>Sign up Today To Access More Features!!</p>
 
                     <Link to="/signup" className="d-flex justify-content-center">
                         <button className="btn login-submit btn-secondary rounded-pill"
-                            style={{ width: "90%", fontSize: "20px", fontWeight: "700", color: "white" }}>
+                            style={{ width: "90%", fontSize: "20px", fontWeight: 700, color: "white" }}>
                             Sign Up
                         </button>
                     </Link>

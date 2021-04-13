@@ -24,10 +24,31 @@ router.get("/mine", isLoggedin, (req, res, next) => {
 });
 
 
-/*  GETTING OTHER user profile */
-router.get("/user/:userid", (req, res, next) => {
-    const userid = req.params.userid;
-    res.send(`Profile belongs to  ${userid}`);
+/*  GETTING ANOTHER user profile */
+router.get("/user/:username", (req, res, next) => {
+    const username = req.params.username;
+    const userReg = /[^0-9a-zA-Z_\S]+/;
+    //check if valid username format:
+    if (userReg.test(username)) return res.sendStatus(404);
+
+    MongoClient.connect(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    }).then(async (client) => {
+        const users = client.db("twitclone").collection("users");
+        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+        try {
+            const result = await users.findOne({ username: username }, { projection: projection });
+            if (!result) throw new Error("User Not Found");
+            res.status(200).send(result);
+        } catch (error) {
+            res.status(404).send(error.message);
+            console.error(error);
+        } finally {
+            await client.close();
+        }
+    }).catch(next);
+
 });
 
 
