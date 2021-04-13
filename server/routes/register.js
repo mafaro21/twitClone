@@ -97,9 +97,11 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             fullname: fullname,
             username: email.split(/[^a-zA-Z0-9]/)[0] + randnum,
             email: email,
+            followers: 0,
+            following: 0,
             bio: "Hello Twitclone, This is my default bio",
             password: newPass,
-            datejoined: new Date(),
+            datejoined: new Date(),        
         };
 
         MongoClient.connect(uri, {

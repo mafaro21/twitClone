@@ -1,13 +1,18 @@
 {
   "$jsonSchema": {
     "bsonType": "object",
+    "additionalProperties": false,
     "required": [
       "fullname",
+      "username",
       "email",
+      "followers",
+      "following",
       "password",
       "datejoined"
     ],
     "properties": {
+      "_id": {},
       "fullname": {
         "bsonType": "string",
         "description": "must be a string",
@@ -36,6 +41,16 @@
       "datejoined": {
         "bsonType": "date",
         "description": "Must be a valid date"
+      },
+      "followers": {
+        "bsonType": "int",
+        "description": "count of followers",
+        "minimum": 0
+      },
+      "following": {
+        "bsonType": "int",
+        "description": "count of following",
+        "minimum": 0
       }
     }
   },

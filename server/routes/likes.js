@@ -24,10 +24,10 @@ router.get("/me/:tweetid", isLoggedin, (req, res, next) => {
   MongoClient.connect(uri, MongoOptions)
     .then(async (client) => {
       const likes = client.db("twitclone").collection("likes");
+      const query = { tweetid: new ObjectId(tweetid), userid: new ObjectId(userid) };
       try {
-        const myLike = await likes.countDocuments({ tweetid: new ObjectId(tweetid), userid: new ObjectId(userid) });
-        const likeCount = { count: myLike }
-        console.log(likeCount)
+        const myLike = await likes.countDocuments(query);
+        const likeCount = { count: myLike };
         res.send(likeCount);
       } catch (error) {
         throw error;
