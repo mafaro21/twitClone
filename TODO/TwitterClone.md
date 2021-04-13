@@ -1,7 +1,7 @@
 ﻿TWIT CLONE: TO-Do List
 --
 
-`last update: 2021-03-07`
+`last update: 2021-04-13`
 
 App Name:... twitClone
 
@@ -29,12 +29,15 @@ App Name:... twitClone
 - [x] User Logout
 - [x] Load Tweets from DB to client
 - [x] Display timestamps for tweets similar to Twitter (1h, 18m, 1m)
-- [ ] Like & retweet Tweets
+- [ ] Like Tweets
 - [ ] Follow & unfollow other users
+- [ ] Retweet
+- [ ] Comment on tweets
+
 
 - Add Chat (DM) feature
 - dont store chat msgs in DB for more than X? hours. Clear them Auto. {#to save db space}**
-- [x] Add dark mode to each page.
+- [x] Dark & Light mode themes.
 - Add Sound to new message
 - Or popup notifications when new message arrives (chat)
 - also send notifications when User get a follow / liked tweet.
