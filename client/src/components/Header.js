@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
+import Compose from '../views/Compose';
 import { Link } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
@@ -78,9 +79,6 @@ export default function Header() {
     }, []);
 
     
-
-   
-
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1">
             <button
@@ -92,8 +90,6 @@ export default function Header() {
             </button>
         </div >
     }
-
-
 
     const MoreModal = () => {
         return <div className="user-modal modal-enter more-modal mr-1">
@@ -109,9 +105,6 @@ export default function Header() {
 
         </div >
     }
-
-    
-
 
     const Logout = () => {  //logout function
         axios.get("/logout")
@@ -150,7 +143,6 @@ export default function Header() {
         });
     }
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -173,7 +165,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then((res) => {
-                    // return <Redirect to="/myprofile" />
+                    
                 })
                 .catch((error) => {
                     setTweetLoading(false)
@@ -323,6 +315,7 @@ export default function Header() {
         <header className=" header pt-3">
             {tweetModal ? <TweetModal /> : null}
             {tweetLoading ? <TweetLoading /> : null}
+            {/* <Compose/> */}
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
@@ -441,7 +434,7 @@ export default function Header() {
                         {userModal ? <UserModal /> : null}
                         <img src={icon} alt="example" className="user-data-img" />
 
-                        <div className="col">
+                        <div className="col user-data-text">
                             <div className="text">{fullname}</div>
                             <div>
                                 <span>@{username}</span>
