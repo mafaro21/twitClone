@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'
 import dotenv from 'dotenv';
 import './css/App.css';
 import Login from './views/Login';
@@ -13,32 +13,38 @@ import Compose from './views/Compose'
 import NotFound404 from './NotFound404';
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import { TweetContext } from './components/TweetContext'
 
 function App() {
   dotenv.config();
 
-  // let username = sessionStorage.getItem('username')
-  // let link = `/${username}`
+  const [tweetContext, setTweetContext] = useState(null)
 
   return (
 
     <Router>
       <div className="App">
         {window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}
+
         <Switch>
+
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
+          {/* <TweetContext.Provider> */}
           <Route path="/myprofile" component={Profile} />
+          {/* </TweetContext.Provider > */}
           <Route path="/edit" component={EditProfile} />
           <Route path="/post" component={Post} />
+          <Route path="/compose/tweet" component={Compose} />
+
+
 
           <Route component={NotFound404} />
 
 
         </Switch>
-        <Route path="/compose" component={Compose} />
       </div>
     </Router>
   );

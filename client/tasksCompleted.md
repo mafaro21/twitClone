@@ -1,7 +1,6 @@
-- if someone has previously liked a post the heart is liked only in profile.js
-- conditional rendering on post.js for whether a post has likes/comments or not
-- light/dark mode
-- font awesome icon in phone view
-- isLikedbyMe for single tweet is giving me an error
+- data updates when tweet is liked or deleted
+- changed time on post.js to a longer version
+- fixed liking conflict in profile.js && post.js
+- adjusted design for post.js
 
 

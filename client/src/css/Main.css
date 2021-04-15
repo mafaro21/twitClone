@@ -23,7 +23,7 @@ html[data-theme="light"]{
   border: 1px solid var(--text);
     border-radius: 15px;
     text-align: left;
-    width: 100%;
+    width: 103%;
 }
 
 .main-view:before{
@@ -243,12 +243,13 @@ button{
 }
 .post-data{
   font-size: 18px;
+  width: 100%;
 }
 .post-comment:focus{
-  height: 230px;
+  height: 120px;
 }
 .post-view{
-  border-bottom: 19px double #606060;
+  border-bottom: 15px solid #606060;
   width: auto;
 }
 .post-link{

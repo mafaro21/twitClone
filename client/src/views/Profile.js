@@ -24,7 +24,7 @@ import ReactTimeAgo from 'react-time-ago';
 
 export default function Profile() {
 
-    const [loading, setLoading] = useState(true);      // loading animation
+    // const [loading, setLoading] = useState(true);      // loading animation
     const [tweetLoading, setTweetLoading] = useState(true);
 
     const [fullname, setFullname] = useState("");
@@ -50,6 +50,8 @@ export default function Profile() {
 
     const [dotsModal, setDotsModal] = useState(false);
 
+    // const [isLikedbyMe, setIsLikedbyMe] = useState(false)
+
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
@@ -70,6 +72,7 @@ export default function Profile() {
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
+                // setIsLikedbyMe(res.data.)
                 // console.log(res.data);
             })
             .catch((error) => {
@@ -109,22 +112,16 @@ export default function Profile() {
         </div>;
     };
 
-    const Logout = () => {          //logout function
-        axios.get("/logout")
-            .then((res) => {
-                sessionStorage.clear();
-                window.location.replace("/");
-
-            });
-    };
 
 
-    const handleLike = (id) => {
+    const handleLike = (id, likedbyme) => {
         //for liking and unliking posts
         // NOW WORKS 🎉🎉
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
-        if (!likedTweets[id]) {
+        console.log(likedbyme)
+
+        if (!likedTweets[id] && !likedbyme) {
             setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
@@ -134,6 +131,7 @@ export default function Profile() {
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
+                    UpdateData()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -151,6 +149,7 @@ export default function Profile() {
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
+                    UpdateData()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -169,6 +168,7 @@ export default function Profile() {
         axios.delete(`tweets/${tweetId}`)
             .then((res) => {
                 console.log(res.data);
+                UpdateData()
             })
             .catch((error) => {
                 console.error(error);
@@ -200,7 +200,7 @@ export default function Profile() {
 
     OutsideClick(ref, () => {
         // setDots(!dots)
-        console.log("yep cock");
+        // console.log("yep cock");
     });
 
     const DotsModal = () => {       //three dots basically 'more'
@@ -319,6 +319,27 @@ export default function Profile() {
         </div >;
     };
 
+    const UpdateData = () => {
+        axios.get("/tweets/mine/all")
+            .then((res) => {
+                setTweets(res);
+                setTweetCount(res.data.length);
+                // console.log(res.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setNoTweets(true);
+                } else {
+                    window.location.replace("/");    // <--- not signed in
+                    sessionStorage.clear();
+                }
+            }).finally(() => {
+                setTweetLoading(false);
+            });
+    }
 
 
     const path = window.location.pathname;
@@ -403,10 +424,11 @@ export default function Profile() {
                                     <strong style={{ fontWeight: 700 }}>{fullname}</strong>
                                     <p><span>@{username}</span></p>
 
-                                    <div>
+                                    <div className="mt-1">
                                         {bio}
                                     </div>
-                                    <div>
+
+                                    <div className="mt-1">
                                         <span>
                                             <svg viewBox="0 0 24 24" class="bio-icon">
                                                 <g>
@@ -426,8 +448,9 @@ export default function Profile() {
                                             Joined {datejoined}
                                         </span>
                                     </div>
-                                    <div>
-                                        <span style={{ fontWeight: 700 }}>0</span>&nbsp;<span>Following</span> 
+
+                                    <div className="mt-1">
+                                        <span style={{ fontWeight: 700 }}>0</span>&nbsp;<span>Following</span>
                                         &nbsp;&nbsp;&nbsp;
                                         <span style={{ fontWeight: 700 }}>0</span> &nbsp;<span>Followers</span>
                                     </div>
@@ -499,7 +522,7 @@ export default function Profile() {
 
                                         <button
                                             className="like col"
-                                            onClick={() => handleLike(item._id)}
+                                            onClick={() => handleLike(item._id, item.isLikedbyMe)}
                                             disabled={disabled}
 
                                         >
@@ -507,7 +530,6 @@ export default function Profile() {
                                                 (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                 : <FontAwesomeIcon icon={faHeart} />
                                             }
-                                            {/* Doesnt live-update. SAD */}
 
                                                 &nbsp; {item.likes}
                                         </button>
