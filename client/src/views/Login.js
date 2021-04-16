@@ -92,7 +92,7 @@ function Login() {
                     .post("/login", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        if (x === true) return window.location.replace("/Home");
+                        if (x === true) return window.location.replace("/home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {

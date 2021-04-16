@@ -31,6 +31,7 @@ export default function Header() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+    
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -319,7 +320,7 @@ export default function Header() {
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
-                <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -362,7 +363,7 @@ export default function Header() {
                     : null}
 
                 {isLoggedIn ?
-                    <Link className={path === '/myprofile' || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to="/myprofile">
+                    <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to= {`/u/${username}`}>
                         <div className=" d-flex pl-2 mt-2" >
                             <div>
                                 <svg viewBox="0 0 26 26" className="icon mr-2">

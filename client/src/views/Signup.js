@@ -82,7 +82,7 @@ function Signup() {
                 axios.post("/register", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        if (x === true) window.location.replace("/Home");
+                        if (x === true) window.location.replace("/home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {
