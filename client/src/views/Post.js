@@ -266,13 +266,21 @@ export default function Post() {
                                         {item.comments === 0 && item.likes === 0 ? null :
                                             <div className="view mt-1  p-2">
                                                 <span className={item.comments === 0 ? "show-detail" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
-                                                    <span style={{ color: 'white', fontWeight: '700' }}>
-                                                        {item.comments}</span> {item.likes === 1 ? "Comment" : "Comments " + " "}
+                                                    <span
+                                                        style={{ fontWeight: '700' }}
+                                                        className="text"
+                                                    >
+                                                        {item.comments}
+                                                    </span> {item.likes === 1 ? "Comment" : "Comments " + " "}
                                                 </span>
 
                                                 <span className={item.likes === 0 ? "show-detail" : null}>
-                                                    <span style={{ color: 'white', fontWeight: '700' }}>
-                                                        {item.likes}</span> {item.likes === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
+                                                    <span
+                                                        style={{ fontWeight: '700' }}
+                                                        className="text"
+                                                    >
+                                                        {item.likes}
+                                                    </span> {item.likes === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
                                                 </span>
                                             </div>
                                         }

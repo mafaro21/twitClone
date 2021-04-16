@@ -61,6 +61,7 @@ html[data-theme="light"]{
   border-radius: 15px;
   text-align: left;
   background-color: var(--sidebarbg);
+  
 }
 
 .sidebar:hover{
@@ -347,7 +348,7 @@ input[type=checkbox]:focus {
     margin-top: 100% !important;
   }
   .header-link, .header-link-active{
-    margin-top: 26%;
+    margin-top: 39%;
   }
   .tweet-submit{
     width: 45px;
@@ -360,6 +361,9 @@ input[type=checkbox]:focus {
   .tweet-text{
     display: none;
   }
+  .tweet-btn{
+    margin-top: 39%;
+  }
   .tweet{
     margin-top: 40%;
     display: inline-block;
@@ -370,8 +374,10 @@ input[type=checkbox]:focus {
     margin-top: 20%;
   }
   .header-link:hover, .header-link-active:hover{
-    margin-right: 10% !important;
+    margin-right: 20% !important;
+    /* margin-top: 200px !important; */
     border-radius: 90% !important;
     width: auto !important;
+    height: auto !important;
   }
 }

@@ -8,10 +8,10 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 // import Interactive from '../components/Interactive';
 import OutsideClick from '../components/OutsideClick';
-import deer from '../images/hari-nandakumar.jpg';
+import deer from '../images/paul-carmona.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -34,7 +34,9 @@ export default function Profile() {
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [tweets, setTweets] = useState({ data: [] });// for displaying tweets and other info
+    const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
+
+    const [profile, setProfile] = useState({ fullname: '', username: '', bio: '', followers: '', following: '' })  //display user data
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
@@ -52,20 +54,29 @@ export default function Profile() {
 
     // const [isLikedbyMe, setIsLikedbyMe] = useState(false)
 
+    const { user } = useParams()
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
+    let icon = "https://avatars.dicebear.com/api/identicon/" + profile.username + ".svg";
+
+    let username1 = sessionStorage.getItem('username');
 
 
     const internalError = () => {       //redirect when there is a server error
         return window.location.replace("/Error");
     };
 
+    const Error = () => {       //redirect when there is a server error
+        return window.location.replace("/NotFound404");
+        // return <Redirect to="/Error" />
+    }
+
     useEffect(() => {   //fetching data for logged in users
 
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
-        setDatejoined(sessionStorage.getItem('datejoined'));
-        setBio(sessionStorage.getItem('bio'));
+        // setFullname(sessionStorage.getItem('fullname'));
+        // setUsername(sessionStorage.getItem('username'));
+        // setDatejoined(sessionStorage.getItem('datejoined'));
+        // setBio(sessionStorage.getItem('bio'));
 
 
         axios.get("/tweets/mine/all")
@@ -81,6 +92,57 @@ export default function Profile() {
                     internalError();
                 } else if (error.response.status === 404) {
                     setNoTweets(true);
+                } else {
+                    window.location.replace("/");    // <--- not signed in
+                    sessionStorage.clear();
+                }
+            }).finally(() => {
+                setTweetLoading(false);
+            });
+
+        // console.log(user)
+
+        // axios.get(`/tweets/user/${user}`) //fetching all tweets from a given user
+        //     .then((res) => {
+        //         // setTweets(res);
+        //         // setTweetCount(res.data.length);
+        //         // setIsLikedbyMe(res.data.)
+        //         console.log(res.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //         if (error.response.status === 500) {
+        //             internalError();
+        //         } else if (error.response.status === 404) {
+        //             setNoTweets(true);
+        //         } else {
+        //             window.location.replace("/");    // <--- not signed in
+        //             sessionStorage.clear();
+        //         }
+        //     }).finally(() => {
+        //         setTweetLoading(false);
+        //     });
+
+
+        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+            .then((res) => {
+                setProfile(res.data)
+                // console.log(res.data)
+                let date = new Date(res.data.datejoined);
+                let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                setDatejoined(finalDate)
+
+                setTweetLoading(false);
+            })
+            .catch((error) => {
+                console.error(error)
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setTweetLoading(false);
+                    Error();
                 } else {
                     window.location.replace("/");    // <--- not signed in
                     sessionStorage.clear();
@@ -356,6 +418,7 @@ export default function Profile() {
 
                     <div className="col main-view  phone-home w-100 " >
                         {/* {loading ? <Loading /> : null} */}
+
                         <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
 
                             <div className="p-2  col row ">
@@ -364,7 +427,7 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div >
-                                        <strong className="text">{fullname}</strong>
+                                        <strong className="text">{profile.fullname}</strong>
                                     </div>
                                     <p><span>{tweetCount}  {tweetCount === 1 ? "Tweet" : "Tweets"} </span></p>
                                 </div>
@@ -384,7 +447,6 @@ export default function Profile() {
                                             className="btn login-submit banner-settings btn-outline-primary rounded-pill mt-1"
                                         // type="submit"
                                         >
-                                            {/* banner-msg */}
                                             <svg viewBox="0 2 26 23" className="banner-msg">
                                                 <g>
                                                     <path d="M12 8.21c-2.09 0-3.79 1.7-3.79 3.79s1.7 3.79 3.79 3.79 3.79-1.7 3.79-3.79-1.7-3.79-3.79-3.79zm0 6.08c-1.262 0-2.29-1.026-2.29-2.29S10.74 9.71 12 9.71s2.29 1.026 2.29 2.29-1.028 2.29-2.29 2.29z">
@@ -394,14 +456,26 @@ export default function Profile() {
                                                 </g>
                                             </svg>
                                         </button>
-                                        <Link
-                                            to="/edit"
-                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
-                                            type="submit"
-                                        // onClick={editToggle}
-                                        >
-                                            Edit Profile
+
+                                        {path === `/u/${username1}` ?
+                                            <Link
+                                                to={`/u/${username1}/edit`}
+                                                className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                type="submit"
+                                            // onClick={editToggle}
+                                            >
+                                                Edit Profile
                                         </Link>
+                                            :
+                                            <div className="banner-right">
+                                                <button
+                                                    className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                    type="submit"
+                                                >
+                                                    Follow
+                                        </button>
+                                            </div>
+                                        }
 
                                     </div>
 
@@ -410,22 +484,11 @@ export default function Profile() {
 
                                 <div className="p-2 col">
 
-                                    {path === '/myprofile' ? null :     //follow button
-                                        <div className="banner-right">
-                                            <button
-                                                className="btn login-submit banner-edit btn-outline-primary rounded-pill"
-                                                type="submit"
-                                            >
-                                                Follow
-                                        </button>
-                                        </div>
-                                    }
-
-                                    <strong style={{ fontWeight: 700 }}>{fullname}</strong>
-                                    <p><span>@{username}</span></p>
+                                    <strong style={{ fontWeight: 700 }}>{profile.fullname}</strong>
+                                    <p><span>@{profile.username}</span></p>
 
                                     <div className="mt-1">
-                                        {bio}
+                                        {profile.bio}
                                     </div>
 
                                     <div className="mt-1">
@@ -450,14 +513,15 @@ export default function Profile() {
                                     </div>
 
                                     <div className="mt-1">
-                                        <span style={{ fontWeight: 700 }}>0</span>&nbsp;<span>Following</span>
+                                        <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
                                         &nbsp;&nbsp;&nbsp;
-                                        <span style={{ fontWeight: 700 }}>0</span> &nbsp;<span>Followers</span>
+                                        <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
+
 
                         {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
@@ -471,13 +535,13 @@ export default function Profile() {
                                         </div>
                                         <div className="show-detail-1">
                                             <div >
-                                                <strong>{fullname}</strong>
+                                                <strong>{profile.fullname}</strong>
                                             </div>
                                             <div>
-                                                <span>@{username}</span>
+                                                <span>@{profile.username}</span>
                                             </div>
                                             <div className="mt-2">
-                                                {bio}
+                                                {profile.bio}
                                             </div>
                                         </div>
 
@@ -487,7 +551,7 @@ export default function Profile() {
                                 <div className="col user-name-tweet post-div" >      {/* <--- user content */}
                                     <div  >
                                         <div >
-                                            <strong>{fullname}</strong> <span>@{username}</span>
+                                            <strong>{profile.fullname}</strong> <span>@{profile.username}</span>
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />

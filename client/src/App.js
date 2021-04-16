@@ -18,7 +18,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 function App() {
   dotenv.config();
 
-  const [tweetContext, setTweetContext] = useState(null)
+  // const [tweetContext, setTweetContext] = useState(null)
 
   return (
 
@@ -33,15 +33,20 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/error" component={Error} />
           {/* <TweetContext.Provider> */}
-          <Route path="/myprofile" component={Profile} />
+          <Route path="/u/:user" exact >
+            <Profile />
+          </Route>
           {/* </TweetContext.Provider > */}
-          <Route path="/edit" component={EditProfile} />
+          <Route path="/u/:user/edit" exact >
+            <EditProfile />
+          </Route>
+          {/* <Route path="/edit" component={EditProfile} /> */}
           <Route path="/post" component={Post} />
           <Route path="/compose/tweet" component={Compose} />
 
 
 
-          <Route component={NotFound404} />
+          <Route exact component={NotFound404} />
 
 
         </Switch>
