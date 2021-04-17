@@ -11,7 +11,7 @@ const rateLimit = require("express-rate-limit"); //store it later in REDIS
 
 //setup rate limit
 const LoginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
+    windowMs: 15 * 60 * 1000,
     max: 5,
     skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 15 mins" }
@@ -76,28 +76,29 @@ router.post("/", LoginLimiter, (req, res, next) => {
     function operateDB() {
         //continue with LOGIN operations
         MongoClient.connect(uri, MongoOptions)
-        .then(async (client) => {
-            const users = client.db("twitclone").collection("users");
-            try {
-                const result = await users.findOne({ email: email });
-                if (!result) {
-                    throw new Error("User doesn\'t exist");
-                }
-                let hashedPass = result.password;
-                const match = await bcrypt.compare(password, hashedPass);
-                if (!match) {
-                    throw new Error("Wrong email or password! Try again.");
-                }
-                // BINGO! User authenticated. Now, create session.
-                req.session.user = { id: result._id, email: result.email };
-                res.status(200).send({ "success": true });
+            .then(async (client) => {
+                const users = client.db("twitclone").collection("users");
+                try {
+                    const result = await users.findOne({ email: email });
+                    if (!result) {
+                        throw new Error("User doesn\'t exist");
+                    }
+                    let hashedPass = result.password;
+                    const match = await bcrypt.compare(password, hashedPass);
+                    if (!match) {
+                        throw new Error("Wrong email or password! Try again.");
+                    }
+                    // BINGO! User authenticated. Now, create session.
+                    req.session.user = { id: result._id, email: result.email };
+                    console.log(req.session);
+                    res.status(200).send({ "success": true });
 
-            } catch (error) {
-                res.status(401).send({ "message": error.message });
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
+                } catch (error) {
+                    res.status(401).send({ "message": error.message });
+                } finally {
+                    await client.close();
+                }
+            }).catch(next);
     } // <--end of function
 
 });

@@ -347,6 +347,10 @@ input[type=checkbox]:focus {
     border-radius: 50% !important;
     margin-top: 100% !important;
   }
+  .header{
+    width: 0%;
+    margin-right: 10%;
+  }
   .header-link, .header-link-active{
     margin-top: 39%;
   }
@@ -355,9 +359,7 @@ input[type=checkbox]:focus {
     height: 45px;
     margin-left: -20%;
   }
-  .tweettest{
-    width: 600%;
-  }
+  
   .tweet-text{
     display: none;
   }
@@ -379,5 +381,48 @@ input[type=checkbox]:focus {
     border-radius: 90% !important;
     width: auto !important;
     height: auto !important;
+  }
+}
+
+@media screen and (max-width: 1199px){
+  .header-title {
+    display: none;
+  }
+  .user-data-text{
+    display: none;
+  }
+  .user-data{
+    margin-left: 0%;
+  }
+  .user-data:hover{
+    border-radius: 50% !important;
+    margin-top: 100% !important;
+  }
+  .header{
+    width: 0%;
+    margin-right: 10%;
+  }
+  .header-link, .header-link-active{
+    margin-top: 29%;
+  }
+  .tweet-submit{
+    width: 45px;
+    height: 45px;
+    margin-left: -20%;
+  }
+  .tweettest{
+    width: 60% !important;
+    margin-left: 19%;
+    margin-top: 13%;
+  }
+  .tweet-text{
+    display: none;
+  }
+  .tweet-btn{
+    margin-top: 29%;
+  }
+  .tweet{
+    margin-top: 40%;
+    display: inline-block;
   }
 }

@@ -36,7 +36,7 @@ export default function Profile() {
 
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
 
-    const [profile, setProfile] = useState({ fullname: '', username: '', bio: '', followers: '', following: '' })  //display user data
+    const [profile, setProfile] = useState({ fullname: '', username: '', bio: '', followers: 0, following: 0 })  //display user data
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
@@ -59,7 +59,6 @@ export default function Profile() {
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + profile.username + ".svg";
 
-    let username1 = sessionStorage.getItem('username');
 
 
     const internalError = () => {       //redirect when there is a server error
@@ -73,10 +72,6 @@ export default function Profile() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        // setFullname(sessionStorage.getItem('fullname'));
-        // setUsername(sessionStorage.getItem('username'));
-        // setDatejoined(sessionStorage.getItem('datejoined'));
-        // setBio(sessionStorage.getItem('bio'));
 
 
         axios.get("/tweets/mine/all")
@@ -94,7 +89,6 @@ export default function Profile() {
                     setNoTweets(true);
                 } else {
                     window.location.replace("/");    // <--- not signed in
-                    sessionStorage.clear();
                 }
             }).finally(() => {
                 setTweetLoading(false);
@@ -117,7 +111,6 @@ export default function Profile() {
         //             setNoTweets(true);
         //         } else {
         //             window.location.replace("/");    // <--- not signed in
-        //             sessionStorage.clear();
         //         }
         //     }).finally(() => {
         //         setTweetLoading(false);
@@ -143,9 +136,6 @@ export default function Profile() {
                 } else if (error.response.status === 404) {
                     setTweetLoading(false);
                     Error();
-                } else {
-                    window.location.replace("/");    // <--- not signed in
-                    sessionStorage.clear();
                 }
             }).finally(() => {
                 setTweetLoading(false);
@@ -154,13 +144,6 @@ export default function Profile() {
 
     }, []); //tweets <-- this works but modal keeps refreshing
 
-    // function displayData() {
-    //     setFullname(sessionStorage.getItem('fullname'));
-    //     setUsername(sessionStorage.getItem('username'));
-    //     setDatejoined(sessionStorage.getItem('datejoined'));
-    //     setBio(sessionStorage.getItem('bio'));
-
-    // }
 
     const Loading = () => {        //the loading div
 
@@ -396,7 +379,6 @@ export default function Profile() {
                     setNoTweets(true);
                 } else {
                     window.location.replace("/");    // <--- not signed in
-                    sessionStorage.clear();
                 }
             }).finally(() => {
                 setTweetLoading(false);
@@ -409,14 +391,14 @@ export default function Profile() {
     TimeAgo.addLocale(en);   //for the time ago
 
     return (
-        <div className="general" >
-            <div className="container App " >
+        <div className="App general" >
+            <div className="container  " >
                 <div className="row " >
 
                     <Header />
                     {commentModal ? <CommentModal /> : null}
 
-                    <div className="col main-view  phone-home w-100 " >
+                    <div className="col main-view phone-home " >
                         {/* {loading ? <Loading /> : null} */}
 
                         <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
@@ -457,9 +439,9 @@ export default function Profile() {
                                             </svg>
                                         </button>
 
-                                        {path === `/u/${username1}` ?
+                                        {path === `/u/${profile.username}` ?
                                             <Link
-                                                to={`/u/${username1}/edit`}
+                                                to={`/u/${profile.username}/edit`}
                                                 className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
                                                 type="submit"
                                             // onClick={editToggle}
