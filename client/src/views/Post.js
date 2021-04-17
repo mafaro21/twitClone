@@ -13,9 +13,13 @@ import en from 'javascript-time-ago/locale/en'
 import ReactTimeAgo from 'react-time-ago'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
+import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 // import { Redirect } from 'react-router-dom';
+
+import 'emoji-mart/css/emoji-mart.css'
+// import { Picker } from 'emoji-mart'
 
 export default function Post() {
 
@@ -28,34 +32,46 @@ export default function Post() {
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0)
 
+    const [comment, setComment] = useState(null)
+
+    const [count, setCount] = useState(0)
+
+    const [color, setColor] = useState("grey")
+
 
     const handleLike = (id) => {  //for liking and unliking posts
 
         setDisabled(true)
 
-        if (!isLiked) {
+        if (!isLiked && isLikedbyMe === 0) {
             setisLiked(true)
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     setDisabled(false)
+                    UpdateData()
                 })
                 .catch((error) => {
                     console.error(error)
-                })
+                }).finally(() => {
+                    setDisabled(false);
+                });
 
         } else {
             setisLiked(false)
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     setDisabled(false)
+                    UpdateData()
                 })
                 .catch((error) => {
                     console.error(error)
-                })
+                }).finally(() => {
+                    setDisabled(false);
+                });
         }
     }
 
@@ -64,7 +80,7 @@ export default function Post() {
         let idPath = document.location.pathname;
         let finalId = idPath.split("/post/");
         let sendId = finalId[1];
-        console.log(sendId)
+        // console.log(sendId)
         // setId(sendId)
         return sendId;
     }
@@ -109,7 +125,7 @@ export default function Post() {
             axios.get(`/likes/me/${getId}`)
                 .then((res) => {
                     setIsLikedbyMe(res.data.count)
-                    console.log(res.data.count)
+                    // console.log(res.data.count)
 
                 })
                 .catch((error) => {
@@ -118,46 +134,78 @@ export default function Post() {
         }
 
 
-
-
-
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
-        document.title = "TwitClone: @" + sessionStorage.getItem('username'); //change DOCTITLE according to username.
+        document.title = "TwitClone"; //change DOCTITLE according to username.
 
 
 
 
     }, []); //tweets
 
-    const wordCount = () => {   //live word counter
-        document.getElementById("tweet").addEventListener('input', function () {
-            var text = this.value,
-                count = text.trim().replace(/\s+/g, ' ').length;
+    // const wordCount = () => {   //live word counter
+    //     document.getElementById("tweet").addEventListener('input', function () {
+    //         var text = this.value,
+    //             count = text.trim().replace(/\s+/g, ' ').length;
 
-            if (count === 280) {
-                document.getElementById('show').style.color = "red"
-            } else if (count >= 250) {
-                document.getElementById('show').style.color = "#FF8000"
-            } else if (count >= 200) {
-                document.getElementById('show').style.color = "#FFB400"
-            } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800"
-            } else {
-                document.getElementById('show').style.color = "grey"
-            }
+    //         if (count === 280) {
+    //             document.getElementById('show').style.color = "red"
+    //         } else if (count >= 250) {
+    //             document.getElementById('show').style.color = "#FF8000"
+    //         } else if (count >= 200) {
+    //             document.getElementById('show').style.color = "#FFB400"
+    //         } else if (count >= 150) {
+    //             document.getElementById('show').style.color = "#FFF800"
+    //         } else {
+    //             document.getElementById('show').style.color = "grey"
+    //         }
 
-            if (count <= 0) {// used to disable button if textarea is empty
-                document.getElementById("submit-btn").disabled = true;
-            } else {
-                document.getElementById("submit-btn").disabled = false;
-            }
+    //         if (count <= 0) {// used to disable button if textarea is empty
+    //             document.getElementById("submit-btn").disabled = true;
+    //         } else {
+    //             document.getElementById("submit-btn").disabled = false;
+    //         }
 
-            document.getElementById('show').textContent = count;
+    //         document.getElementById('show').textContent = count;
 
-        }
-        )
+    //     }
+    //     )
+    // }
+
+
+    const handleChange = (e) => {
+        wordCount(e)
     }
+
+    const wordCount = (e) => {
+        let comment = e.target.value
+        setComment(comment)
+        setCount(comment.length)
+
+        // let y = comment.length
+        let x = comment.trim().replace(/\s+/g, ' ').length;
+
+        if (x === 280) {
+            setColor("red")
+        } else if (x >= 250) {
+            setColor("#FF8000")
+        } else if (x >= 200) {
+            setColor("#FFB400")
+        } else if (x >= 150) {
+            setColor("#FFF800")
+        } else {
+            setColor("grey")
+        }
+
+        if (comment.length === 0) {
+            setDisabled(true)
+        } else {
+            setDisabled(false)
+        }
+    }
+
+    let addEmoji = (emoji) => {
+        setComment(comment => (comment + emoji.native))
+    }
+
 
     const Loading = () => {        //the loading div
 
@@ -174,6 +222,36 @@ export default function Post() {
     TimeAgo.addLocale(en)
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+
+    const UpdateData = () => {
+        const getId = ForId()
+
+        axios.get(`/tweets/${getId}`)
+            .then((res) => {
+                setTweets(res);
+                // console.log(res.data)
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response.status === 500) {
+                    internalError();
+                }
+                else if (error.response.status === 404) {
+                    Error()
+                }
+            });
+
+        axios.get(`/likes/me/${getId}`)
+            .then((res) => {
+                setIsLikedbyMe(res.data.count)
+                // console.log(res.data.count)
+
+            })
+            .catch((error) => {
+                console.error(error)
+            });
+    }
+
 
     return (
         <div className="general" >
@@ -200,46 +278,69 @@ export default function Post() {
                         </div>
 
                         {loading ? <Loading /> : null}
-                        {tweets.data.map((item) => (
+                        {tweets.data.map((item) => {
+                            let date = new Date(item.dateposted);
+                            let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                                'July', 'August', 'September', 'October', 'November', 'December'];
+                            let hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+                            let amorpm = date.getHours() >= 12 ? " PM" : " AM"
+                            let finalDate = hours + ":" + date.getMinutes() + amorpm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
-                            <div className="p-2 view row" key={item._id}>
-                                <div className="col-1.5">              {/* <--- user avi */}
-                                    <img src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`} alt="example" className="user-logo" />
-                                </div>
-                                <div className="col user-name-tweet" >                   {/* <--- user content */}
-                                    <div className=" ">
-                                        <div>
-                                            <strong>{item.User[0].fullname}</strong>
+                            return <div>
+                                <div className="p-2  row" key={item._id}>
+                                    <div className="col-1.5">              {/* <--- user avi */}
+                                        <img src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`} alt="example" className="user-logo" />
+                                    </div>
+                                    <div className="col user-name-tweet" >                   {/* <--- user content */}
+                                        <div className=" ">
+                                            <div>
+                                                <strong>{item.User[0].fullname}</strong>
+                                            </div>
+                                            <span>@{item.User[0].username}</span>
                                         </div>
-                                        <span>@{item.User[0].username}</span>
                                     </div>
 
-                                    <p style={{ fontSize: "21px" }} className=" "  >{item.content}</p>
+                                    <div className="post-data view mr-2">
+                                        <div style={{ fontSize: "21px" }} className="mt-2 p-1"  >{item.content}</div>
 
-                                    <div className="post-data ">
-                                        <div className="view ">
-                                            <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
+                                        <div className="view  p-2">
+                                            <span>{finalDate}</span>
+
                                         </div>
 
                                         {item.comments === 0 && item.likes === 0 ? null :
-                                            <div className="view mt-3">
-                                                <span className={item.comments === 0 ? "show-detail" : null}>   {/*show/ hide whether there are comments or not */}
-                                                    {item.comments} {item.likes === 1 ? "comment" : "comments"}
+                                            <div className="view mt-1  p-2">
+                                                <span className={item.comments === 0 ? "show-detail" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
+                                                    <span
+                                                        style={{ fontWeight: '700' }}
+                                                        className="text"
+                                                    >
+                                                        {item.comments}
+                                                    </span> {item.likes === 1 ? "Comment" : "Comments " + " "}
                                                 </span>
-                                                &nbsp;
-                                            <span className={item.likes === 0 ? "show-detail" : null}>
-                                                    {item.likes} {item.likes === 1 ? "like" : "likes"}      {/*show/ hide the (s) depending on number of likes */}
+
+                                                <span className={item.likes === 0 ? "show-detail" : null}>
+                                                    <span
+                                                        style={{ fontWeight: '700' }}
+                                                        className="text"
+                                                    >
+                                                        {item.likes}
+                                                    </span> {item.likes === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
                                                 </span>
                                             </div>
                                         }
 
-                                        <div className="interact-row d-flex mt-3">
+                                        <div className="interact-row d-flex pt-2 pb-2">
                                             <button className="comment col">
                                                 <FontAwesomeIcon icon={faComment} size="lg" />
                                             </button>
 
+                                            <button className="col retweet">
+                                                <FontAwesomeIcon icon={faRetweet} />
+                                            </button>
+
                                             <button
-                                                className="like col"
+                                                className="like col "
                                                 onClick={() => handleLike(item._id)}
                                                 disabled={disabled}
                                             >
@@ -251,49 +352,65 @@ export default function Post() {
                                     </div>
 
                                 </div>
+                                {/* </div> */}
                             </div>
-
-                        ))}
+                        })}
 
                         <div className="p-2 post-view row mt-3">
-                            <div className="col-1.5">              {/* <--- user avi */}
+                            <div className="col-0.5">              {/* <--- user avi */}
                                 <img src={icon} alt="example" className="user-logo" />
                             </div>
 
-                            <form className="signup col"  >
+                            <form className="signup col tweet-form mr-3">
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div>
+                                <div className="view">
+                                    {/* <span>Replying to </span> */}
                                     <textarea
                                         id="tweet"
                                         name="tweet"
                                         type="text"
                                         // value={fullname}
-                                        onChange={wordCount}
-                                        className=" edit-input post-comment"
+                                        onChange={handleChange}
+                                        className=" edit-input post-comment mr-5"
                                         maxLength="280"
-                                        rows="3"
+                                        rows="1"
                                         placeholder="What's Your Reply?"
                                         required
                                     />
                                     {/* {Object.keys(fullnameErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
                                     })} */}
-                                    <div className="container counter">
-                                        {/* {count}/280 */}
-                                        <span id="show" className="word-count">0</span><span>/280</span>
-                                    </div>
+
+
                                 </div>
 
                                 {/* {loading ? <Loading /> : null} */}
 
-                                <button
-                                    id="submit-btn"
-                                    className="btn login-submit btn-outline-primary rounded-pill mt-4"
-                                    type="submit"
-                                // disabled={disabled}         //button disabler
-                                >
-                                    Tweet
-                                </button>
+                                <div className="d-flex flex-row mt-1">
+                                    <div className="container mt-2">
+                                        <span><span style={{ color }}>{count}</span>/280</span>
+                                        {/* <span id="show">0</span><span>/280</span> */}
+                                    </div>
+
+                                    {/* <Picker
+                                        set='twitter'
+                                        onSelect={addEmoji}
+                                        title='Pick your emoji…'
+                                        emoji='point_up'
+                                        style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '2' }}
+                                        theme='auto'
+                                    /> */}
+
+                                    <button
+                                        id="submit-btn"
+                                        className="btn login-submit btn-outline-primary rounded-pill   "
+                                        type="submit"
+                                        // onClick={handleSubmit}
+                                        disabled={disabled}       //button disabler
+                                    >
+                                        Tweet
+                                    </button>
+                                </div>
                             </form>
 
                         </div>
@@ -320,7 +437,7 @@ export default function Post() {
 
                 </div>
             </div>
-        </div>
+        </div >
 
     );
 }

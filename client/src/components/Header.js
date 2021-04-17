@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
+import Compose from '../views/Compose';
 import { Link } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt'
 
-
+// import 'emoji-mart/css/emoji-mart.css'
+// import { Picker } from 'emoji-mart'
 
 export default function Header() {
 
@@ -30,6 +32,9 @@ export default function Header() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+    // const [addEmoji, setAddEmoji] = useState('')
+
+    
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -50,37 +55,18 @@ export default function Header() {
                     setIsLoggedIn(true);
                     setFullname(res.data.fullname);
                     setUsername(res.data.username);
-                    sessionStorage.setItem('fullname', res.data.fullname);
-                    sessionStorage.setItem('username', res.data.username);
-                    sessionStorage.setItem('bio', res.data.bio);
-                    let date = new Date(res.data.datejoined);
-                    let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November', 'December'];
-                    // let y = months[date.getMonth()];
-                    let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();  //<-- Don't touch this
-                    sessionStorage.setItem('datejoined', finalDate);
 
                 }).catch(err => {
                     if (err.response.status === 401) {
                         setIsLoggedIn(false);
-                        sessionStorage.clear();
                     }
                 });
         }
 
-        if (sessionStorage.length > 3) {
-            //no need to fetch again.
-            setFullname(sessionStorage.getItem('fullname'));
-            setUsername(sessionStorage.getItem('username'));
-            setIsLoggedIn(true);
-        } else fetchData();
-
+fetchData()
     }, []);
 
     
-
-   
-
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1">
             <button
@@ -92,8 +78,6 @@ export default function Header() {
             </button>
         </div >
     }
-
-
 
     const MoreModal = () => {
         return <div className="user-modal modal-enter more-modal mr-1">
@@ -110,13 +94,9 @@ export default function Header() {
         </div >
     }
 
-    
-
-
     const Logout = () => {  //logout function
         axios.get("/logout")
             .then((res) => {
-                sessionStorage.clear();
                 window.location.replace("/");
             });
     }
@@ -127,6 +107,7 @@ export default function Header() {
             var text = this.value,
                 count = text.trim().replace(/\s/g, '').length;
 
+            
             if (count === 280) {
                 document.getElementById('show').style.color = "red"
             } else if (count >= 250) {
@@ -139,7 +120,7 @@ export default function Header() {
                 document.getElementById('show').style.color = "grey"
             }
 
-            if (count <= 0) {// used to disable button if textarea is empty
+            if (count === 0) {// used to disable button if textarea is empty
                 document.getElementById("submit-btn").disabled = true;
             } else {
                 document.getElementById("submit-btn").disabled = false;
@@ -149,7 +130,6 @@ export default function Header() {
 
         });
     }
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -173,7 +153,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then((res) => {
-                    // return <Redirect to="/myprofile" />
+                    
                 })
                 .catch((error) => {
                     setTweetLoading(false)
@@ -264,7 +244,7 @@ export default function Header() {
                                             id="tweet"
                                             name="tweet"
                                             type="text"
-                                            // value={tweet}
+                                            // value={addEmoji}
 
                                             onChange={wordCount}
                                             className=" edit-input "
@@ -285,6 +265,15 @@ export default function Header() {
                                             {/* {count}/280 */}
                                             <span id="show">0</span><span>/280</span>
                                         </div>
+
+                                        {/* <Picker
+                                            set='twitter'
+                                            // onSelect={addEmoji}
+                                            title='Pick your emoji…'
+                                            emoji='point_up'
+                                            style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
+                                            theme='auto'
+                                        /> */}
 
                                         <button
                                             id="submit-btn"
@@ -323,10 +312,11 @@ export default function Header() {
         <header className=" header pt-3">
             {tweetModal ? <TweetModal /> : null}
             {tweetLoading ? <TweetLoading /> : null}
+            {/* <Compose/> */}
             {/* col-sm-2 */}
             <div className="fixed phone-header ">
 
-                <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -369,7 +359,7 @@ export default function Header() {
                     : null}
 
                 {isLoggedIn ?
-                    <Link className={path === '/myprofile' || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to="/myprofile">
+                    <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to= {`/u/${username}`}>
                         <div className=" d-flex pl-2 mt-2" >
                             <div>
                                 <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -441,7 +431,7 @@ export default function Header() {
                         {userModal ? <UserModal /> : null}
                         <img src={icon} alt="example" className="user-data-img" />
 
-                        <div className="col">
+                        <div className="col user-data-text">
                             <div className="text">{fullname}</div>
                             <div>
                                 <span>@{username}</span>

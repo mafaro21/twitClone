@@ -23,7 +23,7 @@ html[data-theme="light"]{
   border: 1px solid var(--text);
     border-radius: 15px;
     text-align: left;
-    width: 100%;
+    width: 103%;
 }
 
 .main-view:before{
@@ -138,13 +138,14 @@ strong {
   border: 2px solid ;
   border-radius: 50%;
   outline: none;
+  fill: var(--accent);
 }
 .banner-msg{
   height:20px;
   fill: var(--accent);
   border-radius: 50%;
 }
-.banner-msg:hover{
+.banner-msg:hover, .banner-settings:hover{
   fill: black;
 }
 .banner-edit{
@@ -239,16 +240,16 @@ button{
 
 /* post */
 .post-div{
-  transition: all 0.5s ease-in;
+  /* transition: opacity 3s ease-out 5s; */
+  transition: all 5s ease-in-out;
+  /* transition-duration: 2s; */
 }
 .post-data{
   font-size: 18px;
-}
-.post-comment:focus{
-  height: 230px;
+  width: 100%;
 }
 .post-view{
-  border-bottom: 19px double #606060;
+  border-bottom: 12px solid #9C9C9C;
   width: auto;
 }
 .post-link{
@@ -337,4 +338,22 @@ button{
   }
 
   
+}
+
+@media screen and (max-width: 768px){
+
+}
+
+@media screen and (max-width: 992px){
+
+  .main-view{
+    width: 19%;
+  }
+}
+
+@media screen and (max-width: 1199px){
+  .main-view{
+    width: 19%;
+    margin-left: -4%;
+  }
 }

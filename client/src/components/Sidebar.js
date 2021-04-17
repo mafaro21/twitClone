@@ -46,11 +46,7 @@ function Sidebar() {
                 });
         }
 
-        if (sessionStorage.length > 3) {
-            //no need to fetch again.
-            setIsLoggedIn(true);
-        } else auth();
-
+        auth()
     }, [isLoggedIn]);
 
 
