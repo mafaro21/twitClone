@@ -248,11 +248,8 @@ button{
   font-size: 18px;
   width: 100%;
 }
-.post-comment:focus{
-  height: 120px;
-}
 .post-view{
-  border-bottom: 15px solid #606060;
+  border-bottom: 12px solid #9C9C9C;
   width: auto;
 }
 .post-link{
@@ -341,4 +338,22 @@ button{
   }
 
   
+}
+
+@media screen and (max-width: 768px){
+
+}
+
+@media screen and (max-width: 992px){
+
+  .main-view{
+    width: 19%;
+  }
+}
+
+@media screen and (max-width: 1199px){
+  .main-view{
+    width: 19%;
+    margin-left: -4%;
+  }
 }

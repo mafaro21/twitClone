@@ -6,11 +6,12 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 // import Loader from "react-loader-spinner";
 
 export default function Edit() {
+    let history = useHistory();
 
     const [editFullname, setEditFullname] = useState(sessionStorage.getItem('fullname') || "")
     const [editUsername, setEditUsername] = useState(sessionStorage.getItem('username') || "")
@@ -19,6 +20,7 @@ export default function Edit() {
     const [fullnameErr, setFullnameErr] = useState({}) // front end validation
     const [usernameErr, setUsernameErr] = useState({})
     const [bioErr, setBioErr] = useState({})
+
 
     const [count, setCount] = useState(0) //word counter
 
@@ -170,6 +172,15 @@ export default function Edit() {
                                     <form className="mt-3  " onSubmit={(e) => handleSubmit(e)}>
 
                                         <div>
+                                            <span>-- select a color for your header --</span>
+                                            <input
+                                                type="color"
+                                                name="color"
+                                                className="mb-2 ml-3"
+                                                style={{ width: "10%", padding: "-1px", border: "none" }}
+                                                placeholder="select a color"
+                                            />
+
                                             <input
                                                 name="fullname"
                                                 type="text"
@@ -235,7 +246,13 @@ export default function Edit() {
 
                                     </form>
                                     <div className="modal-footer">
-                                        <Link to="/myprofile" type="button" className="btn login-submit btn-primary rounded-pill mt-2">Cancel</Link>
+                                        <div
+                                            onClick={() => history.goBack()}
+                                            type="button"
+                                            className="btn login-submit btn-primary rounded-pill mt-2"
+                                        >
+                                            Cancel
+                                            </div>
                                     </div>
                                 </div>
                             </div>

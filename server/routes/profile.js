@@ -36,7 +36,7 @@ router.get("/user/:username", (req, res, next) => {
         useNewUrlParser: true,
     }).then(async (client) => {
         const users = client.db("twitclone").collection("users");
-        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+        const projection = { password: 0, email: 0 }; // <--exclusions
         try {
             const result = await users.findOne({ username: username }, { projection: projection });
             if (!result) throw new Error("User Not Found");

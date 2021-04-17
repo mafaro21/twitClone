@@ -18,6 +18,9 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 // import { Redirect } from 'react-router-dom';
 
+import 'emoji-mart/css/emoji-mart.css'
+// import { Picker } from 'emoji-mart'
+
 export default function Post() {
 
     const [fullname, setFullname] = useState("")
@@ -28,6 +31,12 @@ export default function Post() {
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0)
+
+    const [comment, setComment] = useState(null)
+
+    const [count, setCount] = useState(0)
+
+    const [color, setColor] = useState("grey")
 
 
     const handleLike = (id) => {  //for liking and unliking posts
@@ -124,43 +133,79 @@ export default function Post() {
                 })
         }
 
-        setFullname(sessionStorage.getItem('fullname'));
-        setUsername(sessionStorage.getItem('username'));
-        document.title = "TwitClone: @" + sessionStorage.getItem('username'); //change DOCTITLE according to username.
+
+        document.title = "TwitClone"; //change DOCTITLE according to username.
 
 
 
 
     }, []); //tweets
 
-    const wordCount = () => {   //live word counter
-        document.getElementById("tweet").addEventListener('input', function () {
-            var text = this.value,
-                count = text.trim().replace(/\s+/g, ' ').length;
+    // const wordCount = () => {   //live word counter
+    //     document.getElementById("tweet").addEventListener('input', function () {
+    //         var text = this.value,
+    //             count = text.trim().replace(/\s+/g, ' ').length;
 
-            if (count === 280) {
-                document.getElementById('show').style.color = "red"
-            } else if (count >= 250) {
-                document.getElementById('show').style.color = "#FF8000"
-            } else if (count >= 200) {
-                document.getElementById('show').style.color = "#FFB400"
-            } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800"
-            } else {
-                document.getElementById('show').style.color = "grey"
-            }
+    //         if (count === 280) {
+    //             document.getElementById('show').style.color = "red"
+    //         } else if (count >= 250) {
+    //             document.getElementById('show').style.color = "#FF8000"
+    //         } else if (count >= 200) {
+    //             document.getElementById('show').style.color = "#FFB400"
+    //         } else if (count >= 150) {
+    //             document.getElementById('show').style.color = "#FFF800"
+    //         } else {
+    //             document.getElementById('show').style.color = "grey"
+    //         }
 
-            if (count <= 0) {// used to disable button if textarea is empty
-                document.getElementById("submit-btn").disabled = true;
-            } else {
-                document.getElementById("submit-btn").disabled = false;
-            }
+    //         if (count <= 0) {// used to disable button if textarea is empty
+    //             document.getElementById("submit-btn").disabled = true;
+    //         } else {
+    //             document.getElementById("submit-btn").disabled = false;
+    //         }
 
-            document.getElementById('show').textContent = count;
+    //         document.getElementById('show').textContent = count;
 
-        }
-        )
+    //     }
+    //     )
+    // }
+
+
+    const handleChange = (e) => {
+        wordCount(e)
     }
+
+    const wordCount = (e) => {
+        let comment = e.target.value
+        setComment(comment)
+        setCount(comment.length)
+
+        // let y = comment.length
+        let x = comment.trim().replace(/\s+/g, ' ').length;
+
+        if (x === 280) {
+            setColor("red")
+        } else if (x >= 250) {
+            setColor("#FF8000")
+        } else if (x >= 200) {
+            setColor("#FFB400")
+        } else if (x >= 150) {
+            setColor("#FFF800")
+        } else {
+            setColor("grey")
+        }
+
+        if (comment.length === 0) {
+            setDisabled(true)
+        } else {
+            setDisabled(false)
+        }
+    }
+
+    let addEmoji = (emoji) => {
+        setComment(comment => (comment + emoji.native))
+    }
+
 
     const Loading = () => {        //the loading div
 
@@ -312,25 +357,25 @@ export default function Post() {
                         })}
 
                         <div className="p-2 post-view row mt-3">
-                            <div className="col-1.5">              {/* <--- user avi */}
+                            <div className="col-0.5">              {/* <--- user avi */}
                                 <img src={icon} alt="example" className="user-logo" />
                             </div>
 
-                            <form className="signup col tweet-form">
+                            <form className="signup col tweet-form mr-3">
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div>
+                                <div className="view">
+                                    {/* <span>Replying to </span> */}
                                     <textarea
                                         id="tweet"
                                         name="tweet"
                                         type="text"
                                         // value={fullname}
-                                        onChange={wordCount}
-                                        className=" edit-input post-comment"
+                                        onChange={handleChange}
+                                        className=" edit-input post-comment mr-5"
                                         maxLength="280"
-                                        rows="0"
+                                        rows="1"
                                         placeholder="What's Your Reply?"
                                         required
-                                        contenteditable
                                     />
                                     {/* {Object.keys(fullnameErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
@@ -343,16 +388,25 @@ export default function Post() {
 
                                 <div className="d-flex flex-row mt-1">
                                     <div className="container mt-2">
-                                        {/* {count}/280 */}
-                                        <span id="show">0</span><span>/280</span>
+                                        <span><span style={{ color }}>{count}</span>/280</span>
+                                        {/* <span id="show">0</span><span>/280</span> */}
                                     </div>
+
+                                    {/* <Picker
+                                        set='twitter'
+                                        onSelect={addEmoji}
+                                        title='Pick your emoji…'
+                                        emoji='point_up'
+                                        style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '2' }}
+                                        theme='auto'
+                                    /> */}
 
                                     <button
                                         id="submit-btn"
                                         className="btn login-submit btn-outline-primary rounded-pill   "
                                         type="submit"
-                                    // onClick={handleSubmit}
-                                    // disabled={disabled}       //button disabler
+                                        // onClick={handleSubmit}
+                                        disabled={disabled}       //button disabler
                                     >
                                         Tweet
                                     </button>
