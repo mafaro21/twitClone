@@ -16,7 +16,7 @@
       "fullname": {
         "bsonType": "string",
         "description": "must be a string",
-        "maxLength": 30
+        "maxLength": 50
       },
       "email": {
         "bsonType": "string",

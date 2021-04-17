@@ -136,9 +136,6 @@ export default function Post() {
 
         document.title = "TwitClone"; //change DOCTITLE according to username.
 
-
-
-
     }, []); //tweets
 
     // const wordCount = () => {   //live word counter
@@ -280,11 +277,13 @@ export default function Post() {
                         {loading ? <Loading /> : null}
                         {tweets.data.map((item) => {
                             let date = new Date(item.dateposted);
+                            let localeDate = date.toLocaleDateString();
                             let months = ['January', 'February', 'March', 'April', 'May', 'June',
                                 'July', 'August', 'September', 'October', 'November', 'December'];
                             let hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-                            let amorpm = date.getHours() >= 12 ? " PM" : " AM"
-                            let finalDate = hours + ":" + date.getMinutes() + amorpm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                            let am_pm = date.getHours() >= 12 ? " PM" : " AM"
+                            let finalDate = hours + ":" + date.getMinutes() 
+                            + am_pm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
                             return <div>
                                 <div className="p-2  row" key={item._id}>
@@ -316,7 +315,7 @@ export default function Post() {
                                                         className="text"
                                                     >
                                                         {item.comments}
-                                                    </span> {item.likes === 1 ? "Comment" : "Comments " + " "}
+                                                    </span> {item.comments === 1 ? "Comment" : "Comments " + " "}
                                                 </span>
 
                                                 <span className={item.likes === 0 ? "show-detail" : null}>

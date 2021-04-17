@@ -16,7 +16,7 @@ export default function Compose() {
     const [tweetLoading, setTweetLoading] = useState(false)
     const [tweetErr, setTweetErr] = useState({})
 
-    const [tweetModal, setTweetModal] = useState(true);//tweet modal
+    const [tweetModal, setTweetModal] = useState(true); //tweet modal
     // const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [error, setError] = useState([]);     //using array, data comes that way
