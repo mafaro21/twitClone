@@ -1,4 +1,5 @@
-- fetching another users profile
-- routing for any user
+- fetching another users tweets
+- delete button 
+- error page for when a user doesn't exist
 
 

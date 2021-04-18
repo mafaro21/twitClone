@@ -212,12 +212,18 @@ button{
 
 /* interactive row */
 .interact-row{
-  background-color: var(--background);
+  z-index: inherit;
 }
 .like, .comment, .retweet{
+  border-radius: 15px;
   color: var(--interact);
 }
 
+.delete{
+  color: white;
+  border-radius: 15px;
+  /* background-color: #480101; */
+}
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
   border-radius: 15px;
@@ -226,13 +232,17 @@ button{
 .comment:hover{
   background-color: rgb(151, 252, 254,0.2 );
   border-radius: 15px;
-  color: #37FAFE ;
+  color: #30DBDE ;
   /* #395F5F */
 }
 .retweet:hover{
   background-color: rgb(75, 255, 0 ,0.2 );
   border-radius: 15px;
-  color: #4BFF00 ;
+  color: #38BF00 ;
+}
+.delete:hover{
+  background-color: #9D2121;
+  border-radius: 15px;
 }
 
 /* interactive row */
@@ -243,6 +253,10 @@ button{
   /* transition: opacity 3s ease-out 5s; */
   transition: all 5s ease-in-out;
   /* transition-duration: 2s; */
+}
+.main-post-div:hover{
+  /* background-color: #272523; */
+  z-index: 30;
 }
 .post-data{
   font-size: 18px;
