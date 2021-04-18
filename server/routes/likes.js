@@ -27,8 +27,7 @@ router.get("/me/:tweetid", isLoggedin, (req, res, next) => {
       const query = { tweetid: new ObjectId(tweetid), userid: new ObjectId(userid) };
       try {
         const myLike = await likes.countDocuments(query);
-        const likeCount = { count: myLike };
-        res.send(likeCount);
+        res.send({ "count": myLike });
       } catch (error) {
         throw error;
       } finally {
