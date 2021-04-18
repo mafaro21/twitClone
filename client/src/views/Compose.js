@@ -4,19 +4,19 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import axios from 'axios';
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import Loader from "react-loader-spinner";
 
 
 
 export default function Compose() {
-    let history = useHistory();
+    // let history = useHistory();
 
 
     const [tweetLoading, setTweetLoading] = useState(false)
     const [tweetErr, setTweetErr] = useState({})
 
-    const [tweetModal, setTweetModal] = useState(true); //tweet modal
+    // const [tweetModal, setTweetModal] = useState(true); //tweet modal
     // const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -63,7 +63,7 @@ export default function Compose() {
         const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
         if (isValid) {
             sendToDb();
-            setTweetModal(false)
+            // setTweetModal(false)
             setTweetLoading(true)
         }
 
@@ -80,7 +80,7 @@ export default function Compose() {
                 })
                 .catch((error) => {
                     setTweetLoading(false)
-                    setTweetModal(true)
+                    // setTweetModal(true)
                     setError(error.response.data.message);
                 })
                 .finally(() => {
@@ -194,9 +194,6 @@ export default function Compose() {
                                     </button>
                                 </form>
                             </div>
-                            {/* <div class="modal-footer">
-                            <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
-                        </div> */}
                         </div>
                     </div>
                 </div>

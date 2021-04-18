@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
-import Compose from '../views/Compose';
+// import Compose from '../views/Compose';
 import { Link } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
@@ -120,10 +120,10 @@ fetchData()
                 document.getElementById('show').style.color = "grey"
             }
 
-            if (count === 0) {// used to disable button if textarea is empty
-                document.getElementById("submit-btn").disabled = true;
-            } else {
+            if (count > 0) {        // used to disable button if textarea is empty
                 document.getElementById("submit-btn").disabled = false;
+            } else {
+                document.getElementById("submit-btn").disabled = true;
             }
 
             document.getElementById('show').textContent = count;
@@ -288,9 +288,6 @@ fetchData()
                                         
                                 </form>
                             </div>
-                            {/* <div class="modal-footer">
-                            <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
-                        </div> */}
                         </div>
                     </div>
                 </div>

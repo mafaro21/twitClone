@@ -10,25 +10,24 @@ import axios from 'axios';
 import Loader from "react-loader-spinner";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
-import ReactTimeAgo from 'react-time-ago'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 // import { Redirect } from 'react-router-dom';
-
-import 'emoji-mart/css/emoji-mart.css'
+// import Error from '../views/Error';
+// import 'emoji-mart/css/emoji-mart.css'
 // import { Picker } from 'emoji-mart'
 
 export default function Post() {
 
-    const [fullname, setFullname] = useState("")
-    const [username, setUsername] = useState("")
     const [isLiked, setisLiked] = useState(false)
     const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
     const [disabled, setDisabled] = useState(false);    // button disabler during request
+
+    const [commentDisabled, setCommentDisabled] = useState(true)
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0)
 
@@ -37,7 +36,6 @@ export default function Post() {
     const [count, setCount] = useState(0)
 
     const [color, setColor] = useState("grey")
-
 
     const handleLike = (id) => {  //for liking and unliking posts
 
@@ -92,7 +90,7 @@ export default function Post() {
 
     const Error = () => {       //redirect when there is a server error
         return window.location.replace("/NotFound404");
-        // return <Redirect to="/Error" />
+        // return <Redirect to={Error} />
     }
 
 
@@ -178,7 +176,7 @@ export default function Post() {
         setCount(comment.length)
 
         // let y = comment.length
-        let x = comment.trim().replace(/\s+/g, ' ').length;
+        let x = comment.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
             setColor("red")
@@ -192,16 +190,16 @@ export default function Post() {
             setColor("grey")
         }
 
-        if (comment.length === 0) {
-            setDisabled(true)
+        if (comment.length > 0) {
+            setCommentDisabled(false)
         } else {
-            setDisabled(false)
+            setCommentDisabled(true)
         }
     }
 
-    let addEmoji = (emoji) => {
-        setComment(comment => (comment + emoji.native))
-    }
+    // let addEmoji = (emoji) => {
+    //     setComment(comment => (comment + emoji.native))
+    // }
 
 
     const Loading = () => {        //the loading div
@@ -218,7 +216,7 @@ export default function Post() {
 
     TimeAgo.addLocale(en)
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
 
     const UpdateData = () => {
         const getId = ForId()
@@ -277,13 +275,13 @@ export default function Post() {
                         {loading ? <Loading /> : null}
                         {tweets.data.map((item) => {
                             let date = new Date(item.dateposted);
-                            let localeDate = date.toLocaleDateString();
+                            // let localeDate = date.toLocaleDateString();
                             let months = ['January', 'February', 'March', 'April', 'May', 'June',
                                 'July', 'August', 'September', 'October', 'November', 'December'];
                             let hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
                             let am_pm = date.getHours() >= 12 ? " PM" : " AM"
-                            let finalDate = hours + ":" + date.getMinutes() 
-                            + am_pm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                            let finalDate = hours + ":" + date.getMinutes()
+                                + am_pm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
                             return <div>
                                 <div className="p-2  row" key={item._id}>
@@ -315,7 +313,7 @@ export default function Post() {
                                                         className="text"
                                                     >
                                                         {item.comments}
-                                                    </span> {item.comments === 1 ? "Comment" : "Comments " + " "}
+                                                    </span> {item.comments === 1 ? "Comment" : "Comments "}
                                                 </span>
 
                                                 <span className={item.likes === 0 ? "show-detail" : null}>
@@ -368,7 +366,7 @@ export default function Post() {
                                         id="tweet"
                                         name="tweet"
                                         type="text"
-                                        // value={fullname}
+                                        value={comment}
                                         onChange={handleChange}
                                         className=" edit-input post-comment mr-5"
                                         maxLength="280"
@@ -405,7 +403,7 @@ export default function Post() {
                                         className="btn login-submit btn-outline-primary rounded-pill   "
                                         type="submit"
                                         // onClick={handleSubmit}
-                                        disabled={disabled}       //button disabler
+                                        disabled={commentDisabled}       //button disabler
                                     >
                                         Tweet
                                     </button>
@@ -421,7 +419,7 @@ export default function Post() {
                             </div>
                             <div className="col user-name-tweet">                   {/* <--- user content */}
                                 <div className="user-content">
-                                    <strong>{fullname}</strong> &nbsp; <span>@{username}</span>
+                                    {/* <strong>{fullname}</strong> &nbsp; <span>@{username}</span> */}
                                 </div>
                                 <p></p>
 
