@@ -30,7 +30,7 @@ router.get("/user/:userid", (req, res, next) => {
             $lookup: {
                 from: "likes",
                 localField: "_id",
-                foreignField: "tweerid",
+                foreignField: "tweetid",
                 as: "likedbyme",
             }
         },
