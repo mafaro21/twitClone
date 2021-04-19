@@ -15,6 +15,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import { Link } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import Error from '../views/Error';
 // import 'emoji-mart/css/emoji-mart.css'
@@ -31,11 +32,22 @@ export default function Post() {
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0)
 
-    const [comment, setComment] = useState(null)
+    const [comment, setComment] = useState('')
 
     const [count, setCount] = useState(0)
 
     const [color, setColor] = useState("grey")
+
+    const [commentReply, setCommentReply] = useState(false)
+
+    const [hoverDiv, setHoverDiv] = useState(false)
+
+    const [rows, setRows] = useState(1)
+
+    const [minRows] = useState(1)
+
+    const [maxRows] = useState(8)
+
 
     const handleLike = (id) => {  //for liking and unliking posts
 
@@ -168,11 +180,30 @@ export default function Post() {
 
     const handleChange = (e) => {
         wordCount(e)
+
+        const textareaLineHeight = 32;
+
+        const previousRows = e.target.rows;
+        e.target.rows = minRows;
+
+        const currentRows = ~~(e.target.scrollHeight / textareaLineHeight);
+
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+
+        if (currentRows >= maxRows) {
+            e.target.rows = maxRows;
+            e.target.scrollTop = e.target.scrollHeight;
+        }
+
+        setComment(e.target.value)
+        setRows(currentRows < maxRows ? currentRows : maxRows)
     }
 
     const wordCount = (e) => {
         let comment = e.target.value
-        setComment(comment)
+        // setComment(comment)
         setCount(comment.length)
 
         // let y = comment.length
@@ -212,6 +243,45 @@ export default function Post() {
             />
 
         </div>
+    }
+
+    const HoverDiv = (id) => {
+
+        setTimeout(() => {
+            if (!hoverDiv[id]) {
+                setHoverDiv(prevHoverDiv => ({
+                    ...prevHoverDiv,
+                    [id]: !setHoverDiv[id]
+                }));
+            }
+        }, 700);
+
+        let flm = ''
+        let usm = ''
+
+        return <div className="show-detail p-3 ">
+            <div>
+                <img src={icon} alt="example" className="user-logo " />
+            </div>
+            <div className="show-detail-1 ">
+                <div >
+                    <strong>{flm}</strong>
+                </div>
+                <div>
+                    <span>@{usm}</span>
+                </div>
+                <div className="mt-2 ">
+                    {/* {profile.bio} */}
+                </div>
+                {/* <div className="mt-1">
+                    <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
+                        &nbsp;&nbsp;&nbsp;
+                    <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
+                </div> */}
+            </div>
+
+        </div>
+
     }
 
     TimeAgo.addLocale(en)
@@ -286,12 +356,31 @@ export default function Post() {
                             return <div>
                                 <div className="p-2  row" key={item._id}>
                                     <div className="col-1.5">              {/* <--- user avi */}
-                                        <img src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`} alt="example" className="user-logo" />
+                                        <Link
+                                            to={`/u/${item.User[0].username}`}
+                                            onMouseEnter={() => HoverDiv(item._id)}
+                                            onMouseLeave={() => setHoverDiv(false)}
+                                        >
+                                            <img
+                                                src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`}
+                                                alt="example"
+                                                className="user-logo"
+                                            />
+                                        </Link>
+
+                                        {hoverDiv[item._id] ? <HoverDiv flm={item.User[0].fullname} usm={item.User[0].username} /> : null}
                                     </div>
                                     <div className="col user-name-tweet" >                   {/* <--- user content */}
                                         <div className=" ">
                                             <div>
-                                                <strong>{item.User[0].fullname}</strong>
+                                                <Link
+                                                    to={`/u/${item.User[0].username}`}
+                                                    onMouseEnter={() => HoverDiv(item._id)}
+                                                    onMouseLeave={() => setHoverDiv(false)}
+                                                    className="name-link"
+                                                >
+                                                    <strong>{item.User[0].fullname}</strong>
+                                                </Link>
                                             </div>
                                             <span>@{item.User[0].username}</span>
                                         </div>
@@ -307,7 +396,7 @@ export default function Post() {
 
                                         {item.comments === 0 && item.likes === 0 ? null :
                                             <div className="view mt-1  p-2">
-                                                <span className={item.comments === 0 ? "show-detail" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
+                                                <span className={item.comments === 0 ? "d-none" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
                                                     <span
                                                         style={{ fontWeight: '700' }}
                                                         className="text"
@@ -316,7 +405,7 @@ export default function Post() {
                                                     </span> {item.comments === 1 ? "Comment" : "Comments "}
                                                 </span>
 
-                                                <span className={item.likes === 0 ? "show-detail" : null}>
+                                                <span className={item.likes === 0 ? "d-none" : null}>
                                                     <span
                                                         style={{ fontWeight: '700' }}
                                                         className="text"
@@ -355,39 +444,58 @@ export default function Post() {
 
                         <div className="p-2 post-view row mt-3">
                             <div className="col-0.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className="user-logo" />
+                                <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
                             </div>
 
-                            <form className="signup col tweet-form mr-3">
+                            <form className="signup col tweet-form ">
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
-                                <div className="view">
-                                    {/* <span>Replying to </span> */}
-                                    <textarea
-                                        id="tweet"
-                                        name="tweet"
-                                        type="text"
-                                        value={comment}
-                                        onChange={handleChange}
-                                        className=" edit-input post-comment mr-5"
-                                        maxLength="280"
-                                        rows="1"
-                                        placeholder="What's Your Reply?"
-                                        required
-                                    />
-                                    {/* {Object.keys(fullnameErr).map((key) => {
+                                {tweets.data.map((item) => (
+                                    <div className="">
+
+                                        {commentReply ?
+                                            <span>Replying to
+                                                <Link to={`/u/${item.User[0].username}`} className="ml-1">
+                                                    @{item.User[0].username}
+                                                </Link>
+                                            </span>
+                                            :
+                                            null
+                                        }
+
+                                        <textarea
+                                            id="tweet"
+                                            name="tweet"
+                                            type="text"
+                                            value={comment}
+                                            onChange={handleChange}
+                                            className=" edit-input post-comment pt-3"
+                                            maxLength="280"
+                                            rows={rows}
+                                            placeholder="What's Your Reply?"
+                                            required
+                                            onFocus={() => setCommentReply(true)}
+                                            style={{ fontSize: '20px', padding: '5px' }}
+                                        />
+                                        {/* {Object.keys(fullnameErr).map((key) => {
                                         return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
                                     })} */}
 
 
-                                </div>
+                                    </div>
+                                ))}
 
                                 {/* {loading ? <Loading /> : null} */}
 
                                 <div className="d-flex flex-row mt-1">
-                                    <div className="container mt-2">
-                                        <span><span style={{ color }}>{count}</span>/280</span>
-                                        {/* <span id="show">0</span><span>/280</span> */}
-                                    </div>
+
+                                    {commentReply ? //character counter
+                                        <div className="container mt-2">
+                                            <span><span style={{ color }}>{count}</span>/280</span>
+                                            {/* <span id="show">0</span><span>/280</span> */}
+                                        </div>
+                                        :
+                                        null
+                                    }
 
                                     {/* <Picker
                                         set='twitter'
@@ -400,7 +508,7 @@ export default function Post() {
 
                                     <button
                                         id="submit-btn"
-                                        className="btn login-submit btn-outline-primary rounded-pill   "
+                                        className="btn login-submit btn-outline-primary rounded-pill"
                                         type="submit"
                                         // onClick={handleSubmit}
                                         disabled={commentDisabled}       //button disabler

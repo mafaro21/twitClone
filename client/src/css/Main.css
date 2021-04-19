@@ -48,22 +48,22 @@ html[data-theme="light"]{
   border-radius: 50%;
   float:left;
 }
-.show-detail{
-  display: none;
-}
 .show-detail-1{
   margin-top: 57px;
 }
-.user-logo:hover + .show-detail{
+.show-detail{
   display: block;
-  color: white;
-  background-color: black;
+  color: var(--text);
+  background-color: var(--background);
   z-index: 2 ;
   position: absolute;
   box-shadow: 0 0 8px grey;
   border-radius: 15px;
   margin-top: 60px;
-  width: 250px;
+  min-width: 230px;
+  max-width: 290px;
+  transition-delay: 2s;
+  transition: all 2s ease-in-out;
 }
 .user-content{
   display: flex;
@@ -72,6 +72,10 @@ html[data-theme="light"]{
 
 span{
   color: grey;
+  text-decoration: none;
+}
+span:hover{
+  text-decoration: none;
 }
 /* home properties */
 
@@ -214,16 +218,11 @@ button{
 .interact-row{
   z-index: inherit;
 }
-.like, .comment, .retweet{
+.like, .comment, .retweet, .delete{
   border-radius: 15px;
   color: var(--interact);
 }
 
-.delete{
-  color: white;
-  border-radius: 15px;
-  /* background-color: #480101; */
-}
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
   border-radius: 15px;
@@ -243,12 +242,19 @@ button{
 .delete:hover{
   background-color: #9D2121;
   border-radius: 15px;
+  color: white;
 }
 
 /* interactive row */
 
 
 /* post */
+.name-link{
+  color: var(--text)
+}
+.name-link:hover{
+  color: var(--text)
+}
 .post-div{
   /* transition: opacity 3s ease-out 5s; */
   transition: all 5s ease-in-out;

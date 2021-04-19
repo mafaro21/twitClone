@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const session = require("express-session");
+const isLoggedin = require("./middleware/authchecker");
 const MongoDBStore = require("connect-mongodb-session")(session);
 
 const app = express();
@@ -56,7 +57,7 @@ app.use("/register", toRegister);
 app.use("/login", toLogin);
 app.use("/profile", toProfile);
 app.use("/tweets", tweetRouter);
-app.use("/likes", likesRouter);
+app.use("/likes", isLoggedin, likesRouter);
 app.use("/logout", toLogout);
 app.use("/statuslogin", statuslogin);
 
