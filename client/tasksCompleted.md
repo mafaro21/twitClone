@@ -1,5 +1,4 @@
-- fetching another users tweets
-- delete button 
-- error page for when a user doesn't exist
+- autogrow text area on post.js
+- hover effect for profile.js
 
 

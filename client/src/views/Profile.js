@@ -47,9 +47,11 @@ export default function Profile() {
 
     const [dots, setDots] = useState({});
 
-    const [dotsModal, setDotsModal] = useState(false);
+    const [dotsModal] = useState(false);
 
     const [userID, setUserID] = useState('')
+
+    const [hoverDiv, setHoverDiv] = useState(false)
 
     const { user } = useParams()
 
@@ -377,6 +379,42 @@ export default function Profile() {
             });
     }
 
+    const HoverDiv = (id) => {
+
+        setTimeout(() => {
+            if (!hoverDiv[id]) {
+                setHoverDiv(prevHoverDiv => ({
+                    ...prevHoverDiv,
+                    [id]: !setHoverDiv[id]
+                }));
+            }
+        }, 700);
+
+        return <div className="show-detail p-3 ">
+            <div>
+                <img src={icon} alt="example" className="user-logo " />
+            </div>
+            <div className="show-detail-1 ">
+                <div >
+                    <strong>{profile.fullname}</strong>
+                </div>
+                <div>
+                    <span>@{profile.username}</span>
+                </div>
+                <div className="mt-2 ">
+                    {profile.bio}
+                </div>
+                <div className="mt-1">
+                    <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
+                        &nbsp;&nbsp;&nbsp;
+                    <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
 
     const path = window.location.pathname;
 
@@ -393,7 +431,7 @@ export default function Profile() {
                     <div className="col main-view phone-home " >
                         {/* {loading ? <Loading /> : null} */}
 
-                        <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
+                        <div className={window.scrollY > 0 ? "row profile-header view" : "row profile-header-scroll view"}>
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -502,30 +540,28 @@ export default function Profile() {
                         {tweets.data.map((item) => (
                             <div className="p-2 view row main-post-div" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
-                                    <img src={icon} alt="example" className="user-logo" />
-                                    <div className="show-detail p-3 ">
-                                        <div>
-                                            <img src={icon} alt="example" className="user-logo " />
-                                        </div>
-                                        <div className="show-detail-1">
-                                            <div >
-                                                <strong>{profile.fullname}</strong>
-                                            </div>
-                                            <div>
-                                                <span>@{profile.username}</span>
-                                            </div>
-                                            <div className="mt-2">
-                                                {profile.bio}
-                                            </div>
-                                        </div>
+                                    <Link
+                                        to={`/u/${profile.username}`}
+                                        onMouseEnter={() => HoverDiv(item._id)}
+                                        onMouseLeave={() => setHoverDiv(false)}
+                                    >
+                                        <img src={icon} alt="example" className="user-logo" />
+                                    </Link>
 
-                                    </div>
+                                    {hoverDiv[item._id] ? <HoverDiv /> : null}
                                 </div>
 
                                 <div className="col user-name-tweet post-div" >      {/* <--- user content */}
                                     <div  >
                                         <div >
-                                            <strong>{profile.fullname}</strong> <span>@{profile.username}</span>
+                                            <Link
+                                                to={`/u/${profile.username}`}
+                                                className="name-link"
+                                                onMouseEnter={() => HoverDiv(item._id)}
+                                                onMouseLeave={() => setHoverDiv(false)}
+                                            >
+                                                <strong >{profile.fullname}</strong> <span>@{profile.username}</span>
+                                            </Link>
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
