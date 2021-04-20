@@ -9,7 +9,7 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 //setup rate limit
 const LikeLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
-  max: 50, //==> 100 hits in 5 minute window.
+  max: 50, //==> 50 hits in 5 minute window.
   message: { "message": "Too many requests, try again in 5 mins" }
 });
 
@@ -104,6 +104,7 @@ router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
 /*error handler */
 router.use((err, req, res, next) => {
   res.sendStatus(500);
-  console.error("LIKE_Error ", err);
+  console.error("LIKE_Error", err);
 });
+
 module.exports = router;

@@ -47,7 +47,7 @@ function App() {
           <Route path="/compose/tweet" component={Compose} />
 
           <Route path="/UserNotFound" component={UserNotFound} />
-          <Route component={Error} />
+          {/* <Route component={Error} /> */}
           <Route component={NotFound404} />
 
         </Switch>
