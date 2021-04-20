@@ -41,6 +41,7 @@ app.use(session({
 const indexRouter = require("./routes/index");
 const toRegister = require("./routes/register");
 const toLogin = require("./routes/login");
+const toFollows = require("./routes/follows");
 const toProfile = require("./routes/profile");
 const tweetRouter = require("./routes/tweets");
 const likesRouter = require("./routes/likes");
@@ -58,6 +59,7 @@ app.use("/login", toLogin);
 app.use("/profile", toProfile);
 app.use("/tweets", tweetRouter);
 app.use("/likes", isLoggedin, likesRouter);
+app.use("/follows", isLoggedin, toFollows);
 app.use("/logout", toLogout);
 app.use("/statuslogin", statuslogin);
 

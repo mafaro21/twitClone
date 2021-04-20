@@ -1,0 +1,22 @@
+{
+    "$jsonSchema": {
+      "bsonType": "object",
+      "additionalProperties": false,
+      "required": [
+        "fromUserId",
+        "toUserId"
+      ],
+      "properties": {
+        "_id": {},
+        "toUserId": {
+          "bsonType": "objectId"
+        },
+        "fromUserId": {
+          "bsonType": "objectId"
+        },
+        "date": {
+          "bsonType": "date"
+        }
+      }
+    }
+  }

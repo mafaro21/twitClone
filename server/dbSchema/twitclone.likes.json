@@ -1,11 +1,14 @@
 {
     "$jsonSchema": {
+        "bsonType": "object",
+        "additionalProperties": false,
         "required": [
             "userid",
             "tweetid",
             "dateliked"
         ],
         "properties": {
+            "_id": {},
             "tweetid": {
                 "bsonType": "objectId"
             },

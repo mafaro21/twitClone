@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", isLoggedin, (req, res, next) => {
     req.session.destroy(err => {
-        if (err) console.error(err);
+        if (err) throw err;
          return res.send({ 'message': "logged out", "success": true });
     });
 });
