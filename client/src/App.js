@@ -8,6 +8,8 @@ import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
 import Navbar from './components/Navbar';
 import Post from './views/Post'
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 import Compose from './views/Compose'
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
@@ -16,6 +18,7 @@ import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { TweetContext } from './components/TweetContext'
 
+
 function App() {
   dotenv.config();
 
@@ -23,22 +26,25 @@ function App() {
   return (
 
     <Router>
-      <div className="App">
-        {window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}
+      { window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}
+      <div className="App general">
+
 
         <Switch>
+
 
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
 
           <Route path="/u/:user" exact >
-            <Profile />
+            <div>
+              <Profile />
+            </div>
           </Route>
           <Route path="/u/:user/edit" exact >
             <EditProfile />
           </Route>
-
           <Route path="/post/:postid" exact>
             <Post />
           </Route>
@@ -51,6 +57,7 @@ function App() {
           <Route component={NotFound404} />
 
         </Switch>
+
       </div>
     </Router>
   );

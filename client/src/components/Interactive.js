@@ -27,8 +27,8 @@ export default function Interactive() {
     return (
         <div className="interact-row d-flex ">
             <button className="comment col">
-                <FontAwesomeIcon icon={faComment} />
-                 &nbsp; 121k
+                <FontAwesomeIcon icon={faComment} />&nbsp; 121k
+
             </button>
 
             <button className="retweet col">
@@ -42,8 +42,8 @@ export default function Interactive() {
             >
                 {isLiked ? (
                     <FontAwesomeIcon icon={heartSolid} className="text-danger" />
-                ) : <FontAwesomeIcon icon={faHeart} />}
-                    &nbsp; {count}
+                ) : <FontAwesomeIcon icon={faHeart} />} &nbsp; {count}
+
             </button>
         </div>
     );

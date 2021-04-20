@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -6,16 +6,16 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 // import Loader from "react-loader-spinner";
 
 export default function Edit() {
     let history = useHistory();
 
-    const [editFullname, setEditFullname] = useState(sessionStorage.getItem('fullname') || "")
-    const [editUsername, setEditUsername] = useState(sessionStorage.getItem('username') || "")
-    const [editBio, setEditBio] = useState(sessionStorage.getItem('bio') || "")
+    const [editFullname, setEditFullname] = useState('')
+    const [editUsername, setEditUsername] = useState('')
+    const [editBio, setEditBio] = useState('')
 
     const [fullnameErr, setFullnameErr] = useState({}) // front end validation
     const [usernameErr, setUsernameErr] = useState({})
@@ -28,12 +28,34 @@ export default function Edit() {
 
     const [loading, setLoading] = useState(false);      // loading animation
 
+    const { user } = useParams()
+
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
             {error}
         </div>
         : '';
+
+    useEffect(() => {
+        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+            .then((res) => {
+                // console.log(res.data)
+                setEditBio(res.data.bio)
+                setEditFullname(res.data.fullname)
+                setEditUsername(res.data.username)
+            })
+            .catch((error) => {
+                console.error(error)
+                if (error.response.status === 500) {
+                    internalError();
+                }
+            });
+    }, [])
+
+    const internalError = () => {       //redirect when there is a server error
+        return window.location.replace("/Error");
+    };
 
     const onChange = (e) => {
         setEditBio(e.target.value)
@@ -79,7 +101,7 @@ export default function Edit() {
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
                     let x = res.data.success;
-                    if (x === true) window.location.replace("/myprofile");
+                    if (x === true) window.location.replace(`/u/${user}`);
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
@@ -178,6 +200,7 @@ export default function Edit() {
                                                 name="color"
                                                 className="mb-2 ml-3"
                                                 style={{ width: "10%", padding: "-1px", border: "none" }}
+                                                disabled={disabled}
                                                 placeholder="select a color"
                                             />
 
@@ -188,7 +211,8 @@ export default function Edit() {
                                                 onChange={(e) => setEditFullname(e.target.value)}
                                                 className="edit-input change "
                                                 maxLength="30"
-                                                placeholder="New Fullname"
+                                                placeholder="New Fullname..."
+                                                disabled={disabled}
                                                 required
                                             />
                                             {Object.keys(fullnameErr).map((key) => {
@@ -203,7 +227,8 @@ export default function Edit() {
                                                 onChange={(e) => setEditUsername(e.target.value)}
                                                 className="edit-input mt-1 change"
                                                 maxLength="20"
-                                                placeholder="New Username"
+                                                placeholder="New Username..."
+                                                disabled={disabled}
                                                 required
                                             />
                                             {Object.keys(usernameErr).map((key) => {
@@ -219,7 +244,8 @@ export default function Edit() {
                                                 rows="4"
                                                 className="edit-input mt-1 change"
                                                 maxLength="100"
-                                                placeholder="Bio"
+                                                placeholder="Bio..."
+                                                disabled={disabled}
                                                 required
                                             />
                                             {Object.keys(bioErr).map((key) => {
