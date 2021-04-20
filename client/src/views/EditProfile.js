@@ -6,7 +6,7 @@ import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 // import Loader from "react-loader-spinner";
 

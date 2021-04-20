@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import dotenv from 'dotenv';
 import './css/App.css';
 import Login from './views/Login';
@@ -11,6 +11,7 @@ import Post from './views/Post'
 import Compose from './views/Compose'
 // import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
+import UserNotFound from './views/UserNotFound';
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { TweetContext } from './components/TweetContext'
@@ -18,7 +19,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 function App() {
   dotenv.config();
 
-  // const [tweetContext, setTweetContext] = useState(null)
 
   return (
 
@@ -31,23 +31,24 @@ function App() {
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
-          <Route path="/error" component={Error} />
-          {/* <TweetContext.Provider> */}
+
           <Route path="/u/:user" exact >
             <Profile />
           </Route>
-          {/* </TweetContext.Provider > */}
           <Route path="/u/:user/edit" exact >
             <EditProfile />
           </Route>
-          {/* <Route path="/edit" component={EditProfile} /> */}
-          <Route path="/post" component={Post} />
+
+          <Route path="/post/:postid" exact>
+            <Post />
+          </Route>
+
+          {/* component={Post} /> */}
           <Route path="/compose/tweet" component={Compose} />
 
-
-
-          <Route exact component={NotFound404} />
-
+          <Route path="/UserNotFound" component={UserNotFound} />
+          <Route component={Error} />
+          <Route component={NotFound404} />
 
         </Switch>
       </div>

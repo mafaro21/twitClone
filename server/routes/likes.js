@@ -1,6 +1,5 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
-const isLoggedin = require("../middleware/authchecker");
 const router = express.Router();
 const uri = process.env.MONGO_URL;
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
@@ -16,7 +15,7 @@ const LikeLimiter = rateLimit({
 
 
 /* COUNT MY LIKES on A TWEET => 1 or 0 */
-router.get("/me/:tweetid", isLoggedin, (req, res, next) => {
+router.get("/me/:tweetid", (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
@@ -39,7 +38,7 @@ router.get("/me/:tweetid", isLoggedin, (req, res, next) => {
 
 
 /* ADD ❤ LIKE ON A TWEET */
-router.post("/:tweetid", isLoggedin, LikeLimiter, (req, res, next) => {
+router.post("/:tweetid", LikeLimiter, (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
@@ -72,7 +71,7 @@ router.post("/:tweetid", isLoggedin, LikeLimiter, (req, res, next) => {
 
 
 /* REMOVE 🤍 LIKE ON A TWEET */
-router.delete("/:tweetid", isLoggedin, LikeLimiter, (req, res, next) => {
+router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
   const userid = req.session.user.id;
   const tweetid = req.params.tweetid;
 

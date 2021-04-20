@@ -1,4 +1,4 @@
-- fetching another users profile
-- routing for any user
+- autogrow text area on post.js
+- hover effect for profile.js
 
 

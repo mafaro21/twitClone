@@ -27,9 +27,6 @@ export default function Profile() {
     // const [loading, setLoading] = useState(true);      // loading animation
     const [tweetLoading, setTweetLoading] = useState(true);
 
-    const [fullname, setFullname] = useState("");
-    const [username, setUsername] = useState("");
-    const [bio, setBio] = useState("");
     const [datejoined, setDatejoined] = useState("");
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
@@ -50,12 +47,13 @@ export default function Profile() {
 
     const [dots, setDots] = useState({});
 
-    const [dotsModal, setDotsModal] = useState(false);
+    const [dotsModal] = useState(false);
 
-    // const [isLikedbyMe, setIsLikedbyMe] = useState(false)
+    const [userID, setUserID] = useState('')
+
+    const [hoverDiv, setHoverDiv] = useState(false)
 
     const { user } = useParams()
-
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + profile.username + ".svg";
 
@@ -65,8 +63,8 @@ export default function Profile() {
         return window.location.replace("/Error");
     };
 
-    const Error = () => {       //redirect when there is a server error
-        return window.location.replace("/NotFound404");
+    const Error = (user) => {       //redirect when there is a server error
+        return window.location.replace(`/UserNotFound/${user}`);
         // return <Redirect to="/Error" />
     }
 
@@ -74,34 +72,12 @@ export default function Profile() {
 
 
 
-        axios.get("/tweets/mine/all")
-            .then((res) => {
-                setTweets(res);
-                setTweetCount(res.data.length);
-                // setIsLikedbyMe(res.data.)
-                // console.log(res.data);
-            })
-            .catch((error) => {
-                console.error(error);
-                if (error.response.status === 500) {
-                    internalError();
-                } else if (error.response.status === 404) {
-                    setNoTweets(true);
-                } else {
-                    window.location.replace("/");    // <--- not signed in
-                }
-            }).finally(() => {
-                setTweetLoading(false);
-            });
-
-        // console.log(user)
-
-        // axios.get(`/tweets/user/${user}`) //fetching all tweets from a given user
+        // axios.get("/tweets/mine/all")
         //     .then((res) => {
-        //         // setTweets(res);
-        //         // setTweetCount(res.data.length);
+        //         setTweets(res);
+        //         setTweetCount(res.data.length);
         //         // setIsLikedbyMe(res.data.)
-        //         console.log(res.data);
+        //         // console.log(res.data);
         //     })
         //     .catch((error) => {
         //         console.error(error);
@@ -116,6 +92,7 @@ export default function Profile() {
         //         setTweetLoading(false);
         //     });
 
+        // console.log(user)
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
@@ -126,8 +103,9 @@ export default function Profile() {
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
                 setDatejoined(finalDate)
-
-                setTweetLoading(false);
+                let x = res.data._id
+                getTweets(x)
+                setUserID(x)
             })
             .catch((error) => {
                 console.error(error)
@@ -135,14 +113,34 @@ export default function Profile() {
                     internalError();
                 } else if (error.response.status === 404) {
                     setTweetLoading(false);
-                    Error();
+
+                    Error(user);
                 }
-            }).finally(() => {
-                setTweetLoading(false);
             });
 
 
-    }, []); //tweets <-- this works but modal keeps refreshing
+        async function getTweets(x) {
+            setTweetLoading(true)
+            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+                .then((res) => {
+                    setTweets(res);
+                    setTweetCount(res.data.length);
+                    // console.log(res.data);
+                    // console.log(x)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.response.status === 500) {
+                        internalError();
+                    } else if (error.response.status === 404) {
+                        setNoTweets(true);
+                    }
+                }).finally(() => {
+                    setTweetLoading(false);
+                });
+        }
+
+    }, [user]); //tweets <-- this works but modal keeps refreshing
 
 
     const Loading = () => {        //the loading div
@@ -206,16 +204,17 @@ export default function Profile() {
         // console.log(likedTweets);
     };
 
-    const handleDelete = () => {
+    const handleDelete = (id) => {
 
-        // return alert(tweetId)
+        // return alert(id)
 
-        axios.delete(`tweets/${tweetId}`)
+        axios.delete(`/tweets/${id}`)
             .then((res) => {
                 console.log(res.data);
                 UpdateData()
             })
             .catch((error) => {
+                console.log(id)
                 console.error(error);
             });
     };
@@ -223,7 +222,7 @@ export default function Profile() {
 
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
-            <i><span style={{ fontSize: "18px", fontWeight: 'bolder' }}>You haven't made any tweets yet</span></i>
+            <i><span style={{ fontSize: "18px", fontWeight: 'bolder' }}>This user hasn't made any tweets yet</span></i>
         </div>;
     };
 
@@ -354,9 +353,6 @@ export default function Profile() {
                                     </button>
                                 </form>
                             </div>
-                            {/* <div class="modal-footer">
-                            <button type="button" onClick={tweetToggle} className="btn login-submit btn-primary rounded-pill mt-3">Close</button>
-                        </div> */}
                         </div>
                     </div>
                 </div>
@@ -364,8 +360,8 @@ export default function Profile() {
         </div >;
     };
 
-    const UpdateData = () => {
-        axios.get("/tweets/mine/all")
+    const UpdateData = () => {  //update data after like or deleted tweet
+        axios.get(`/tweets/user/${userID}`)
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
@@ -377,12 +373,46 @@ export default function Profile() {
                     internalError();
                 } else if (error.response.status === 404) {
                     setNoTweets(true);
-                } else {
-                    window.location.replace("/");    // <--- not signed in
                 }
             }).finally(() => {
                 setTweetLoading(false);
             });
+    }
+
+    const HoverDiv = (id) => {
+
+        setTimeout(() => {
+            if (!hoverDiv[id]) {
+                setHoverDiv(prevHoverDiv => ({
+                    ...prevHoverDiv,
+                    [id]: !setHoverDiv[id]
+                }));
+            }
+        }, 700);
+
+        return <div className="show-detail p-3 ">
+            <div>
+                <img src={icon} alt="example" className="user-logo " />
+            </div>
+            <div className="show-detail-1 ">
+                <div >
+                    <strong>{profile.fullname}</strong>
+                </div>
+                <div>
+                    <span>@{profile.username}</span>
+                </div>
+                <div className="mt-2 ">
+                    {profile.bio}
+                </div>
+                <div className="mt-1">
+                    <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
+                        &nbsp;&nbsp;&nbsp;
+                    <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
+                </div>
+            </div>
+
+        </div>
+
     }
 
 
@@ -401,7 +431,7 @@ export default function Profile() {
                     <div className="col main-view phone-home " >
                         {/* {loading ? <Loading /> : null} */}
 
-                        <div className={window.scrollY === 0 ? "row profile-header view" : "row profile-header-scroll view"}>
+                        <div className={window.scrollY > 0 ? "row profile-header view" : "row profile-header-scroll view"}>
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -475,7 +505,7 @@ export default function Profile() {
 
                                     <div className="mt-1">
                                         <span>
-                                            <svg viewBox="0 0 24 24" class="bio-icon">
+                                            <svg viewBox="0 0 24 24" className="bio-icon">
                                                 <g>
                                                     <path d="M19.708 2H4.292C3.028 2 2 3.028 2 4.292v15.416C2 20.972 3.028 22 4.292 22h15.416C20.972 22 22 20.972 22 19.708V4.292C22 3.028 20.972 2 19.708 2zm.792 17.708c0 .437-.355.792-.792.792H4.292c-.437 0-.792-.355-.792-.792V6.418c0-.437.354-.79.79-.792h15.42c.436 0 .79.355.79.79V19.71z">
                                                     </path>
@@ -508,46 +538,43 @@ export default function Profile() {
                         {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
                         {tweets.data.map((item) => (
-                            <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                            <div className="p-2 view row main-post-div" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
-                                    <img src={icon} alt="example" className="user-logo" />
-                                    <div className="show-detail p-3 ">
-                                        <div>
-                                            <img src={icon} alt="example" className="user-logo " />
-                                        </div>
-                                        <div className="show-detail-1">
-                                            <div >
-                                                <strong>{profile.fullname}</strong>
-                                            </div>
-                                            <div>
-                                                <span>@{profile.username}</span>
-                                            </div>
-                                            <div className="mt-2">
-                                                {profile.bio}
-                                            </div>
-                                        </div>
+                                    <Link
+                                        to={`/u/${profile.username}`}
+                                        onMouseEnter={() => HoverDiv(item._id)}
+                                        onMouseLeave={() => setHoverDiv(false)}
+                                    >
+                                        <img src={icon} alt="example" className="user-logo" />
+                                    </Link>
 
-                                    </div>
+                                    {hoverDiv[item._id] ? <HoverDiv /> : null}
                                 </div>
 
                                 <div className="col user-name-tweet post-div" >      {/* <--- user content */}
                                     <div  >
                                         <div >
-                                            <strong>{profile.fullname}</strong> <span>@{profile.username}</span>
+                                            <Link
+                                                to={`/u/${profile.username}`}
+                                                className="name-link"
+                                                onMouseEnter={() => HoverDiv(item._id)}
+                                                onMouseLeave={() => setHoverDiv(false)}
+                                            >
+                                                <strong >{profile.fullname}</strong> <span>@{profile.username}</span>
+                                            </Link>
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                             </span>
                                             {dots[item._id] ? <DotsModal /> : null}
                                             {dotsModal ? <DotsModal /> : null}
-                                            <span className="three-dots" onClick={() => Dots(item._id)}>
-                                                {/* ··· */}
+                                            {/* <span className="three-dots" onClick={() => Dots(item._id)}>
                                                 <svg viewBox="0 0 24 24" className="post-menu">
                                                     <g>
                                                         <circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle>
                                                     </g>
                                                 </svg>
-                                            </span>
+                                            </span> */}
                                         </div>
 
                                         <Link to={`/post/${item._id}`} className="post-link "><p>{item.content}</p></Link>
@@ -568,16 +595,23 @@ export default function Profile() {
 
                                         <button
                                             className="like col"
-                                            onClick={() => handleLike(item._id, item.isLikedbyMe)}
+                                            onClick={() => handleLike(item._id, item.isLikedbyme)}
                                             disabled={disabled}
 
                                         >
-                                            {likedTweets[item._id] || item.isLikedbyMe ?
+                                            {likedTweets[item._id] || item.isLikedbyme ?
                                                 (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                 : <FontAwesomeIcon icon={faHeart} />
                                             }
 
                                                 &nbsp; {item.likes}
+                                        </button>
+
+                                        <button
+                                            className="col delete"
+                                            onClick={() => handleDelete(item._id)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
                                     </div>
 

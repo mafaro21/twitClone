@@ -39,7 +39,7 @@ function Navbar() {
                 <Search />
 
                 <div className="d-flex nav-links ">
-                    <input type="checkbox" class="toggle" onClick={toggleThemeChange} />
+                    <input type="checkbox" className="toggle" onClick={toggleThemeChange} />
 
                 </div>
 

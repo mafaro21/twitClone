@@ -48,22 +48,22 @@ html[data-theme="light"]{
   border-radius: 50%;
   float:left;
 }
-.show-detail{
-  display: none;
-}
 .show-detail-1{
   margin-top: 57px;
 }
-.user-logo:hover + .show-detail{
+.show-detail{
   display: block;
-  color: white;
-  background-color: black;
+  color: var(--text);
+  background-color: var(--background);
   z-index: 2 ;
   position: absolute;
   box-shadow: 0 0 8px grey;
   border-radius: 15px;
   margin-top: 60px;
-  width: 250px;
+  min-width: 230px;
+  max-width: 290px;
+  transition-delay: 2s;
+  transition: all 2s ease-in-out;
 }
 .user-content{
   display: flex;
@@ -72,6 +72,10 @@ html[data-theme="light"]{
 
 span{
   color: grey;
+  text-decoration: none;
+}
+span:hover{
+  text-decoration: none;
 }
 /* home properties */
 
@@ -212,9 +216,10 @@ button{
 
 /* interactive row */
 .interact-row{
-  background-color: var(--background);
+  z-index: inherit;
 }
-.like, .comment, .retweet{
+.like, .comment, .retweet, .delete{
+  border-radius: 15px;
   color: var(--interact);
 }
 
@@ -226,23 +231,38 @@ button{
 .comment:hover{
   background-color: rgb(151, 252, 254,0.2 );
   border-radius: 15px;
-  color: #37FAFE ;
+  color: #30DBDE ;
   /* #395F5F */
 }
 .retweet:hover{
   background-color: rgb(75, 255, 0 ,0.2 );
   border-radius: 15px;
-  color: #4BFF00 ;
+  color: #38BF00 ;
+}
+.delete:hover{
+  background-color: #9D2121;
+  border-radius: 15px;
+  color: white;
 }
 
 /* interactive row */
 
 
 /* post */
+.name-link{
+  color: var(--text)
+}
+.name-link:hover{
+  color: var(--text)
+}
 .post-div{
   /* transition: opacity 3s ease-out 5s; */
   transition: all 5s ease-in-out;
   /* transition-duration: 2s; */
+}
+.main-post-div:hover{
+  /* background-color: #272523; */
+  z-index: 30;
 }
 .post-data{
   font-size: 18px;
