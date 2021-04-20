@@ -45,12 +45,11 @@ html[data-theme="light"]{
 .b{
   background-color: blue;
 }
-
-a, .link{
+a, .link, Link{
   text-decoration: none;
 }
 
-a:hover, .link:hover{
+a:hover, .link:hover, Link:hover{
   color: var(--darkaccent);
   text-decoration: none;
 }
@@ -102,7 +101,9 @@ a:hover, .link:hover{
 button{
   outline: none;
 }
-
+button:hover{
+  text-decoration: none;
+}
 .display{
   display: flex;
 }

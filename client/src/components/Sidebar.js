@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import axios from "axios";
-// import Loader from "react-loader-spinner";
+import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
 
 
 function Sidebar() {
 
-    // const [api, setApi] = useState({ articles: [] });
+    const [api, setApi] = useState({ articles: [] });
 
-    // const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -50,17 +50,17 @@ function Sidebar() {
     }, [isLoggedIn]);
 
 
-    // const Loading = () => {        //the loading div
+    const Loading = () => {        //the loading div
 
-    //     return <div className="d-flex justify-content-center">
-    //         <Loader type="TailSpin"
-    //             color="orange"
-    //             height={40}
-    //             width={40}
-    //         />
+        return <div className="d-flex justify-content-center">
+            <Loader type="TailSpin"
+                color="orange"
+                height={40}
+                width={40}
+            />
 
-    //     </div>
-    // }
+        </div>
+    }
 
 
 
@@ -76,8 +76,8 @@ function Sidebar() {
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Headlines</h5>
                     <ul className="col" >
-                        {/* {loading ? <Loading /> : null} */}
-                        {/* {api.articles.map(item => (
+                        {loading ? <Loading /> : null}
+                        {api.articles.map(item => (
                             <li key={item.url} >
                                 <a href={item.url} target="_blank" rel="noreferrer" className="row view">
                                     <img src={item.urlToImage} className="col-5 api-image row " alt="news" />
@@ -85,7 +85,7 @@ function Sidebar() {
                                 </a>
 
                             </li>
-                        ))} */}
+                        ))}
                     </ul>
                 </div>
                 :

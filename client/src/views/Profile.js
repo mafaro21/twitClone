@@ -11,7 +11,7 @@ import OutsideClick from '../components/OutsideClick';
 import deer from '../images/paul-carmona.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -57,7 +57,7 @@ export default function Profile() {
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + profile.username + ".svg";
 
-
+    let history = useHistory()
 
     const internalError = () => {       //redirect when there is a server error
         return window.location.replace("/Error");
@@ -157,11 +157,12 @@ export default function Profile() {
 
 
 
-    const handleLike = (id, likedbyme) => {
+    const handleLike = (e, id, likedbyme) => {
         //for liking and unliking posts
         // NOW WORKS 🎉🎉
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
+        e.preventDefault()
         console.log(likedbyme)
 
         if (!likedTweets[id] && !likedbyme) {
@@ -204,8 +205,8 @@ export default function Profile() {
         // console.log(likedTweets);
     };
 
-    const handleDelete = (id) => {
-
+    const handleDelete = (e, id) => {
+        e.preventDefault()
         // return alert(id)
 
         axios.delete(`/tweets/${id}`)
@@ -551,7 +552,7 @@ export default function Profile() {
                                     {hoverDiv[item._id] ? <HoverDiv /> : null}
                                 </div>
 
-                                <div className="col user-name-tweet post-div" >      {/* <--- user content */}
+                                <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >      {/* <--- user content */}
                                     <div  >
                                         <div >
                                             <Link
@@ -560,8 +561,10 @@ export default function Profile() {
                                                 onMouseEnter={() => HoverDiv(item._id)}
                                                 onMouseLeave={() => setHoverDiv(false)}
                                             >
-                                                <strong >{profile.fullname}</strong> <span>@{profile.username}</span>
+                                                <strong >{profile.fullname}</strong>&nbsp;
                                             </Link>
+                                            <span>@{profile.username}</span>
+
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                 <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
@@ -577,7 +580,9 @@ export default function Profile() {
                                             </span> */}
                                         </div>
 
-                                        <Link to={`/post/${item._id}`} className="post-link "><p>{item.content}</p></Link>
+                                        <div className="post-link ">
+                                            <p>{item.content}</p>
+                                        </div>
                                     </div>
 
                                     <div className="interact-row d-flex ">
@@ -595,7 +600,7 @@ export default function Profile() {
 
                                         <button
                                             className="like col"
-                                            onClick={() => handleLike(item._id, item.isLikedbyme)}
+                                            onClick={(e) => handleLike(e, item._id, item.isLikedbyme)}
                                             disabled={disabled}
 
                                         >
@@ -609,13 +614,13 @@ export default function Profile() {
 
                                         <button
                                             className="col delete"
-                                            onClick={() => handleDelete(item._id)}
+                                            onClick={(e) => handleDelete(e, item._id)}
                                         >
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
                                     </div>
 
-                                </div>
+                                </Link>
                             </div>
                         ))}
 

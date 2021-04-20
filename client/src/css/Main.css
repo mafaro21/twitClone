@@ -21,9 +21,9 @@ html[data-theme="light"]{
 }
 .main-view{
   border: 1px solid var(--text);
-    border-radius: 15px;
-    text-align: left;
-    width: 103%;
+  border-radius: 15px;
+  text-align: left;
+  width: 103%;
 }
 
 .main-view:before{
@@ -31,9 +31,9 @@ html[data-theme="light"]{
 }
 
 .view{
-    border-bottom: .02px solid var(--text);
-    text-align: left;
-    width: auto;
+  border-bottom: .02px solid var(--text);
+  text-align: left;
+  width: auto;
 }
 
 .tweet-img{
@@ -93,7 +93,7 @@ strong {
   z-index: 1;
   top: 52px;
   background-color: var(--background);
-  width: 575px;
+  width: 105.5%;
   height: 66px;
   border-radius: 15px 15px 0 0;
 }
@@ -104,7 +104,7 @@ strong {
   z-index: 1;
   top: 52px;
   background-color: var(--background);
-  width: 575px;
+  width: 105.5%;
   height: 66px;
 }
 
@@ -216,32 +216,42 @@ button{
 
 /* interactive row */
 .interact-row{
-  z-index: inherit;
+  background-color: inherit;
+  /* align-items: center; */
+  flex-direction: row;
+  justify-content: space-around;
+}
+.interact-row:hover{
+  background-color: inherit;
+  text-decoration: none;
+
 }
 .like, .comment, .retweet, .delete{
-  border-radius: 15px;
+  border-radius: 50px;
   color: var(--interact);
+  max-width: 80px;
+  flex-direction: row;
 }
 
 .like:hover{
   background-color: rgb(254, 153, 151,0.2 );
-  border-radius: 15px;
+  border-radius: 50px;
   color: #FD4D4A;
 }
 .comment:hover{
   background-color: rgb(151, 252, 254,0.2 );
-  border-radius: 15px;
+  border-radius: 50px;
   color: #30DBDE ;
   /* #395F5F */
 }
 .retweet:hover{
   background-color: rgb(75, 255, 0 ,0.2 );
-  border-radius: 15px;
+  border-radius: 50px;
   color: #38BF00 ;
 }
 .delete:hover{
   background-color: #9D2121;
-  border-radius: 15px;
+  border-radius: 50px;
   color: white;
 }
 
@@ -260,9 +270,12 @@ button{
   transition: all 5s ease-in-out;
   /* transition-duration: 2s; */
 }
+.post-div:hover{
+  text-decoration: none;
+}
 .main-post-div:hover{
-  /* background-color: #272523; */
-  z-index: 30;
+  background-color: #0F0E0D;
+  cursor: pointer;
 }
 .post-data{
   font-size: 18px;

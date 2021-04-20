@@ -1,4 +1,3 @@
-- autogrow text area on post.js
-- hover effect for profile.js
-
+- editprofile.js fix and bio on profile.js updates soon after
+- link hover effect on profile.js
 
