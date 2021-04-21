@@ -38,15 +38,14 @@ function Sidebar() {
         //     console.error(error);
         // });
 
-        function auth() {
+        (() => {
             axios.get("/statuslogin")
                 .then((res) => {
                     setIsLoggedIn(res.data.loggedin)
                     // console.log(res.data)
                 });
-        }
+        })()
 
-        auth()
     }, [isLoggedIn]);
 
 
@@ -79,9 +78,9 @@ function Sidebar() {
                         {loading ? <Loading /> : null}
                         {api.articles.map(item => (
                             <li key={item.url} >
-                                <a href={item.url} target="_blank" rel="noreferrer" className="row view">
+                                <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row view">
                                     <img src={item.urlToImage} className="col-5 api-image row " alt="news" />
-                                    <p className="col api-text">{item.title} </p>
+                                    <p className="col api-text" >{item.title} </p>
                                 </a>
 
                             </li>

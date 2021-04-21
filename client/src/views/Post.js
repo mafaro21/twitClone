@@ -3,6 +3,7 @@ import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
+import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Interactive from '../components/Interactive';
@@ -15,7 +16,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import Error from '../views/Error';
 // import 'emoji-mart/css/emoji-mart.css'
@@ -48,6 +49,7 @@ export default function Post() {
 
     const [maxRows] = useState(8)
 
+    let history = useHistory()
 
     const handleLike = (id) => {  //for liking and unliking posts
 
@@ -96,12 +98,12 @@ export default function Post() {
     }
 
     const internalError = () => {       //redirect when there is a server error
-        return window.location.replace("/Error");
+        return history.push("/Error");
         // return <Redirect to="/Error" />
     }
 
     const Error = () => {       //redirect when there is a server error
-        return window.location.replace("/NotFound404");
+        return history.push("/NotFound404");
         // return <Redirect to={Error} />
     }
 
@@ -320,6 +322,7 @@ export default function Post() {
 
     return (
         <div className="general" >
+            <Navbar />
             <div className="container App " >
                 <div className="row " >
 

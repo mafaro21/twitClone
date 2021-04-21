@@ -4,6 +4,7 @@ import '../css/custom.scss';
 import '../css/Main.css';
 import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
 import Header from '../components/Header';
 import tobias from '../images/mihai-surdu.jpg';
 
@@ -19,6 +20,7 @@ function Home() {
 
     return (
         <div className="App general ">
+            <Navbar />
             <div className="container ">
                 {/* <h3 className="text-start">Welcome, $Username</h3> */}
                 <div className="row ">

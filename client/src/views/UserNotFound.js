@@ -4,6 +4,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import BackButton from '../components/BackButton';
 import unf1 from '../images/unf1.jpg';
@@ -20,6 +21,8 @@ export default function UserNotFound() {
 
     return (
         <div className="App general" >
+            <Navbar />
+
             <div className="container  " >
                 <div className="row " >
 
