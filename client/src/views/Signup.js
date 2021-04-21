@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/App.css";
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 
@@ -28,6 +28,8 @@ function Signup() {
         </div>
         : '';
 
+    let history = useHistory()
+
     const loadCaptcha = useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
@@ -39,7 +41,7 @@ function Signup() {
     }, []);
 
     const internalError = () => {       //redirect when there is a server error
-        return window.location.replace("/Error");
+        return history.push("/Error");
     }
 
     const Loading = () => { //the loading div
@@ -82,7 +84,7 @@ function Signup() {
                 axios.post("/register", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        if (x === true) window.location.replace("/home");
+                        if (x === true) history.push("/home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {

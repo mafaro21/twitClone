@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 
@@ -18,6 +18,7 @@ function Login() {
 
     const [loading, setLoading] = useState(false);      // loading animation
 
+
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -25,13 +26,13 @@ function Login() {
         </div>
         : '';
 
-
+    let history = useHistory()
 
     const loadCaptcha = useEffect(() => {
         axios.get("/statuslogin")
             .then((res) => {
                 if (res.data.loggedin) {
-                    return window.location.replace("/Home");
+                    return history.push("/Home");
                 }
             });
 
@@ -49,7 +50,7 @@ function Login() {
 
     const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;
-        return window.location.replace("/Error");
+        return history.push("/Error");
     }
 
     const Loading = () => {
@@ -92,7 +93,7 @@ function Login() {
                     .post("/login", userObject)
                     .then((res) => {
                         let x = res.data.success;
-                        if (x === true) return window.location.replace("/home");
+                        if (x === true) return history.push("/home");
                     })
                     .catch((error) => {
                         if (error.response.status === 500) {

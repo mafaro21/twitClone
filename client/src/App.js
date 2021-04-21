@@ -6,27 +6,23 @@ import Signup from './views/Signup';
 import Home from './views/Home';
 import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
-import Navbar from './components/Navbar';
 import Post from './views/Post'
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 import Compose from './views/Compose'
-// import IsLoggedIn from './components/IsLoggedIn';
+import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
 import UserNotFound from './views/UserNotFound';
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import axios from 'axios';
 // import { TweetContext } from './components/TweetContext'
 
 
 function App() {
   dotenv.config();
 
-
   return (
 
     <Router>
-      { window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "" ? null : <Navbar />}
       <div className="App general">
 
 
@@ -53,10 +49,11 @@ function App() {
           <Route path="/compose/tweet" component={Compose} />
 
           <Route path="/UserNotFound" component={UserNotFound} />
-          {/* <Route component={Error} /> */}
+          <Route path="/fuckyou" component={Error} />
           <Route component={NotFound404} />
 
         </Switch>
+        {/* <Sidebar /> */}
 
       </div>
     </Router>

@@ -3,7 +3,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
 // import Compose from '../views/Compose';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -34,6 +34,7 @@ export default function Header() {
 
     // const [addEmoji, setAddEmoji] = useState('')
 
+    let history = useHistory()
     
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
@@ -97,7 +98,7 @@ fetchData()
     const Logout = () => {  //logout function
         axios.get("/logout")
             .then((res) => {
-                window.location.replace("/");
+                history.push("/");
             });
     }
 

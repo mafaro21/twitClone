@@ -3,8 +3,9 @@ import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
-import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
@@ -54,7 +55,7 @@ export default function Edit() {
     }, [])
 
     const internalError = () => {       //redirect when there is a server error
-        return window.location.replace("/Error");
+        return history.push("/Error");
     };
 
     const onChange = (e) => {
@@ -101,7 +102,7 @@ export default function Edit() {
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
                     let x = res.data.success;
-                    if (x === true) window.location.replace(`/u/${user}`);
+                    if (x === true) history.push(`/u/${user}`);
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
@@ -159,6 +160,8 @@ export default function Edit() {
 
     return (
         <div className="App general " >
+            <Navbar />
+
             <div className="container  " >
                 <div className="row " >
 
