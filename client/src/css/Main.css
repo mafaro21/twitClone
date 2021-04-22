@@ -5,14 +5,14 @@ html[data-theme="dark"]{
   --text: #fbfafa;
   --background: #080603; 
   --interact: #AEAEAE;
-}/* #F29C50 */
-
+  --posthover: #0F0E0D;
+}
 html[data-theme="light"]{
   --text: #080603;
   --background: #fbfafa;
   --darkaccent: #ECD4CC;
   --interact: #414141;
-
+  --posthover: #ECEBEB;
 }
 
 /* mainly home properties */
@@ -229,7 +229,7 @@ button{
 .like, .comment, .retweet, .delete{
   border-radius: 50px;
   color: var(--interact);
-  max-width: 80px;
+  /* max-width: 80px; */
   flex-direction: row;
 }
 
@@ -274,7 +274,7 @@ button{
   text-decoration: none;
 }
 .main-post-div:hover{
-  background-color: #0F0E0D;
+  background-color: var(--posthover);
   cursor: pointer;
 }
 .post-data{

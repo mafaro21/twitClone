@@ -10,7 +10,6 @@ import Post from './views/Post'
 import Compose from './views/Compose'
 import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
-import UserNotFound from './views/UserNotFound';
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
@@ -48,7 +47,6 @@ function App() {
           {/* component={Post} /> */}
           <Route path="/compose/tweet" component={Compose} />
 
-          <Route path="/UserNotFound" component={UserNotFound} />
           <Route path="/fuckyou" component={Error} />
           <Route component={NotFound404} />
 
