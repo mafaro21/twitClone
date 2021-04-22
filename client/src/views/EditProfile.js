@@ -39,6 +39,7 @@ export default function Edit() {
         : '';
 
     useEffect(() => {
+
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 // console.log(res.data)
@@ -102,7 +103,7 @@ export default function Edit() {
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
                     let x = res.data.success;
-                    if (x === true) history.push(`/u/${user}`);
+                    if (x === true) history.push(`/u/${userObject.username}`); //relocate to whatever username we have been given
                 })
                 .catch((error) => {
                     setError(error.response.data.message);

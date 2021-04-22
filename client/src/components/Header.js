@@ -3,7 +3,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
 // import Compose from '../views/Compose';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -284,8 +284,9 @@ export default function Header() {
             </div>
         </div >
     };
-
-    const path = window.location.pathname; //for current location
+ 
+    let location = useLocation()    //for current location
+    let path = location.pathname
 
     const ref = useRef();   //clicking outside closes modal
 

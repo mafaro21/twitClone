@@ -14,7 +14,7 @@ import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, useParams, useHistory, Redirect } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -58,9 +58,11 @@ export default function Profile() {
 
     const [userNotFound, setUserNotFound] = useState(false)
 
+    const [sessionName, setSessionName] = useState('')
+
     const { user } = useParams()
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + profile.username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
 
     let history = useHistory()
 
@@ -68,13 +70,15 @@ export default function Profile() {
         return history.push("/Error");
     };
 
-    const Error = (user) => {       //redirect when there is a server error
-        return history.push(`/UserNotFound/${user}`);
-        // return <Redirect to={`/UserNotFound/${user}`} />
-    }
 
     useEffect(() => {   //fetching data for logged in users
 
+        (() => {
+            axios.get("/statuslogin")
+                .then((res) => {
+                    setSessionName(res.data.user)
+                });
+        })();
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
@@ -88,7 +92,7 @@ export default function Profile() {
                 let x = res.data._id
                 getTweets(x)
                 setUserID(x)
-                document.title = `TwitClone: @${profile.username}`
+                document.title = `TwitClone: @${user}`
             })
             .catch((error) => {
                 console.error(error)
@@ -139,8 +143,6 @@ export default function Profile() {
 
         </div>;
     };
-
-
 
     const handleLike = (e, id, likedbyme) => {
         //for liking and unliking posts
@@ -409,8 +411,35 @@ export default function Profile() {
         </div>
     }
 
+    const handleFollow = () => {
+        console.log(userID)
 
-    const path = window.location.pathname;
+        axios.post(`/follows/${userID}`)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+
+    }
+
+    const handleUnfollow = () => {
+        axios.delete(`/follows/${userID}`)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }
+
+
+
+    let location = useLocation()
+    let path = location.pathname
+    let path1 = path.split('/u/')
+    let userPath = path1[1]
 
     TimeAgo.addLocale(en);   //for the time ago
 
@@ -452,7 +481,7 @@ export default function Profile() {
                                     <div className="banner-right ">
 
                                         {userNotFound ? null :
-                                            path === `/u/${profile.username}` ?
+                                            sessionName === userPath ?
                                                 <Link
                                                     to={`/u/${profile.username}/edit`}
                                                     className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
@@ -460,16 +489,25 @@ export default function Profile() {
                                                 // onClick={editToggle}
                                                 >
                                                     Edit Profile
-                                        </Link>
+                                                </Link>
                                                 :
-                                                <div className="banner-right">
+                                                <div className="banner-right" onClick={() => handleFollow()}>
                                                     <button
                                                         className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
                                                         type="submit"
                                                     >
                                                         Follow
-                                        </button>
+                                                    </button>
                                                 </div>
+
+                                            // <div className="banner-right" onClick={() => handleUnfollow()}>
+                                            //     <button
+                                            //         className="btn login-submit banner-edit btn-primary rounded-pill mt-1"
+                                            //         type="submit"
+                                            //     >
+                                            //         Following
+                                            //     </button>
+                                            // </div>
                                         }
 
                                     </div>
