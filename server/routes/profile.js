@@ -2,6 +2,7 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
+const { ProfileValidation } = require("../middleware/inputvalidation");
 const router = express.Router();
 
 
@@ -51,63 +52,33 @@ router.get("/user/:username", (req, res, next) => {
 
 });
 
-
-/* UPDATING MY PROFILE  */
-router.put("/mine/edit", isLoggedin, (req, res, next) => {
+/**  UPDATING MY PROFILE  */
+router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
     const userid = req.session.user.id;
     const { fullname, username, bio } = req.body;
-    let errors = []; // input errors
 
-    //do validation FIRST
-    function checkInputs() {
-        let OK = true;
-        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
-        let userReg = /[^0-9a-zA-Z_\S]+/;
-        let bioReg = /[<>]/;
+    //connect to db
+    MongoClient.connect(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    }).then(async (client) => {
+        const users = client.db("twitclone").collection("users");
+        const newValues = { fullname: fullname, username: username, bio: bio };
+        try {
+            await users.updateOne({ _id: userid }, { $set: newValues });
+            //IF SUCCESS, UPDATE the Session variables
+            req.session.user = { "id": userid, "username": username };
+            res.status(200).send({  "success": true });
 
-        if (!fullname || !username || !bio) {
-            //☹ if any empty, END immediately!
-            errors.push("No field can be empty, ");
-            return false;
+        } catch (error) {
+            if (error.code === 11000)
+                res.status(409).send({ "message": "Username has already been taken" });
+            else throw error;
+        } finally {
+            await client.close();
         }
-        if (!reg.test(fullname) || userReg.test(username) || bioReg.test(bio)) {
-            errors.push("One or more fields contain illegal characters, ");
-            OK = false;
-        }
-        if (bio.length > 100) {
-            errors.push("Max length for bio exceeded");
-            OK = false;
-        }
-        return OK;
-    };
+    }).catch(next);
 
-    const checkInputsResult = checkInputs();
-    if (checkInputsResult === false) {
-        res.status(422).send({ "message": errors, "success": false });
-        return;
-    } else updateUserData();
-
-    //--------------------------END OF validation ABOVE ----------------------//
-
-    function updateUserData() {
-        MongoClient.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-        }).then(async (client) => {
-            const users = client.db("twitclone").collection("users");
-            const newValues = { fullname: fullname, username: username, bio: bio };
-            try {
-                const result = await users.updateOne({ _id: userid }, { $set: newValues });
-                res.send({ "updated:": result.modifiedCount, "success": true });
-            } catch (error) {
-                if (error.code === 11000)
-                    res.status(409).send({ "message": "Username has already been taken" });
-                else throw error;
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
-    }
 });
 
 

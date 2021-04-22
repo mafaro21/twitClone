@@ -44,7 +44,7 @@ function Sidebar() {
                     setIsLoggedIn(res.data.loggedin)
                     // console.log(res.data)
                 });
-        })()
+        })();
 
     }, [isLoggedIn]);
 

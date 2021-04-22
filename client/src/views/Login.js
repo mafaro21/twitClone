@@ -31,7 +31,7 @@ function Login() {
     const loadCaptcha = useEffect(() => {
         axios.get("/statuslogin")
             .then((res) => {
-                if (res.data.loggedin) {
+                if (res.data.loggedin === true) {
                     return history.push("/Home");
                 }
             });

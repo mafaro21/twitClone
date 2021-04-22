@@ -7,7 +7,7 @@ router.get("/", (req, res, next) => {
     if (!req.session || !req.session.user) {
         return res.send({ "loggedin": false });
     } else
-        return res.send({ "loggedin": true, "user": req.session.user.email });
+        return res.send({ "loggedin": true, "user": req.session.user.username });
 });
 
 module.exports = router;
