@@ -49,8 +49,7 @@ export default function Header() {
 
     useEffect(() => {
     
-
-        function fetchData() {
+        (()=> {
             axios.get("/profile/mine")
                 .then(res => {
                     setIsLoggedIn(true);
@@ -62,9 +61,8 @@ export default function Header() {
                         setIsLoggedIn(false);
                     }
                 });
-        }
+        })();
 
-fetchData()
     }, []);
 
     
@@ -95,15 +93,16 @@ fetchData()
         </div >
     }
 
-    const Logout = () => {  //logout function
+    /** Logout function */
+    const Logout = () => {  
         axios.get("/logout")
             .then((res) => {
                 history.push("/");
             });
     }
 
-
-    const wordCount = () => {   //live word counter
+    /** Live word-counter */
+    const wordCount = () => {   
         document.getElementById("tweet").addEventListener('input', function () {
             var text = this.value,
                 count = text.trim().replace(/\s/g, '').length;
@@ -128,49 +127,39 @@ fetchData()
             }
 
             document.getElementById('show').textContent = count;
-
         });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
         const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
-        if (isValid) {
+        if (isValid === true) {
             sendToDb();
-            setTweetModal(false)
-            setTweetLoading(true)
+            setTweetModal(false);
+            setTweetLoading(true);
         }
-
-
 
         function sendToDb() {
             const tweetObject = {
                 content: tweet.replace(/\n/g, " ").trim()
             }
 
-            axios.post("/tweets", tweetObject)
-                .then((res) => {
-                    
-                })
+            axios.post("/tweets", tweetObject) // <--------REMOVED .res, ITS NOT BEING USED.
                 .catch((error) => {
-                    setTweetLoading(false)
-                    setTweetModal(true)
+                    setTweetLoading(false);
+                    setTweetModal(true);
                     setError(error.response.data.message);
                 })
                 .finally(() => {
-                    setTweetLoading(false)
-                    // document.getElementById("loading").removeChild(loading);
+                    setTweetLoading(false);
                 });
-
-
         }
     }
 
-    //validation check
+    /** Validation check */
     const tweetValidation = (twt) => {
         const tweetErr = {};
         let tweetReg = /[<>]+/;

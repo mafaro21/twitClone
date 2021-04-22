@@ -7,6 +7,7 @@ const axios = require("axios").default;
 const router = express.Router();
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const rateLimit = require("express-rate-limit"); //store it later in REDIS
+const { LoginValidation } = require("../middleware/inputvalidation");
 
 
 //setup rate limit
@@ -26,24 +27,11 @@ router.get("/", (req, res, next) => {
 });
 
 /* handling POST requests */
-router.post("/", LoginLimiter, (req, res, next) => {
+router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
     const { email, password, responseToken } = req.body;
-    let errors = []; // input errors
     let isValid = false; // captcha result
-
-    function checkInputs() {
-        let OK = true;
-        let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-
-        if (!emailpatt.test(email) || !email || !password) {
-            errors.push("Invalid or empty inputs");
-            return false;
-        }
-        return OK;
-    };
-
-    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
-    const checkInputsResult = checkInputs();
+   
+    // BEGIN CAPTCHA VERIFICATION -----------------------//
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
@@ -62,10 +50,8 @@ router.post("/", LoginLimiter, (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputsResult) === false) {
-                res.status(422).send({ "message": errors, "success": false });
-            }
-            else operateDB();
+            if (isValid === true) operateDB();
+            else throw new Error();
         })
         .catch(err => {
             res.status(400).send({ "message": "CAPTCHA Error" });
@@ -89,7 +75,7 @@ router.post("/", LoginLimiter, (req, res, next) => {
                         throw new Error("Wrong email or password! Try again.");
                     }
                     // BINGO! User authenticated. Now, create session.
-                    req.session.user = { id: result._id, email: result.email };
+                    req.session.user = { "id": result._id, "username": result.username };
                     res.status(200).send({ "success": true });
 
                 } catch (error) {

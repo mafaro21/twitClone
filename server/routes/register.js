@@ -6,12 +6,13 @@ const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
 const rateLimit = require("express-rate-limit"); // store it later in REDIS
+const { RegValidation } = require("../middleware/inputvalidation");
 
 
 //setup rate limit
 const RegisterLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 mins window
-    max: 5, // blocking after 5 FAILED requests
+    max: 5, // block after 5 FAILED requests
     skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again in 15 mins" }
 });
@@ -24,42 +25,11 @@ router.get("/", (req, res, next) => {
 
 
 /* handling POST requests */
-router.post("/", RegisterLimiter, (req, res, next) => {
-    const { fullname, email, password, confirmPass, responseToken } = req.body;
-    let errors = []; // input errors
+router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
+    const { fullname, email, password, responseToken } = req.body;
+    
+    // BEGIN CAPTCHA VERIFICATION ---------------------------// 
     let isValid = false; // captcha result
-
-    function checkInputs() {
-        let OK = true;
-        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
-        let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
-
-        if (!fullname || !email || !password || !confirmPass) {
-            //☹ if any empty, END immediately!
-            errors.push("No field can be empty, ");
-            return false;
-        }
-        if (!reg.test(fullname)) {
-            errors.push("Name contains illegal characters, ");
-            OK = false;
-        }
-        if (!emailpatt.test(email)) {
-            errors.push("Email is invalid, ");
-            OK = false;
-        }
-        if (password.length < 8) {
-            errors.push("Required 8 or more characters, ");
-            OK = false;
-        }
-        if (password !== confirmPass) {
-            errors.push("Passwords do not match, ");
-            OK = false;
-        }
-        return OK;
-    };
-
-    //-----------------BEGIN CAPTCHA VERIFICATION ---------------------------//
-    const checkInputsResult = checkInputs();
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
@@ -78,10 +48,8 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if ((isValid && checkInputsResult) === false) {
-                res.status(422).send({ "message": errors, "success": false });
-                return;
-            } else addUserToDatabase();
+            if (isValid === true) addUserToDatabase();
+            else throw new Error();
         })
         .catch(err => {
             res.status(400).send({ "message": "CAPTCHA Error" });
@@ -101,7 +69,7 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             following: 0,
             bio: "Hello Twitclone, This is my default bio",
             password: newPass,
-            datejoined: new Date(),        
+            datejoined: new Date(),
         };
 
         MongoClient.connect(uri, {
@@ -111,8 +79,8 @@ router.post("/", RegisterLimiter, (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             try {
                 const result = await users.insertOne(userObject);
-                // IF successful, create session here.
-                req.session.user = { id: result.ops[0]._id, email: result.ops[0].email };
+                // IF SUCCESSFUL, create session here.
+                req.session.user = { "id": result.ops[0]._id, "username": result.ops[0].username };
                 res.status(201).send({ "success": true });
             } catch (error) {
                 if (error.code === 11000) {
