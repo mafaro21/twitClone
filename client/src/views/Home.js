@@ -6,7 +6,7 @@ import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import Header from '../components/Header';
-import tobias from '../images/mihai-surdu.jpg';
+import tobias from '../images/polina-kuzovkova.jpg';
 
 // import derick from '../images/derick-anies.jpg';
 // import axios from 'axios';
@@ -72,7 +72,7 @@ function Home() {
                                 <div className="user-content">
                                     first user &nbsp; <span> @firstuser69</span>
                                 </div>
-                                <p>at the art gallery</p>
+                                <p>travelling......</p>
                                 <p>
                                     <img src={tobias} alt="test" className="tweet-img" />
                                 </p>
