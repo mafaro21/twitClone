@@ -9,7 +9,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 // import Interactive from '../components/Interactive';
 import OutsideClick from '../components/OutsideClick';
-import deer from '../images/paul-carmona.jpg';
+import deer from '../images/linus2.jpg';
 import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
 import axios from 'axios';

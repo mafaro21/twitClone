@@ -8,9 +8,9 @@ import Loader from "react-loader-spinner";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt'
-
-// import 'emoji-mart/css/emoji-mart.css'
-// import { Picker } from 'emoji-mart'
+import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 export default function Header() {
 
@@ -31,6 +31,23 @@ export default function Header() {
     const [tweetErr, setTweetErr] = useState({})
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const [tweetContent, setTweetContent] = useState('')
+
+    const [count, setCount] = useState(0)
+
+    const [color, setColor] = useState("grey")
+
+    const [disabled, setDisabled] = useState(false);
+
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
+
+    const [rows, setRows] = useState(2)
+
+    const [minRows] = useState(3)
+
+    const [maxRows] = useState(10)
 
     // const [addEmoji, setAddEmoji] = useState('')
 
@@ -62,6 +79,8 @@ export default function Header() {
                     }
                 });
         })();
+
+        
 
     }, []);
 
@@ -135,10 +154,11 @@ export default function Header() {
 
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
-        const isValid = tweetValidation(tweet); /* <-- call the validation fn. 😀*/
+
+        const isValid = tweetValidation(tweet); /* <-- call the validation fn. */
         if (isValid === true) {
             sendToDb();
-            setTweetModal(false);
+            // setTweetModal(false);
             setTweetLoading(true);
         }
 
@@ -147,10 +167,19 @@ export default function Header() {
                 content: tweet.replace(/\n/g, " ").trim()
             }
 
-            axios.post("/tweets", tweetObject) // <--------REMOVED .res, ITS NOT BEING USED.
+            axios.post("/tweets", tweetObject)
+                .then(() => {
+                    let tweetDiv = document.getElementById("tweet-modal")
+                    tweetDiv.style.display = "none"
+                    setTweetContent('')
+                    setCount(0)
+                    setColor('grey')
+                    setShowEmojiPicker(false)
+                    setRows(3)
+                })
                 .catch((error) => {
                     setTweetLoading(false);
-                    setTweetModal(true);
+                    // setTweetModal(true);
                     setError(error.response.data.message);
                 })
                 .finally(() => {
@@ -202,7 +231,7 @@ export default function Header() {
 
 
     const TweetModal = () => {
-        return <div >
+        return <div id="tweet-modal">
             <div className="modal-wrapper" >
                 <div className="tweettest  modal-enter" >
                     <div className="">
@@ -226,7 +255,7 @@ export default function Header() {
                                     <img src={icon} alt="example" className="user-tweet-img" />
                                 </div>
 
-                                <form id="tweetForm" className="signup col tweet-form" onSubmit={(e) => handleSubmit(e)} >
+                                <form id="tweetForm1" className="signup col tweet-form" onSubmit={(e) => handleSubmit(e)} >
 
                                     <div className="view">
                                         <textarea
@@ -296,9 +325,201 @@ export default function Header() {
 
     });
 
+    const toggleTest = () => {
+        let tweetDiv = document.getElementById("tweet-modal")
+        let button = document.getElementById("tweet-button")
+        let buttonClose = document.getElementById("tweet-close")
+
+        button.addEventListener("click", () => {
+
+            showDiv = !showDiv
+            if (showDiv === true) {
+                tweetDiv.style.display = "block"
+            } else {
+                tweetDiv.style.display = "none"
+            }
+  
+        })
+
+        buttonClose.addEventListener("click", () => {
+
+            
+            if (1 != 3) {
+                tweetDiv.style.display = "none"
+                setTweetContent('')
+                setCount(0)
+                setColor('grey')
+                setRows(3)
+                setShowEmojiPicker(false)
+                setTweetErr('')
+            }
+        })
+
+        let showDiv = false
+
+    }
+    
+    const handleChange = (e) => {
+        setTweetContent(e.target.value)
+        wordCountReact(e)
+
+        const textareaLineHeight = 40;
+
+        const previousRows = e.target.rows;
+        e.target.rows = minRows;
+
+        const currentRows = ~~(e.target.scrollHeight / textareaLineHeight);
+
+        if (currentRows === previousRows) {
+            e.target.rows = currentRows;
+        }
+
+        if (currentRows >= maxRows) {
+            e.target.rows = maxRows;
+            e.target.scrollTop = e.target.scrollHeight;
+        }
+
+        // setComment(e.target.value)
+        setRows(currentRows < maxRows ? currentRows : maxRows)
+    }
+
+    const wordCountReact = (e) => {
+        let tweetContent = e.target.value
+        // setComment(comment)
+        setCount(tweetContent.length)
+
+        // let y = comment.length
+        let x = tweetContent.trim().replace(/\s/g, '').length;
+
+        if (x === 280) {
+            setColor("red")
+        } else if (x >= 250) {
+            setColor("#FF8000")
+        } else if (x >= 200) {
+            setColor("#FFB400")
+        } else if (x >= 150) {
+            setColor("#FFF800")
+        } else {
+            setColor("grey")
+        }
+
+        if (tweetContent.length > 1) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
+    }
+    
+    let addEmoji = emoji => {
+        setTweetContent(tweetContent + emoji.native)
+    }
+    const Emoji = () => {
+        return <Picker
+            onSelect={addEmoji}
+            color="#ff6300"
+            sheetSize={32}
+            emoji='point_up'
+            title="Pick your emoji"
+            set='twitter'
+            style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
+            theme='auto'
+        />
+    }
+    
+
     return (
-        <header className=" header pt-3">
+        <header className=" header pt-3" >
             {tweetModal ? <TweetModal /> : null}
+            <div id="tweet-modal">
+                <div className="modal-wrapper" >
+                    <div className="tweettest  modal-enter" >
+                        <div className="">
+                            <div className="modal-view">
+                                <div className="modal-header">
+                                    <button className="" onClick={toggleTest} id="tweet-close">
+                                        <svg viewBox="0 0 24 24" className="back-button ">
+                                            <g>
+                                                <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
+
+
+                                <div className="modal-body row ">
+                                    <div className="col-1">
+                                        <img src={icon} alt="example" className="user-tweet-img" />
+                                    </div>
+
+                                    <form id="tweetForm" className="signup col tweet-form" onSubmit={(e) => handleSubmit(e)} >
+
+                                        <div className="view">
+                                            <textarea
+
+                                                id="tweet"
+                                                name="tweet"
+                                                type="text"
+                                                value={tweetContent}
+                                                onChange={handleChange}
+                                                className=" edit-input "
+                                                maxLength="280"
+                                                rows={rows}
+                                                placeholder="Any Hot Takes?"
+                                                required
+                                            />
+
+
+                                            {Object.keys(tweetErr).map((key) => {
+                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                            })}
+                                        </div>
+
+                                        <div className="d-flex flex-row mt-1">
+                                            <div className="container d-flex">
+                                                <span><span style={{ color }}>{count}</span>/280</span>
+                                                {/* <span id="show">0</span><span>/280</span> */}
+                                                <div className=" ml-4">
+                                                    <FontAwesomeIcon
+                                                        size="lg"
+                                                        icon={faSmile}
+                                                        className="mt-2 icon-active"
+                                                        onClick={toggleEmojiPicker}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {showEmojiPicker ? <Emoji/> : null}
+
+                                            {/* <Picker
+                                            set='twitter'
+                                            // onSelect={addEmoji}
+                                            title='Pick your emoji…'
+                                            emoji='point_up'
+                                            style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
+                                            theme='auto'
+                                            /> */}
+
+                                            <button
+                                                id="submit-btn"
+                                                className="btn login-submit btn-outline-primary rounded-pill   "
+                                                type="submit"
+                                            // onClick={handleSubmit}
+                                                disabled={disabled}       //button disabler
+                                            >
+                                                Tweet
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
             {tweetLoading ? <TweetLoading /> : null}
             {/* <Compose/> */}
             {/* col-sm-2 */}
@@ -393,8 +614,10 @@ export default function Header() {
 
                                 <div
                                     // to="/compose"
+                                    id="tweet-button"
                                     className="btn tweet-submit btn-primary rounded-pill mt-3 "
-                                    onClick={tweetToggle}
+                                    // onClick={tweetToggle}
+                                    onClick={toggleTest}
 
                                 >
                                     <div
