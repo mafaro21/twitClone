@@ -12,8 +12,30 @@ const FollowLimiter = rateLimit({
     message: { "message": "Too many requests, try again in 5 mins" }
 });
 
+/** check if I Follow given User => 1 or 0 */
+router.get("/to/:userid", (req, res, next) => {
+    const fromUserId = req.session.user.id;
+    const toUserId = req.params.userid;
 
-/* FOLLOW SOMEONE by userId */
+    if (!ObjectId.isValid(toUserId)) return res.sendStatus(400);
+
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const follows = client.db("twitclone").collection("follows");
+            const query = { fromUserId: new ObjectId(fromUserId), toUserId: new ObjectId(toUserId) };
+            try {
+                const myFollow = await follows.countDocuments(query);
+                res.send({ "count": myFollow });
+            } catch (error) {
+                throw error;
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+
+});
+
+/** FOLLOW SOMEONE by userId */
 router.post("/:userid", FollowLimiter, (req, res, next) => {
     const fromUserId = req.session.user.id;
     const toUserId = req.params.userid;
@@ -39,12 +61,14 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             try {
                 let q1 = await follows.insertOne(followObject);
-                let q2 = await users.updateOne({ _id: followObject.fromuserid }, { $inc: { "following": 1 } });
-                let q3 = await users.updateOne({ _id: followObject.touserid }, { $inc: { "followers": 1 } });
+                let q2 = await users.updateOne({ _id: followObject.fromUserId }, { $inc: { "following": 1 } });
+                let q3 = await users.updateOne({ _id: followObject.toUserId }, { $inc: { "followers": 1 } });
                 if (q1.insertedCount && q2.modifiedCount && q3.modifiedCount)
                     res.status(201).send({ "success": true });
             } catch (error) {
-                throw error;
+                if (error.code === 11000) {
+                    res.status(409).send({ "message": "Cannot follow User Twice", "success": false });
+                } else throw error;
             } finally {
                 await client.close();
             }
@@ -53,7 +77,7 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
 });
 
 
-/* UNFOLLOW SOMEONE by userId */
+/** UNFOLLOW SOMEONE by userId  */
 router.delete("/:userid", FollowLimiter, (req, res, next) => {
     const fromUserId = req.session.user.id;
     const toUserId = req.params.userid;
@@ -61,7 +85,7 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
     /** 
      * 
      * Objective:
-     * 1. DELETE one entry to `follows` collection
+     * 1. DELETE one entry from `follows` collection
      * 2. DECREMENT -1 the `following` count of Source user
      * 3. DECREMENT -1 the `followers` count of Target user.
      *  */
@@ -90,7 +114,7 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
 
 });
 
-/*error handler */
+/** error handler */
 router.use((err, req, res, next) => {
     res.sendStatus(500);
     console.error("FOLLOW_Error", err);
