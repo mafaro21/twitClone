@@ -16,11 +16,12 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
 import { Link, useHistory } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import Error from '../views/Error';
-// import 'emoji-mart/css/emoji-mart.css'
-// import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 export default function Post() {
 
@@ -42,6 +43,9 @@ export default function Post() {
     const [commentReply, setCommentReply] = useState(false)
 
     const [hoverDiv, setHoverDiv] = useState(false)
+
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
 
     const [rows, setRows] = useState(1)
 
@@ -319,6 +323,21 @@ export default function Post() {
             });
     }
 
+    let addEmoji = emoji => {
+        setComment(comment + emoji.native)
+    }
+    const Emoji = () => {
+        return <Picker
+            onSelect={addEmoji}
+            color="#ff6300"
+            sheetSize={32}
+            emoji='point_up'
+            title="Pick your emoji"
+            set='twitter'
+            style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '1' }}
+            theme='auto'
+        />
+    }
 
     return (
         <div className="general" >
@@ -489,16 +508,29 @@ export default function Post() {
 
                                 {/* {loading ? <Loading /> : null} */}
 
-                                <div className="d-flex flex-row mt-1">
+                                <div className="d-flex flex-row mt-1 justify-content-between">
 
                                     {commentReply ? //character counter
-                                        <div className="container mt-2">
-                                            <span><span style={{ color }}>{count}</span>/280</span>
-                                            {/* <span id="show">0</span><span>/280</span> */}
+                                        <div className="d-flex">
+                                            <div className="container mt-2">
+                                                <span><span style={{ color }}>{count}</span>/280</span>
+                                                {/* <span id="show">0</span><span>/280</span> */}
+                                            </div>
+
+                                            <div className=" ml-4" >
+                                                <FontAwesomeIcon
+                                                    size="lg"
+                                                    icon={faSmile}
+                                                    className="mt-2 icon-active"
+                                                    onClick={toggleEmojiPicker}
+                                                />
+                                            </div>
                                         </div>
                                         :
                                         null
                                     }
+
+                                    {showEmojiPicker ? <Emoji /> : null}
 
                                     {/* <Picker
                                         set='twitter'
@@ -511,7 +543,7 @@ export default function Post() {
 
                                     <button
                                         id="submit-btn"
-                                        className="btn login-submit btn-outline-primary rounded-pill"
+                                        className="btn login-submit btn-outline-primary rounded-pill "
                                         type="submit"
                                         // onClick={handleSubmit}
                                         disabled={commentDisabled}       //button disabler

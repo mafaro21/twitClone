@@ -135,6 +135,8 @@ strong {
   display: flex;
   float:right;
   justify-content: space-between;
+  transition-duration: 2s;
+  transition: all .1s ease-in-out;
 }
 .banner-settings{
   height: 40px;
