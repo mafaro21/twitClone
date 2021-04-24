@@ -88,8 +88,7 @@ const TweetValidation = (req, res, next) => {
     }
     const TweetValidationResult = checkInputs();
     if (TweetValidationResult === false) {
-        res.status(422).send({ "message": errors, "success": false });
-        return;
+        return res.status(422).send({ "message": errors, "success": false });
     } else next();
 };
 
@@ -123,8 +122,7 @@ const ProfileValidation = (req, res, next) => {
 
     const checkInputsResult = checkInputs();
     if (checkInputsResult === false) {
-        res.status(422).send({ "message": errors, "success": false });
-        return;
+        return res.status(422).send({ "message": errors, "success": false });   
     } else next();
 };
 

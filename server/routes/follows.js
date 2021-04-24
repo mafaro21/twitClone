@@ -64,7 +64,7 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
                 let q2 = await users.updateOne({ _id: followObject.fromUserId }, { $inc: { "following": 1 } });
                 let q3 = await users.updateOne({ _id: followObject.toUserId }, { $inc: { "followers": 1 } });
                 if (q1.insertedCount && q2.modifiedCount && q3.modifiedCount)
-                    res.status(201).send({ "success": true });
+                    res.status(201).send({ "followed": q1.insertedCount, "success": true });
             } catch (error) {
                 if (error.code === 11000) {
                     res.status(409).send({ "message": "Cannot follow User Twice", "success": false });
@@ -104,7 +104,7 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
                 let q2 = await users.updateOne({ _id: followObject.fromuserid }, { $inc: { "following": -1 } });
                 let q3 = await users.updateOne({ _id: followObject.touserid }, { $inc: { "followers": -1 } });
                 if (q1.deletedCount && q2.modifiedCount && q3.modifiedCount)
-                    res.status(200).send({ "success": true });
+                    res.status(200).send({ "unfollowed": q1.insertedCount, "success": true });
             } catch (error) {
                 throw error;
             } finally {

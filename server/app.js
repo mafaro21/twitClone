@@ -69,7 +69,7 @@ app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 
-//connect to Mongodb
+//Test MongoDB connection
 MongoClient.connect(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
