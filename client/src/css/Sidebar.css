@@ -61,7 +61,6 @@ html[data-theme="light"]{
   border-radius: 15px;
   text-align: left;
   background-color: var(--sidebarbg);
-  
 }
 
 .sidebar:hover{
@@ -142,7 +141,10 @@ ul{
 .header-title{
   font-size: 21px;
 }
-
+.icon-active:hover{
+  background-color: var(--hover);
+  border-radius: 29px;
+}
 .header-link:hover, .header-link-active:hover{
   fill: var(--accent);
   color: var(--accent);
@@ -162,7 +164,9 @@ ul{
 }
 
 /* tweetModal */
-
+#tweet-modal{
+  display: none;
+}
 .modal-wrapper{
   z-index: 2 ;
   position: fixed;
@@ -170,18 +174,18 @@ ul{
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(38, 36, 34, 0.9);
 }
 .tweettest{
-  margin-top: 103px;
-  width: 35%;
+  margin-top: 86px;
+  width: 33%;
   transition: all .3s ease-in-out;
-  margin-left: 32%;
+  margin-left: 30%;
   
 }
 .modal-view{
   background-color: var(--background);
-  border: 2px solid var(--accent);
+  border: 1px solid var(--background);
   border-radius: 26px;
 }
 .user-tweet-img{
@@ -328,6 +332,13 @@ input[type=checkbox]:focus {
     width: 65px;
     height: 50px;
   }
+  .tweettest{
+  margin-top: 86px;
+  width: 100% !important;
+  transition: all .3s ease-in-out;
+  margin-left: 30%;
+  
+}
 }
 
 @media screen and (max-width: 992px){
@@ -371,7 +382,7 @@ input[type=checkbox]:focus {
     display: inline-block;
   }
   .tweettest{
-    width: 80% !important;
+    width: 100% !important;
     margin-left: 10%;
     margin-top: 20%;
   }
@@ -411,8 +422,8 @@ input[type=checkbox]:focus {
     margin-left: -20%;
   }
   .tweettest{
-    width: 60% !important;
-    margin-left: 19%;
+    width: 50% !important;
+    margin-left: 20%;
     margin-top: 13%;
   }
   .tweet-text{
@@ -425,4 +436,14 @@ input[type=checkbox]:focus {
     margin-top: 40%;
     display: inline-block;
   }
+}
+
+@media screen and (max-width: 1400px){
+  .tweettest{
+  margin-top: 86px;
+  width: 43%;
+  transition: all .3s ease-in-out;
+  margin-left: 27%;
+  
+}
 }
