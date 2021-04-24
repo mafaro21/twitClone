@@ -30,7 +30,7 @@ App Name:... twitClone
 - [x] Load Tweets from DB to client
 - [x] Display timestamps for tweets similar to Twitter (1h, 18m, 1m)
 - [x] Like Tweets
-- [ ] Follow & unfollow other users
+- [x] Follow & unfollow other users
 - [ ] Retweet
 - [ ] Comment on tweets
 

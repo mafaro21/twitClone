@@ -403,7 +403,7 @@ export default function Header() {
             setColor("grey")
         }
 
-        if (tweetContent.length > 1) {
+        if (tweetContent.length !== 0) {
             setDisabled(false)
         } else {
             setDisabled(true)
@@ -624,7 +624,7 @@ export default function Header() {
                                         className="tweet-text"
                                         style={{ fontWeight: 700 }}
                                     >
-                                        Tweet
+                                        Tweet 
                                     </div>
                                 <FontAwesomeIcon icon={faFeatherAlt} className="tweet"/>
 

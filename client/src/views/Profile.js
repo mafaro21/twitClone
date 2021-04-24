@@ -40,6 +40,8 @@ export default function Profile() {
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
+    const [isFollowing, setIsFollowing] = useState(0)
+
     const [tweetCount, setTweetCount] = useState(0);
 
     const [tweetId, setTweetId] = useState("");
@@ -110,6 +112,15 @@ export default function Profile() {
 
         async function getTweets(x) {
             setTweetLoading(true)
+
+            axios.get(`/follows/to/${x}`)
+                .then((res) => {
+                    setIsFollowing(res.data.count)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+
             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
                 .then((res) => {
                     setTweets(res);
@@ -127,9 +138,13 @@ export default function Profile() {
                 }).finally(() => {
                     setTweetLoading(false);
                 });
+
+
         }
 
-    }, [user]); //tweets <-- this works but modal keeps refreshing
+
+
+    }, [user]);
 
 
     const Loading = () => {        //the loading div
@@ -351,6 +366,37 @@ export default function Profile() {
     };
 
     const UpdateData = () => {  //update data after like or deleted tweet
+        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+            .then((res) => {
+                setProfile(res.data)
+                // console.log(res.data)
+                let date = new Date(res.data.datejoined);
+                let months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                setDatejoined(finalDate)
+                document.title = `TwitClone: @${user}`
+            })
+            .catch((error) => {
+                console.error(error)
+
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setUserNotFound(true)
+                    document.title = `TwitClone - User Not Found!!`
+                    // Error(user);
+                }
+            });
+
+        axios.get(`/follows/to/${userID}`)
+            .then((res) => {
+                setIsFollowing(res.data.count)
+            })
+            .catch((err) => {
+                console.error(err)
+            });
+
         axios.get(`/tweets/user/${userID}`)
             .then((res) => {
                 setTweets(res);
@@ -364,9 +410,9 @@ export default function Profile() {
                 } else if (error.response.status === 404) {
                     setNoTweets(true);
                 }
-            }).finally(() => {
-                setTweetLoading(false);
             });
+
+
     }
 
     const HoverDiv = (id) => {
@@ -416,6 +462,7 @@ export default function Profile() {
 
         axios.post(`/follows/${userID}`)
             .then((res) => {
+                UpdateData()
                 console.log(res.data)
             })
             .catch((err) => {
@@ -425,8 +472,11 @@ export default function Profile() {
     }
 
     const handleUnfollow = () => {
+        console.log(userID)
+
         axios.delete(`/follows/${userID}`)
             .then((res) => {
+                UpdateData()
                 console.log(res.data)
             })
             .catch((err) => {
@@ -491,23 +541,24 @@ export default function Profile() {
                                                     Edit Profile
                                                 </Link>
                                                 :
-                                                <div className="banner-right" onClick={() => handleFollow()}>
-                                                    <button
-                                                        className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
-                                                        type="submit"
-                                                    >
-                                                        Follow
+                                                isFollowing === 0 ?
+                                                    <div className="banner-right" onClick={() => handleFollow()}>
+                                                        <button
+                                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                            type="submit"
+                                                        >
+                                                            Follow
                                                     </button>
-                                                </div>
-
-                                            // <div className="banner-right" onClick={() => handleUnfollow()}>
-                                            //     <button
-                                            //         className="btn login-submit banner-edit btn-primary rounded-pill mt-1"
-                                            //         type="submit"
-                                            //     >
-                                            //         Following
-                                            //     </button>
-                                            // </div>
+                                                    </div>
+                                                    :
+                                                    <div className="banner-right" onClick={() => handleUnfollow()}>
+                                                        <button
+                                                            className="btn login-submit banner-edit btn-primary rounded-pill mt-1"
+                                                            type="submit"
+                                                        >
+                                                            Following
+                                                        </button>
+                                                    </div>
                                         }
 
                                     </div>
