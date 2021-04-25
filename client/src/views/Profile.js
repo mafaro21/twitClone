@@ -7,6 +7,7 @@ import BackButton from '../components/BackButton';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import NoAccount from '../components/NoAccount';
 // import Interactive from '../components/Interactive';
 import OutsideClick from '../components/OutsideClick';
 import deer from '../images/linus2.jpg';
@@ -61,6 +62,8 @@ export default function Profile() {
     const [userNotFound, setUserNotFound] = useState(false)
 
     const [sessionName, setSessionName] = useState('')
+
+    const [noAccountDiv, setNoAccountDiv] = useState(false)
 
     const { user } = useParams()
 
@@ -181,15 +184,20 @@ export default function Profile() {
                 })
                 .catch((error) => {
                     console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
                 }).finally(() => {
                     setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
                 });
 
         } else {
             setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
-                [id]: setLikedTweets[id]
+                [id]: setLikedTweets[id],
             }));
 
             axios.delete(`/likes/${id}`)
@@ -199,8 +207,12 @@ export default function Profile() {
                 })
                 .catch((error) => {
                     console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
                 }).finally(() => {
                     setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
                 });
         }
         // console.log("Liked tweetid", id);
@@ -219,7 +231,14 @@ export default function Profile() {
             .catch((error) => {
                 console.log(id)
                 console.error(error);
-            });
+                error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setNoAccountDiv(false)
+                }, 2000);
+            })
     };
 
 
@@ -467,6 +486,12 @@ export default function Profile() {
             })
             .catch((err) => {
                 console.error(err)
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setNoAccountDiv(false)
+                }, 5000);
             })
 
     }
@@ -481,6 +506,12 @@ export default function Profile() {
             })
             .catch((err) => {
                 console.error(err)
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setNoAccountDiv(false)
+                }, 2000);
             })
     }
 
@@ -498,6 +529,8 @@ export default function Profile() {
             <Navbar />
             <div className="container  " >
                 <div className="row " >
+
+                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
 
                     <Header />
                     {commentModal ? <CommentModal /> : null}
