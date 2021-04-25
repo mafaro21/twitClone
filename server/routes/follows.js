@@ -12,28 +12,6 @@ const FollowLimiter = rateLimit({
     message: { "message": "Too many requests, try again in 5 mins" }
 });
 
-/** check if I Follow given User => 1 or 0 */
-router.get("/to/:userid", (req, res, next) => {
-    const fromUserId = req.session.user.id;
-    const toUserId = req.params.userid;
-
-    if (!ObjectId.isValid(toUserId)) return res.sendStatus(400);
-
-    MongoClient.connect(uri, MongoOptions)
-        .then(async (client) => {
-            const follows = client.db("twitclone").collection("follows");
-            const query = { fromUserId: new ObjectId(fromUserId), toUserId: new ObjectId(toUserId) };
-            try {
-                const myFollow = await follows.countDocuments(query);
-                res.send({ "count": myFollow });
-            } catch (error) {
-                throw error;
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
-
-});
 
 /** FOLLOW SOMEONE by userId */
 router.post("/:userid", FollowLimiter, (req, res, next) => {
