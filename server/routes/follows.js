@@ -43,9 +43,7 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
                     await users.updateOne({ _id: followObject.fromUserId }, { $inc: { "following": 1 } });
                     await users.updateOne({ _id: followObject.toUserId }, { $inc: { "followers": 1 } });
                     res.status(201).send({ "followed": q1.insertedCount, "success": true });
-
                 }
-
             } catch (error) {
                 if (error.code === 11000) {
                     res.status(409).send({ "message": "Cannot follow User Twice", "success": false });
@@ -82,15 +80,11 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
             const users = client.db("twitclone").collection("users");
             try {
                 let q1 = await follows.deleteOne(followObject);
-
-                let q2 = await users.updateOne({ _id: followObject.fromUserId }, { $inc: { following: -1 } });
-                let q3 = await users.updateOne({ _id: followObject.toUserId }, { $inc: { followers: -1 } });
-                if (q1.deletedCount === 1 && q2.modifiedCount === 1 && q3.modifiedCount === 1) {
+                if (q1.deletedCount === 1) {
+                    await users.updateOne({ _id: followObject.fromUserId }, { $inc: { following: -1 } });
+                    await users.updateOne({ _id: followObject.toUserId }, { $inc: { followers: -1 } });
                     res.status(200).send({ "unfollowed": q1.deletedCount, "success": true });
                 }
-
-
-
             } catch (error) {
                 throw error;
             } finally {
