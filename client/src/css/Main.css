@@ -6,6 +6,7 @@ html[data-theme="dark"]{
   --background: #080603; 
   --interact: #AEAEAE;
   --posthover: #0F0E0D;
+   --hover: rgb(242,156,80,0.4);
 }
 html[data-theme="light"]{
   --text: #080603;
@@ -13,6 +14,7 @@ html[data-theme="light"]{
   --darkaccent: #ECD4CC;
   --interact: #414141;
   --posthover: #ECEBEB;
+   --hover: rgb(242,156,80,0.4);
 }
 
 /* mainly home properties */
@@ -179,7 +181,24 @@ button{
 .word-count{
   z-index: 1000;
 }
-
+.follow-tab{
+ color: var(--text);
+ cursor: pointer;
+}
+.follow-tab-active{
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  cursor: pointer;
+}
+.follow-tab-active:hover{ 
+  background-color: var(--hover);
+  text-decoration: none;
+}
+.follow-tab:hover{
+  background-color: var(--hover);
+  text-decoration: none;
+  color: var(--accent)
+}
 /* modal edit */
 .modaltest{
   z-index: 1000 ;

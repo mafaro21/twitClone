@@ -61,7 +61,8 @@ a:hover, .link:hover, Link:hover{
     background-color: var(--accent);
     background-image: repeating-linear-gradient(147deg, #FFE53B, #f29c50, #FFE53B, #f29c50);
     animation: gradient 6s infinite linear;
-    height: calc(100vh - 56px); 
+    /* height: calc(100vh - 56px);  */
+    height: 100vh;
     background-size: 300% 100%;
     /* background-repeat: no-repeat; */
     /* background-position: cover; */
@@ -136,12 +137,12 @@ button:hover{
 
 .login-input{
   padding: 26px;
-  border: 1px solid var(--text);
+  border: 1px solid white;
   border-radius: 20px;
   height: 60px;
   width: 30%;
   background-color: rgba(0, 0, 0, 0.3);
-  color:var(--text);
+  color: white;
   outline: none;
 }
 
@@ -157,12 +158,12 @@ button:hover{
 
 .signup-input{
   padding: 26px;
-  border: 1px solid var(--text);
+  border: 1px solid white;
   border-radius: 20px;
   height: 60px;
   width: 50%;
   background-color:rgba(0, 0, 0, 0.2);
-  color: var(--text);
+  color: white;
   outline: none;
 }
 

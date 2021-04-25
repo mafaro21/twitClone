@@ -28,32 +28,23 @@ import ReactTimeAgo from 'react-time-ago';
 
 export default function Profile() {
 
-    // const [loading, setLoading] = useState(true);      // loading animation
     const [tweetLoading, setTweetLoading] = useState(true);
 
-    const [datejoined, setDatejoined] = useState("");
+    const [datejoined, setDatejoined] = useState('');
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
 
-    const [profile, setProfile] = useState({ fullname: '', username: '', bio: '', followers: 0, following: 0 })  //display user data
+    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
-    const [isFollowing, setIsFollowing] = useState(0)
-
     const [tweetCount, setTweetCount] = useState(0);
-
-    const [tweetId, setTweetId] = useState("");
 
     const [noTweets, setNoTweets] = useState(false);
 
     const [commentModal, setCommentModal] = useState(false);
-
-    const [dots, setDots] = useState({});
-
-    const [dotsModal] = useState(false);
 
     const [userID, setUserID] = useState('')
 
@@ -87,16 +78,17 @@ export default function Profile() {
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
-                setProfile(res.data)
-                // console.log(res.data)
-                let date = new Date(res.data.datejoined);
+                setProfile(res.data[0])
+                console.log(res.data)
+                let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
                 setDatejoined(finalDate)
-                let x = res.data._id
+                let x = res.data[0]._id
                 getTweets(x)
                 setUserID(x)
+                console.log(x)
                 document.title = `TwitClone: @${user}`
             })
             .catch((error) => {
@@ -116,20 +108,12 @@ export default function Profile() {
         async function getTweets(x) {
             setTweetLoading(true)
 
-            axios.get(`/follows/to/${x}`)
-                .then((res) => {
-                    setIsFollowing(res.data.count)
-                })
-                .catch((err) => {
-                    console.error(err)
-                })
-
             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
                 .then((res) => {
                     setTweets(res);
                     setTweetCount(res.data.length);
                     // console.log(res.data);
-                    // console.log(x)
+                    console.log(x)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -215,8 +199,6 @@ export default function Profile() {
                     }, 2000);
                 });
         }
-        // console.log("Liked tweetid", id);
-        // console.log(likedTweets);
     };
 
     const handleDelete = (e, id) => {
@@ -241,7 +223,6 @@ export default function Profile() {
             })
     };
 
-
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
 
@@ -250,40 +231,12 @@ export default function Profile() {
         </div>;
     };
 
-    const Dots = (id) => {
-
-        setTweetId(id);   //set tweetid whenever the dots are clicked
-
-        if (!dots[id]) {
-            setDots(prevDots => ({
-                ...prevDots,
-                [id]: !setDots[id]
-
-            }));
-            console.log(id);
-        }
-    };
 
     const ref = useRef();   //clicking outside closes modal
 
     OutsideClick(ref, () => {
-        // setDots(!dots)
         // console.log("yep cock");
     });
-
-    const DotsModal = () => {       //three dots basically 'more'
-        return <div className="dots-wrapper" ref={ref}>
-            <div className="dots " >
-                <button className="p-3 dots-delete " onClick={handleDelete}>
-                    <div className="dots-button"><FontAwesomeIcon icon={faTrashAlt} /> Delete</div>
-                </button>
-                <button className="p-3 dots-delete ">
-                    <div className="dots-button" >THIS DOES NOTHING </div>
-                </button>
-            </div>
-        </div >;
-    };
-
 
     const wordCount = () => {   //live word counter
         document.getElementById("tweet").addEventListener('input', function () {
@@ -387,9 +340,9 @@ export default function Profile() {
     const UpdateData = () => {  //update data after like or deleted tweet
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
-                setProfile(res.data)
+                setProfile(res.data[0])
                 // console.log(res.data)
-                let date = new Date(res.data.datejoined);
+                let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
@@ -406,14 +359,6 @@ export default function Profile() {
                     document.title = `TwitClone - User Not Found!!`
                     // Error(user);
                 }
-            });
-
-        axios.get(`/follows/to/${userID}`)
-            .then((res) => {
-                setIsFollowing(res.data.count)
-            })
-            .catch((err) => {
-                console.error(err)
             });
 
         axios.get(`/tweets/user/${userID}`)
@@ -491,7 +436,7 @@ export default function Profile() {
             .finally(() => {
                 setTimeout(() => {
                     setNoAccountDiv(false)
-                }, 5000);
+                }, 2000);
             })
 
     }
@@ -574,16 +519,7 @@ export default function Profile() {
                                                     Edit Profile
                                                 </Link>
                                                 :
-                                                isFollowing === 0 ?
-                                                    <div className="banner-right" onClick={() => handleFollow()}>
-                                                        <button
-                                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
-                                                            type="submit"
-                                                        >
-                                                            Follow
-                                                    </button>
-                                                    </div>
-                                                    :
+                                                profile.isfollowedbyme === true ?
                                                     <div className="banner-right" onClick={() => handleUnfollow()}>
                                                         <button
                                                             className="btn login-submit banner-edit btn-primary rounded-pill mt-1"
@@ -592,6 +528,16 @@ export default function Profile() {
                                                             Following
                                                         </button>
                                                     </div>
+                                                    :
+                                                    <div className="banner-right" onClick={() => handleFollow()}>
+                                                        <button
+                                                            className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                            type="submit"
+                                                        >
+                                                            Follow
+                                                    </button>
+                                                    </div>
+
                                         }
 
                                     </div>
@@ -633,9 +579,9 @@ export default function Profile() {
 
                                     {userNotFound ? null :
                                         <div className="mt-1">
-                                            <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
+                                            <Link to={`/u/${profile.username}/following`}><span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span></Link>
                                         &nbsp;&nbsp;&nbsp;
-                                        <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
+                                        <Link to={`/u/${profile.username}/followers`}><span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span></Link>
                                         </div>
                                     }
                                 </div>
@@ -680,15 +626,6 @@ export default function Profile() {
                                             <span>
                                                     <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                                 </span>
-                                                {dots[item._id] ? <DotsModal /> : null}
-                                                {dotsModal ? <DotsModal /> : null}
-                                                {/* <span className="three-dots" onClick={() => Dots(item._id)}>
-                                                <svg viewBox="0 0 24 24" className="post-menu">
-                                                    <g>
-                                                        <circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle>
-                                                    </g>
-                                                </svg>
-                                            </span> */}
                                             </div>
 
                                             <div className="post-link ">

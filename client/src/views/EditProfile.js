@@ -42,10 +42,10 @@ export default function Edit() {
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
-                // console.log(res.data)
-                setEditBio(res.data.bio)
-                setEditFullname(res.data.fullname)
-                setEditUsername(res.data.username)
+                console.log(res.data)
+                setEditBio(res.data[0].bio)
+                setEditFullname(res.data[0].fullname)
+                setEditUsername(res.data[0].username)
             })
             .catch((error) => {
                 console.error(error)
@@ -265,7 +265,7 @@ export default function Edit() {
                                         {loading ? <Loading /> : null}
 
                                         <button
-                                            id="submit-btn"
+                                            // id="submit-btn"
                                             className="btn align-content-center login-submit btn-outline-primary rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
