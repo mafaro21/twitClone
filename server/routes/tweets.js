@@ -125,6 +125,7 @@ router.get("/:tweetid", (req, res, next) => {
         }).catch(next);
 });
 
+
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
@@ -135,8 +136,8 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $gt: new ObjectId(lastTweetID) },
-            },
+                _id: { $gt: new ObjectId(lastTweetID) }
+            }
         },
         {
             $lookup: {
@@ -144,7 +145,7 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 localField: "byUserId",
                 foreignField: "userid",
                 as: "likedbyme",
-            },
+            }
         },
         {
             $project: {
@@ -154,10 +155,10 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 comments: 1,
                 dateposted: 1,
                 isLikedbyMe: {
-                    $in: ["$_id", "$likedbyme.tweetid"],
-                },
-            },
-        },
+                    $in: ["$_id", "$likedbyme.tweetid"]
+                }
+            }
+        }
     ];
 
     //retrieve data from db
@@ -179,6 +180,7 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
             }
         }).catch(next);
 });
+
 
 /* POST TWEET */
 router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
