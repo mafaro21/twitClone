@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const { ProfileValidation } = require("../middleware/inputvalidation");
@@ -28,18 +28,57 @@ router.get("/mine", isLoggedin, (req, res, next) => {
 /*  GETTING ANOTHER user profile */
 router.get("/user/:username", (req, res, next) => {
     const username = req.params.username;
+    const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
     const userReg = /[^0-9a-zA-Z_\S]+/;
     //check if valid username format:
     if (userReg.test(username)) return res.sendStatus(404);
+
+    const agg = [
+        {
+            $match: {
+                username: username,
+            }
+        },
+        {
+            $lookup: {
+                from: "follows",
+                localField: "_id",
+                foreignField: "toUserId",
+                as: "followed",
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                fullname: 1,
+                username: 1,
+                bio: 1,
+                datejoined: 1,
+                followers: 1,
+                following: 1,
+                isfollowedbyme: {
+                    $in: [new ObjectId(viewerId), "$followed.fromUserId"]
+                }
+            }
+        }
+    ];
+
+    //this is to avoid UNDEFINED Error for viewerId
+    function getSafe(fn, defaultValue) {
+        try {
+            return fn();
+        } catch (e) {
+            return defaultValue;
+        }
+    }
 
     MongoClient.connect(uri, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
     }).then(async (client) => {
         const users = client.db("twitclone").collection("users");
-        const projection = { password: 0, email: 0 }; // <--exclusions
         try {
-            const result = await users.findOne({ username: username }, { projection: projection });
+            const result = await users.aggregate(agg).toArray();
             if (!result) throw new Error("User Not Found");
             res.status(200).send(result);
         } catch (error) {
@@ -68,7 +107,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
             await users.updateOne({ _id: userid }, { $set: newValues });
             //IF SUCCESS, UPDATE the Session variables
             req.session.user = { "id": userid, "username": username };
-            res.status(200).send({  "success": true });
+            res.status(200).send({ "success": true });
 
         } catch (error) {
             if (error.code === 11000)
