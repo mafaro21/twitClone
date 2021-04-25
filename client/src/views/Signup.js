@@ -154,7 +154,7 @@ function Signup() {
         <body className="App general sign-pic d-flex" onLoad={loadCaptcha}  >
             <div className="container mt-5" >
                 <div className=" animate-enter container mt-4 p-5" >
-                    <h3 style={{ fontWeight: 700 }}> Create an Account </h3>
+                    <h3 style={{ fontWeight: 700, color: 'white' }}> Create an Account </h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
                     <form className="container signup" onSubmit={(e) => handleSubmit(e)} >
                         <div>

@@ -6,6 +6,7 @@ import BackButton from '../components/BackButton';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
@@ -47,6 +48,8 @@ export default function Post() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
 
+    const [noAccountDiv, setNoAccountDiv] = useState(false)
+
     const [rows, setRows] = useState(1)
 
     const [minRows] = useState(1)
@@ -70,8 +73,12 @@ export default function Post() {
                 })
                 .catch((error) => {
                     console.error(error)
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
                 }).finally(() => {
                     setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
                 });
 
         } else {
@@ -85,8 +92,13 @@ export default function Post() {
                 })
                 .catch((error) => {
                     console.error(error)
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
                 }).finally(() => {
                     setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
                 });
         }
     }
@@ -345,6 +357,8 @@ export default function Post() {
             <div className="container App " >
                 <div className="row " >
 
+                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
+
                     <Header />
 
                     <div className="col main-view  phone-home w-100 " >
@@ -542,7 +556,7 @@ export default function Post() {
                                     /> */}
 
                                     <button
-                                        id="submit-btn"
+                                        // id="submit-btn"
                                         className="btn login-submit btn-outline-primary rounded-pill "
                                         type="submit"
                                         // onClick={handleSubmit}

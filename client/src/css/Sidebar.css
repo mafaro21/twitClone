@@ -205,6 +205,48 @@ ul{
 }
 /* tweetModal */
 
+/* no account modal */
+.no-acc-wrapper{
+  z-index: 2 ;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0);
+}
+.no-acc-test{
+  margin-top: 86px;
+  width: 30%;
+  transition: all .3s ease-in-out;
+  margin-left: 34%;
+  
+}
+.no-acc-view{
+  background-color: var(--text);
+  border: 2px solid var(--darkaccent);
+  border-radius: 26px;
+  color: var(--background)
+}
+.no-acc-modal-leave{
+  animation: no-acc 0.4s ease-in 0s 1 normal backwards;
+  display: block;
+  opacity: 0;
+  transform: translate(0, 25px);
+}
+@keyframes no-acc {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(0, -25px);
+  }
+}
+/* no account modal  */
+
+
 .tweet-loader{
   height: auto;
   margin-top: 303px;

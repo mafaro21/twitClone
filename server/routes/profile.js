@@ -33,6 +33,7 @@ router.get("/user/:username", (req, res, next) => {
     //check if valid username format:
     if (userReg.test(username)) return res.sendStatus(404);
 
+    if (username.length > 20) return res.sendStatus(404);
     const agg = [
         {
             $match: {
@@ -79,7 +80,7 @@ router.get("/user/:username", (req, res, next) => {
         const users = client.db("twitclone").collection("users");
         try {
             const result = await users.aggregate(agg).toArray();
-            if (!result) throw new Error("User Not Found");
+            if (result.length === 0) throw new Error("User Not Found");
             res.status(200).send(result);
         } catch (error) {
             res.status(404).send(error.message);
