@@ -107,7 +107,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
         try {
             await users.updateOne({ _id: userid }, { $set: newValues });
             //IF SUCCESS, UPDATE the Session variables
-            req.session.user = { "id": userid, "username": username };
+            req.session.user = { "id": userid, "username": username, "fullname": fullname };
             res.status(200).send({ "success": true });
 
         } catch (error) {

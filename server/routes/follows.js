@@ -52,7 +52,6 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
                 await client.close();
             }
         }).catch(next);
-
 });
 
 
@@ -61,14 +60,9 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
     const fromUserId = req.session.user.id;
     const toUserId = req.params.userid;
 
-    /** 
-     * 
-     * Objective:
-     * 1. DELETE one entry from `follows` collection
-     * 2. DECREMENT -1 the `following` count of Source user
-     * 3. DECREMENT -1 the `followers` count of Target user.
-     *  */
-
+    /** Objectives:
+     * OPPOSITE of the above in FOLLOW block
+     */
     const followObject = {
         fromUserId: new ObjectId(fromUserId),
         toUserId: new ObjectId(toUserId),
@@ -87,6 +81,106 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
                 }
             } catch (error) {
                 throw error;
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+});
+
+
+/** View someone's FOLLOWERS. (⚠ MUST BE Loggedin) */
+router.get("/to/:userid", (req, res, next) => {
+    const toUserId = req.params.userid; // the target user
+    const viewerId = req.session.user.id; // myself the viewer
+    const lastFollowerId = req.query.gt || 0; // FOR paging, coming from client.
+
+    const agg = [
+        {
+            $match: {
+                toUserId: new ObjectId(toUserId),
+                _id: { $gt: new ObjectId(lastFollowerId) },
+                fromUserId: { $ne: new ObjectId(viewerId) }, //exclude myself (the viewer)
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "fromUserId",
+                foreignField: "_id",
+                as: "User",
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                "User.fullname": 1,
+                "User.username": 1,
+                "User.bio": 1,
+            },
+        },
+    ];
+
+    //fetch from MongoDB
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const follows = client.db("twitclone").collection("follows");
+            try {
+                const result = await follows.aggregate(agg).limit(50).toArray();
+                if (result.length === 0) throw new Error("No followers");
+                res.status(200).send(result);
+            } catch (error) {
+                res.sendStatus(404);
+                console.error(error);
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+});
+
+
+/** View someone's FOLLOWING (⚠ MUST BE Loggedin) */
+router.get("/from/:userid", (req, res, next) => {
+    const fromUserId = req.params.userid; // the target user
+    const viewerId = req.session.user.id; // myself the viewer
+    const lastFollowerId = req.query.gt || 0; // FOR paging, coming from client.
+
+    const agg = [
+        {
+            $match: {
+                fromUserId: new ObjectId(fromUserId),
+                _id: { $gt: new ObjectId(lastFollowerId) },
+                toUserId: { $ne: new ObjectId(viewerId) }, //exclude myself (the viewer)
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "toUserId",
+                foreignField: "_id",
+                as: "User",
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                "User.fullname": 1,
+                "User.username": 1,
+                "User.bio": 1,
+            }
+        }
+    ];
+
+    //fetch from MongoDB
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const follows = client.db("twitclone").collection("follows");
+            try {
+                const result = await follows.aggregate(agg).limit(50).toArray();
+                if (result.length === 0) throw new Error("Not following anyone");
+                res.status(200).send(result);
+            } catch (error) {
+                res.sendStatus(404);
+                console.error(error);
             } finally {
                 await client.close();
             }
