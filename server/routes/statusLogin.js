@@ -6,8 +6,10 @@ const router = express.Router();
 router.get("/", (req, res, next) => {
     if (!req.session || !req.session.user) {
         return res.send({ "loggedin": false });
-    } else
-        return res.send({ "loggedin": true, "user": req.session.user.username });
+    } else{
+        return res.send({ "loggedin": true, "user": req.session.user.username, 
+        "fullname": req.session.user.fullname });
+    }
 });
 
 module.exports = router;

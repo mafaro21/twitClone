@@ -75,7 +75,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
                         throw new Error("Wrong email or password! Try again.");
                     }
                     // BINGO! User authenticated. Now, create session.
-                    req.session.user = { "id": result._id, "username": result.username };
+                    req.session.user = { "id": result._id, "username": result.username, "fullname": result.fullname };
                     res.status(200).send({ "success": true });
 
                 } catch (error) {

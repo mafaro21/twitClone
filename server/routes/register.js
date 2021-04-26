@@ -27,7 +27,7 @@ router.get("/", (req, res, next) => {
 /* handling POST requests */
 router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
     const { fullname, email, password, responseToken } = req.body;
-    
+
     // BEGIN CAPTCHA VERIFICATION ---------------------------// 
     let isValid = false; // captcha result
     const axiosOptions = {
@@ -80,7 +80,11 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
             try {
                 const result = await users.insertOne(userObject);
                 // IF SUCCESSFUL, create session here.
-                req.session.user = { "id": result.ops[0]._id, "username": result.ops[0].username };
+                req.session.user = {
+                    "id": result.ops[0]._id,
+                    "username": result.ops[0].username,
+                    "fullname": result.ops[0].fullname
+                };
                 res.status(201).send({ "success": true });
             } catch (error) {
                 if (error.code === 11000) {

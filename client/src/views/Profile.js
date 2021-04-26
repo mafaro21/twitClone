@@ -78,17 +78,16 @@ export default function Profile() {
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
-                setProfile(res.data[0])
+                setProfile(res.data[0]);
+                let x = res.data[0]._id;
+                setUserID(x);
+                getTweets(x);
                 console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-                setDatejoined(finalDate)
-                let x = res.data[0]._id
-                getTweets(x)
-                setUserID(x)
-                console.log(x)
+                setDatejoined(finalDate);
                 document.title = `TwitClone: @${user}`
             })
             .catch((error) => {
@@ -125,11 +124,7 @@ export default function Profile() {
                 }).finally(() => {
                     setTweetLoading(false);
                 });
-
-
         }
-
-
 
     }, [user]);
 
