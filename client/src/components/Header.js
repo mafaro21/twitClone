@@ -67,20 +67,18 @@ export default function Header() {
     useEffect(() => {
     
         (()=> {
-            axios.get("/profile/mine")
+            axios.get("/statuslogin")
                 .then(res => {
                     setIsLoggedIn(true);
                     setFullname(res.data.fullname);
-                    setUsername(res.data.username);
+                    setUsername(res.data.user);
 
                 }).catch(err => {
                     if (err.response.status === 401) {
                         setIsLoggedIn(false);
                     }
                 });
-        })();
-
-        
+        })();       
 
     }, []);
 
@@ -552,7 +550,7 @@ export default function Header() {
                     </div>
                 </Link>
 
-                {isLoggedIn ?
+                {isLoggedIn === true ?
                     <Link to="#" className="d-flex header-link">
                         <div className=" d-flex pl-2 mt-2">
                             <div>
@@ -567,7 +565,7 @@ export default function Header() {
                     </Link>
                     : null}
 
-                {isLoggedIn ?
+                {isLoggedIn ===true ?
                     <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to= {`/u/${username}`}>
                         <div className=" d-flex pl-2 mt-2" >
                             <div>
@@ -607,7 +605,7 @@ export default function Header() {
 
                 {moreModal ? <MoreModal /> : null}
 
-                {isLoggedIn ?
+                {isLoggedIn ===true ?
                     <div className="d-flex tweet-btn">
                         <div className=" d-flex pl-2">
                             <div>
@@ -636,8 +634,7 @@ export default function Header() {
 
 
 
-                {isLoggedIn ?
-
+                {isLoggedIn ===true ?
                     <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
                         {userModal ? <UserModal /> : null}
                         <img src={icon} alt="example" className="user-data-img" />

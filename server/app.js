@@ -6,37 +6,42 @@ const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const session = require("express-session");
 const isLoggedin = require("./middleware/authchecker");
-const MongoDBStore = require("connect-mongodb-session")(session);
+const redis = require("redis");
+const RedisStore = require("connect-redis")(session);
 
 const app = express();
 
-//initialize session store.
-const sessionStore = new MongoDBStore({
-    uri: uri,
-    databaseName: "twitclone",
-    collection: "sessions",
-    connectionOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    },
-}, (error) => {
-    if (error) throw error;
+/** CONNECT to REDIS */
+const client = redis.createClient({
+    host: process.env.REDIS_URI,
+    port: process.env.REDIS_PORT || 14847,
+    password: process.env.REDIS_PASSWORD,
 });
 
-//setup the session. 02 HOURS ONLY.
+client.ping((err, reply) => {
+    if (err) throw err;
+    console.log(reply);
+});
+
+
+//setup the session. 03 HOURS ONLY.
 app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
-    store: sessionStore,
+    store: new RedisStore({ client: client }),
     resave: true,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 2, // 2 hour session.
+        maxAge: 1000 * 60 * 60 * 3, // 3 hour session.
         httpOnly: true,
         secure: app.get("env") === "production" ? true : false,
     },
 }));
 
+client.on('error', (error)=>{
+   if(error.code === 'ECONNRESET') console.error(error);
+   else throw error;
+});
 
 //import all routers
 const indexRouter = require("./routes/index");
@@ -69,7 +74,7 @@ app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 
-//Test MongoDB connection
+//TEST MongoDB connection
 MongoClient.connect(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -102,5 +107,6 @@ app.use((err, req, res, next) => {
     res.send(err);
     console.error(err.message);
 });
+
 
 module.exports = app;
