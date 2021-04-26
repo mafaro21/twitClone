@@ -264,7 +264,6 @@ export default function Post() {
     }
 
     const HoverDiv = (id) => {
-
         setTimeout(() => {
             if (!hoverDiv[id]) {
                 setHoverDiv(prevHoverDiv => ({
@@ -274,8 +273,8 @@ export default function Post() {
             }
         }, 700);
 
-        let flm = ''
-        let usm = ''
+        // let flm = ''
+        // let usm = ''
 
         return <div className="show-detail p-3 ">
             <div>
@@ -283,10 +282,10 @@ export default function Post() {
             </div>
             <div className="show-detail-1 ">
                 <div >
-                    <strong>{flm}</strong>
+                    {/* <strong>{flm}</strong> */}
                 </div>
                 <div>
-                    <span>@{usm}</span>
+                    {/* <span>@{username}</span> */}
                 </div>
                 <div className="mt-2 ">
                     {/* {profile.bio} */}
@@ -394,7 +393,7 @@ export default function Post() {
                                     <div className="col-1.5">              {/* <--- user avi */}
                                         <Link
                                             to={`/u/${item.User[0].username}`}
-                                            onMouseEnter={() => HoverDiv(item._id)}
+                                            onMouseEnter={() => HoverDiv(item._id, item.User[0].username)}
                                             onMouseLeave={() => setHoverDiv(false)}
                                         >
                                             <img
@@ -404,7 +403,7 @@ export default function Post() {
                                             />
                                         </Link>
 
-                                        {hoverDiv[item._id] ? <HoverDiv flm={item.User[0].fullname} usm={item.User[0].username} /> : null}
+                                        {hoverDiv[item._id] ? <HoverDiv /> : null}
                                     </div>
                                     <div className="col user-name-tweet" >                   {/* <--- user content */}
                                         <div className=" ">

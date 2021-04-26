@@ -78,29 +78,16 @@ export default function Profile() {
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
-<<<<<<< HEAD
-                setProfile(res.data[0])
-                // console.log(res.data)
-=======
                 setProfile(res.data[0]);
                 let x = res.data[0]._id;
                 setUserID(x);
                 getTweets(x);
-                console.log(res.data)
->>>>>>> f5bd155ec9c9d83ae892e689e2f85ca3dc75014c
+                // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
                 let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-<<<<<<< HEAD
-                setDatejoined(finalDate)
-                let x = res.data[0]._id
-                getTweets(x)
-                setUserID(x)
-                // console.log(x)
-=======
                 setDatejoined(finalDate);
->>>>>>> f5bd155ec9c9d83ae892e689e2f85ca3dc75014c
                 document.title = `TwitClone: @${user}`
             })
             .catch((error) => {
@@ -125,7 +112,7 @@ export default function Profile() {
                     setTweets(res);
                     setTweetCount(res.data.length);
                     // console.log(res.data);
-                    console.log(x)
+                    // console.log(x)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -668,12 +655,16 @@ export default function Profile() {
                                                 &nbsp; {item.likes}
                                             </button>
 
-                                            <button
-                                                className="col delete"
-                                                onClick={(e) => handleDelete(e, item._id)}
-                                            >
-                                                <FontAwesomeIcon icon={faTrashAlt} />
-                                            </button>
+                                            {sessionName === userPath ?
+                                                <button
+                                                    className="col delete"
+                                                    onClick={(e) => handleDelete(e, item._id)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </button>
+                                                :
+                                                null
+                                            }
                                         </div>
 
                                     </Link>
