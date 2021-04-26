@@ -27,7 +27,9 @@ export default function Following() {
             .then((res) => {
                 setProfile(res.data[0])
                 // console.log(res.data)
-                // let x = res.data[0]._id
+                let x = res.data[0]._id
+                getFollowing(x)
+                console.log(x)
                 document.title = `People followed by @${user} - TwitClone`
             })
             .catch((error) => {
@@ -41,6 +43,18 @@ export default function Following() {
                     // Error(user);
                 }
             });
+
+        async function getFollowing(x) {
+            console.log(x)
+            axios.get(`/follows/from/${x}`)
+                .then((res) => {
+                    console.log(res.data)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+
+        }
     }, [user])
 
     let location = useLocation()

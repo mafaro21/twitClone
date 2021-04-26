@@ -79,7 +79,7 @@ export default function Profile() {
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0])
-                console.log(res.data)
+                // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -88,7 +88,7 @@ export default function Profile() {
                 let x = res.data[0]._id
                 getTweets(x)
                 setUserID(x)
-                console.log(x)
+                // console.log(x)
                 document.title = `TwitClone: @${user}`
             })
             .catch((error) => {
