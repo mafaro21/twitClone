@@ -69,14 +69,10 @@ export default function Header() {
         (()=> {
             axios.get("/statuslogin")
                 .then(res => {
-                    setIsLoggedIn(true);
+                    setIsLoggedIn(res.data.loggedin);
                     setFullname(res.data.fullname);
                     setUsername(res.data.user);
 
-                }).catch(err => {
-                    if (err.response.status === 401) {
-                        setIsLoggedIn(false);
-                    }
                 });
         })();       
 

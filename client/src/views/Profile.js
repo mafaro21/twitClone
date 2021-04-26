@@ -82,7 +82,7 @@ export default function Profile() {
                 let x = res.data[0]._id;
                 setUserID(x);
                 getTweets(x);
-                console.log(res.data)
+                // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -112,7 +112,7 @@ export default function Profile() {
                     setTweets(res);
                     setTweetCount(res.data.length);
                     // console.log(res.data);
-                    console.log(x)
+                    // console.log(x)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -655,12 +655,16 @@ export default function Profile() {
                                                 &nbsp; {item.likes}
                                             </button>
 
-                                            <button
-                                                className="col delete"
-                                                onClick={(e) => handleDelete(e, item._id)}
-                                            >
-                                                <FontAwesomeIcon icon={faTrashAlt} />
-                                            </button>
+                                            {sessionName === userPath ?
+                                                <button
+                                                    className="col delete"
+                                                    onClick={(e) => handleDelete(e, item._id)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </button>
+                                                :
+                                                null
+                                            }
                                         </div>
 
                                     </Link>
