@@ -142,7 +142,7 @@ function Login() {
                 <div className="container mt-5 p-5 login-form">
 
 
-                    <h3 style={{ fontWeight: 700 }}>Welcome back. Login</h3>
+                    <h3 style={{ fontWeight: 700, color: 'white' }}>Welcome back. Login</h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
@@ -188,11 +188,11 @@ function Login() {
                         </button>
                     </form>
 
-                    <h3 className="animate-enter login-text mt-5">See what’s happening around <br />
+                    <h3 className="animate-enter login-text mt-5" style={{ color: 'white' }}>See what’s happening around <br />
                                 the world
                     </h3>
 
-                    <h4 className="animate-enter login-text mt-5">Join TwitClone Today...</h4>
+                    <h4 className="animate-enter login-text mt-5" style={{ color: 'white' }}>Join TwitClone Today...</h4>
 
                     <Link to="/signup" >
                         <input
