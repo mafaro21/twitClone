@@ -35,6 +35,8 @@ function Signup() {
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
         document.body.appendChild(script);
 
+        document.title = "TwitClone - Signup"
+
         return () => {
             document.body.removeChild(script);
         }

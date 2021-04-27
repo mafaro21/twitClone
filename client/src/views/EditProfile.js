@@ -161,7 +161,7 @@ export default function Edit() {
 
     return (
         <div className="App general " >
-            <Navbar />
+            {/* <Navbar /> */}
 
             <div className="container  " >
                 <div className="row " >

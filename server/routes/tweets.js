@@ -186,9 +186,9 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
 router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
     const userid = req.session.user.id;
     const { content } = req.body;
-
+    console.log(content)
     const tweetObject = {
-        byUserId: userid,
+        byUserId: new ObjectId(userid),
         content: content,
         likes: 0,
         comments: 0,
