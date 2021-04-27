@@ -4,6 +4,7 @@ import '../css/custom.scss';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 import { Link } from 'react-router-dom';
+import Search from './Search';
 
 
 function Sidebar() {
@@ -65,7 +66,8 @@ function Sidebar() {
 
     return (
         <div className="col-sm-4 p-3 phone-sidebar" ref={newsRef}>
-            <div className="p-3 sidebar">
+            <Search />
+            <div className="p-3 sidebar mt-4">
                 <h5 style={{ fontWeight: 700 }}>Trending Topics</h5>
                 <p>Trending</p>
             </div>
@@ -109,6 +111,7 @@ function Sidebar() {
                     </div>
                     <div className="col">
                         <p>© TwitClone 2021</p>
+                        <p>Credits</p>
                     </div>
                 </div>
             </div>

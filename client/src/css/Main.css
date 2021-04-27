@@ -93,10 +93,10 @@ strong {
   font-weight: bold;
   position: sticky;
   z-index: 1;
-  top: 52px;
+  top: 0;
   background-color: var(--background);
   width: 105.5%;
-  height: 66px;
+  /* height: 66px; */
   border-radius: 15px 15px 0 0;
 }
 .profile-header-scroll{
@@ -104,16 +104,15 @@ strong {
   font-weight: bold;
   position: sticky;
   z-index: 1;
-  top: 52px;
+  top: 0px;
   background-color: var(--background);
   width: 105.5%;
   height: 66px;
 }
-
-/* .banner{
-  width: 100%;
-  height: 20%;
-} */
+.flw-flw:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
 .header-photo{
   height: 200px;
   width: 100%;
@@ -187,7 +186,7 @@ button{
 }
 .follow-tab-active{
   color: var(--accent);
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 3px solid var(--accent);
   cursor: pointer;
 }
 .follow-tab-active:hover{ 

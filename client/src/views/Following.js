@@ -22,8 +22,6 @@ export default function Following() {
 
     const [loading, setLoading] = useState(true)
 
-    const [hoverDiv, setHoverDiv] = useState(false)
-
     const [noAccountDiv, setNoAccountDiv] = useState(false)
 
     let { user } = useParams()
@@ -66,7 +64,7 @@ export default function Following() {
             // console.log(x)
             axios.get(`/follows/from/${x}`)
                 .then((res) => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     setFollowing(res)
                     setLoading(false)
                 })
@@ -88,7 +86,7 @@ export default function Following() {
                 })
 
         }
-    }, [user])
+    }, [])
 
     let location = useLocation()
     let path = location.pathname
@@ -106,42 +104,6 @@ export default function Following() {
         </div>;
     };
 
-    const HoverDiv = (id) => {
-
-        setTimeout(() => {
-            if (!hoverDiv[id]) {
-                setHoverDiv(prevHoverDiv => ({
-                    ...prevHoverDiv,
-                    [id]: !setHoverDiv[id]
-                }));
-            }
-        }, 700);
-
-        return <div className="show-detail p-3 ">
-            <div>
-                {/* <img src={icon} alt="example" className="user-logo " /> */}
-            </div>
-            <div className="show-detail-1 ">
-                <div >
-                    <strong>{profile.fullname}</strong>
-                </div>
-                <div>
-                    <span>@{profile.username}</span>
-                </div>
-                <div className="mt-2 ">
-                    {profile.bio}
-                </div>
-                <div className="mt-1">
-                    <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
-                        &nbsp;&nbsp;&nbsp;
-                    <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
-                </div>
-            </div>
-
-        </div>
-
-    }
-
     const NotFollowing = () => {
         return <div className="d-flex justify-content-center p-2">
             <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {user} isn't following anyone.... very picky </span>
@@ -150,14 +112,14 @@ export default function Following() {
 
     return (
         <div className="App general">
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="container  " >
                 <div className="row " >
                     <Header />
                     {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
                     <div className="col main-view phone-home " >
 
-                        <div className={window.scrollY > 0 ? "row profile-header " : "row profile-header-scroll "}>
+                        <div className="row profile-header ">
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -175,13 +137,11 @@ export default function Following() {
                         </div>
 
                         <div className="row d-flex view" style={{ textAlign: 'center', fontWeight: '700' }}>
-                            <div className={finalPath === '/followers' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
-                                <Link to={`/u/${profile.username}/followers`} className="follow-tab">
-                                    <p className="p-2 ">
-                                        Followers
+                            <Link to={`/u/${profile.username}/followers`} className={finalPath === '/followers' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
+                                <p className="p-2 ">
+                                    Followers
                                         </p>
-                                </Link>
-                            </div>
+                            </Link>
                             <div className={finalPath === '/following' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
                                 <p className="p-2">Following</p>
                             </div>
@@ -192,33 +152,26 @@ export default function Following() {
                         {following.data.map((item, i) => {
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
 
-                            return <div className="p-2 view row main-post-div" key={i}>
+                            return <Link to={`/u/${item.User[0].username}`} className="p-2 view row main-post-div post-link name-link" key={i}>
                                 <div className="col-1.5">              {/* <--- user avi */}
-                                    <Link
-                                        to={`/u/${item.User[0].username}`}
-                                        onMouseEnter={() => HoverDiv(item._id)}
-                                        onMouseLeave={() => setHoverDiv(false)}
-                                    >
+                                    <div>
                                         <img src={icon} alt="example" className="user-logo" />
-                                    </Link>
+                                    </div>
 
-                                    {hoverDiv[item._id] ? <HoverDiv /> : null}
                                 </div>
                                 <div className="col">
-                                    <Link
+                                    <div
                                         style={{ fontWeight: '700' }}
-                                        to={`/u/${item.User[0].username}`}
                                         className="name-link"
                                     >
                                         {item.User[0].fullname}
-                                    </Link>
+                                    </div>
                                     <div>
                                         <span className="mb-5">@{item.User[0].username}</span>
                                     </div>
                                     <div>{item.User[0].bio}</div>
                                 </div>
-
-                            </div>
+                            </Link>
                         })}
                     </div>
 

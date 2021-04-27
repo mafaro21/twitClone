@@ -31,11 +31,11 @@ html[data-theme="light"]{
 }
 
 .search-input{
-  padding: 18px;
+  padding: 23px;
   border: 1px solid var(--text);
-  border-radius: 20px;
+  border-radius: 29px;
   height: 1px;
-  width: 330px;
+  width: 100%;
   background-color: var(--background);
   color:var(--text);
   outline: none;

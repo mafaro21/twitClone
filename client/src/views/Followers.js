@@ -22,6 +22,8 @@ export default function Followers() {
 
     const [loading, setLoading] = useState(true)
 
+    const [hoverData, setHoverData] = useState({ fullname: '', username: '', bio: '' })
+
     const [noAccountDiv, setNoAccountDiv] = useState(false)
 
     let { user } = useParams()
@@ -84,7 +86,7 @@ export default function Followers() {
                 })
 
         }
-    }, [user])
+    }, [])
 
     const Loading = () => {        //the loading div
 
@@ -106,7 +108,7 @@ export default function Followers() {
 
     return (
         <div className="App general">
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="container  " >
                 <div className="row " >
                     <Header />
@@ -114,7 +116,7 @@ export default function Followers() {
                     {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
                     <div className="col main-view phone-home " >
 
-                        <div className={window.scrollY > 0 ? "row profile-header " : "row profile-header-scroll "}>
+                        <div className="row profile-header ">
 
                             <div className="p-2  col row ">
                                 <div className="ml-2 col-1.5">
@@ -137,48 +139,44 @@ export default function Followers() {
                                     Followers
                                 </p>
                             </div>
-                            <div className={finalPath === '/following' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
-                                <Link to={`/u/${profile.username}/following`} className="follow-tab">
-                                    <p className="p-2 ">
-                                        Following
+                            <Link to={`/u/${profile.username}/following`} className={finalPath === '/following' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
+                                <p className="p-2 ">
+                                    Following
                                     </p>
-                                </Link>
-                            </div>
+                            </Link>
                         </div>
 
                         {notFollowers ? <NoFollowers /> : null}
                         {loading ? <Loading /> : null}
                         {followers.data.map((item, i) => {
-                            // console.log(item.User[0].bio)
+                            // setHoverData(item.User[0])
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
-                            return <div className="p-2 view row main-post-div" key={i}>
+                            return <Link to={`/u/${item.User[0].username}`} className="p-2 view row main-post-div post-link name-link " key={i}>
                                 <div className="col-1.5">              {/* <--- user avi */}
-                                    <Link
+                                    <div
                                         to={`/u/${item.User[0].username}`}
-                                    // onMouseEnter={() => HoverDiv(item._id)}
-                                    // onMouseLeave={() => setHoverDiv(false)}
                                     >
                                         <img src={icon} alt="example" className="user-logo" />
-                                    </Link>
+                                    </div>
 
-                                    {/* {hoverDiv[item._id] ? <HoverDiv /> : null} */}
                                 </div>
-                                <div className="col">
-                                    <Link
+                                <div className="col ">
+                                    <div
                                         to={`/u/${item.User[0].username}`}
-                                        style={{ fontWeight: '700' }}
-                                        className="name-link"
+                                        style={{ fontWeight: '700', textDecoration: 'none' }}
+                                        className="name-link "
                                     >
                                         {item.User[0].fullname}
-                                    </Link>
+                                    </div>
                                     <div>
                                         <span className="mb-5">@{item.User[0].username}</span>
                                     </div>
                                     <div>{item.User[0].bio}</div>
                                 </div>
+                            </Link>
 
-                            </div>
                         })}
+
                     </div>
 
                     <Sidebar />

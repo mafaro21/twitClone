@@ -36,6 +36,8 @@ function Login() {
                 }
             });
 
+        document.title = "TwitClone - Login"
+
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
         document.body.appendChild(script);

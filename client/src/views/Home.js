@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -16,11 +16,13 @@ function Home() {
 
     let icon = "https://avatars.dicebear.com/api/identicon/1.svg";
 
-
+    useEffect(() => {
+        document.title = "TwitClone - Home"
+    }, [])
 
     return (
         <div className="App general ">
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="container ">
                 {/* <h3 className="text-start">Welcome, $Username</h3> */}
                 <div className="row ">
