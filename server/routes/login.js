@@ -54,7 +54,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             else throw new Error();
         })
         .catch(err => {
-            res.status(400).send({ "message": "CAPTCHA Error" });
+            res.status(401).send({ "message": "CAPTCHA Error" });
             console.error("AXIOS", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//

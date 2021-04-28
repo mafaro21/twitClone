@@ -38,9 +38,9 @@ app.use(session({
     },
 }));
 
-client.on('error', (error)=>{
-   if(error.code === 'ECONNRESET') console.error(error);
-   else throw error;
+client.on('error', (error) => {
+    if (error.code === 'ECONNRESET') console.error(error.message);
+    else throw error;
 });
 
 //import all routers
