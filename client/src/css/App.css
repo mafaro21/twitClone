@@ -2,8 +2,8 @@
 
 /* color schemes */
 html[data-theme="dark"]{
-  --accent: #ff6300;
-  --darkaccent: #b45235;
+  /* --accent: #ff6300; */
+  /* --darkaccent: #b45235; */
   --text: #fbfafa;
   --background: #080603; 
 }
@@ -171,13 +171,16 @@ button:hover{
   height: 50px;
   width: 100px;
   transition: all .3s ease-in-out;
-  /*background-color: var(--accent);
-  color: var(--text);
+  background-color: var(--accent);
+  /* color: var(--text);
   transform: translateZ(0);
   border: 2px solid var(--text);
   outline: none; */
 }
-
+.btn{
+  background-color: var(--accent);
+  /* color: var(--accent); */
+}
 .login-submit:hover{
   transform: scale(1.1);
 }

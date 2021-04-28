@@ -314,7 +314,7 @@ export default function Profile() {
 
                                     <button
                                         id="submit-btn"
-                                        className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                                        className="btn login-submit btn-accent-outline rounded-pill mt-3"
                                         type="submit"
                                     // onClick={handleSubmit}
                                     // disabled={disabled}       //button disabler
@@ -472,9 +472,11 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div >
-                                        <strong className="text">{userNotFound ? "Profile" : profile.fullname}</strong>
+                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname}</strong>
                                     </div>
-                                    <p><span>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span></p>
+                                    {/* <p> */}
+                                    <span style={{ fontSize: '15px' }}>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
+                                    {/* </p> */}
                                 </div>
                             </div>
                         </div>
@@ -494,7 +496,7 @@ export default function Profile() {
                                                 sessionName === userPath ?
                                                     <Link
                                                         to={`/u/${profile.username}/edit`}
-                                                        className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                        className="btn login-submit banner-edit btn-accent rounded-pill mt-1 "
                                                         type="submit"
                                                     // onClick={editToggle}
                                                     >
@@ -504,7 +506,7 @@ export default function Profile() {
                                                     profile.isfollowedbyme === true ?
                                                         <div className="banner-right" onClick={() => handleUnfollow()}>
                                                             <button
-                                                                className="btn login-submit banner-edit btn-primary rounded-pill mt-1"
+                                                                className="btn login-submit banner-edit btn-accent rounded-pill mt-1"
                                                                 type="submit"
                                                                 disabled={disabled}
                                                             >
@@ -514,7 +516,7 @@ export default function Profile() {
                                                         :
                                                         <div className="banner-right" onClick={() => handleFollow()}>
                                                             <button
-                                                                className="btn login-submit banner-edit btn-outline-primary rounded-pill mt-1"
+                                                                className="btn login-submit banner-edit btn-accent-outline rounded-pill mt-1"
                                                                 type="submit"
                                                                 disabled={disabled}
                                                             >

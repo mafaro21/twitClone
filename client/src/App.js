@@ -4,6 +4,7 @@ import './css/App.css';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import Home from './views/Home';
+import Explore from './views/Explore';
 import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
 import Post from './views/Post'
@@ -33,6 +34,7 @@ function App() {
           <Route path="/" exact component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
+          <Route path="/explore" component={Explore} />
 
           <Route path="/u/:user" exact >
             <div>

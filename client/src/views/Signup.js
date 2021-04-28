@@ -228,7 +228,7 @@ function Signup() {
 
                         <button
                             id="submit-btn"
-                            className="btn login-submit btn-outline-primary rounded-pill mt-3"
+                            className="btn login-submit btn-accent-outline rounded-pill mt-3"
                             type="submit"
                             disabled={disabled}         //button disabler
                         >

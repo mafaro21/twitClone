@@ -266,7 +266,7 @@ export default function Edit() {
 
                                         <button
                                             // id="submit-btn"
-                                            className="btn align-content-center login-submit btn-outline-primary rounded-pill mt-1"
+                                            className="btn align-content-center login-submit btn-accent-outline rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
                                             disabled={disabled}    // button disabler
@@ -279,7 +279,7 @@ export default function Edit() {
                                         <div
                                             onClick={() => history.goBack()}
                                             type="button"
-                                            className="btn login-submit btn-primary rounded-pill mt-2"
+                                            className="btn login-submit btn-accent rounded-pill mt-2"
                                         >
                                             Cancel
                                             </div>

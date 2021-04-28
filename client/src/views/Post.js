@@ -432,7 +432,7 @@ export default function Post() {
                             </div>
                         })}
 
-                        <div className="p-2 post-view row mt-3">
+                        <div className="p-2 profile-view row mt-3">
                             <div className="col-0.5">              {/* <--- user avi */}
                                 <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
                             </div>
@@ -511,7 +511,7 @@ export default function Post() {
 
                                     <button
                                         // id="submit-btn"
-                                        className="btn login-submit btn-outline-primary rounded-pill "
+                                        className="btn login-submit btn-accent-outline rounded-pill "
                                         type="submit"
                                         // onClick={handleSubmit}
                                         disabled={commentDisabled}       //button disabler
