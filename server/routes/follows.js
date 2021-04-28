@@ -99,7 +99,6 @@ router.get("/to/:userid", (req, res, next) => {
             $match: {
                 toUserId: new ObjectId(toUserId),
                 _id: { $gt: new ObjectId(lastFollowerId) },
-                fromUserId: { $ne: new ObjectId(viewerId) }, //exclude myself (the viewer)
             },
         },
         {
@@ -149,7 +148,6 @@ router.get("/from/:userid", (req, res, next) => {
             $match: {
                 fromUserId: new ObjectId(fromUserId),
                 _id: { $gt: new ObjectId(lastFollowerId) },
-                toUserId: { $ne: new ObjectId(viewerId) }, //exclude myself (the viewer)
             }
         },
         {

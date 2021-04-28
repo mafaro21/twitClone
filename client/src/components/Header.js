@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
+import ThemeToggle from './ThemeToggle'
 // import Compose from '../views/Compose';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loader from "react-loader-spinner";
@@ -69,14 +70,10 @@ export default function Header() {
         (()=> {
             axios.get("/statuslogin")
                 .then(res => {
-                    setIsLoggedIn(true);
+                    setIsLoggedIn(res.data.loggedin);
                     setFullname(res.data.fullname);
                     setUsername(res.data.user);
 
-                }).catch(err => {
-                    if (err.response.status === 401) {
-                        setIsLoggedIn(false);
-                    }
                 });
         })();       
 
@@ -84,9 +81,9 @@ export default function Header() {
 
     
     const UserModal = () => {
-        return <div className="user-modal modal-enter mr-1">
+        return <div className="user-modal modal-enter mr-1 ">
             <button
-                className="text p-2 user-modal-btn "
+                className="text p-2 user-modal-btn rounded"
                 type="submit"
                 onClick={Logout}
             >
@@ -157,7 +154,7 @@ export default function Header() {
         if (isValid === true) {
             sendToDb();
             // setTweetModal(false);
-            setTweetLoading(true);
+            
         }
 
         function sendToDb() {
@@ -167,6 +164,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
+                    setTweetLoading(true);
                     let tweetDiv = document.getElementById("tweet-modal")
                     tweetDiv.style.display = "none"
                     setTweetContent('')
@@ -521,7 +519,8 @@ export default function Header() {
             {tweetLoading ? <TweetLoading /> : null}
             {/* <Compose/> */}
             {/* col-sm-2 */}
-            <div className="fixed phone-header ">
+            <div><Link className="text nav-logo pl-2" to="/home">TwitClone</Link></div>
+            <div className="fixed phone-header mt-4">
 
                 <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
@@ -649,7 +648,7 @@ export default function Header() {
                     </button>
                     : null}
 
-
+<ThemeToggle/>
             </div>
         </header >
     );

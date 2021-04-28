@@ -43,8 +43,6 @@ export default function Post() {
 
     const [commentReply, setCommentReply] = useState(false)
 
-    const [hoverDiv, setHoverDiv] = useState(false)
-
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
 
@@ -162,8 +160,6 @@ export default function Post() {
         }
 
 
-        document.title = "TwitClone"; //change DOCTITLE according to username.
-
     }, []); //tweets
 
     // const wordCount = () => {   //live word counter
@@ -263,45 +259,6 @@ export default function Post() {
         </div>
     }
 
-    const HoverDiv = (id) => {
-
-        setTimeout(() => {
-            if (!hoverDiv[id]) {
-                setHoverDiv(prevHoverDiv => ({
-                    ...prevHoverDiv,
-                    [id]: !setHoverDiv[id]
-                }));
-            }
-        }, 700);
-
-        let flm = ''
-        let usm = ''
-
-        return <div className="show-detail p-3 ">
-            <div>
-                <img src={icon} alt="example" className="user-logo " />
-            </div>
-            <div className="show-detail-1 ">
-                <div >
-                    <strong>{flm}</strong>
-                </div>
-                <div>
-                    <span>@{usm}</span>
-                </div>
-                <div className="mt-2 ">
-                    {/* {profile.bio} */}
-                </div>
-                {/* <div className="mt-1">
-                    <span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span>
-                        &nbsp;&nbsp;&nbsp;
-                    <span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span>
-                </div> */}
-            </div>
-
-        </div>
-
-    }
-
     TimeAgo.addLocale(en)
 
     let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
@@ -353,7 +310,7 @@ export default function Post() {
 
     return (
         <div className="general" >
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="container App " >
                 <div className="row " >
 
@@ -369,7 +326,7 @@ export default function Post() {
                                     <BackButton />
                                 </div>
                                 <div className="col ">
-                                    <div className="">
+                                    <div className="p-1">
                                         <strong>Spicy Take</strong>
                                     </div>
                                 </div>
@@ -389,13 +346,13 @@ export default function Post() {
                             let finalDate = hours + ":" + date.getMinutes()
                                 + am_pm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
+                            document.title = `Post by @${item.User[0].username} - TwitClone`;
+
                             return <div>
                                 <div className="p-2  row" key={item._id}>
                                     <div className="col-1.5">              {/* <--- user avi */}
                                         <Link
                                             to={`/u/${item.User[0].username}`}
-                                            onMouseEnter={() => HoverDiv(item._id)}
-                                            onMouseLeave={() => setHoverDiv(false)}
                                         >
                                             <img
                                                 src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`}
@@ -404,15 +361,12 @@ export default function Post() {
                                             />
                                         </Link>
 
-                                        {hoverDiv[item._id] ? <HoverDiv flm={item.User[0].fullname} usm={item.User[0].username} /> : null}
                                     </div>
                                     <div className="col user-name-tweet" >                   {/* <--- user content */}
                                         <div className=" ">
                                             <div>
                                                 <Link
                                                     to={`/u/${item.User[0].username}`}
-                                                    onMouseEnter={() => HoverDiv(item._id)}
-                                                    onMouseLeave={() => setHoverDiv(false)}
                                                     className="name-link"
                                                 >
                                                     <strong>{item.User[0].fullname}</strong>
@@ -485,8 +439,8 @@ export default function Post() {
 
                             <form className="signup col tweet-form ">
                                 {/* onSubmit={(e) => handleSubmit(e)} */}
-                                {tweets.data.map((item) => (
-                                    <div className="">
+                                {tweets.data.map((item, i) => (
+                                    <div className="" key={i}>
 
                                         {commentReply ?
                                             <span>Replying to
