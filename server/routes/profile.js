@@ -3,24 +3,29 @@ const { MongoClient, ObjectId } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const { ProfileValidation } = require("../middleware/inputvalidation");
+const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const router = express.Router();
 
 
 /* GETTING MY PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
-    //retrieve data from db
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(client => {
+    /**
+     * TODO: GET from redis, if null
+     * fetch data from Mongodb 
+     */
+    MongoClient.connect(uri, MongoOptions).then(client => {
         const users = client.db("twitclone").collection("users");
         const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
-        users.findOne({ _id: userid }, { projection: projection }, (err, result) => {
-            if (!result) res.sendStatus(404);
-            else res.send(result);
-            client.close();
-        });
+        try {
+            const result = await users.findOne({ _id: new ObjectId(userid)}, { projection: projection });
+            res.status(200).send(result);
+        } catch (error) {
+           res.sendStatus(404);
+           console.error(error);
+        } finally {
+            await client.close();
+        }
     }).catch(next);
 });
 
@@ -73,10 +78,7 @@ router.get("/user/:username", (req, res, next) => {
         }
     }
 
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(async (client) => {
+    MongoClient.connect(uri, MongoOptions).then(async (client) => {
         const users = client.db("twitclone").collection("users");
         try {
             const result = await users.aggregate(agg).toArray();
@@ -98,10 +100,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
     const { fullname, username, bio } = req.body;
 
     //connect to db
-    MongoClient.connect(uri, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    }).then(async (client) => {
+    MongoClient.connect(uri, MongoOptions).then(async (client) => {
         const users = client.db("twitclone").collection("users");
         const newValues = { fullname: fullname, username: username, bio: bio };
         try {

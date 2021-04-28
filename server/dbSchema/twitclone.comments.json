@@ -1,0 +1,36 @@
+{
+    "$jsonSchema": {
+      "bsonType": "object",
+      "additionalProperties": false,
+      "required": [
+        "userid",
+        "tweetid",
+        "content",
+        "date"
+      ],
+      "properties": {
+        "_id": {},
+        "tweetid": {
+          "bsonType": "objectId"
+        },
+        "userid": {
+          "bsonType": "objectId"
+        },
+        "content": {
+          "bsonType": "string",
+          "maxLength": 140
+        },
+        "date": {
+          "bsonType": "date"
+        }
+      }
+    },
+    "$and": [
+      {
+        "content": {
+          "$regex": "[^<>]+",
+          "$options": "gi"
+        }
+      }
+    ]
+  }

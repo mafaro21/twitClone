@@ -43,6 +43,11 @@ router.post("/:tweetid", LikeLimiter, (req, res, next) => {
   const tweetid = req.params.tweetid;
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
 
+  /** Objectives:
+   * 1. ADD NEW ENTRY to `likes` collection
+   * 2. INCREMENT +1 `count` of _likes_ in the referenced `tweet`
+   */
+
   const likesObject = {
     tweetid: new ObjectId(tweetid),
     userid: new ObjectId(userid),
@@ -77,6 +82,10 @@ router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
 
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
 
+   /** Objectives:
+   * 1. REMOVE ENTRY from `likes` collection
+   * 2. DECREMENT -1 `count` of _likes_ in the referenced `tweet`
+   */
   const likesObject = {
     tweetid: new ObjectId(tweetid),
     userid: new ObjectId(userid)
