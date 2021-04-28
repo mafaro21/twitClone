@@ -3,7 +3,7 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import axios from "axios";
 import Loader from "react-loader-spinner";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
 
 
@@ -62,11 +62,13 @@ function Sidebar() {
         </div>
     }
 
+    let location = useLocation()
 
 
     return (
         <div className="col-sm-4 p-3 phone-sidebar" ref={newsRef}>
-            <Search />
+            {location.pathname === '/explore' ? null : <Search />}
+
             <div className="p-3 sidebar mt-4">
                 <h5 style={{ fontWeight: 700 }}>Trending Topics</h5>
                 <p>Trending</p>

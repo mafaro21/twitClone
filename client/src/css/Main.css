@@ -1,29 +1,54 @@
 /* color schemes */
 html[data-theme="dark"]{
-  --accent: #ff6300;
-  --darkaccent: #b45235;
   --text: #fbfafa;
   --background: #080603; 
   --interact: #AEAEAE;
   --posthover: #0F0E0D;
-   --hover: rgb(242,156,80,0.4);
+   --border:rgb(47, 51, 54); 
 }
 html[data-theme="light"]{
   --text: #080603;
   --background: #fbfafa;
-  --darkaccent: #ECD4CC;
   --interact: #414141;
   --posthover: #ECEBEB;
-   --hover: rgb(242,156,80,0.4);
+   --border: rgb(235, 238, 240);
 }
-
+html[data-theme="medium"]{
+  --background: #19252F;
+  --text: #fbfafa;
+  --posthover: #364049;
+  --border: rgb(56, 68, 77);
+  --interact: #AEAEAE;
+}
+html[accent-theme="orange"]{
+--accent: #ff6300;
+--darkaccent: #FF7720;
+--hover: rgb(242,156,80,0.4);
+}
+html[accent-theme="red"]{
+--accent: #FF2020;
+--darkaccent: #FF4040;
+--hover: rgb(255, 0, 0,0.2)
+}
+html[accent-theme="sky-blue"]{
+  --accent: #3232FC;
+  --darkaccent: #4C4CFC;
+  --hover: rgb(50, 50, 252 ,0.2)
+}
+html[accent-theme="green"]{
+  --accent: #249F0D;
+  --darkaccent: #1C800A;
+  --hover: rgb(36, 159, 13,0.3);
+}
 /* mainly home properties */
 .main{
   width: 40%;
 }
 .main-view{
-  border: 1px solid var(--text);
-  border-radius: 15px;
+  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  /* border-radius: 15px; */
   text-align: left;
   width: 103%;
 }
@@ -33,7 +58,7 @@ html[data-theme="light"]{
 }
 
 .view{
-  border-bottom: .02px solid var(--text);
+  border-bottom: 1px solid var(--border);
   text-align: left;
   width: auto;
 }
@@ -96,18 +121,6 @@ strong {
   top: 0;
   background-color: var(--background);
   width: 105.5%;
-  /* height: 66px; */
-  border-radius: 15px 15px 0 0;
-}
-.profile-header-scroll{
-  font-size: 18px;
-  font-weight: bold;
-  position: sticky;
-  z-index: 1;
-  top: 0px;
-  background-color: var(--background);
-  width: 105.5%;
-  height: 66px;
 }
 .flw-flw:hover{
   text-decoration: underline;
@@ -128,7 +141,7 @@ strong {
   margin-top: -6%;
 }
 .profile-view{
-    border-bottom: 10px solid var(--darkaccent);
+    border-bottom: 10px solid var(--interact);
     text-align: left;
     width: auto;
 }

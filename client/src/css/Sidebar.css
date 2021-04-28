@@ -1,10 +1,10 @@
 /* color schemes */
 html[data-theme="dark"]{
-  --accent: #ff6300;
-  --darkaccent: #b45235;
+  /* --accent: #ff6300; */
+  /* --darkaccent: #b45235; */
   --text: #fbfafa;
   --background: #080603; 
-  --hover: rgb(242,156,80,0.4);
+  /* --hover: rgb(242,156,80,0.4); */
   --sidebarbg: #201e1c;
 }
 
@@ -12,7 +12,11 @@ html[data-theme="light"]{
   --text: #080603;
   --background: #fbfafa;
   --sidebarbg: #E3E3E3;
-  --hover: rgb(242,156,80,0.4);
+  /* --hover: rgb(242,156,80,0.4); */
+}
+
+html[data-theme="medium"]{
+  --sidebarbg: #39454F;
 }
 
 .user-data{
@@ -160,9 +164,23 @@ ul{
 .tweet-submit{
   width: 140px;
   height: 50px;
-
+  
 }
-
+.btn-accent{
+  background-color: var(--accent);
+  color: var(--text)
+}
+.btn-accent:hover{
+  color: var(--text)
+}
+.btn-accent-outline{
+  border: 1px solid var(--accent);
+  background-color: inherit;
+  color: var(--accent)
+}
+.btn-accent-outline:hover{
+  color: var(--accent)
+}
 /* tweetModal */
 #tweet-modal{
   display: none;
@@ -457,6 +475,7 @@ input[type=checkbox]:focus {
   }
   .header-link, .header-link-active{
     margin-top: 29%;
+    margin-right: 30%;
   }
   .tweet-submit{
     width: 45px;

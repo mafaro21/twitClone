@@ -1,14 +1,14 @@
 /* color schemes */
 :root{
-  --accent: #ff6300;
+  /* --accent: #ff6300; */
   --inputbk: rgba(65, 61, 61, 1);
   --text: white;
   --nav: rgb(47, 47, 43, 1)
 }
 
 html[data-theme="dark"]{
-  --accent: #ff6300;
-  --darkaccent: #b45235;
+  /* --accent: #ff6300; */
+  /* --darkaccent: #b45235; */
   --text: #fbfafa;
   --background: #080603; 
 }
@@ -23,15 +23,20 @@ html[data-theme="light"]{
 }
 
 .search{
-  width:40%;
+  width:100%;
 }
 
 .nav-logo{
   font-size: 20px;
+  /* color:  */
+}
+.nav-logo:hover{
+  color: var(--darkaccent);
 }
 
 .search-input{
   padding: 23px;
+  padding-left: 16%;
   border: 1px solid var(--text);
   border-radius: 29px;
   height: 1px;
@@ -43,6 +48,12 @@ html[data-theme="light"]{
 .search-input:focus{
   box-shadow: 0 0 13px var(--accent);
   border: 1px solid var(--accent);
+}
+.bi{
+  fill: grey;
+  position: relative;
+  top: 15px;
+  left: 12%;
 }
 
 /* media breakpoints */

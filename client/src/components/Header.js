@@ -39,7 +39,7 @@ export default function Header() {
 
     const [color, setColor] = useState("grey")
 
-    const [disabled, setDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(true);
 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
@@ -225,7 +225,6 @@ export default function Header() {
         </div>
     }
 
-
     const TweetModal = () => {
         return <div id="tweet-modal">
             <div className="modal-wrapper" >
@@ -292,7 +291,7 @@ export default function Header() {
 
                                         <button
                                             id="submit-btn"
-                                            className="btn login-submit btn-outline-primary rounded-pill   "
+                                            className="btn login-submit btn-accent-outline rounded-pill   "
                                             type="submit"
                                         // onClick={handleSubmit}
                                         // disabled={disabled}       //button disabler
@@ -317,7 +316,6 @@ export default function Header() {
 
     OutsideClick(ref, () => {
         setUserModal(false)
-        // setMoreModal(false)
 
     });
 
@@ -489,18 +487,9 @@ export default function Header() {
 
                                             {showEmojiPicker ? <Emoji/> : null}
 
-                                            {/* <Picker
-                                            set='twitter'
-                                            // onSelect={addEmoji}
-                                            title='Pick your emoji…'
-                                            emoji='point_up'
-                                            style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
-                                            theme='auto'
-                                            /> */}
-
                                             <button
                                                 id="submit-btn"
-                                                className="btn login-submit btn-outline-primary rounded-pill   "
+                                                className="btn login-submit btn-accent-outline rounded-pill   "
                                                 type="submit"
                                             // onClick={handleSubmit}
                                                 disabled={disabled}       //button disabler
@@ -519,9 +508,10 @@ export default function Header() {
             {tweetLoading ? <TweetLoading /> : null}
             {/* <Compose/> */}
             {/* col-sm-2 */}
-            <div><Link className="text nav-logo pl-2" to="/home">TwitClone</Link></div>
-            <div className="fixed phone-header mt-4">
+            <div><Link className="text nav-logo fixed pl-2 " to="/home">TwitClone</Link></div>
+            <div className="fixed phone-header mt-5">
 
+                {isLoggedIn === true ?
                 <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
                         <div>
@@ -535,8 +525,9 @@ export default function Header() {
                         <p className="header-title " style={{ fontWeight: 700 }}>Home</p>
                     </div>
                 </Link>
+                    : null}
 
-                <Link to="#" className="d-flex header-link">
+                <Link to="/explore" className={path === '/explore' ? "d-flex header-link-active" : "d-flex header-link"}>
                     <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -605,14 +596,14 @@ export default function Header() {
                 {moreModal ? <MoreModal /> : null}
 
                 {isLoggedIn ===true ?
-                    <div className="d-flex tweet-btn">
+                    <div className="d-flex tweet-btn" >
                         <div className=" d-flex pl-2">
                             <div>
 
                                 <div
                                     // to="/compose"
                                     id="tweet-button"
-                                    className="btn tweet-submit btn-primary rounded-pill mt-3 "
+                                    className="btn tweet-submit btn-accent rounded-pill mt-3 "
                                     // onClick={tweetToggle}
                                     onClick={toggleTest}
 
@@ -648,7 +639,7 @@ export default function Header() {
                     </button>
                     : null}
 
-<ThemeToggle/>
+<ThemeToggle className="mt-4"/>
             </div>
         </header >
     );
