@@ -38,9 +38,9 @@ app.use(session({
     },
 }));
 
-client.on('error', (error)=>{
-   if(error.code === 'ECONNRESET') console.error(error);
-   else throw error;
+client.on('error', (error) => {
+    if (error.code === 'ECONNRESET') console.error(error.message);
+    else throw error;
 });
 
 //import all routers
@@ -51,6 +51,7 @@ const toFollows = require("./routes/follows");
 const toProfile = require("./routes/profile");
 const tweetRouter = require("./routes/tweets");
 const likesRouter = require("./routes/likes");
+const toComments = require('./routes/comments');
 const toLogout = require("./routes/logout");
 const statuslogin = require("./routes/statusLogin");
 
@@ -66,6 +67,7 @@ app.use("/profile", toProfile);
 app.use("/tweets", tweetRouter);
 app.use("/likes", isLoggedin, likesRouter);
 app.use("/follows", isLoggedin, toFollows);
+app.use("/comments", toComments);
 app.use("/logout", toLogout);
 app.use("/statuslogin", statuslogin);
 

@@ -186,7 +186,6 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
 router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
     const userid = req.session.user.id;
     const { content } = req.body;
-    console.log(content)
     const tweetObject = {
         byUserId: new ObjectId(userid),
         content: content,
@@ -221,7 +220,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
             try {
                 const result = await tweets.deleteOne({ _id: new ObjectId(tweetid) });
                 res.status(200).send({ "success": true });
-                console.log("DELETED", result.deletedCount);
+                console.log("DELETED Tweet", result.deletedCount);
             } catch (error) {
                 throw error;
             } finally {
