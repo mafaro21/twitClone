@@ -89,10 +89,11 @@ export default function Followers() {
     }, [])
 
     const Loading = () => {        //the loading div
+        let x = localStorage.getItem("accent") || 'grey'
 
         return <div className="d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
-                color="orange"
+                color={x}
                 height={60}
                 width={60}
             />

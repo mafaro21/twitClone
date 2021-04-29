@@ -34,11 +34,15 @@ export default function Profile() {
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
+    const [disableDiv, setDisableDiv] = useState(false)
+
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
 
     const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
+
+    const [deleteTweet, setdeleteTweet] = useState({})
 
     const [tweetCount, setTweetCount] = useState(0);
 
@@ -127,11 +131,13 @@ export default function Profile() {
     }, [user]);
 
 
-    const Loading = () => {        //the loading div
+    const Loading = () => {
 
-        return <div className="d-flex justify-content-center">
+        let x = localStorage.getItem("accent") || 'grey'
+
+        return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
-                color="orange"
+                color={x}
                 height={60}
                 width={60}
             />
@@ -197,23 +203,36 @@ export default function Profile() {
     const handleDelete = (e, id) => {
         e.preventDefault()
         // return alert(id)
+        setDisableDiv(true)
 
-        axios.delete(`/tweets/${id}`)
-            .then((res) => {
-                console.log(res.data);
-                UpdateData()
-            })
-            .catch((error) => {
-                console.log(id)
-                console.error(error);
-                error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+        if (!deleteTweet[id]) {
+            setDisabled(true);
+            setDisableDiv(prevDelete => ({
+                ...prevDelete,
+                [id]: !setDisableDiv[id],
+            }));
 
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    setNoAccountDiv(false)
-                }, 2000);
-            })
+            axios.delete(`/tweets/${id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    UpdateData()
+                })
+                .catch((error) => {
+                    console.log(id)
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                    // setDisableDiv(false)
+                    setDisabled(false);
+                })
+        }
+
+
     };
 
     const NoTweets = () => {        //only shown when user has no tweets
@@ -578,7 +597,7 @@ export default function Profile() {
                         {noTweets ? <NoTweets /> : null}
                         {tweetLoading ? <Loading /> : null}
                         {tweets.data.map((item) => (
-                            <div className="p-2 view row main-post-div" key={item._id}>
+                            <div className={disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} key={item._id}>
                                 {userNotFound ? null :
                                     <div className="col-1.5">              {/* <--- user avi */}
                                         <Link
@@ -609,7 +628,7 @@ export default function Profile() {
                                                 </span>
                                             </div>
 
-                                            <div className="post-link ">
+                                            <div className="post-link">
                                                 <p>{item.content}</p>
                                             </div>
                                         </div>

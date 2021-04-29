@@ -51,10 +51,11 @@ function Sidebar() {
 
 
     const Loading = () => {        //the loading div
+        let x = localStorage.getItem("accent") || 'grey'
 
         return <div className="d-flex justify-content-center">
             <Loader type="TailSpin"
-                color="orange"
+                color={x}
                 height={40}
                 width={40}
             />
@@ -97,7 +98,7 @@ function Sidebar() {
                     <p>Sign up Today To Access More Features!!</p>
 
                     <Link to="/signup" className="d-flex justify-content-center">
-                        <button className="btn login-submit btn-secondary rounded-pill"
+                        <button className="btn login-submit btn-accent rounded-pill"
                             style={{ width: "90%", fontSize: "20px", fontWeight: 700, color: "white" }}>
                             Sign Up
                         </button>

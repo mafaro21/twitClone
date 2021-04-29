@@ -14,19 +14,20 @@ router.get("/mine", isLoggedin, (req, res, next) => {
      * TODO: GET from redis, if null
      * fetch data from Mongodb 
      */
-    MongoClient.connect(uri, MongoOptions).then(client => {
-        const users = client.db("twitclone").collection("users");
-        const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
-        try {
-            const result = await users.findOne({ _id: new ObjectId(userid)}, { projection: projection });
-            res.status(200).send(result);
-        } catch (error) {
-           res.sendStatus(404);
-           console.error(error);
-        } finally {
-            await client.close();
-        }
-    }).catch(next);
+    MongoClient.connect(uri, MongoOptions)
+        .then(async client => {
+            const users = client.db("twitclone").collection("users");
+            const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+            try {
+                const result = await users.findOne({ _id: new ObjectId(userid) }, { projection: projection });
+                res.status(200).send(result);
+            } catch (error) {
+                res.sendStatus(404);
+                console.error(error);
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
 });
 
 

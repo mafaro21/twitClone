@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
+import '../css/Sidebar.css';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Navbar from '../components/Navbar';
@@ -17,12 +18,14 @@ import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import Error from '../views/Error';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
+import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
 
 export default function Post() {
 
@@ -37,9 +40,13 @@ export default function Post() {
 
     const [comment, setComment] = useState('')
 
+    const [otherComments, setOtherComments] = useState({ data: [] })
+
     const [count, setCount] = useState(0)
 
     const [color, setColor] = useState("grey")
+
+    const [tweetErr, setTweetErr] = useState({})
 
     const [commentReply, setCommentReply] = useState(false)
 
@@ -48,6 +55,11 @@ export default function Post() {
 
     const [noAccountDiv, setNoAccountDiv] = useState(false)
 
+    const [disableDiv, setDisableDiv] = useState(false)
+    const [sessionName, setSessionName] = useState('')
+    const [deleteTweet, setdeleteTweet] = useState({})
+    const [likedTweets, setLikedTweets] = useState({})
+
     const [rows, setRows] = useState(1)
 
     const [minRows] = useState(1)
@@ -55,6 +67,18 @@ export default function Post() {
     const [maxRows] = useState(8)
 
     let history = useHistory()
+
+    let location = useLocation()
+    let path = location.pathname
+    let path1 = path.split(`/post/`)
+    let finalPath = path1[1]
+
+    const [error, setError] = useState([]);     //using array, data comes that way
+    const errorDiv = error
+        ? <div>
+            {error}
+        </div>
+        : '';
 
     const handleLike = (id) => {  //for liking and unliking posts
 
@@ -101,16 +125,6 @@ export default function Post() {
         }
     }
 
-    const ForId = () => {
-        // let fetchid = useLocation()
-        let idPath = document.location.pathname;
-        let finalId = idPath.split("/post/");
-        let sendId = finalId[1];
-        // console.log(sendId)
-        // setId(sendId)
-        return sendId;
-    }
-
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
         // return <Redirect to="/Error" />
@@ -121,76 +135,56 @@ export default function Post() {
         // return <Redirect to={Error} />
     }
 
-
     useEffect(() => {   //fetching data for logged in users
+        (() => {
+            axios.get("/statuslogin")
+                .then((res) => {
+                    setSessionName(res.data.user)
+                });
+        })();
 
         window.scrollTo(0, 0)       //scroll to top of page when it loads
 
-        const getId = ForId()
-
-        if (getId !== undefined) {
-            axios.get(`/tweets/${getId}`)
-                .then((res) => {
-                    setTweets(res);
-                    setLoading(false)
-                    // console.log(res.data)
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    }
-                    else if (error.response.status === 404) {
-                        Error()
-                    }
-                }).finally(() => {
-                    setLoading(false);
-                })
+        axios.get(`/tweets/${finalPath}`)
+            .then((res) => {
+                setTweets(res);
+                setLoading(false)
+                // console.log(res.data)
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response.status === 500) {
+                    internalError();
+                }
+                else if (error.response.status === 404) {
+                    Error()
+                }
+            }).finally(() => {
+                setLoading(false);
+            })
 
 
-            axios.get(`/likes/me/${getId}`)
-                .then((res) => {
-                    setIsLikedbyMe(res.data.count)
-                    // console.log(res.data.count)
+        axios.get(`/likes/me/${finalPath}`)
+            .then((res) => {
+                setIsLikedbyMe(res.data.count)
+                // console.log(res.data.count)
 
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-        }
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+
+        axios.get(`/comments/tweet/${finalPath}`)
+            .then((res) => {
+                // console.log(res.data)
+                setOtherComments(res)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
 
 
-    }, []); //tweets
-
-    // const wordCount = () => {   //live word counter
-    //     document.getElementById("tweet").addEventListener('input', function () {
-    //         var text = this.value,
-    //             count = text.trim().replace(/\s+/g, ' ').length;
-
-    //         if (count === 280) {
-    //             document.getElementById('show').style.color = "red"
-    //         } else if (count >= 250) {
-    //             document.getElementById('show').style.color = "#FF8000"
-    //         } else if (count >= 200) {
-    //             document.getElementById('show').style.color = "#FFB400"
-    //         } else if (count >= 150) {
-    //             document.getElementById('show').style.color = "#FFF800"
-    //         } else {
-    //             document.getElementById('show').style.color = "grey"
-    //         }
-
-    //         if (count <= 0) {// used to disable button if textarea is empty
-    //             document.getElementById("submit-btn").disabled = true;
-    //         } else {
-    //             document.getElementById("submit-btn").disabled = false;
-    //         }
-
-    //         document.getElementById('show').textContent = count;
-
-    //     }
-    //     )
-    // }
-
+    }, [finalPath]); //tweets
 
     const handleChange = (e) => {
         wordCount(e)
@@ -242,16 +236,12 @@ export default function Post() {
         }
     }
 
-    // let addEmoji = (emoji) => {
-    //     setComment(comment => (comment + emoji.native))
-    // }
-
-
     const Loading = () => {        //the loading div
+        let x = localStorage.getItem("accent") || 'grey'
 
         return <div className="d-flex justify-content-center mt-3">
             <Loader type="TailSpin"
-                color="orange"
+                color={x}
                 height={60}
                 width={60}
             />
@@ -264,9 +254,8 @@ export default function Post() {
     let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
 
     const UpdateData = () => {
-        const getId = ForId()
 
-        axios.get(`/tweets/${getId}`)
+        axios.get(`/tweets/${finalPath}`)
             .then((res) => {
                 setTweets(res);
                 // console.log(res.data)
@@ -281,7 +270,7 @@ export default function Post() {
                 }
             });
 
-        axios.get(`/likes/me/${getId}`)
+        axios.get(`/likes/me/${finalPath}`)
             .then((res) => {
                 setIsLikedbyMe(res.data.count)
                 // console.log(res.data.count)
@@ -290,6 +279,15 @@ export default function Post() {
             .catch((error) => {
                 console.error(error)
             });
+
+        axios.get(`/comments/tweet/${finalPath}`)
+            .then((res) => {
+                console.log(res.data)
+                setOtherComments(res)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
     }
 
     let addEmoji = emoji => {
@@ -307,6 +305,157 @@ export default function Post() {
             theme='auto'
         />
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
+        // const tweet = myForm.elements.tweet.value;
+
+        const isValid = tweetValidation(comment); /* <-- call the validation fn. */
+        if (isValid === true) {
+            sendToDb();
+            // setTweetModal(false);
+
+        }
+
+        function sendToDb() {
+            const tweetObject = {
+                content: comment.replace(/\n/g, " ").trim()
+            }
+
+            axios.post(`/comments/tweet/${finalPath}`, tweetObject)
+                .then((res) => {
+                    // setTweetLoading(true);
+                    let tweetDiv = document.getElementById("tweet-modal")
+                    tweetDiv.style.display = "none"
+                    setComment('')
+                    setCount(0)
+                    setColor('grey')
+                    setShowEmojiPicker(false)
+                    setRows(1)
+                    UpdateData()
+                    console.log(res.data)
+                })
+                .catch((error) => {
+                    // setTweetLoading(false);
+                    setError(error.response.data.message);
+                    console.error(error)
+                })
+                .finally(() => {
+                    UpdateData()
+                });
+        }
+    }
+
+    /** Validation check */
+    const tweetValidation = (twt) => {
+        const tweetErr = {};
+        let tweetReg = /[<>]+/;
+        let isValid = true;
+
+        if (tweetReg.test(twt)) {
+            tweetErr.tweetinvalid = "Contains illegal characters";
+            isValid = false;
+        }
+        if (twt.trim().length < 1) {
+            tweetErr.tweetinvalid = "Cannot be empty";
+            isValid = false;
+        }
+
+        setTweetErr(tweetErr);
+        return isValid;
+    }
+
+    const handleDelete = (e, id) => {
+        e.preventDefault()
+        // return alert(id)
+        setDisableDiv(true)
+
+        if (!deleteTweet[id]) {
+            setDisabled(true);
+            setDisableDiv(prevDelete => ({
+                ...prevDelete,
+                [id]: !setDisableDiv[id],
+            }));
+
+            axios.delete(`/comments/${id}/tweet/${finalPath}`)
+                .then((res) => {
+                    console.log(res.data);
+                    UpdateData()
+                })
+                .catch((error) => {
+                    console.log(id)
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                    // setDisableDiv(false)
+                    setDisabled(false);
+                })
+        }
+
+
+    };
+
+    const handleCommentLike = (e, id, likedbyme) => {
+        //for liking and unliking posts
+        // NOW WORKS 🎉🎉
+        //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
+
+        e.preventDefault()
+        console.log(likedbyme)
+
+        if (!likedTweets[id] && !likedbyme) {
+            setDisabled(true);
+            setLikedTweets(prevTweets => ({
+                ...prevTweets,
+                [id]: !setLikedTweets[id],
+            }));
+
+            axios.post(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    UpdateData()
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                });
+
+        } else {
+            setDisabled(true);
+            setLikedTweets(prevTweets => ({
+                ...prevTweets,
+                [id]: setLikedTweets[id],
+            }));
+
+            axios.delete(`/likes/${id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    UpdateData()
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                });
+        }
+    };
 
     return (
         <div className="general" >
@@ -336,7 +485,7 @@ export default function Post() {
                         </div>
 
                         {loading ? <Loading /> : null}
-                        {tweets.data.map((item) => {
+                        {tweets.data.map((item, i) => {
                             let date = new Date(item.dateposted);
                             // let localeDate = date.toLocaleDateString();
                             let months = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -349,7 +498,7 @@ export default function Post() {
                             document.title = `Post by @${item.User[0].username} - TwitClone`;
 
                             return <div>
-                                <div className="p-2  row" key={item._id}>
+                                <div className="p-2  row" key={i}>
                                     <div className="col-1.5">              {/* <--- user avi */}
                                         <Link
                                             to={`/u/${item.User[0].username}`}
@@ -437,14 +586,14 @@ export default function Post() {
                                 <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
                             </div>
 
-                            <form className="signup col tweet-form ">
-                                {/* onSubmit={(e) => handleSubmit(e)} */}
+                            <form className="signup col tweet-form " onSubmit={(e) => handleSubmit(e)}>
+                                {/*  */}
                                 {tweets.data.map((item, i) => (
                                     <div className="" key={i}>
 
                                         {commentReply ?
                                             <span>Replying to
-                                                <Link to={`/u/${item.User[0].username}`} className="ml-1">
+                                                <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
                                                     @{item.User[0].username}
                                                 </Link>
                                             </span>
@@ -466,9 +615,12 @@ export default function Post() {
                                             onFocus={() => setCommentReply(true)}
                                             style={{ fontSize: '20px', padding: '5px' }}
                                         />
-                                        {/* {Object.keys(fullnameErr).map((key) => {
-                                        return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
-                                    })} */}
+                                        <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
+
+
+                                        {Object.keys(tweetErr).map((key) => {
+                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                        })}
 
 
                                     </div>
@@ -523,22 +675,73 @@ export default function Post() {
 
                         </div>
 
+                        {otherComments.data.map((item, i) => {
+                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
 
-                        <div className="p-2 view row mt-3" >             {/* <--- standard tweet*/}
-                            <div className="col-1.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">                   {/* <--- user content */}
-                                <div className="user-content">
-                                    {/* <strong>{fullname}</strong> &nbsp; <span>@{username}</span> */}
+                            return <Link to={`/post/${item._id}`} className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link" : "p-2 view row main-post-div post-link name-link"} key={i} >             {/* <--- standard tweet*/}
+                                <Link to={`/u/${item.User[0].username}`} className="col-1.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className="user-logo" />
+                                </Link>
+
+                                <div className="col user-name-tweet post-div">                   {/* <--- user content */}
+                                    <div className="user-content">
+                                        <Link
+                                            to={`/u/${item.User[0].username}`}
+                                            className="name-link"
+                                        >
+                                            <strong>{item.User[0].fullname}</strong> &nbsp;
+                                        </Link>
+
+                                        <span>@{item.User[0].username}</span>
+                                        &nbsp; <span>·</span> &nbsp;
+                                        <span>
+                                            <ReactTimeAgo date={item.date} locale="en-US" timeStyle="twitter" />
+                                        </span>
+                                    </div>
+                                    <p className="post-link ">{item.content}</p>
+
+                                    <div className="interact-row d-flex ">
+                                        <button
+                                            className="comment col"
+                                        // onClick={() => setCommentModal(true)}
+                                        >
+                                            <FontAwesomeIcon icon={faComment} />
+                                            {/* &nbsp; {item.comments} */}
+                                        </button>
+
+                                        <button className="col retweet">
+                                            <FontAwesomeIcon icon={faRetweet} />
+                                        </button>
+
+                                        <button
+                                            className="like col"
+                                            onClick={(e) => handleCommentLike(e, item._id, item.isLikedbyme)}
+                                            disabled={disabled}
+
+                                        >
+                                            {likedTweets[item._id] || item.isLikedbyme ?
+                                                (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
+                                                : <FontAwesomeIcon icon={faHeart} />
+                                            }
+
+                                            {/* &nbsp; {item.likes} */}
+                                        </button>
+
+                                        {sessionName === item.User[0].username ?
+                                            <button
+                                                className="col delete"
+                                                onClick={(e) => handleDelete(e, item._id)}
+                                            >
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </button>
+                                            :
+                                            null
+                                        }
+                                    </div>
+
                                 </div>
-                                <p></p>
-
-                                <Interactive />
-
-                            </div>
-                        </div>
-
+                            </Link>
+                        })}
                     </div>
 
                     <Sidebar />
