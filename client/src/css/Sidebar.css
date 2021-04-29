@@ -168,18 +168,22 @@ ul{
 }
 .btn-accent{
   background-color: var(--accent);
-  color: var(--text)
+  color: white;
+  font-weight: 700;
 }
 .btn-accent:hover{
-  color: var(--text)
+  color: var(--text);
+  background-color: var(--hover);
 }
 .btn-accent-outline{
   border: 1px solid var(--accent);
   background-color: inherit;
-  color: var(--accent)
+  color: var(--accent);
+  font-weight: 700;
 }
 .btn-accent-outline:hover{
-  color: var(--accent)
+  color: var(--accent);
+  background-color: var(--hover);
 }
 /* tweetModal */
 #tweet-modal{

@@ -56,28 +56,28 @@ export default function ThemeToggle() {
     }
 
     const orangeAccent = () => {
-        localStorage.setItem("accent", "orange");
+        localStorage.setItem("accent", "rgb(244, 93, 34)");
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
     }
 
     const redAccent = () => {
-        localStorage.setItem("accent", "red");
+        localStorage.setItem("accent", "rgb(224, 36, 94)");
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
     }
 
     const skyBlueAccent = () => {
-        localStorage.setItem("accent", "sky-blue");
+        localStorage.setItem("accent", "rgba(29,161,242,1.00)");
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
     }
 
     const greenAccent = () => {
-        localStorage.setItem("accent", "green");
+        localStorage.setItem("accent", '#17BF63');
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));

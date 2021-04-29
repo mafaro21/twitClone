@@ -72,9 +72,11 @@ export default function Edit() {
     }
 
     const Loading = () => {        //the loading div
+        let x = localStorage.getItem("accent") || 'grey'
+
         return <div className="d-flex mt-2">
             <Loader type="TailSpin"
-                color="orange"
+                color={x}
                 height={40}
                 width={40}
                 className="d-flex "

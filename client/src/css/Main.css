@@ -20,25 +20,25 @@ html[data-theme="medium"]{
   --border: rgb(56, 68, 77);
   --interact: #AEAEAE;
 }
-html[accent-theme="orange"]{
---accent: #ff6300;
+html[accent-theme="rgb(244, 93, 34)"]{
+--accent: rgb(244, 93, 34);
 --darkaccent: #FF7720;
---hover: rgb(242,156,80,0.4);
+--hover: rgb(244, 93, 34, 0.1);
 }
-html[accent-theme="red"]{
---accent: #FF2020;
+html[accent-theme="rgb(224, 36, 94)"]{
+--accent: rgb(224, 36, 94);
 --darkaccent: #FF4040;
---hover: rgb(255, 0, 0,0.2)
+--hover: rgb(224, 36, 94, 0.1)
 }
-html[accent-theme="sky-blue"]{
-  --accent: #3232FC;
+html[accent-theme="rgba(29,161,242,1.00)"]{
+  --accent: rgba(29,161,242,1.00);
   --darkaccent: #4C4CFC;
-  --hover: rgb(50, 50, 252 ,0.2)
+  --hover: rgb(29,161,242,0.1)
 }
-html[accent-theme="green"]{
-  --accent: #249F0D;
+html[accent-theme="#17BF63"]{
+  --accent: rgb(23, 191, 99);
   --darkaccent: #1C800A;
-  --hover: rgb(36, 159, 13,0.3);
+  --hover: rgb(23, 191, 99, 0.1);
 }
 /* mainly home properties */
 .main{
@@ -112,6 +112,10 @@ strong {
   font-weight: 700;
   /* for fullname. You can turn it to a Class. */
 }
+.test{
+  text-decoration: line-through;
+  
+}
 
 .profile-header{
   font-size: 18px;
@@ -171,17 +175,17 @@ strong {
 .banner-edit{
   height: 40px;
   width: 110px;
-  /* color: var(--accent); */
-  /* transition: all .3s ease-in-out; */
-  /* transform: translateZ(0); */
-  /* border: 2px solid ;
-  outline: none; */
 }
 .no-padding {
   padding-left: 0;
   padding-right: 0;
 }
-
+.accent{
+  color: var(--accent);
+}
+.accent:hover{
+  color: var(--accent);
+}
 button{
   background-color: var(--background);
   border: 0;

@@ -112,11 +112,13 @@ export default function Compose() {
     }
 
     const TweetLoading = () => {    //loader after tweet has been sent
+        let x = localStorage.getItem("accent") || 'grey'
+
         return <div className="d-flex justify-content-center">
             <div className="modal-wrapper" >
                 <div className=" d-flex tweet-loader" >
                     <Loader type="TailSpin"
-                        color="orange"
+                        color={x}
                         height={40}
                         width={40}
                         className="d-flex "

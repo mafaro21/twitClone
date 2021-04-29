@@ -1,7 +1,5 @@
-- users can tweet from home.js
-- explore page
-- improved the search bar
-- thinner borders
-- new medium theme....
-- testing out new accents
+- fixed the accents
+- posting and deleteing comments
+- line through when a tweet is being deleted
+
 

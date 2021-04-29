@@ -26,7 +26,7 @@ function Home() {
 
     const [comment, setComment] = useState('')
     const [sessionName, setSessionName] = useState('')
-    const [tweetLoading, setTweetLoading] = useState(false)
+    const [tweetLoading, setTweetLoading] = useState(true)
 
 
     const [minRows] = useState(1)
@@ -124,11 +124,13 @@ function Home() {
     }
 
     const TweetLoading = () => {    //loader after tweet has been sent
+        let x = localStorage.getItem("accent") || 'grey'
+
         return <div className="d-flex justify-content-center">
             <div className="modal-wrapper" >
                 <div className=" d-flex tweet-loader" >
                     <Loader type="TailSpin"
-                        color="orange"
+                        color={x}
                         height={40}
                         width={40}
                         className="d-flex "
@@ -139,11 +141,12 @@ function Home() {
         </div>
     }
 
+    // let percent = 60;
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisabled(true)
-        // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
-        // const tweet = myForm.elements.tweet.value;
+        setTweetLoading(true)
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
@@ -167,6 +170,7 @@ function Home() {
                     setColor('grey')
                     setShowEmojiPicker(false)
                     setRows(3)
+
                 })
                 .catch((error) => {
                     setTweetLoading(false);
@@ -199,11 +203,16 @@ function Home() {
         return isValid;
     }
 
+
+    const LineLoader = () => {
+    }
+
+
     return (
         <div className="App general ">
             {/* <Navbar /> */}
             <div className="container ">
-                {tweetLoading ? <TweetLoading /> : null}
+
 
                 <div className="row ">
 
@@ -222,8 +231,11 @@ function Home() {
                             return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
                         })}
 
+
+
                         {sessionName ?
                             <div className="p-2 profile-view row mt-3">
+                                {tweetLoading ? <linearProgress /> : null}
                                 <div className="col-0.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>

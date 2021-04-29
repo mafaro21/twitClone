@@ -47,9 +47,11 @@ function Signup() {
     }
 
     const Loading = () => { //the loading div
+        let x = localStorage.getItem("accent") || 'grey'
+
         return <div>
             <Loader type="Watch"
-                color="orange"
+                color={x}
                 height={30}
                 width={30}
             />
