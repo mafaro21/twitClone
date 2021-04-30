@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
+import { UserContext } from '../Contexts/UserContext';
 
 
 function Sidebar() {
+    const [user] = useContext(UserContext)
 
     const [api, setApi] = useState({ articles: [] });
 
@@ -75,7 +77,7 @@ function Sidebar() {
                 <p>Trending</p>
             </div>
 
-            {isLoggedIn ?
+            {user ?
 
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Headlines</h5>

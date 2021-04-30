@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/App.css';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
@@ -25,6 +25,7 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
+import { UserContext } from '../Contexts/UserContext';
 
 export default function Profile() {
 
@@ -469,6 +470,7 @@ export default function Profile() {
 
     TimeAgo.addLocale(en);   //for the time ago
 
+    const msg = useContext(UserContext)
     return (
         <div className="App general" >
             {/* <Navbar /> */}
@@ -491,7 +493,7 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div >
-                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname}</strong>
+                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname} {msg}</strong>
                                     </div>
                                     {/* <p> */}
                                     <span style={{ fontSize: '15px' }}>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>

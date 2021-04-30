@@ -54,6 +54,7 @@ export default function Post() {
     const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
 
     const [noAccountDiv, setNoAccountDiv] = useState(false)
+    const [commentLoading, setCommentLoading] = useState(false)
 
     const [disableDiv, setDisableDiv] = useState(false)
     const [sessionName, setSessionName] = useState('')
@@ -249,6 +250,19 @@ export default function Post() {
         </div>
     }
 
+    const CommentLoading = () => {
+        let x = localStorage.getItem("accent") || 'grey'
+
+        return <div className="d-flex justify-content-center ">
+            <Loader type="ThreeDots"
+                color={x}
+                height={40}
+                width={40}
+            />
+
+        </div>
+    }
+
     TimeAgo.addLocale(en)
 
     let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
@@ -308,7 +322,7 @@ export default function Post() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setCommentLoading(true)
         // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         // const tweet = myForm.elements.tweet.value;
 
@@ -344,6 +358,7 @@ export default function Post() {
                 })
                 .finally(() => {
                     UpdateData()
+                    setCommentLoading(false)
                 });
         }
     }
@@ -668,7 +683,7 @@ export default function Post() {
                                         // onClick={handleSubmit}
                                         disabled={commentDisabled}       //button disabler
                                     >
-                                        Tweet
+                                        {commentLoading ? <CommentLoading /> : "Tweet"}
                                     </button>
                                 </div>
                             </form>
