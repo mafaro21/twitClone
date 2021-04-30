@@ -34,8 +34,6 @@ export default function Header() {
 
     const [tweetErr, setTweetErr] = useState({})
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-
     const [tweetContent, setTweetContent] = useState('')
 
     const [count, setCount] = useState(0)
@@ -74,7 +72,6 @@ export default function Header() {
             axios.get("/statuslogin")
                 .then(res => {
                     setUser(res.data.loggedin)
-                    setIsLoggedIn(res.data.loggedin);
                     setFullname(res.data.fullname);
                     setUsername(res.data.user);
 // console.log(res.data)
@@ -100,11 +97,9 @@ export default function Header() {
         return <div className="user-modal modal-enter more-modal mr-1">
             <button
                 className="text p-2 user-modal-btn "
-                type="submit"
-                
+                type="submit"      
             >
-                Change Theme
-                  
+                Change Theme                
             </button>
 
 
@@ -150,15 +145,15 @@ export default function Header() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-setTweetLoading(true);
+        
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
 
         const isValid = tweetValidation(tweet); /* <-- call the validation fn. */
         if (isValid === true) {
+            setTweetLoading(true);
             sendToDb();
-            // setTweetModal(false);
-            
+                  
         }
 
         function sendToDb() {

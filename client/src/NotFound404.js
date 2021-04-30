@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 function NotFound404() {
   return (
     <div className="pt-5 general p-4 error-page">
-      <div className=" mt-5 p-5 " >
+      <div className="mt-5 p-5">
         <div className=" " style={{ color: "black", fontSize: "50px" }}>
 
           <h1 style={{ fontFamily: "monospace" }}> ERROR 404!</h1>
