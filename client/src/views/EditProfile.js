@@ -81,7 +81,7 @@ export default function Edit() {
                 width={40}
                 className="d-flex "
             />
-            <div className="mt-2 ml-3" style={{ color: 'orange' }}>Saving Changes....</div>
+            <div className="mt-2 ml-3" style={{ color: x }}>Saving Changes....</div>
 
         </div>
     }

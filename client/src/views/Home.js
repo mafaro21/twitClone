@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -14,6 +14,7 @@ import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Loader from "react-loader-spinner";
 import TweetLoading from '../components/Header'
+import { UserContext } from '../Contexts/UserContext';
 
 function Home() {
     const [disabled, setDisabled] = useState(true);
@@ -26,7 +27,8 @@ function Home() {
 
     const [comment, setComment] = useState('')
     const [sessionName, setSessionName] = useState('')
-    const [tweetLoading, setTweetLoading] = useState(true)
+    const [tweetLoading, setTweetLoading] = useState(false)
+
 
 
     const [minRows] = useState(1)
@@ -126,18 +128,13 @@ function Home() {
     const TweetLoading = () => {    //loader after tweet has been sent
         let x = localStorage.getItem("accent") || 'grey'
 
-        return <div className="d-flex justify-content-center">
-            <div className="modal-wrapper" >
-                <div className=" d-flex tweet-loader" >
-                    <Loader type="TailSpin"
-                        color={x}
-                        height={40}
-                        width={40}
-                        className="d-flex "
-                    />
-                    <div className="mt-2 ml-3" style={{ color: 'orange' }}>Sending Spicy Tweet...</div>
-                </div>
-            </div>
+        return <div className="d-flex justify-content-center ">
+            <Loader type="ThreeDots"
+                color={x}
+                height={40}
+                width={40}
+            />
+
         </div>
     }
 
@@ -207,6 +204,7 @@ function Home() {
     const LineLoader = () => {
     }
 
+    const msg = useContext(UserContext)
 
     return (
         <div className="App general ">
@@ -222,7 +220,7 @@ function Home() {
                         <div className="row profile-header view p-3">
 
                             <div >
-                                <strong className="text" style={{ fontSize: '20px' }}>Home</strong>
+                                <strong className="text" style={{ fontSize: '20px' }}>Home {msg}</strong>
                             </div>
                         </div>
 
@@ -235,7 +233,7 @@ function Home() {
 
                         {sessionName ?
                             <div className="p-2 profile-view row mt-3">
-                                {tweetLoading ? <linearProgress /> : null}
+
                                 <div className="col-0.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
@@ -291,8 +289,8 @@ function Home() {
                                             // onClick={handleSubmit}
                                             disabled={disabled}       //button disabler
                                         >
-                                            Tweet
-                                    </button>
+                                            {tweetLoading ? <TweetLoading /> : "Tweet"}
+                                        </button>
                                     </div>
                                 </form>
 

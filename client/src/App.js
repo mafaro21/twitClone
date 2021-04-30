@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import dotenv from 'dotenv';
 import './css/App.css';
 import Login from './views/Login';
@@ -16,11 +16,19 @@ import Followers from './views/Followers'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
-// import { TweetContext } from './components/TweetContext'
+import { UserContext, UserNameContext } from './Contexts/UserContext';
 
 
 function App() {
   dotenv.config();
+
+  const [user, setUser] = useState('')
+
+  const value = useMemo(() => [user, setUser], [user, setUser])
+
+  // const [username, setUsername] = useState('')
+
+  // const usernameData = useMemo(() => [username, setUsername], [username, setUsername])
 
   return (
 
@@ -29,34 +37,31 @@ function App() {
 
 
         <Switch>
+          <UserContext.Provider value={value}>
 
+            <Route path="/" exact component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/home" component={Home} />
+            <Route path="/explore" component={Explore} />
 
-          <Route path="/" exact component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/home" component={Home} />
-          <Route path="/explore" component={Explore} />
-
-          <Route path="/u/:user" exact >
-            <div>
+            <Route path="/u/:user" exact >
               <Profile />
-            </div>
-          </Route>
-          <Route path="/u/:user/edit" exact >
-            <EditProfile />
-          </Route>
-          <Route path="/post/:postid" exact>
-            <Post />
-          </Route>
+            </Route>
+            <Route path="/u/:user/edit" exact >
+              <EditProfile />
+            </Route>
+            <Route path="/post/:postid" exact>
+              <Post />
+            </Route>
 
-          <Route path="/u/:user/following" component={Following} />
-          <Route path="/u/:user/followers" component={Followers} />
+            <Route path="/u/:user/following" component={Following} />
+            <Route path="/u/:user/followers" component={Followers} />
 
-          {/* component={Post} /> */}
-          <Route path="/compose/tweet" component={Compose} />
+            <Route path="/compose/tweet" component={Compose} />
 
+          </UserContext.Provider>
           <Route path="/error" component={Error} />
           <Route component={NotFound404} />
-
         </Switch>
         {/* <Sidebar /> */}
 

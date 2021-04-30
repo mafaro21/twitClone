@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
@@ -12,8 +12,11 @@ import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt'
 import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
+import { UserContext } from '../Contexts/UserContext';
 
 export default function Header() {
+    const [user, setUser] = useContext(UserContext)
+    // const [username, setUsername] = useContext(UserContext)
 
     const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
@@ -70,10 +73,11 @@ export default function Header() {
         (()=> {
             axios.get("/statuslogin")
                 .then(res => {
+                    setUser(res.data.loggedin)
                     setIsLoggedIn(res.data.loggedin);
                     setFullname(res.data.fullname);
                     setUsername(res.data.user);
-
+// console.log(res.data)
                 });
         })();       
 
@@ -146,7 +150,7 @@ export default function Header() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+setTweetLoading(true);
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
 
@@ -164,7 +168,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    setTweetLoading(true);
+                    
                     let tweetDiv = document.getElementById("tweet-modal")
                     tweetDiv.style.display = "none"
                     setTweetContent('')
@@ -212,18 +216,13 @@ export default function Header() {
     const TweetLoading = () => {    //loader after tweet has been sent
         let x = localStorage.getItem("accent") || 'grey'
         
-        return <div className="d-flex justify-content-center">
-            <div className="modal-wrapper" >
-                <div className=" d-flex tweet-loader" >
-                    <Loader type="TailSpin"
-                        color={x}
-                        height={40}
-                        width={40}
-                        className="d-flex "
-                    />
-                    <div className="mt-2 ml-3" style={{ color: 'orange' }}>Sending Spicy Tweet...</div>
-                </div>
-            </div>
+        return <div className="d-flex justify-content-center ">
+            <Loader type="ThreeDots"
+                color={x}
+                height={40}
+                width={40}
+            />
+
         </div>
     }
 
@@ -496,7 +495,7 @@ export default function Header() {
                                             // onClick={handleSubmit}
                                                 disabled={disabled}       //button disabler
                                             >
-                                                Tweet
+                                                {tweetLoading ? <TweetLoading /> : "Tweet"}
                                             </button>
                                         </div>
 
@@ -507,7 +506,7 @@ export default function Header() {
                     </div>
                 </div>
             </div >
-            {tweetLoading ? <TweetLoading /> : null}
+            
             {/* <Compose/> */}
             {/* col-sm-2 */}
             <div><Link className="text nav-logo fixed pl-2 " to="/home">
@@ -518,9 +517,10 @@ export default function Header() {
                 </svg>
             </Link>
             </div>
+            {user}
             <div className="fixed phone-header mt-5">
 
-                {isLoggedIn === true ?
+                {user === true ?
                 <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                     <div className="  d-flex pl-2 mt-2" >
                         <div>
@@ -549,7 +549,7 @@ export default function Header() {
                     </div>
                 </Link>
 
-                {isLoggedIn === true ?
+                {user === true ?
                     <Link to="#" className="d-flex header-link">
                         <div className=" d-flex pl-2 mt-2">
                             <div>
@@ -564,7 +564,7 @@ export default function Header() {
                     </Link>
                     : null}
 
-                {isLoggedIn ===true ?
+                {user ===true ?
                     <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to= {`/u/${username}`}>
                         <div className=" d-flex pl-2 mt-2" >
                             <div>
@@ -604,7 +604,7 @@ export default function Header() {
 
                 {moreModal ? <MoreModal /> : null}
 
-                {isLoggedIn ===true ?
+                {user ===true ?
                     <div className="d-flex tweet-btn" >
                         <div className=" d-flex pl-2">
                             <div>
@@ -621,7 +621,7 @@ export default function Header() {
                                         className="tweet-text"
                                         style={{ fontWeight: 700 }}
                                     >
-                                        Tweet 
+                                        Tweet
                                     </div>
                                 <FontAwesomeIcon icon={faFeatherAlt} className="tweet"/>
 
@@ -633,7 +633,7 @@ export default function Header() {
 
 
 
-                {isLoggedIn ===true ?
+                {user ===true ?
                     <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
                         {userModal ? <UserModal /> : null}
                         <img src={icon} alt="example" className="user-data-img" />
