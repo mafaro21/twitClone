@@ -230,7 +230,7 @@ export default function Post() {
             setColor("grey")
         }
 
-        if (comment.length > 0) {
+        if (comment.trim().length > 0) {
             setCommentDisabled(false)
         } else {
             setCommentDisabled(true)
@@ -322,15 +322,15 @@ export default function Post() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setCommentLoading(true)
+        
         // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         // const tweet = myForm.elements.tweet.value;
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
+            setCommentLoading(true)
             sendToDb();
             // setTweetModal(false);
-
         }
 
         function sendToDb() {

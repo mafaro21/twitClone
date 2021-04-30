@@ -102,7 +102,7 @@ function Home() {
             setColor("grey")
         }
 
-        if (comment.length > 0) {
+        if (comment.trim().length > 0) {
             setDisabled(false)
         } else {
             setDisabled(true)
@@ -143,10 +143,11 @@ function Home() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisabled(true)
-        setTweetLoading(true)
+        
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
+            setTweetLoading(true)
             sendToDb();
             // setTweetModal(false);
 

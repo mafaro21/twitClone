@@ -1,0 +1,21 @@
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "additionalProperties": false,
+        "required": ["OGtweetid", "retweetby", "date"],
+        "properties": {
+            "_id": {},
+            "OGtweetid": {
+                "bsonType": "objectId",
+                "description": "original tweet"
+            },
+            "retweetby": {
+                "bsonType": "objectId",
+                "description": "person who retweeted"
+            },
+            "date": {
+                "bsonType": "date"
+            }
+        }
+    }
+}
