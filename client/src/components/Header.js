@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick'
-import ThemeToggle from './ThemeToggle'
 // import Compose from '../views/Compose';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loader from "react-loader-spinner";
@@ -54,7 +53,7 @@ export default function Header() {
     // const [addEmoji, setAddEmoji] = useState('')
 
     let history = useHistory()
-    
+
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -67,20 +66,20 @@ export default function Header() {
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     useEffect(() => {
-    
-        (()=> {
+
+        (() => {
             axios.get("/statuslogin")
                 .then(res => {
                     setUser(res.data.loggedin)
                     setFullname(res.data.fullname);
                     setUsername(res.data.user);
-// console.log(res.data)
+                    // console.log(res.data)
                 });
-        })();       
+        })();
 
     }, []);
 
-    
+
     const UserModal = () => {
         return <div className="user-modal modal-enter mr-1 ">
             <button
@@ -97,9 +96,9 @@ export default function Header() {
         return <div className="user-modal modal-enter more-modal mr-1">
             <button
                 className="text p-2 user-modal-btn "
-                type="submit"      
+                type="submit"
             >
-                Change Theme                
+                Change Theme
             </button>
 
 
@@ -107,7 +106,7 @@ export default function Header() {
     }
 
     /** Logout function */
-    const Logout = () => {  
+    const Logout = () => {
         axios.get("/logout")
             .then((res) => {
                 history.push("/");
@@ -115,12 +114,12 @@ export default function Header() {
     }
 
     /** Live word-counter */
-    const wordCount = () => {   
+    const wordCount = () => {
         document.getElementById("tweet").addEventListener('input', function () {
             var text = this.value,
                 count = text.trim().replace(/\s/g, '').length;
 
-            
+
             if (count === 280) {
                 document.getElementById('show').style.color = "red"
             } else if (count >= 250) {
@@ -145,7 +144,7 @@ export default function Header() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         const tweet = myForm.elements.tweet.value;
 
@@ -153,7 +152,7 @@ export default function Header() {
         if (isValid === true) {
             setTweetLoading(true);
             sendToDb();
-                  
+
         }
 
         function sendToDb() {
@@ -163,7 +162,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    
+
                     let tweetDiv = document.getElementById("tweet-modal")
                     tweetDiv.style.display = "none"
                     setTweetContent('')
@@ -210,7 +209,7 @@ export default function Header() {
 
     const TweetLoading = () => {    //loader after tweet has been sent
         let x = localStorage.getItem("accent") || 'grey'
-        
+
         return <div className="d-flex justify-content-center ">
             <Loader type="ThreeDots"
                 color={x}
@@ -264,7 +263,7 @@ export default function Header() {
                                             required
                                         />
 
-                                        
+
                                         {Object.keys(tweetErr).map((key) => {
                                             return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
                                         })}
@@ -295,7 +294,7 @@ export default function Header() {
                                             Tweet
                                     </button>
                                     </div>
-                                        
+
                                 </form>
                             </div>
                         </div>
@@ -304,7 +303,7 @@ export default function Header() {
             </div>
         </div >
     };
- 
+
     let location = useLocation()    //for current location
     let path = location.pathname
 
@@ -328,12 +327,12 @@ export default function Header() {
             } else {
                 tweetDiv.style.display = "none"
             }
-  
+
         })
 
         buttonClose.addEventListener("click", () => {
 
-            
+
             if (1 != 3) {
                 tweetDiv.style.display = "none"
                 setTweetContent('')
@@ -348,7 +347,7 @@ export default function Header() {
         let showDiv = false
 
     }
-    
+
     const handleChange = (e) => {
         setTweetContent(e.target.value)
         wordCountReact(e)
@@ -399,7 +398,7 @@ export default function Header() {
             setDisabled(true)
         }
     }
-    
+
     let addEmoji = emoji => {
         setTweetContent(tweetContent + emoji.native)
     }
@@ -415,10 +414,10 @@ export default function Header() {
             theme='auto'
         />
     }
-    
+
 
     return (
-        <header className=" header pt-3" >
+        <header className=" header pt-3 " >
             {tweetModal ? <TweetModal /> : null}
             <div id="tweet-modal">
                 <div className="modal-wrapper" >
@@ -481,13 +480,13 @@ export default function Header() {
                                                 </div>
                                             </div>
 
-                                            {showEmojiPicker ? <Emoji/> : null}
+                                            {showEmojiPicker ? <Emoji /> : null}
 
                                             <button
                                                 id="submit-btn"
                                                 className="btn login-submit btn-accent-outline rounded-pill   "
                                                 type="submit"
-                                            // onClick={handleSubmit}
+                                                // onClick={handleSubmit}
                                                 disabled={disabled}       //button disabler
                                             >
                                                 {tweetLoading ? <TweetLoading /> : "Tweet"}
@@ -501,37 +500,35 @@ export default function Header() {
                     </div>
                 </div>
             </div >
-            
+
             {/* <Compose/> */}
-            {/* col-sm-2 */}
-            <div><Link className="text nav-logo fixed pl-2 " to="/home">
+            {/* col-2 */}
+            <Link className="text nav-logo fixed pl-2 " to="/home">
                 <svg width="26px" height="40px" viewBox="0 0 256 209" version="1.1" preserveAspectRatio="xMidYMid">
                     <g>
                         <path d="M256,25.4500259 C246.580841,29.6272672 236.458451,32.4504868 225.834156,33.7202333 C236.678503,27.2198053 245.00583,16.9269929 248.927437,4.66307685 C238.779765,10.6812633 227.539325,15.0523376 215.57599,17.408298 C205.994835,7.2006971 192.34506,0.822 177.239197,0.822 C148.232605,0.822 124.716076,24.3375931 124.716076,53.3423116 C124.716076,57.4586875 125.181462,61.4673784 126.076652,65.3112644 C82.4258385,63.1210453 43.7257252,42.211429 17.821398,10.4359288 C13.3005011,18.1929938 10.710443,27.2151234 10.710443,36.8402889 C10.710443,55.061526 19.9835254,71.1374907 34.0762135,80.5557137 C25.4660961,80.2832239 17.3681846,77.9207088 10.2862577,73.9869292 C10.2825122,74.2060448 10.2825122,74.4260967 10.2825122,74.647085 C10.2825122,100.094453 28.3867003,121.322443 52.413563,126.14673 C48.0059695,127.347184 43.3661509,127.988612 38.5755734,127.988612 C35.1914554,127.988612 31.9009766,127.659938 28.694773,127.046602 C35.3777973,147.913145 54.7742053,163.097665 77.7569918,163.52185 C59.7820257,177.607983 37.1354036,186.004604 12.5289147,186.004604 C8.28987161,186.004604 4.10888474,185.75646 0,185.271409 C23.2431033,200.173139 50.8507261,208.867532 80.5109185,208.867532 C177.116529,208.867532 229.943977,128.836982 229.943977,59.4326002 C229.943977,57.1552968 229.893412,54.8901664 229.792282,52.6381454 C240.053257,45.2331635 248.958338,35.9825545 256,25.4500259" fill="#55acee"></path>
                     </g>
                 </svg>
             </Link>
-            </div>
-            {user}
-            <div className="fixed phone-header mt-5">
+            <div className="fixed phone-header work mt-5">
 
                 {user === true ?
-                <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
-                    <div className="  d-flex pl-2 mt-2" >
-                        <div>
-                            <svg viewBox="0 0 26 26" className="icon mr-2">
-                                <g>
-                                    <path d="M22.46 7.57L12.357 2.115c-.223-.12-.49-.12-.713 0L1.543 7.57c-.364.197-.5.652-.303 1.017.135.25.394.393.66.393.12 0 .243-.03.356-.09l.815-.44L4.7 19.963c.214 1.215 1.308 2.062 2.658 2.062h9.282c1.352 0 2.445-.848 2.663-2.087l1.626-11.49.818.442c.364.193.82.06 1.017-.304.196-.363.06-.818-.304-1.016zm-4.638 12.133c-.107.606-.703.822-1.18.822H7.36c-.48 0-1.075-.216-1.178-.798L4.48 7.69 12 3.628l7.522 4.06-1.7 12.015z"></path>
-                                    <path d="M8.22 12.184c0 2.084 1.695 3.78 3.78 3.78s3.78-1.696 3.78-3.78-1.695-3.78-3.78-3.78-3.78 1.696-3.78 3.78zm6.06 0c0 1.258-1.022 2.28-2.28 2.28s-2.28-1.022-2.28-2.28 1.022-2.28 2.28-2.28 2.28 1.022 2.28 2.28z"></path>
-                                </g>
-                            </svg>
+                    <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                        <div className="  d-flex pl-2 mt-2" >
+                            <div>
+                                <svg viewBox="0 0 26 26" className="icon mr-2">
+                                    <g>
+                                        <path d="M22.46 7.57L12.357 2.115c-.223-.12-.49-.12-.713 0L1.543 7.57c-.364.197-.5.652-.303 1.017.135.25.394.393.66.393.12 0 .243-.03.356-.09l.815-.44L4.7 19.963c.214 1.215 1.308 2.062 2.658 2.062h9.282c1.352 0 2.445-.848 2.663-2.087l1.626-11.49.818.442c.364.193.82.06 1.017-.304.196-.363.06-.818-.304-1.016zm-4.638 12.133c-.107.606-.703.822-1.18.822H7.36c-.48 0-1.075-.216-1.178-.798L4.48 7.69 12 3.628l7.522 4.06-1.7 12.015z"></path>
+                                        <path d="M8.22 12.184c0 2.084 1.695 3.78 3.78 3.78s3.78-1.696 3.78-3.78-1.695-3.78-3.78-3.78-3.78 1.696-3.78 3.78zm6.06 0c0 1.258-1.022 2.28-2.28 2.28s-2.28-1.022-2.28-2.28 1.022-2.28 2.28-2.28 2.28 1.022 2.28 2.28z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <p className="header-title " style={{ fontWeight: 700 }}>Home</p>
                         </div>
-                        <p className="header-title " style={{ fontWeight: 700 }}>Home</p>
-                    </div>
-                </Link>
+                    </Link>
                     : null}
 
-                <Link to="/explore" className={path === '/explore' ? "d-flex header-link-active" : "d-flex header-link"}>
+                <Link to="/explore" className={path === '/explore' ? "d-flex header-link-active" : "d-flex header-link "}>
                     <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -559,8 +556,8 @@ export default function Header() {
                     </Link>
                     : null}
 
-                {user ===true ?
-                    <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to= {`/u/${username}`}>
+                {user === true ?
+                    <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${username}`}>
                         <div className=" d-flex pl-2 mt-2" >
                             <div>
                                 <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -574,7 +571,7 @@ export default function Header() {
                     </Link>
                     : null}
 
-                <Link to="#" className="d-flex more header-link">
+                <Link to="/more" className={path === '/more' ? "d-flex header-link-active more" : "d-flex header-link more"}>
                     <div className=" d-flex pl-2 mt-2">
                         <div>
                             <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -599,7 +596,7 @@ export default function Header() {
 
                 {moreModal ? <MoreModal /> : null}
 
-                {user ===true ?
+                {user === true ?
                     <div className="d-flex tweet-btn" >
                         <div className=" d-flex pl-2">
                             <div>
@@ -613,14 +610,14 @@ export default function Header() {
 
                                 >
                                     <div
-                                        className="tweet-text"
+                                        className="tweet-text mt-1"
                                         style={{ fontWeight: 700 }}
                                     >
                                         Tweet
                                     </div>
-                                <FontAwesomeIcon icon={faFeatherAlt} className="tweet"/>
+                                    <FontAwesomeIcon icon={faFeatherAlt} className="tweet" />
 
-                        </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -628,7 +625,7 @@ export default function Header() {
 
 
 
-                {user ===true ?
+                {user === true ?
                     <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
                         {userModal ? <UserModal /> : null}
                         <img src={icon} alt="example" className="user-data-img" />
@@ -642,8 +639,6 @@ export default function Header() {
 
                     </button>
                     : null}
-
-<ThemeToggle className="mt-4"/>
             </div>
         </header >
     );

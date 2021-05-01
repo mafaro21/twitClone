@@ -35,7 +35,7 @@ html[accent-theme="rgba(29,161,242,1.00)"]{
   --darkaccent: #4C4CFC;
   --hover: rgb(29,161,242,0.1)
 }
-html[accent-theme="#17BF63"]{
+html[accent-theme="rgb(23, 191, 99)"]{
   --accent: rgb(23, 191, 99);
   --darkaccent: #1C800A;
   --hover: rgb(23, 191, 99, 0.1);
@@ -50,11 +50,6 @@ html[accent-theme="#17BF63"]{
   border-bottom: 1px solid var(--border);
   /* border-radius: 15px; */
   text-align: left;
-  width: 103%;
-}
-
-.main-view:before{
-  filter: blur(5px);
 }
 
 .view{
@@ -240,6 +235,57 @@ button{
   opacity: 0;
   transform: translate(0, 25px);
 }
+
+/* more */
+.more-back:hover, .more-accent:hover{
+  cursor: pointer;
+}
+.more-back{
+  border:1px white solid;
+  border-radius: 8px;
+  padding: 5px;
+  width: 133px;
+}
+.more-back-active{
+  border: 3px var(--accent) solid;
+  border-radius: 8px;
+  padding: 5px;
+  width: 133px;
+}
+.more-light{
+  background-color: #fbfafa;
+  color: #080603
+}
+.more-dark{
+  background-color: #080603;
+  color: #fbfafa
+}
+.more-medium{
+  background-color: #19252F;
+  color: #fbfafa
+}
+
+.more-accent{
+  /* border: 1px white solid; */
+  border-radius: 50%;
+  width: 7%;
+  height: 38px;
+  width: 38px;
+}
+.orange-accent{
+background-color: rgb(244, 93, 34);
+}
+.blue-accent{
+background-color: rgba(29,161,242,1.00);
+}
+.red-accent{
+background-color: rgb(224, 36, 94);
+}
+.green-accent{
+  background-color: rgb(23, 191, 99);
+}
+/* more */
+
 @keyframes animate-enter-frames {
   from {
     opacity: 0;
@@ -385,9 +431,12 @@ button{
   /* .user-name-tweet{
      margin-left: 26px; 
   } */
-
+.general{
+  /* margin-left: 0%; */
+}
   .main-view{
     font-size: 13px;
+    /* margin: 0px; */
   }
 
   .tweet-img{
@@ -423,7 +472,7 @@ button{
 
 @media screen and (max-width: 1199px){
   .main-view{
-    width: 19%;
+    /* width: 19%; */
     margin-left: -4%;
   }
 }

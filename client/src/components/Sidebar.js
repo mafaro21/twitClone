@@ -69,7 +69,7 @@ function Sidebar() {
 
 
     return (
-        <div className="col-sm-4 p-3 phone-sidebar" ref={newsRef}>
+        <div className="col-4 p-3 phone-sidebar" ref={newsRef}>
             {location.pathname === '/explore' ? null : <Search />}
 
             <div className="p-3 sidebar mt-4">

@@ -237,11 +237,10 @@ function Signup() {
                             Sign Up
                         </button>
                     </form>
-                    <Link to="/" ><p className="mt-3 login-text">Already have an account?</p></Link>
+                    <Link to="/" ><p className="mt-3 login-text accent">Already have an account?</p></Link>
                 </div>
             </div>
         </body >
-
     );
 }
 

@@ -322,7 +322,7 @@ export default function Post() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         // const tweet = myForm.elements.tweet.value;
 
@@ -486,7 +486,7 @@ export default function Post() {
                         <div className="row profile-header view">
 
                             <div className="p-2  col row " id="top">
-                                <div className="ml-2 col-1.5">
+                                <div className="ml-3 col-1.5">
                                     <BackButton />
                                 </div>
                                 <div className="col ">

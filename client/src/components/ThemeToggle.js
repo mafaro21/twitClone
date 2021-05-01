@@ -1,44 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import '../css/App.css';
+import '../css/Sidebar.css';
+import '../css/custom.scss';
+import '../css/Main.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import { faCircle } from '@fortawesome/free-regular-svg-icons/faCircle';
+
+
 
 
 export default function ThemeToggle() {
-    const [isDark, setIsDark] = useState(localStorage.getItem("theme") === "dark" ? true : false);
-    useEffect(() => {
-        // localStorage.setItem("theme", "dark");
-        // localStorage.setItem("accent", "orange");
+    const [theme, setTheme] = useState(localStorage.getItem("theme"))
+    const [accent, setAccent] = useState(localStorage.getItem("accent"))
 
-        document
-            .getElementsByTagName("HTML")[0]
-            .setAttribute("data-theme", localStorage.getItem("theme"), "accent-theme", localStorage.getItem("accent"));
-        // document.setAttribute("accent-theme", localStorage.getItem("accent"));
+    // useEffect(() => {
 
-        document
-            .getElementsByTagName("HTML")[0]
-            .setAttribute("accent-theme", localStorage.getItem("accent"));
+    //     document
+    //         .getElementsByTagName("HTML")[0]
+    //         .setAttribute("data-theme", localStorage.getItem("theme"), "accent-theme", localStorage.getItem("accent"));
+    //     // document.setAttribute("accent-theme", localStorage.getItem("accent"));
 
-    }, []);
+    //     document
+    //         .getElementsByTagName("HTML")[0]
+    //         .setAttribute("accent-theme", localStorage.getItem("accent"));
 
-    const toggleThemeChange = () => {
-        if (isDark === false) {
-            localStorage.setItem("theme", "dark");
-            document
-                .getElementsByTagName("HTML")[0]
-                .setAttribute("data-theme", localStorage.getItem("theme"));
-            setIsDark(true);
-        } else {
-            localStorage.setItem("theme", "light");
-            document
-                .getElementsByTagName("HTML")[0]
-                .setAttribute("data-theme", localStorage.getItem("theme"));
-            setIsDark(false);
-        }
-    }
+    // }, []);
+
+
 
     const darkMode = () => {
         localStorage.setItem("theme", "dark");
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("data-theme", localStorage.getItem("theme"));
+        setTheme("dark")
     }
 
     const lightMode = () => {
@@ -46,6 +43,7 @@ export default function ThemeToggle() {
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("data-theme", localStorage.getItem("theme"));
+        setTheme("light")
     }
 
     const mediumMode = () => {
@@ -53,6 +51,8 @@ export default function ThemeToggle() {
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("data-theme", localStorage.getItem("theme"));
+        setTheme("medium")
+
     }
 
     const orangeAccent = () => {
@@ -60,6 +60,7 @@ export default function ThemeToggle() {
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
+        setAccent("rgb(244, 93, 34)")
     }
 
     const redAccent = () => {
@@ -67,6 +68,7 @@ export default function ThemeToggle() {
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
+        setAccent("rgb(224, 36, 94)")
     }
 
     const skyBlueAccent = () => {
@@ -74,46 +76,72 @@ export default function ThemeToggle() {
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
+        setAccent("rgba(29,161,242,1.00)")
     }
 
     const greenAccent = () => {
-        localStorage.setItem("accent", '#17BF63');
+        localStorage.setItem("accent", 'rgb(23, 191, 99)');
         document
             .getElementsByTagName("HTML")[0]
             .setAttribute("accent-theme", localStorage.getItem("accent"));
+        setAccent("rgb(23, 191, 99)")
     }
 
 
     return (
-        <div className="mt-3">
-            {/* <input type="checkbox" className="toggle" onClick={toggleThemeChange} /> */}
-THEMES
-            <div>
-                <button className="text" onClick={lightMode}>light</button>
+
+        <div className="mt-3" style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '20px', fontWeight: '700' }} className="">
+                Customize Your View
             </div>
 
-            <div>
-                <button className="text" onClick={darkMode}>dark</button>
+            <div className="mt-3">Background</div>
+            <div className="mt-1 d-flex flex-row justify-content-between">
+                {/* {x === light ? } */}
+                <div
+                    className={theme === 'light' ? "more-back-active m-2 more-light" : "more-back m-2 more-light"}
+                    onClick={lightMode}
+                >
+                    {theme === 'light' ? <FontAwesomeIcon icon={faCheckCircle} size="lg" className="mt-2" /> : <FontAwesomeIcon icon={faCircle} size="lg" className="mt-2" />}
+                    <button className="text p-3 more-light" >light</button>
+                </div>
+
+                <div
+                    className={theme === 'dark' ? "more-back-active m-2 more-dark" : "more-back m-2 more-dark"}
+                    onClick={darkMode}
+                >
+                    {theme === 'dark' ? <FontAwesomeIcon icon={faCheckCircle} size="lg" className="mt-2" /> : <FontAwesomeIcon icon={faCircle} size="lg" className="mt-2" />}
+                    <button className="text p-3 more-dark" >dark</button>
+                </div>
+
+                <div
+                    className={theme === 'medium' ? "more-back-active m-2 more-medium" : "more-back m-2 more-medium"}
+                    onClick={mediumMode}
+                >
+                    {theme === 'medium' ? <FontAwesomeIcon icon={faCheckCircle} size="lg" className="mt-2" /> : <FontAwesomeIcon icon={faCircle} size="lg" className="mt-2" />}
+                    <button className="text p-3 more-medium" >medium</button>
+                </div>
             </div>
 
-            <div>
-                <button className="text" onClick={mediumMode}>medium???</button>
-            </div>
+            <div className="mt-5">Accents</div>
 
-            <div className="mt-3">ACCENTS</div>
-            <div>
-                <button className="text" onClick={orangeAccent}>orange</button>
-            </div>
-            <div>
-                <button className="text" onClick={redAccent}>red</button>
-            </div>
-            <div>
-                <button className="text" onClick={skyBlueAccent}>sky-blue</button>
-            </div>
-            <div>
-                <button className="text" onClick={greenAccent}>green</button>
+            <div className="mt-3 d-flex flex-row justify-content-between">
+                <div className="more-accent m-2 orange-accent" onClick={orangeAccent}>
+                    {accent === "rgb(244, 93, 34)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
+                </div>
+                <div className="more-accent m-2 red-accent" onClick={redAccent}>
+                    {accent === "rgb(224, 36, 94)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
+                </div>
+                <div className="more-accent m-2 blue-accent" onClick={skyBlueAccent}>
+                    {accent === "rgba(29,161,242,1.00)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
+                </div>
+                <div className="more-accent m-2 green-accent" onClick={greenAccent}>
+                    {accent === "rgb(23, 191, 99)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
+                </div>
             </div>
 
         </div>
+
+
     )
 }
