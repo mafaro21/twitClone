@@ -1,6 +1,7 @@
 {
   "$jsonSchema": {
     "bsonType": "object",
+    "additionalProperties": false,
     "required": [
       "byUserId",
       "content",
@@ -9,6 +10,7 @@
       "comments"
     ],
     "properties": {
+      "_id": {},
       "byUserId": {
         "bsonType": "objectId",
         "description": "Pointer to user who tweeted"
@@ -28,6 +30,11 @@
         "description": "Count of comments",
         "minimum": 0
       },
+      "retweets": {
+        "bsonType": "int",
+        "description": "count of retweets",
+        "minimum": 0
+      },
       "dateposted": {
         "bsonType": "date",
         "description": "date of tweet posted"
@@ -37,8 +44,8 @@
   "$and": [
     {
       "content": {
-        "$regex": "^[^><]+$",
-        "$options": "g"
+        "$regex": "[^><]+",
+        "$options": "gi"
       }
     }
   ]
