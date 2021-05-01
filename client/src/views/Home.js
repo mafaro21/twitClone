@@ -17,6 +17,8 @@ import TweetLoading from '../components/Header'
 import { UserContext } from '../Contexts/UserContext';
 
 function Home() {
+    const [user] = useContext(UserContext)
+
     const [disabled, setDisabled] = useState(true);
     const [count, setCount] = useState(0)
 
@@ -143,7 +145,7 @@ function Home() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisabled(true)
-        
+
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
@@ -205,7 +207,7 @@ function Home() {
     const LineLoader = () => {
     }
 
-    const msg = useContext(UserContext)
+
 
     return (
         <div className="App general ">
@@ -221,7 +223,7 @@ function Home() {
                         <div className="row profile-header view p-3">
 
                             <div >
-                                <strong className="text" style={{ fontSize: '20px' }}>Home {msg}</strong>
+                                <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
                             </div>
                         </div>
 
@@ -232,7 +234,7 @@ function Home() {
 
 
 
-                        {sessionName ?
+                        {user ?
                             <div className="p-2 profile-view row mt-3">
 
                                 <div className="col-0.5">              {/* <--- user avi */}

@@ -45,6 +45,8 @@ export default function Profile() {
 
     const [deleteTweet, setdeleteTweet] = useState({})
 
+    const [retweetTweet, setRetweetTweet] = useState({})
+
     const [tweetCount, setTweetCount] = useState(0);
 
     const [noTweets, setNoTweets] = useState(false);
@@ -235,6 +237,11 @@ export default function Profile() {
 
 
     };
+
+    const handleRetweet = (e, id) => {
+        e.preventDefault()
+        console.log(id)
+    }
 
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
@@ -438,6 +445,8 @@ export default function Profile() {
                 }, 2000);
             })
     }
+
+
 
     const FollowingLink = () => {
         if (sessionName) {
@@ -644,7 +653,10 @@ export default function Profile() {
                                             &nbsp; {item.comments}
                                             </button>
 
-                                            <button className="col retweet">
+                                            <button
+                                                className="col retweet"
+                                                onClick={(e) => handleRetweet(e, item._id)}
+                                            >
                                                 <FontAwesomeIcon icon={faRetweet} />
                                             </button>
 
@@ -654,7 +666,7 @@ export default function Profile() {
                                                 disabled={disabled}
 
                                             >
-                                                {likedTweets[item._id] || item.isLikedbyme ?
+                                                {item.isLikedbyme ?
                                                     (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                     : <FontAwesomeIcon icon={faHeart} />
                                                 }

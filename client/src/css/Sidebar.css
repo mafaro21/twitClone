@@ -84,12 +84,11 @@ html[data-theme="medium"]{
 }
 
 .header{
-  /* position: fixed; */
+  position: relative;
   /* background-color: brown; */
   text-align: left;
   font-size: 23px;
   width: 16%;
-  
 }
 
 .fixed{
@@ -320,40 +319,42 @@ input[type=checkbox]:focus {
 /* toggle */
 
 @media screen and (max-width: 500px){   /*phone view*/
+  .nav-logo{
+    display: none;
+  }
   .header-title {
     display: none;
   }
-
   .header{
-    position: absolute;
+    background-color: red !important;
   }
-
   .phone-header{
     display: flex;
     position: fixed !important;
     flex-direction: row !important;
     bottom: 0;
-    background-color: var(--background);
+    background-color: black !important;
     z-index: 1 !important;
-    width: 100vw !important;
-    height: 56px;
-    /* justify-content: left; */
-    /* white-space: nowrap; */
-    /* align-items: stretch; */
-    /* margin-top: 20px; */
+    width: 45% !important;
+    height: 19% !important; 
+    justify-content: space-between !important;
+    padding-bottom: 4%;
+    margin-left: 6%;
   }
-
+.work{
+  background-color: #080603 !important;
+  height: auto !important;
+  width: 100vw;
+}
   .header-link, .header-link-active{
-    padding: 5px;
-    width: 100%;
-    justify-content: center;
+   
   }
 
   .phone-sidebar{
     display: none;
   }
   .more{
-    display:none !important;
+    /* display:none !important; */
   }
 
   .user-data, .floating-name{
@@ -361,11 +362,11 @@ input[type=checkbox]:focus {
   }
   .tweet-btn{
     z-index:1;
-    position: fixed;
-    margin-top: -72px;
-    margin-left: 82vw;
+    position: absolute;
+    /* display: flex; */
+    margin-top: -30px !important;
+    margin-left: 81vw;
     border-radius: 90%;
-    
   }
   .tweet-submit{
     width: 53px !important;
@@ -397,12 +398,16 @@ input[type=checkbox]:focus {
     height: 50px;
   }
   .tweettest{
-  margin-top: 86px;
-  width: 100% !important;
-  transition: all .3s ease-in-out;
-  margin-left: 30%;
+    margin-top: 86px;
+    width: 100% !important;
+    transition: all .3s ease-in-out;
+    margin-left: 30%;
   
-}
+  }
+  .header{
+    /* display: none; */
+  }
+
 }
 
 @media screen and (max-width: 992px){
