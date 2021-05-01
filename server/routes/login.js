@@ -90,7 +90,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
 
 
 /*error handler */
-router.use((err, req, res) => {
+router.use((err, req, res, next) => {
     res.sendStatus(500);
     console.error("LOGINeRR", err.message);
 });
