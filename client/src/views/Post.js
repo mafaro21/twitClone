@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Sidebar.css';
@@ -26,8 +26,10 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
+import { UserContext } from '../Contexts/UserContext';
 
 export default function Post() {
+    const [user] = useContext(UserContext)
 
     const [isLiked, setisLiked] = useState(false)
     const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
@@ -596,78 +598,79 @@ export default function Post() {
                             </div>
                         })}
 
-                        <div className="p-2 profile-view row mt-3">
-                            <div className="col-0.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
-                            </div>
+                        {user ?
+                            <div className="p-2 profile-view row mt-3">
+                                <div className="col-0.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
+                                </div>
 
-                            <form className="signup col tweet-form " onSubmit={(e) => handleSubmit(e)}>
-                                {/*  */}
-                                {tweets.data.map((item, i) => (
-                                    <div className="" key={i}>
+                                <form className="signup col tweet-form " onSubmit={(e) => handleSubmit(e)}>
+                                    {/*  */}
+                                    {tweets.data.map((item, i) => (
+                                        <div className="" key={i}>
 
-                                        {commentReply ?
-                                            <span>Replying to
+                                            {commentReply ?
+                                                <span>Replying to
                                                 <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
-                                                    @{item.User[0].username}
-                                                </Link>
-                                            </span>
+                                                        @{item.User[0].username}
+                                                    </Link>
+                                                </span>
+                                                :
+                                                null
+                                            }
+
+                                            <textarea
+                                                id="tweet"
+                                                name="tweet"
+                                                type="text"
+                                                value={comment}
+                                                onChange={handleChange}
+                                                className=" edit-input post-comment pt-3"
+                                                maxLength="280"
+                                                rows={rows}
+                                                placeholder="What's Your Reply?"
+                                                required
+                                                onFocus={() => setCommentReply(true)}
+                                                style={{ fontSize: '20px', padding: '5px' }}
+                                            />
+                                            <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
+
+
+                                            {Object.keys(tweetErr).map((key) => {
+                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                            })}
+
+
+                                        </div>
+                                    ))}
+
+                                    {/* {loading ? <Loading /> : null} */}
+
+                                    <div className="d-flex flex-row mt-1 justify-content-between">
+
+                                        {commentReply ? //character counter
+                                            <div className="d-flex">
+                                                <div className="container mt-2">
+                                                    <span><span style={{ color }}>{count}</span>/280</span>
+                                                    {/* <span id="show">0</span><span>/280</span> */}
+                                                </div>
+
+                                                <div className=" ml-4" >
+                                                    <FontAwesomeIcon
+                                                        size="lg"
+                                                        icon={faSmile}
+                                                        className="mt-2 icon-active"
+                                                        onClick={toggleEmojiPicker}
+                                                    />
+                                                </div>
+                                            </div>
                                             :
                                             null
                                         }
 
-                                        <textarea
-                                            id="tweet"
-                                            name="tweet"
-                                            type="text"
-                                            value={comment}
-                                            onChange={handleChange}
-                                            className=" edit-input post-comment pt-3"
-                                            maxLength="280"
-                                            rows={rows}
-                                            placeholder="What's Your Reply?"
-                                            required
-                                            onFocus={() => setCommentReply(true)}
-                                            style={{ fontSize: '20px', padding: '5px' }}
-                                        />
-                                        <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
+                                        {showEmojiPicker ? <Emoji /> : null}
 
-
-                                        {Object.keys(tweetErr).map((key) => {
-                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
-                                        })}
-
-
-                                    </div>
-                                ))}
-
-                                {/* {loading ? <Loading /> : null} */}
-
-                                <div className="d-flex flex-row mt-1 justify-content-between">
-
-                                    {commentReply ? //character counter
-                                        <div className="d-flex">
-                                            <div className="container mt-2">
-                                                <span><span style={{ color }}>{count}</span>/280</span>
-                                                {/* <span id="show">0</span><span>/280</span> */}
-                                            </div>
-
-                                            <div className=" ml-4" >
-                                                <FontAwesomeIcon
-                                                    size="lg"
-                                                    icon={faSmile}
-                                                    className="mt-2 icon-active"
-                                                    onClick={toggleEmojiPicker}
-                                                />
-                                            </div>
-                                        </div>
-                                        :
-                                        null
-                                    }
-
-                                    {showEmojiPicker ? <Emoji /> : null}
-
-                                    {/* <Picker
+                                        {/* <Picker
                                         set='twitter'
                                         onSelect={addEmoji}
                                         title='Pick your emoji…'
@@ -676,19 +679,20 @@ export default function Post() {
                                         theme='auto'
                                     /> */}
 
-                                    <button
-                                        // id="submit-btn"
-                                        className="btn login-submit btn-accent-outline rounded-pill "
-                                        type="submit"
-                                        // onClick={handleSubmit}
-                                        disabled={commentDisabled}       //button disabler
-                                    >
-                                        {commentLoading ? <CommentLoading /> : "Tweet"}
-                                    </button>
-                                </div>
-                            </form>
+                                        <button
+                                            // id="submit-btn"
+                                            className="btn login-submit btn-accent-outline rounded-pill "
+                                            type="submit"
+                                            // onClick={handleSubmit}
+                                            disabled={commentDisabled}       //button disabler
+                                        >
+                                            {commentLoading ? <CommentLoading /> : "Tweet"}
+                                        </button>
+                                    </div>
+                                </form>
 
-                        </div>
+                            </div>
+                            : null}
 
                         {otherComments.data.map((item, i) => {
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";

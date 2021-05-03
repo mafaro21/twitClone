@@ -183,7 +183,7 @@ function Login() {
 
                         <button
                             id="submit-btn"
-                            className="btn login-submit btn-accent-outline rounded-pill mt-3"
+                            className="btn login-submit btn-accent rounded-pill mt-3"
                             type="submit"
                             disabled={disabled}         //button disabler
                         >
@@ -198,12 +198,13 @@ function Login() {
                     <h4 className="animate-enter login-text mt-5" style={{ color: 'white' }}>Join TwitClone Today...</h4>
 
                     <Link to="/signup" >
-                        <input
-                            value="Sign Up"
-                            className="btn login-submit btn-accent-outline rounded-pill mt-1"
+                        <button
+                            className="btn login-submit btn-accent rounded-pill mt-1"
                             disabled={disabled}         //button disabler
 
-                        />
+                        >
+                            Sign Up
+                        </button>
                     </Link>
 
 

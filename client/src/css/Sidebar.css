@@ -39,7 +39,7 @@ html[data-theme="medium"]{
   margin-top: 10px;
 }
 .user-modal{
-  z-index: -1;
+  z-index: 3 !important;
   position: absolute;
   box-shadow: 0 0 9px grey;
   /* border: 1px solid var(--accent); */
@@ -318,54 +318,54 @@ input[type=checkbox]:focus {
 }
 /* toggle */
 
-@media screen and (max-width: 500px){   /*phone view*/
+@media screen and (max-width: 500px){   
   .nav-logo{
     display: none;
   }
   .header-title {
     display: none;
   }
-  .header{
-    background-color: red !important;
-  }
   .phone-header{
-    display: flex;
-    position: fixed !important;
+    display: none;
+    /* position: absolute !important; */
     flex-direction: row !important;
-    bottom: 0;
-    background-color: black !important;
+    bottom: 0 !important;
+    /* border-top-color: rgb(47, 51, 54); */
+    background-color: #f61 !important;
     z-index: 1 !important;
-    width: 45% !important;
-    height: 19% !important; 
-    justify-content: space-between !important;
-    padding-bottom: 4%;
-    margin-left: 6%;
+    width: 50% !important;
+    /* height: 2px !important;  */
+    /* justify-content: right !important; */
+    /* padding-bottom: 4%; */
+    /* margin-top: 78vh !important; */
   }
-.work{
-  background-color: #080603 !important;
-  height: auto !important;
-  width: 100vw;
-}
   .header-link, .header-link-active{
-   
+    /* background-color: blueviolet; */
+    width: 100%;
+    margin-left: -5%;
+    /* margin-top: 50%; */
   }
-
+  .bg-test{
+    background-color: #061 !important;
+    z-index: 1 !important;
+    bottom: 0 !important;
+    display: flex;
+  flex-direction: row !important;
+  }
   .phone-sidebar{
     display: none;
-  }
-  .more{
-    /* display:none !important; */
   }
 
   .user-data, .floating-name{
     display: none !important;
   }
   .tweet-btn{
+    /* display: none !important; */
     z-index:1;
     position: absolute;
-    /* display: flex; */
-    margin-top: -30px !important;
-    margin-left: 81vw;
+    display: flex;
+    margin-top: -60px !important;
+    margin-left: 75vw;
     border-radius: 90%;
   }
   .tweet-submit{
@@ -383,8 +383,15 @@ input[type=checkbox]:focus {
     margin-top: 20%;
     display: inline-block;
   }
-
-}
+  .btn-accent-outline, .btn-accent{
+    height: 38px;
+    width: auto;
+  }
+  .no-acc-test{
+    width: 80%;
+    margin-left: 10%;
+  }
+} 
 
 @media screen and (max-width: 768px){
   .phone-sidebar{
@@ -404,9 +411,10 @@ input[type=checkbox]:focus {
     margin-left: 30%;
   
   }
-  .header{
-    /* display: none; */
+  .phone-header{
+     padding: 10% !important;
   }
+
 
 }
 
@@ -429,7 +437,7 @@ input[type=checkbox]:focus {
   }
   .header{
     width: 0%;
-    margin-right: 10%;
+    /* margin-right: 10%; */
   }
   .header-link, .header-link-active{
     margin-top: 39%;
@@ -481,6 +489,7 @@ input[type=checkbox]:focus {
   .header{
     width: 0%;
     margin-right: 10%;
+
   }
   .header-link, .header-link-active{
     margin-top: 29%;
