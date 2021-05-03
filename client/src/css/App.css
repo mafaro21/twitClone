@@ -274,7 +274,7 @@ textarea.edit-input{
 
 }
 
-@media screen and (min-width: 500px){    /*phone view and screens between*/
+@media screen and (max-width: 500px){    /*phone view and screens between*/
   .login-form, .sign-form{
     width: auto;
     height: auto;  
@@ -285,7 +285,7 @@ textarea.edit-input{
   }
 
   .login-input{
-    width: 90%;
+    width: 95%;
   }
   .login-pic, .sign-pic{
     background-position: center;
@@ -308,7 +308,14 @@ textarea.edit-input{
   .change::placeholder{
   color: #C9C9C9;
   }
+  .login-submit{
+    height: 50%;
+    width: auto;
+  }
+  button{
+    font-size: 6px;
 
+  }
   
   
   
