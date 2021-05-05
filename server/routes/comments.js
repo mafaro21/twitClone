@@ -67,12 +67,13 @@ router.delete("/:commentid/tweet/:tweetid", isLoggedin, (req, res, next) => {
             const comments = client.db("twitclone").collection("comments");
             const tweets = client.db("twitclone").collection("tweets");
             try {
-                const delComment = await comments.deleteOne(commentObject);
-                if (delComment.deletedCount === 0) throw new Error('Not your tweet');
+                let r1 = await comments.deleteOne(commentObject);
+                if(r1.deletedCount === 0) throw new Error("Cannot delete comment!");
                 await tweets.updateOne({ _id: commentObject.tweetid }, { $inc: { comments: -1 } });
-                res.status(200).send({ "deleted": delComment.deletedCount, "success": true });
+                res.status(200).send({ "deleted": 1, "success": true });
             } catch (error) {
-                throw error;
+                res.sendStatus(400);
+                console.error(error);
             } finally {
                 await client.close();
             }
@@ -114,7 +115,10 @@ router.get("/tweet/:tweetid", (req, res, next) => {
         .then(async (client) => {
             const comments = client.db("twitclone").collection("comments");
             try {
-                const result = await comments.aggregate(agg).toArray();
+                const result = await comments.aggregate(agg)
+                    .sort({ date: -1 })
+                    .limit(50)
+                    .toArray();
                 if (!result) throw new Error("No comments for this tweet");
                 res.status(200).send(result);
             } catch (error) {

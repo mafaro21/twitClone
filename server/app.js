@@ -24,7 +24,7 @@ client.ping((err, reply) => {
 });
 
 
-//setup the session. 03 HOURS ONLY.
+//setup the session. save to Redis. 03 HOURS ONLY.
 app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
@@ -89,7 +89,7 @@ MongoClient.connect(uri, {
 }).catch((err) => {
     console.error(err);
     process.exit(1);
-    //if cannot connect, KILL THE SERVER
+    //^if cannot connect, KILL THE SERVER!
 });
 
 // if visiting non-existing page, serve error 404
