@@ -89,21 +89,18 @@ export default function Profile() {
                 getTweets(x);
                 // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
-                let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long"}).format(date);
                 setDatejoined(finalDate);
                 document.title = `TwitClone - @${user}`
             })
             .catch((error) => {
-                console.error(error)
 
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
                     setTweetLoading(false);
                     setUserNotFound(true)
-                    document.title = `TwitClone - User Not Found!!`
+                    document.title = "TwitClone - User Not Found!!"
                     // Error(user);
                 }
             });
@@ -406,7 +403,6 @@ export default function Profile() {
     }
 
     const handleFollow = () => {
-        console.log(userID)
         setDisabled(true)
         axios.post(`/follows/${userID}`)
             .then((res) => {
@@ -427,7 +423,6 @@ export default function Profile() {
     }
 
     const handleUnfollow = () => {
-        console.log(userID)
         setDisabled(true)
         axios.delete(`/follows/${userID}`)
             .then((res) => {

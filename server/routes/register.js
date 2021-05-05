@@ -101,7 +101,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
 
 /*error handler */
 router.use((err, req, res, next) => {
-    res.sendStatus(500);
+    res.status(500).send({ message: "Oops! Something went wrong :(" });
     console.error("REGISTER_Error ", err);
 });
 

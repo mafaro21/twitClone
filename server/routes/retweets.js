@@ -3,9 +3,43 @@ const { MongoClient, ObjectId } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const router = express.Router();
+const rateLimit = require("express-rate-limit"); // store it later in REDIS
 
-/** DO A RETWEET by `tweetid` */
-router.post("/:tweetid", (req, res, next) => {
+
+//setup rate limit
+const RetweetLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 50, //==> 50 hits in 5 minute window.
+    message: { "message": "Too many requests, try again in 5 mins" }
+  });
+  
+
+
+/* COUNT MY retweet on A TWEET => 1 or 0 */
+router.get("/me/:tweetid", (req, res, next) => {
+    const userid = req.session.user.id;
+    const tweetid = req.params.tweetid;
+    if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
+  
+    MongoClient.connect(uri, MongoOptions)
+      .then(async (client) => {
+        const retweets = client.db("twitclone").collection("retweets");
+        const query = { tweetid: new ObjectId(tweetid), userid: new ObjectId(userid) };
+        try {
+          const myRetweet = await retweets.countDocuments(query);
+          res.send({ "count": myRetweet });
+        } catch (error) {
+          throw error;
+        } finally {
+          await client.close();
+        }
+      }).catch(next);
+  
+  });
+  
+
+/** DO A RETWEET by `tweetid` ✅ */
+router.post("/:tweetid", RetweetLimiter, (req, res, next) => {
     const userid = req.session.user.id; // user who is retweeting
     const tweetid = req.params.tweetid;
     if (!ObjectId.isValid(OGtweetid)) return res.sendStatus(400);
@@ -38,8 +72,9 @@ router.post("/:tweetid", (req, res, next) => {
         }).catch(next);
 });
 
-/** UNDO a RETWEET by tweetid */
-router.delete("/:tweetid", (req, res, next) => {
+
+/** UNDO ❌ RETWEET by tweetid */
+router.delete("/:tweetid", RetweetLimiter, (req, res, next) => {
     const userid = req.session.user.id; // user who is retweeting
     const tweetid = req.params.tweetid;
     if (!ObjectId.isValid(OGtweetid)) return res.sendStatus(400);

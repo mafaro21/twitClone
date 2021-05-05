@@ -10,13 +10,11 @@ import EditProfile from './views/EditProfile';
 import Post from './views/Post'
 import Compose from './views/Compose'
 import More from './views/More'
-import IsLoggedIn from './components/IsLoggedIn';
 import NotFound404 from './NotFound404';
 import Following from './views/Following'
 import Followers from './views/Followers'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import axios from 'axios';
 import { UserContext } from './Contexts/UserContext';
 import { ThemeContext } from './Contexts/ThemeContext';
 
@@ -38,8 +36,6 @@ function App() {
     document
       .getElementsByTagName("HTML")[0]
       .setAttribute("accent-theme", localStorage.getItem("accent"));
-
-
 
   }, []);
 
