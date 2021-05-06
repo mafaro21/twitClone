@@ -1,5 +1,4 @@
-- fixed the accents
-- posting and deleteing comments
-- line through when a tweet is being deleted
-
+- created routes for retweets and likes
+- news api is now working but still monitoring if the data refreshes after some time, also how many requests it makes 
+- removed the redundant UpdateData()
 

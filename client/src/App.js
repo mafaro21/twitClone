@@ -13,14 +13,24 @@ import More from './views/More'
 import NotFound404 from './NotFound404';
 import Following from './views/Following'
 import Followers from './views/Followers'
+import Retweets from './views/Retweets'
+import Likes from './views/Likes'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserContext } from './Contexts/UserContext';
-import { ThemeContext } from './Contexts/ThemeContext';
-
+import { ApiContext } from './Contexts/ApiContext';
+import axios from 'axios'
 
 function App() {
   dotenv.config();
+
+  const [user, setUser] = useState('')
+
+  const value = useMemo(() => [user, setUser], [user, setUser])
+
+  const [apiData, setApiData] = useState({ articles: [] })
+
+  const api = useMemo(() => [apiData, setApiData], [apiData, setApiData])
 
   useEffect(() => {
     if (localStorage.length === 0) {
@@ -37,28 +47,47 @@ function App() {
       .getElementsByTagName("HTML")[0]
       .setAttribute("accent-theme", localStorage.getItem("accent"));
 
+
+
+    // setTimeout(() => {
+    const options = {
+      method: 'GET',
+      url: 'https://newsapi.org/v2/top-headlines',
+      params: {
+        category: 'general',
+        pageSize: 8,
+        country: 'us',
+        apiKey: process.env.REACT_APP_NEWS_API_KEY
+      }
+    };
+
+    axios.request(options).then(function (res) {
+      console.log(res.data)
+      setApiData(res.data)
+      // setLoading(false);
+    }).catch(function (error) {
+      console.error(error);
+    });
+    // }, 10000);
+
   }, []);
 
-  const [user, setUser] = useState('')
 
-  const value = useMemo(() => [user, setUser], [user, setUser])
-
-  const [theme, setTheme] = useState("medium")
 
   // const usernameData = useMemo(() => [username, setUsername], [username, setUsername])
 
   return (
 
     <Router>
-      <ThemeContext.Provider value={{ theme, setTheme }}>
-        <div className="App general" data-theme={theme}>
+      <div className="App general">
 
-          <UserContext.Provider value={value}>
+        <UserContext.Provider value={value}>
+          <ApiContext.Provider value={api}>
             <Switch>
 
               <Route path="/" exact component={Login} />
               <Route path="/signup" component={Signup} />
-              <Route path="/home" component={Home} data-theme={theme} />
+              <Route path="/home" component={Home} />
               <Route path="/explore" component={Explore} />
               <Route path="/more" component={More} />
 
@@ -74,16 +103,17 @@ function App() {
 
               <Route path="/u/:user/following" component={Following} />
               <Route path="/u/:user/followers" component={Followers} />
+              <Route path="/u/:user/retweets" component={Retweets} />
+              <Route path="/u/:user/likes" component={Likes} />
 
               <Route path="/compose/tweet" component={Compose} />
               <Route path="/error" component={Error} />
 
               <Route component={NotFound404} />
             </Switch>
-            {/* <Sidebar /> */}
-          </UserContext.Provider>
-        </div>
-      </ThemeContext.Provider>
+          </ApiContext.Provider>
+        </UserContext.Provider>
+      </div>
     </Router>
   );
 }
