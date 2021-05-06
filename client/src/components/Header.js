@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
-import OutsideClick from './OutsideClick'
+import OutsideClick from './OutsideClick';
 // import Compose from '../views/Compose';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt'
-import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons/faFeatherAlt';
+import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Header() {
-    const [user, setUser] = useContext(UserContext)
+    const [user, setUser] = useContext(UserContext);
     // const [username, setUsername] = useContext(UserContext)
 
     const [fullname, setFullname] = useState("");
@@ -29,30 +29,30 @@ export default function Header() {
     const [tweetModal, setTweetModal] = useState(false);//tweet modal
     const tweetToggle = () => setTweetModal(!tweetModal);
 
-    const [tweetLoading, setTweetLoading] = useState(false)
+    const [tweetLoading, setTweetLoading] = useState(false);
 
-    const [tweetErr, setTweetErr] = useState({})
+    const [tweetErr, setTweetErr] = useState({});
 
-    const [tweetContent, setTweetContent] = useState('')
+    const [tweetContent, setTweetContent] = useState('');
 
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
 
-    const [color, setColor] = useState("grey")
+    const [color, setColor] = useState("grey");
 
     const [disabled, setDisabled] = useState(true);
 
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
 
-    const [rows, setRows] = useState(2)
+    const [rows, setRows] = useState(2);
 
-    const [minRows] = useState(3)
+    const [minRows] = useState(3);
 
-    const [maxRows] = useState(10)
+    const [maxRows] = useState(10);
 
     // const [addEmoji, setAddEmoji] = useState('')
 
-    let history = useHistory()
+    let history = useHistory();
 
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
 
@@ -67,14 +67,13 @@ export default function Header() {
 
     useEffect(() => {
 
-        (() => {
-            axios.get("/statuslogin")
-                .then(res => {
-                    setUser(res.data.loggedin)
-                    setFullname(res.data.fullname);
-                    setUsername(res.data.user);
-                    // console.log(res.data)
-                });
+        (async () => {
+            const res = await axios.get("/statuslogin");
+            setUser(res.data.loggedin);
+            setFullname(res.data.fullname);
+            setUsername(res.data.user);
+            // console.log(res.data)
+
         })();
 
     }, []);
@@ -91,8 +90,8 @@ export default function Header() {
                     Log out @{username}
                 </button>
             </div >
-        </div>
-    }
+        </div>;
+    };
 
     const MoreModal = () => {
         return <div className="user-modal modal-enter more-modal mr-1">
@@ -104,16 +103,16 @@ export default function Header() {
             </button>
 
 
-        </div >
-    }
+        </div >;
+    };
 
     /** Logout function */
     const Logout = () => {
         axios.get("/logout")
-            .then((res) => {
+            .then(() => {
                 history.push("/");
             });
-    }
+    };
 
     /** Live word-counter */
     const wordCount = () => {
@@ -123,15 +122,15 @@ export default function Header() {
 
 
             if (count === 280) {
-                document.getElementById('show').style.color = "red"
+                document.getElementById('show').style.color = "red";
             } else if (count >= 250) {
-                document.getElementById('show').style.color = "#FF8000"
+                document.getElementById('show').style.color = "#FF8000";
             } else if (count >= 200) {
-                document.getElementById('show').style.color = "#FFB400"
+                document.getElementById('show').style.color = "#FFB400";
             } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800"
+                document.getElementById('show').style.color = "#FFF800";
             } else {
-                document.getElementById('show').style.color = "grey"
+                document.getElementById('show').style.color = "grey";
             }
 
             if (count > 0) {        // used to disable button if textarea is empty
@@ -142,7 +141,7 @@ export default function Header() {
 
             document.getElementById('show').textContent = count;
         });
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -154,24 +153,22 @@ export default function Header() {
         if (isValid === true) {
             setTweetLoading(true);
             sendToDb();
-
         }
 
         function sendToDb() {
             const tweetObject = {
                 content: tweet.replace(/\n/g, " ").trim()
-            }
+            };
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-
-                    let tweetDiv = document.getElementById("tweet-modal")
-                    tweetDiv.style.display = "none"
-                    setTweetContent('')
-                    setCount(0)
-                    setColor('grey')
-                    setShowEmojiPicker(false)
-                    setRows(3)
+                    let tweetDiv = document.getElementById("tweet-modal");
+                    tweetDiv.style.display = "none";
+                    setTweetContent('');
+                    setCount(0);
+                    setColor('grey');
+                    setShowEmojiPicker(false);
+                    setRows(3);
                 })
                 .catch((error) => {
                     setTweetLoading(false);
@@ -182,7 +179,7 @@ export default function Header() {
                     setTweetLoading(false);
                 });
         }
-    }
+    };
 
     /** Validation check */
     const tweetValidation = (twt) => {
@@ -201,7 +198,7 @@ export default function Header() {
 
         setTweetErr(tweetErr);
         return isValid;
-    }
+    };
 
 
     // OutsideClick(tweetRef, () => {
@@ -210,7 +207,7 @@ export default function Header() {
     // });
 
     const TweetLoading = () => {    //loader after tweet has been sent
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || "grey";
 
         return <div className="d-flex justify-content-center ">
             <Loader type="ThreeDots"
@@ -219,8 +216,8 @@ export default function Header() {
                 width={40}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
     const TweetModal = () => {
         return <div id="tweet-modal">
@@ -267,7 +264,7 @@ export default function Header() {
 
 
                                         {Object.keys(tweetErr).map((key) => {
-                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
                                         })}
                                     </div>
 
@@ -303,56 +300,56 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-        </div >
+        </div >;
     };
 
-    let location = useLocation()    //for current location
-    let path = location.pathname
+    let location = useLocation();    //for current location
+    let path = location.pathname;
 
     const ref = useRef();   //clicking outside closes modal
 
     OutsideClick(ref, () => {
-        setUserModal(false)
+        setUserModal(false);
 
     });
 
     const toggleTest = () => {
-        let tweetDiv = document.getElementById("tweet-modal")
-        let button = document.getElementById("tweet-button")
-        let buttonClose = document.getElementById("tweet-close")
+        let tweetDiv = document.getElementById("tweet-modal");
+        let button = document.getElementById("tweet-button");
+        let buttonClose = document.getElementById("tweet-close");
 
         button.addEventListener("click", () => {
 
-            showDiv = !showDiv
+            showDiv = !showDiv;
             if (showDiv === true) {
-                tweetDiv.style.display = "block"
+                tweetDiv.style.display = "block";
             } else {
-                tweetDiv.style.display = "none"
+                tweetDiv.style.display = "none";
             }
 
-        })
+        });
 
         buttonClose.addEventListener("click", () => {
 
 
             if (1 != 3) {
-                tweetDiv.style.display = "none"
-                setTweetContent('')
-                setCount(0)
-                setColor('grey')
-                setRows(3)
-                setShowEmojiPicker(false)
-                setTweetErr('')
+                tweetDiv.style.display = "none";
+                setTweetContent('');
+                setCount(0);
+                setColor('grey');
+                setRows(3);
+                setShowEmojiPicker(false);
+                setTweetErr('');
             }
-        })
+        });
 
-        let showDiv = false
+        let showDiv = false;
 
-    }
+    };
 
     const handleChange = (e) => {
-        setTweetContent(e.target.value)
-        wordCountReact(e)
+        setTweetContent(e.target.value);
+        wordCountReact(e);
 
         const textareaLineHeight = 40;
 
@@ -371,39 +368,39 @@ export default function Header() {
         }
 
         // setComment(e.target.value)
-        setRows(currentRows < maxRows ? currentRows : maxRows)
-    }
+        setRows(currentRows < maxRows ? currentRows : maxRows);
+    };
 
     const wordCountReact = (e) => {
-        let tweetContent = e.target.value
+        let tweetContent = e.target.value;
         // setComment(comment)
-        setCount(tweetContent.length)
+        setCount(tweetContent.length);
 
         // let y = comment.length
         let x = tweetContent.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
-            setColor("red")
+            setColor("red");
         } else if (x >= 250) {
-            setColor("#FF8000")
+            setColor("#FF8000");
         } else if (x >= 200) {
-            setColor("#FFB400")
+            setColor("#FFB400");
         } else if (x >= 150) {
-            setColor("#FFF800")
+            setColor("#FFF800");
         } else {
-            setColor("grey")
+            setColor("grey");
         }
 
         if (tweetContent.length !== 0) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
+            setDisabled(true);
         }
-    }
+    };
 
     let addEmoji = emoji => {
-        setTweetContent(tweetContent + emoji.native)
-    }
+        setTweetContent(tweetContent + emoji.native);
+    };
     const Emoji = () => {
         return <Picker
             onSelect={addEmoji}
@@ -414,8 +411,8 @@ export default function Header() {
             set='twitter'
             style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
             theme='auto'
-        />
-    }
+        />;
+    };
 
 
     return (
@@ -464,7 +461,7 @@ export default function Header() {
 
 
                                             {Object.keys(tweetErr).map((key) => {
-                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
                                             })}
                                         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Sidebar.css';
@@ -11,70 +11,70 @@ import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
+import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 // import { Redirect } from 'react-router-dom';
 // import Error from '../views/Error';
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Post() {
-    const [user] = useContext(UserContext)
+    const [user] = useContext(UserContext);
 
-    const [isLiked, setisLiked] = useState(false)
-    const [tweets, setTweets] = useState({ data: [] })            // for displaying tweets and other info
+    const [isLiked, setisLiked] = useState(false);
+    const [tweets, setTweets] = useState({ data: [] });            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [commentDisabled, setCommentDisabled] = useState(true)
+    const [commentDisabled, setCommentDisabled] = useState(true);
 
-    const [isLikedbyMe, setIsLikedbyMe] = useState(0)
+    const [isLikedbyMe, setIsLikedbyMe] = useState(0);
 
-    const [comment, setComment] = useState('')
+    const [comment, setComment] = useState('');
 
-    const [otherComments, setOtherComments] = useState({ data: [] })
+    const [otherComments, setOtherComments] = useState({ data: [] });
 
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
 
-    const [color, setColor] = useState("grey")
+    const [color, setColor] = useState("grey");
 
-    const [tweetErr, setTweetErr] = useState({})
+    const [tweetErr, setTweetErr] = useState({});
 
-    const [commentReply, setCommentReply] = useState(false)
+    const [commentReply, setCommentReply] = useState(false);
 
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
 
-    const [noAccountDiv, setNoAccountDiv] = useState(false)
-    const [commentLoading, setCommentLoading] = useState(false)
+    const [noAccountDiv, setNoAccountDiv] = useState(false);
+    const [commentLoading, setCommentLoading] = useState(false);
 
-    const [disableDiv, setDisableDiv] = useState(false)
-    const [sessionName, setSessionName] = useState('')
-    const [deleteTweet, setdeleteTweet] = useState({})
-    const [likedTweets, setLikedTweets] = useState({})
+    const [disableDiv, setDisableDiv] = useState(false);
+    const [sessionName, setSessionName] = useState('');
+    const [deleteTweet, setdeleteTweet] = useState({});
+    const [likedTweets, setLikedTweets] = useState({});
 
-    const [rows, setRows] = useState(1)
+    const [rows, setRows] = useState(1);
 
-    const [minRows] = useState(1)
+    const [minRows] = useState(1);
 
-    const [maxRows] = useState(8)
+    const [maxRows] = useState(8);
 
-    let history = useHistory()
+    let history = useHistory();
 
-    let location = useLocation()
-    let path = location.pathname
-    let path1 = path.split(`/post/`)
-    let finalPath = path1[1]
+    let location = useLocation();
+    let path = location.pathname;
+    let path1 = path.split(`/post/`);
+    let finalPath = path1[1];
 
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
@@ -85,73 +85,73 @@ export default function Post() {
 
     const handleLike = (id) => {  //for liking and unliking posts
 
-        setDisabled(true)
+        setDisabled(true);
 
         if (!isLiked && isLikedbyMe === 0) {
-            setisLiked(true)
+            setisLiked(true);
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     // console.log(res.data)
-                    setDisabled(false)
-                    UpdateData()
+                    setDisabled(false);
+                    UpdateData();
                 })
                 .catch((error) => {
-                    console.error(error)
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
         } else {
-            setisLiked(false)
+            setisLiked(false);
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     // console.log(res.data)
-                    setDisabled(false)
-                    UpdateData()
+                    setDisabled(false);
+                    UpdateData();
                 })
                 .catch((error) => {
-                    console.error(error)
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
-    }
+    };
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
         // return <Redirect to="/Error" />
-    }
+    };
 
     const Error = () => {       //redirect when there is a server error
         return history.push("/NotFound404");
         // return <Redirect to={Error} />
-    }
+    };
 
     useEffect(() => {   //fetching data for logged in users
         (() => {
             axios.get("/statuslogin")
                 .then((res) => {
-                    setSessionName(res.data.user)
+                    setSessionName(res.data.user);
                 });
         })();
 
-        window.scrollTo(0, 0)       //scroll to top of page when it loads
+        window.scrollTo(0, 0);       //scroll to top of page when it loads
 
         axios.get(`/tweets/${finalPath}`)
             .then((res) => {
                 setTweets(res);
-                setLoading(false)
+                setLoading(false);
                 // console.log(res.data)
             })
             .catch((error) => {
@@ -160,37 +160,37 @@ export default function Post() {
                     internalError();
                 }
                 else if (error.response.status === 404) {
-                    Error()
+                    Error();
                 }
             }).finally(() => {
                 setLoading(false);
-            })
+            });
 
 
         axios.get(`/likes/me/${finalPath}`)
             .then((res) => {
-                setIsLikedbyMe(res.data.count)
+                setIsLikedbyMe(res.data.count);
                 // console.log(res.data.count)
 
             })
             .catch((error) => {
-                console.error(error)
-            })
+                console.error(error);
+            });
 
         axios.get(`/comments/tweet/${finalPath}`)
             .then((res) => {
                 // console.log(res.data)
-                setOtherComments(res)
+                setOtherComments(res);
             })
             .catch((err) => {
-                console.error(err)
-            })
+                console.error(err);
+            });
 
 
     }, [finalPath]); //tweets
 
     const handleChange = (e) => {
-        wordCount(e)
+        wordCount(e);
 
         const textareaLineHeight = 32;
 
@@ -208,39 +208,39 @@ export default function Post() {
             e.target.scrollTop = e.target.scrollHeight;
         }
 
-        setComment(e.target.value)
-        setRows(currentRows < maxRows ? currentRows : maxRows)
-    }
+        setComment(e.target.value);
+        setRows(currentRows < maxRows ? currentRows : maxRows);
+    };
 
     const wordCount = (e) => {
-        let comment = e.target.value
+        let comment = e.target.value;
         // setComment(comment)
-        setCount(comment.length)
+        setCount(comment.length);
 
         // let y = comment.length
         let x = comment.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
-            setColor("red")
+            setColor("red");
         } else if (x >= 250) {
-            setColor("#FF8000")
+            setColor("#FF8000");
         } else if (x >= 200) {
-            setColor("#FFB400")
+            setColor("#FFB400");
         } else if (x >= 150) {
-            setColor("#FFF800")
+            setColor("#FFF800");
         } else {
-            setColor("grey")
+            setColor("grey");
         }
 
         if (comment.trim().length > 0) {
-            setCommentDisabled(false)
+            setCommentDisabled(false);
         } else {
-            setCommentDisabled(true)
+            setCommentDisabled(true);
         }
-    }
+    };
 
     const Loading = () => {        //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center mt-3">
             <Loader type="TailSpin"
@@ -249,11 +249,11 @@ export default function Post() {
                 width={60}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
     const CommentLoading = () => {
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center ">
             <Loader type="ThreeDots"
@@ -262,10 +262,10 @@ export default function Post() {
                 width={40}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
-    TimeAgo.addLocale(en)
+    TimeAgo.addLocale(en);
 
     let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
 
@@ -282,33 +282,33 @@ export default function Post() {
                     internalError();
                 }
                 else if (error.response.status === 404) {
-                    Error()
+                    Error();
                 }
             });
 
         axios.get(`/likes/me/${finalPath}`)
             .then((res) => {
-                setIsLikedbyMe(res.data.count)
+                setIsLikedbyMe(res.data.count);
                 // console.log(res.data.count)
 
             })
             .catch((error) => {
-                console.error(error)
+                console.error(error);
             });
 
         axios.get(`/comments/tweet/${finalPath}`)
             .then((res) => {
-                console.log(res.data)
-                setOtherComments(res)
+                console.log(res.data);
+                setOtherComments(res);
             })
             .catch((err) => {
-                console.error(err)
-            })
-    }
+                console.error(err);
+            });
+    };
 
     let addEmoji = emoji => {
-        setComment(comment + emoji.native)
-    }
+        setComment(comment + emoji.native);
+    };
     const Emoji = () => {
         return <Picker
             onSelect={addEmoji}
@@ -319,8 +319,8 @@ export default function Post() {
             set='twitter'
             style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '1' }}
             theme='auto'
-        />
-    }
+        />;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -330,7 +330,7 @@ export default function Post() {
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
-            setCommentLoading(true)
+            setCommentLoading(true);
             sendToDb();
             // setTweetModal(false);
         }
@@ -338,32 +338,32 @@ export default function Post() {
         function sendToDb() {
             const tweetObject = {
                 content: comment.replace(/\n/g, " ").trim()
-            }
+            };
 
             axios.post(`/comments/tweet/${finalPath}`, tweetObject)
                 .then((res) => {
                     // setTweetLoading(true);
-                    let tweetDiv = document.getElementById("tweet-modal")
-                    tweetDiv.style.display = "none"
-                    setComment('')
-                    setCount(0)
-                    setColor('grey')
-                    setShowEmojiPicker(false)
-                    setRows(1)
-                    UpdateData()
-                    console.log(res.data)
+                    let tweetDiv = document.getElementById("tweet-modal");
+                    tweetDiv.style.display = "none";
+                    setComment('');
+                    setCount(0);
+                    setColor('grey');
+                    setShowEmojiPicker(false);
+                    setRows(1);
+                    UpdateData();
+                    console.log(res.data);
                 })
                 .catch((error) => {
                     // setTweetLoading(false);
                     setError(error.response.data.message);
-                    console.error(error)
+                    console.error(error);
                 })
                 .finally(() => {
-                    UpdateData()
-                    setCommentLoading(false)
+                    UpdateData();
+                    setCommentLoading(false);
                 });
         }
-    }
+    };
 
     /** Validation check */
     const tweetValidation = (twt) => {
@@ -382,12 +382,12 @@ export default function Post() {
 
         setTweetErr(tweetErr);
         return isValid;
-    }
+    };
 
     const handleDelete = (e, id) => {
-        e.preventDefault()
+        e.preventDefault();
         // return alert(id)
-        setDisableDiv(true)
+        setDisableDiv(true);
 
         if (!deleteTweet[id]) {
             setDisabled(true);
@@ -399,21 +399,21 @@ export default function Post() {
             axios.delete(`/comments/${id}/tweet/${finalPath}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData()
+                    UpdateData();
                 })
                 .catch((error) => {
-                    console.log(id)
+                    console.log(id);
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
                 })
                 .finally(() => {
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                     // setDisableDiv(false)
                     setDisabled(false);
-                })
+                });
         }
 
 
@@ -424,8 +424,8 @@ export default function Post() {
         // NOW WORKS 🎉🎉
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
-        e.preventDefault()
-        console.log(likedbyme)
+        e.preventDefault();
+        console.log(likedbyme);
 
         if (!likedTweets[id] && !likedbyme) {
             setDisabled(true);
@@ -437,16 +437,16 @@ export default function Post() {
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData()
+                    UpdateData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
@@ -460,15 +460,15 @@ export default function Post() {
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData()
+                    UpdateData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
@@ -504,13 +504,8 @@ export default function Post() {
                         {loading ? <Loading /> : null}
                         {tweets.data.map((item, i) => {
                             let date = new Date(item.dateposted);
-                            // let localeDate = date.toLocaleDateString();
-                            let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                                'July', 'August', 'September', 'October', 'November', 'December'];
-                            let hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-                            let am_pm = date.getHours() >= 12 ? " PM" : " AM"
-                            let finalDate = hours + ":" + date.getMinutes()
-                                + am_pm + " · " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+                            const options = { dateStyle: 'long', timeStyle: 'short', hour12: true };
+                            let finalDate = new Intl.DateTimeFormat("en-US", options).format(date);
 
                             document.title = `Post by @${item.User[0].username} - TwitClone`;
 
@@ -595,7 +590,7 @@ export default function Post() {
 
                                 </div>
                                 {/* </div> */}
-                            </div>
+                            </div>;
                         })}
 
                         {user ?
@@ -637,7 +632,7 @@ export default function Post() {
 
 
                                             {Object.keys(tweetErr).map((key) => {
-                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                                                return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
                                             })}
 
 
@@ -759,7 +754,7 @@ export default function Post() {
                                     </div>
 
                                 </div>
-                            </Link>
+                            </Link>;
                         })}
                     </div>
 

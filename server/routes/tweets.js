@@ -13,7 +13,36 @@ router.get("/", (req, res, next) => {
     res.send("Here are all tweets");
 });
 
-/* GET ALL TWEETS FROM given USER_id */
+
+/* POST A NEW TWEET */
+router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
+    const userid = req.session.user.id;
+    const { content } = req.body;
+    const tweetObject = {
+        byUserId: new ObjectId(userid),
+        content: content,
+        likes: 0,
+        comments: 0,
+        retweets: 0,
+        dateposted: new Date(),
+    };
+
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const tweets = client.db("twitclone").collection("tweets");
+            try {
+                await tweets.insertOne(tweetObject);
+                res.status(201).send({ "success": true });
+            } catch (error) {
+                throw error;
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+});
+
+
+/* GET ALL TWEETS FROM given USER */
 router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
@@ -23,19 +52,25 @@ router.get("/user/:userid", (req, res, next) => {
     const agg = [
         {
             $match: {
-                byUserId: new ObjectId(userid),
-                _id: { $gt: new ObjectId(lastTweetID) }
+                byUserId: new ObjectId(userid)
             }
-        },
-        {
+        }, {
+            $limit: 20
+        }, {
             $lookup: {
                 from: "likes",
                 localField: "_id",
                 foreignField: "tweetid",
-                as: "likedbyme",
+                as: "likedby"
             }
-        },
-        {
+        }, {
+            $lookup: {
+                from: "retweets",
+                localField: "_id",
+                foreignField: "OGtweetid",
+                as: "retweetby"
+            }
+        }, {
             $project: {
                 _id: 1,
                 content: 1,
@@ -43,7 +78,10 @@ router.get("/user/:userid", (req, res, next) => {
                 comments: 1,
                 dateposted: 1,
                 isLikedbyme: {
-                    $in: [new ObjectId(viewerId), "$likedbyme.userid"]
+                    $in: [new ObjectId(viewerId), "$likedby.userid"]
+                },
+                isRetweetbyme: {
+                    $in: [new ObjectId(viewerId), "$retweetby.userid"]
                 }
             }
         }
@@ -65,10 +103,9 @@ router.get("/user/:userid", (req, res, next) => {
             try {
                 const result = await tweets.aggregate(agg)
                     .sort({ dateposted: -1, byUserId: -1 })
-                    .limit(50)
                     .toArray();
                 if (result.length === 0) throw new Error("No tweets");
-                res.send(result);
+                res.status(200).send(result);
             } catch (error) {
                 res.sendStatus(404);
                 console.error("FetchTweetsErr", error);
@@ -118,7 +155,7 @@ router.get("/:tweetid", (req, res, next) => {
                 if (result.length === 0) throw new Error("Tweet Not found");
                 res.send(result);
             } catch (error) {
-                res.status(404).send({ message: error.message });
+                res.status(404).send({ "message": error.message });
             } finally {
                 await client.close();
             }
@@ -126,25 +163,29 @@ router.get("/:tweetid", (req, res, next) => {
 });
 
 
+// ⚠ ❌❌ -- TO BE FIXED: ADD RETWEETS
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     const lastTweetID = req.query.gt || 0; //attached with the consecutive requests
     //axios.get(mine/all?gt=x12345)
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(404);
+    
     const agg = [
         {
             $match: {
                 byUserId: new ObjectId(userid),
                 _id: { $gt: new ObjectId(lastTweetID) }
             }
+        }, {
+            $limit: 20
         },
         {
             $lookup: {
                 from: "likes",
-                localField: "byUserId",
-                foreignField: "userid",
-                as: "likedbyme",
+                localField: "_id",
+                foreignField: "tweetid",
+                as: "likedby"
             }
         },
         {
@@ -155,7 +196,7 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 comments: 1,
                 dateposted: 1,
                 isLikedbyMe: {
-                    $in: ["$_id", "$likedbyme.tweetid"]
+                    $in: ["$_id", "$likedby.tweetid"]
                 }
             }
         }
@@ -168,10 +209,9 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
             try {
                 const result = await tweets.aggregate(agg)
                     .sort({ dateposted: -1, byUserId: -1 })
-                    .limit(50)
                     .toArray();
                 if (result.length === 0) throw new Error("No tweets");
-                res.send(result);
+                res.status(200).send(result);
             } catch (error) {
                 res.sendStatus(404);
                 console.error("FETCHmyTWEETS", error);
@@ -181,32 +221,6 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         }).catch(next);
 });
 
-
-/* POST TWEET */
-router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
-    const userid = req.session.user.id;
-    const { content } = req.body;
-    const tweetObject = {
-        byUserId: new ObjectId(userid),
-        content: content,
-        likes: 0,
-        comments: 0,
-        dateposted: new Date(),
-    };
-
-    MongoClient.connect(uri, MongoOptions)
-        .then(async (client) => {
-            const tweets = client.db("twitclone").collection("tweets");
-            try {
-                await tweets.insertOne(tweetObject);
-                res.status(201).send({ "success": true });
-            } catch (error) {
-                throw error;
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
-});
 
 /* DELETE SINGLE TWEET */
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
@@ -232,7 +246,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
 
 /*error handler */
 router.use((err, req, res, next) => {
-    res.sendStatus(500);
+    res.status(500).send({ message: "Oops! Something went wrong :(" });
     console.error("TWEET_ROUTE", err);
 });
 

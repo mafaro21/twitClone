@@ -91,11 +91,11 @@ export default function ThemeToggle() {
     return (
 
         <div className="mt-3" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '20px', fontWeight: '700' }} className="">
+            <div style={{ fontSize: '20px', fontWeight: 700 }} className="">
                 Customize Your View
             </div>
 
-            <div className="mt-3">Background</div>
+            <div style={{ fontWeight: 700 }} className="mt-3">Background</div>
             <div className="mt-1 theme">
                 {/* {x === light ? } */}
                 <div
@@ -123,19 +123,19 @@ export default function ThemeToggle() {
                 </div>
             </div>
 
-            <div className="mt-5">Accents</div>
+            <div style={{ fontWeight: 700 }} className="mt-5">Theme Color</div>
 
             <div className="mt-3 d-flex flex-row justify-content-between">
-                <div className="more-accent m-2 orange-accent" onClick={orangeAccent}>
+                <div title="orange" className="more-accent m-2 orange-accent" onClick={orangeAccent}>
                     {accent === "rgb(244, 93, 34)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
                 </div>
-                <div className="more-accent m-2 red-accent" onClick={redAccent}>
+                <div title="red" className="more-accent m-2 red-accent" onClick={redAccent}>
                     {accent === "rgb(224, 36, 94)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
                 </div>
-                <div className="more-accent m-2 blue-accent" onClick={skyBlueAccent}>
+                <div title="skyblue" className="more-accent m-2 blue-accent" onClick={skyBlueAccent}>
                     {accent === "rgba(29,161,242,1.00)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
                 </div>
-                <div className="more-accent m-2 green-accent" onClick={greenAccent}>
+                <div title="green" className="more-accent m-2 green-accent" onClick={greenAccent}>
                     {accent === "rgb(23, 191, 99)" ? <FontAwesomeIcon icon={faCheck} size="lg" className="mt-2" /> : null}
                 </div>
             </div>
