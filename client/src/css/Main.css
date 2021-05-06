@@ -467,8 +467,14 @@ background-color: rgb(224, 36, 94);
   
 }
 
-@media screen and (max-width: 768px){
-
+@media screen and (min-width: 501px) and (max-width: 768px){
+  .main-view{
+    margin-left: 10%;
+    
+  }
+  .profile-header{
+    width: auto;
+  }
 }
 
 @media screen and (max-width: 992px){
