@@ -5,18 +5,18 @@ html[data-theme="dark"]{
   --text: #fbfafa;
   --background: #080603; 
   /* --hover: rgb(242,156,80,0.4); */
-  --sidebarbg: #201e1c;
+  --sidebarbg: #272523;
 }
 
 html[data-theme="light"]{
   --text: #080603;
   --background: #fbfafa;
-  --sidebarbg: #E3E3E3;
+  --sidebarbg: #DCDBDB;
   /* --hover: rgb(242,156,80,0.4); */
 }
 
 html[data-theme="medium"]{
-  --sidebarbg: #39454F;
+  --sidebarbg: #535C63;
 }
 
 .user-data{
@@ -99,14 +99,15 @@ ul{
   
 }
 .api-text{
-  color: white;
+  color: var(--text);
 }
 .api-text:hover{
   color:var(--accent);
 }
 .api-image{
-  height: 80px;
+  height: 90px;
   width: auto;
+  border-radius: 12%;
 }
 .back-button{
   height:26px;

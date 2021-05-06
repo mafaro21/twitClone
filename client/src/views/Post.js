@@ -40,6 +40,8 @@ export default function Post() {
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0);
 
+    const [isRetweetedbyMe, setisRetweetedbyMe] = useState(0)
+
     const [comment, setComment] = useState('');
 
     const [otherComments, setOtherComments] = useState({ data: [] });
@@ -59,7 +61,6 @@ export default function Post() {
     const [commentLoading, setCommentLoading] = useState(false);
 
     const [disableDiv, setDisableDiv] = useState(false);
-    const [sessionName, setSessionName] = useState('');
     const [deleteTweet, setdeleteTweet] = useState({});
     const [likedTweets, setLikedTweets] = useState({});
 
@@ -94,7 +95,7 @@ export default function Post() {
                 .then((res) => {
                     // console.log(res.data)
                     setDisabled(false);
-                    UpdateData();
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -113,7 +114,7 @@ export default function Post() {
                 .then((res) => {
                     // console.log(res.data)
                     setDisabled(false);
-                    UpdateData();
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -138,16 +139,7 @@ export default function Post() {
         // return <Redirect to={Error} />
     };
 
-    useEffect(() => {   //fetching data for logged in users
-        (() => {
-            axios.get("/statuslogin")
-                .then((res) => {
-                    setSessionName(res.data.user);
-                });
-        })();
-
-        window.scrollTo(0, 0);       //scroll to top of page when it loads
-
+    function getData() {
         axios.get(`/tweets/${finalPath}`)
             .then((res) => {
                 setTweets(res);
@@ -186,6 +178,21 @@ export default function Post() {
                 console.error(err);
             });
 
+        axios.get(`retweets/me/${finalPath}`)
+            .then((res) => {
+                console.log(res.data)
+                setisRetweetedbyMe(res.data.count)
+            })
+            .catch((err) => {
+                console.error(err)
+            });
+    }
+
+    useEffect(() => {   //fetching data for logged in users
+
+        window.scrollTo(0, 0);       //scroll to top of page when it loads
+
+        getData()
 
     }, [finalPath]); //tweets
 
@@ -269,43 +276,6 @@ export default function Post() {
 
     let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
 
-    const UpdateData = () => {
-
-        axios.get(`/tweets/${finalPath}`)
-            .then((res) => {
-                setTweets(res);
-                // console.log(res.data)
-            })
-            .catch((error) => {
-                console.error(error);
-                if (error.response.status === 500) {
-                    internalError();
-                }
-                else if (error.response.status === 404) {
-                    Error();
-                }
-            });
-
-        axios.get(`/likes/me/${finalPath}`)
-            .then((res) => {
-                setIsLikedbyMe(res.data.count);
-                // console.log(res.data.count)
-
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-        axios.get(`/comments/tweet/${finalPath}`)
-            .then((res) => {
-                console.log(res.data);
-                setOtherComments(res);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    };
-
     let addEmoji = emoji => {
         setComment(comment + emoji.native);
     };
@@ -350,7 +320,7 @@ export default function Post() {
                     setColor('grey');
                     setShowEmojiPicker(false);
                     setRows(1);
-                    UpdateData();
+                    getData();
                     console.log(res.data);
                 })
                 .catch((error) => {
@@ -359,7 +329,7 @@ export default function Post() {
                     console.error(error);
                 })
                 .finally(() => {
-                    UpdateData();
+                    getData();
                     setCommentLoading(false);
                 });
         }
@@ -399,7 +369,7 @@ export default function Post() {
             axios.delete(`/comments/${id}/tweet/${finalPath}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData();
+                    getData();
                 })
                 .catch((error) => {
                     console.log(id);
@@ -437,7 +407,7 @@ export default function Post() {
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData();
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -460,7 +430,7 @@ export default function Post() {
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    UpdateData();
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
@@ -572,8 +542,9 @@ export default function Post() {
                                                 <FontAwesomeIcon icon={faComment} size="lg" />
                                             </button>
 
-                                            <button className="col retweet">
+                                            <button className={isRetweetedbyMe === 1 ? "col retweet-true" : "col retweet"}>
                                                 <FontAwesomeIcon icon={faRetweet} />
+
                                             </button>
 
                                             <button
@@ -741,7 +712,7 @@ export default function Post() {
                                             {/* &nbsp; {item.likes} */}
                                         </button>
 
-                                        {sessionName === item.User[0].username ?
+                                        {user === item.User[0].username ?
                                             <button
                                                 className="col delete"
                                                 onClick={(e) => handleDelete(e, item._id)}
