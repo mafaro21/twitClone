@@ -7,6 +7,7 @@ import ThemeToggle from '../components/ThemeToggle'
 export default function More() {
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         document.title = 'TwitClone - More'
     }, [])
     return (

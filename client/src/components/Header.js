@@ -510,7 +510,7 @@ export default function Header() {
                 </svg>
             </Link>
             <div className="bg-test">
-                <div className="fixed phone-header work mt-5">
+                <div className="fixed phone-header work mt-5 ">
 
                     {user === true ?
                         <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">

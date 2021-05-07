@@ -136,14 +136,14 @@ export default function Followers() {
 
                         <div className="  row d-flex view" style={{ textAlign: 'center', fontWeight: '700' }}>
                             <div className={finalPath === '/followers' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
-                                <p className="p-2 ">
+                                <div className="p-3 ">
                                     Followers
-                                </p>
+                                </div>
                             </div>
                             <Link to={`/u/${profile.username}/following`} className={finalPath === '/following' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
-                                <p className="p-2 ">
+                                <div className="p-3 ">
                                     Following
-                                    </p>
+                                    </div>
                             </Link>
                         </div>
 

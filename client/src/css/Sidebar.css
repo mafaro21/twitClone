@@ -5,18 +5,18 @@ html[data-theme="dark"]{
   --text: #fbfafa;
   --background: #080603; 
   /* --hover: rgb(242,156,80,0.4); */
-  --sidebarbg: #201e1c;
+  --sidebarbg: #272523;
 }
 
 html[data-theme="light"]{
   --text: #080603;
   --background: #fbfafa;
-  --sidebarbg: #E3E3E3;
+  --sidebarbg: #DCDBDB;
   /* --hover: rgb(242,156,80,0.4); */
 }
 
 html[data-theme="medium"]{
-  --sidebarbg: #39454F;
+  --sidebarbg: #535C63;
 }
 
 .user-data{
@@ -99,14 +99,15 @@ ul{
   
 }
 .api-text{
-  color: white;
+  color: var(--text);
 }
 .api-text:hover{
   color:var(--accent);
 }
 .api-image{
-  height: 80px;
+  height: 90px;
   width: auto;
+  border-radius: 12%;
 }
 .back-button{
   height:26px;
@@ -133,6 +134,12 @@ ul{
   color: var(--text);
   width: auto;
   cursor: pointer;
+  padding: 1%;
+  margin-top: 6%;
+}
+.header-link-active{
+  padding: 1%;
+  margin-top: 6%;
 }
 .header-link-active, .icon-active{
   fill: var(--accent);
@@ -154,14 +161,13 @@ ul{
   background-color: var(--hover);
   border-radius: 29px;
   text-decoration: none;
-  /* box-shadow: 0 0 8px var(--accent); */
 }
 
 .tweet{
   display: none;
 }
 .tweet-submit{
-  width: 140px;
+  width: 150px;
   height: 50px;
   
 }
@@ -393,28 +399,59 @@ input[type=checkbox]:focus {
   }
 } 
 
-@media screen and (max-width: 768px){
+@media screen and (min-width: 501px) and (max-width: 768px){
   .phone-sidebar{
     display: none;
   }
   .header-title {
     display: none;
   }
+  .user-data-text{
+    display: none;
+  }
+  .user-data{
+    margin-left: 0%;
+  }
+  .user-data:hover{
+    border-radius: 50% !important;
+    margin-top: 100% !important;
+  }
+  .header{
+    width: 0%;
+    padding: 3%;
+    margin-right: 10%;
+  }
+  .header-link, .header-link-active{
+    margin-top: 39%;
+  }
   .tweet-submit{
-    width: 65px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
+    margin-left: -20%;
+  }
+  
+  .tweet-text{
+    display: none;
+  }
+  .tweet-btn{
+    margin-top: 39%;
+  }
+  .tweet{
+    margin-top: 40%;
+    display: inline-block;
   }
   .tweettest{
-    margin-top: 86px;
     width: 100% !important;
-    transition: all .3s ease-in-out;
-    margin-left: 30%;
-  
+    margin-left: 10%;
+    margin-top: 20%;
   }
-  .phone-header{
-     padding: 10% !important;
+  .header-link:hover, .header-link-active:hover{
+    margin-right: 20% !important;
+    /* margin-top: 200px !important; */
+    border-radius: 90% !important;
+    width: auto !important;
+    height: auto !important;
   }
-
 
 }
 
@@ -494,6 +531,10 @@ input[type=checkbox]:focus {
   .header-link, .header-link-active{
     margin-top: 29%;
     margin-right: 30%;
+  }
+  .header-link:hover, .header-link-active:hover{
+    width: 81%;
+    
   }
   .tweet-submit{
     width: 45px;

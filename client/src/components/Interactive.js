@@ -27,7 +27,7 @@ export default function Interactive() {
     return (
         <div className="interact-row d-flex ">
             <button className="comment col">
-                <FontAwesomeIcon icon={faComment} />&nbsp; 121k
+                <FontAwesomeIcon icon={faComment} />&nbsp; 1k
 
             </button>
 
