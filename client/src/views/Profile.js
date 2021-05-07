@@ -92,6 +92,7 @@ export default function Profile() {
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long"}).format(date);
                 setDatejoined(finalDate);
                 document.title = `TwitClone - @${user}`
+                
             })
             .catch((error) => {
 
