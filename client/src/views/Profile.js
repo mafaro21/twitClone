@@ -8,7 +8,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import NoAccount from '../components/NoAccount';
-// import Interactive from '../components/Interactive';
+import Interactive from '../components/Interactive';
 import OutsideClick from '../components/OutsideClick';
 import deer from '../images/linus2.jpg';
 import unf1 from '../images/unf1.jpg';
@@ -35,7 +35,7 @@ export default function Profile() {
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [disableDiv, setDisableDiv] = useState(false)
+    const [disableDiv, setDisableDiv] = useState(false) //linethrough when axios is handling delete request for a tweet
 
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
 
@@ -59,9 +59,11 @@ export default function Profile() {
 
     const [sessionName, setSessionName] = useState('')
 
-    const [noAccountDiv, setNoAccountDiv] = useState(false)
+    const [noAccountDiv, setNoAccountDiv] = useState(false) //shows modal that tells user they need to sign/log in
 
     const { user } = useParams()
+
+    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
 
@@ -75,9 +77,8 @@ export default function Profile() {
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
-                let x = res.data[0]._id;
-                setUserID(x);
-                getTweets(x);
+                setUserID(res.data[0]._id);
+                getTweets(res.data[0]._id);
                 // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
@@ -371,6 +372,10 @@ export default function Profile() {
         }
     }
 
+    if (childData) {
+        getData()
+        setchildData(false)
+    }
 
 
     let location = useLocation()
@@ -394,7 +399,7 @@ export default function Profile() {
 
                     {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
 
-                    <Header />
+                    <Header passChildData={setchildData} />
 
                     <div className="col main-view phone-home " >
                         {/* {loading ? <Loading /> : null} */}
@@ -564,7 +569,7 @@ export default function Profile() {
                                             </div>
 
                                             <div className="post-link">
-                                                <p>{item.content}</p>
+                                                <p>{item.content} </p>
                                             </div>
                                         </div>
 
@@ -610,8 +615,19 @@ export default function Profile() {
                                                 :
                                                 null
                                             }
+
                                         </div>
 
+                                        <Interactive
+                                            className="mt-2"
+                                            session={sessionName}
+                                            id={item._id}
+                                            comments={item.comments}
+                                            retweets={item.retweets}
+                                            likes={item.likes}
+                                            likesByMe={item.isLikedbyme}
+                                            passChildData={setchildData}
+                                        />
                                     </Link>
                                 }
                             </div>

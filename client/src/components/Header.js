@@ -13,7 +13,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import { UserContext } from '../Contexts/UserContext';
 
-export default function Header() {
+export default function Header({ passChildData }) {
     const [user, setUser] = useContext(UserContext);
     // const [username, setUsername] = useContext(UserContext)
 
@@ -162,6 +162,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
+                    passChildData(true) // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');
