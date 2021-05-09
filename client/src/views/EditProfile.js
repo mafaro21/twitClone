@@ -106,6 +106,7 @@ export default function Edit() {
                 .then((res) => {
                     let x = res.data.success;
                     if (x === true) history.push(`/u/${userObject.username}`); //relocate to whatever username we have been given
+                    console.log("change")
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
