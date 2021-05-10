@@ -15,7 +15,7 @@ import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
-export default function Tweets({ fromHeader }) {
+export default function Tweets() {
 
     const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
     const [datejoined, setDatejoined] = useState('');
@@ -28,8 +28,6 @@ export default function Tweets({ fromHeader }) {
     const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
     const { user } = useParams()
     let history = useHistory()
-
-    const [tweetFromHeader, setTweetFromHeader] = useState(fromHeader)
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
 
@@ -96,16 +94,14 @@ export default function Tweets({ fromHeader }) {
 
         getData()
 
-        setTweetFromHeader(fromHeader)
+    }, [user]);
 
-    }, [user, fromHeader]);
-
-    if (tweetFromHeader) {
+    if (childData) {
         getData()
-        setTweetFromHeader(null)
+        setchildData(false)
     }
 
-    console.log(tweetFromHeader)
+    console.log(childData)
 
     const Loading = () => {
 
@@ -215,7 +211,7 @@ export default function Tweets({ fromHeader }) {
                                 retweets={item.retweets}
                                 likes={item.likes}
                                 likesByMe={item.isLikedbyme}
-                            // fromHeader={setchildData}
+                                passChildData={setchildData}
                             />
                         </Link>
                     }
