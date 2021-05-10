@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
 router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
     const { email, password, responseToken } = req.body;
     let isValid = false; // captcha result
-   
+
     //------------------------ BEGIN CAPTCHA VERIFICATION -----------------------//
     const axiosOptions = {
         url: process.env.VERIFY_LINK,

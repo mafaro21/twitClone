@@ -1,4 +1,3 @@
-- created routes for retweets and likes
-- news api is now working but still monitoring if the data refreshes after some time, also how many requests it makes 
-- removed the redundant UpdateData()
+- profile.js triggers a render when tweeting from header.js
+- interactive.js works but the linethrough when deleteing no more exists
 

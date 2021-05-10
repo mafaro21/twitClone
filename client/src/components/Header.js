@@ -13,7 +13,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import { UserContext } from '../Contexts/UserContext';
 
-export default function Header() {
+export default function Header({ passChildData }) {
     const [user, setUser] = useContext(UserContext);
     // const [username, setUsername] = useContext(UserContext)
 
@@ -162,6 +162,7 @@ export default function Header() {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
+                    passChildData(true) // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');
@@ -513,7 +514,7 @@ export default function Header() {
                 <div className="fixed phone-header work mt-5 ">
 
                     {user === true ?
-                        <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                        <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                             <div className="  d-flex pl-2 mt-2" >
                                 <div>
                                     <svg viewBox="0 0 26 26" className="icon mr-2">

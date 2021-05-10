@@ -19,7 +19,7 @@ import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserContext } from './Contexts/UserContext';
 import { ApiContext } from './Contexts/ApiContext';
-import axios from 'axios'
+import axios from 'axios';
 
 function App() {
   dotenv.config();
@@ -54,7 +54,7 @@ function App() {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
       params: {
-        category: 'general',
+        category: 'sports',
         pageSize: 8,
         country: 'us',
         apiKey: process.env.REACT_APP_NEWS_API_KEY
@@ -62,7 +62,7 @@ function App() {
     };
 
     axios.request(options).then(function (res) {
-      console.log(res.data)
+      // console.log(res.data)
       setApiData(res.data)
       // setLoading(false);
     }).catch(function (error) {
@@ -103,8 +103,6 @@ function App() {
 
               <Route path="/u/:user/following" component={Following} />
               <Route path="/u/:user/followers" component={Followers} />
-              <Route path="/u/:user/retweets" component={Retweets} />
-              <Route path="/u/:user/likes" component={Likes} />
 
               <Route path="/compose/tweet" component={Compose} />
               <Route path="/error" component={Error} />
