@@ -82,10 +82,10 @@ router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
 
   if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
 
-   /** Objectives:
-   * 1. REMOVE ENTRY from `likes` collection
-   * 2. DECREMENT -1 `count` of _likes_ in the referenced `tweet`
-   */
+  /** Objectives:
+  * 1. REMOVE ENTRY from `likes` collection
+  * 2. DECREMENT -1 `count` of _likes_ in the referenced `tweet`
+  */
   const likesObject = {
     tweetid: new ObjectId(tweetid),
     userid: new ObjectId(userid)
@@ -107,6 +107,64 @@ router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
       }
     }).catch(next);
 
+});
+
+/** FETCH ALL TWEETS LIKED BY USER */
+router.get("/:userid", (req, res, next) => {
+  const byUserId = req.params.userid;
+  if (!ObjectId.isValid(byUserId)) return res.sendStatus(400);
+
+  const agg = [
+      {
+        $match: {
+          userid: new ObjectId(byUserId)
+        }
+      },
+      {
+        $limit: 20
+      },
+      {
+        $sort: { dateliked: -1 }
+      },
+      {
+        $lookup: {
+          from: "tweets",
+          localField: "tweetid",
+          foreignField: "_id",
+          as: "ogtweet"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "ogtweet.byUserId",
+          foreignField: "_id",
+          as: "oguser"
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          ogtweet: 1,
+          "oguser.fullname": 1,
+          "oguser.username": 1
+        }
+      }
+    ];
+
+  //collect all retweets from db
+  MongoClient.connect(uri, MongoOptions)
+    .then(async (client) => {
+      try {
+        const likes = client.db("twitclone").collection("likes");
+        const result = await likes.aggregate(agg).toArray();
+        if (result.length === 0) throw new Error("No retweets by this user");
+        res.status(200).send(result);
+      } catch (error) {
+        res.status(404).send({ "message": error.message });
+        console.error(error);
+      }
+    }).catch(next);
 });
 
 
