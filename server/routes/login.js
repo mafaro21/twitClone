@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
 router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
     const { email, password, responseToken } = req.body;
     let isValid = false; // captcha result
-   
+
     //------------------------ BEGIN CAPTCHA VERIFICATION -----------------------//
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -61,7 +61,6 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
 
     function operateDB() {
         //continue with LOGIN operations
-        console.time("login")
         MongoClient.connect(uri, MongoOptions)
             .then(async (client) => {
                 const users = client.db("twitclone").collection("users");
@@ -78,7 +77,6 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
                     // BINGO! User authenticated. Now, create session.
                     req.session.user = { "id": result._id, "username": result.username, "fullname": result.fullname };
                     res.status(200).send({ "success": true });
-                    console.timeEnd("login");
                 } catch (error) {
                     res.status(401).send({ "message": error.message });
                 } finally {

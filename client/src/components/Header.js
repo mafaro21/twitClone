@@ -514,7 +514,7 @@ export default function Header({ passChildData }) {
                 <div className="fixed phone-header work mt-5 ">
 
                     {user === true ?
-                        <Link className={path === '/home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
+                        <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                             <div className="  d-flex pl-2 mt-2" >
                                 <div>
                                     <svg viewBox="0 0 26 26" className="icon mr-2">
