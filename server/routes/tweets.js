@@ -11,19 +11,19 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 /** GET ALL TWEETS! */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.gt || 0;  //attached from Client for paging
+    const lastTweetID = req.query.lt || 0;  //attached from Client for paging
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
 
     const agg = [
         {
             $match: {
-                _id: { $gt: new ObjectId(lastTweetID) }
+                _id: { $lt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
         },
         {
-            $sort: { dateposted: -1 }
+            $sort: { dateposted: -1, likes: -1 }
         },
         {
             $lookup: {
@@ -115,14 +115,14 @@ router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
 router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.gt || 0;  //attached by Client for paging
-    //axios.get(tweets/user/{userID}?gt=x12345)
+    const lastTweetID = req.query.lt || 0;  //attached by Client for paging
+    //axios.get(tweets/user/{userID}?lt=x12345)
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
     const agg = [
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $gt: new ObjectId(lastTweetID) }
+                _id: { $lt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
@@ -236,15 +236,15 @@ router.get("/:tweetid", (req, res, next) => {
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
-    const lastTweetID = req.query.gt || 0; //attached with the consecutive requests
-    //axios.get(mine/all?gt=x12345)
+    const lastTweetID = req.query.lt || 0; //attached with the consecutive requests
+    //axios.get(mine/all?lt=x12345)
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(404);
 
     const agg = [
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $gt: new ObjectId(lastTweetID) }
+                _id: { $lt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
