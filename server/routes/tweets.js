@@ -122,7 +122,7 @@ router.get("/user/:userid", (req, res, next) => {
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $lt: new ObjectId(lastTweetID) }
+                _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
@@ -244,7 +244,7 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $lt: new ObjectId(lastTweetID) }
+                _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
