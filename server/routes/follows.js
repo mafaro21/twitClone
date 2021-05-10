@@ -91,13 +91,13 @@ router.delete("/:userid", FollowLimiter, (req, res, next) => {
 /** View someone's FOLLOWERS. (⚠ MUST BE Loggedin) */
 router.get("/to/:userid", (req, res, next) => {
     const toUserId = req.params.userid; // the target user
-    const lastFollowerId = req.query.gt || 0; // FOR paging, coming from client.
+    const lastFollowerId = req.query.lt || 0; // FOR paging, coming from client.
 
     const agg = [
         {
             $match: {
                 toUserId: new ObjectId(toUserId),
-                _id: { $gt: new ObjectId(lastFollowerId) },
+                _id: { $lt: new ObjectId(lastFollowerId) },
             },
         },
         {
@@ -139,13 +139,13 @@ router.get("/to/:userid", (req, res, next) => {
 /** View someone's FOLLOWING (⚠ MUST BE Loggedin) */
 router.get("/from/:userid", (req, res, next) => {
     const fromUserId = req.params.userid; // the target user
-    const lastFollowerId = req.query.gt || 0; // FOR paging, coming from client.
+    const lastFollowerId = req.query.lt || 0; // FOR paging, coming from client.
 
     const agg = [
         {
             $match: {
                 fromUserId: new ObjectId(fromUserId),
-                _id: { $gt: new ObjectId(lastFollowerId) },
+                _id: { $lt: new ObjectId(lastFollowerId) },
             }
         },
         {
