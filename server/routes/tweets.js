@@ -8,9 +8,78 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 
 //HANDLING TWEETS
 
-/* GET ALL TWEETS */
+/** GET ALL TWEETS! */
 router.get("/", (req, res, next) => {
-    res.send("Here are all tweets");
+    const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
+    const lastTweetID = req.query.gt || 0;  //attached by Client for paging
+    if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
+
+    const agg = [
+        {
+            $match: {
+                _id: { $gt: new ObjectId(lastTweetID) }
+            }
+        }, {
+            $limit: 20
+        },
+        {
+            $sort: { dateposted: -1 }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "tweetid",
+                as: "likedby"
+            }
+        }, {
+            $lookup: {
+                from: "retweets",
+                localField: "_id",
+                foreignField: "OGtweetid",
+                as: "retweetby"
+            }
+        }, {
+            $project: {
+                _id: 1,
+                content: 1,
+                likes: 1,
+                comments: 1,
+                dateposted: 1,
+                isLikedbyme: {
+                    $in: [new ObjectId(viewerId), "$likedby.userid"]
+                },
+                isRetweetbyme: {
+                    $in: [new ObjectId(viewerId), "$retweetby.userid"]
+                }
+            }
+        }
+    ];
+
+    //retrieve data from db
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const tweets = client.db("twitclone").collection("tweets");
+            try {
+                const result = await tweets.aggregate(agg).toArray();
+                if (result.length === 0) throw new Error("No tweets");
+                res.status(200).send(result);
+            } catch (error) {
+                res.sendStatus(404);
+                console.error("FetchTweetsErr", error);
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+
+    //this is to avoid UNDEFINED Error for viewerId
+    function getSafe(fn, defaultValue) {
+        try {
+            return fn();
+        } catch (e) {
+            return defaultValue;
+        }
+    }
 });
 
 
@@ -42,7 +111,7 @@ router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
 });
 
 
-/* GET ALL TWEETS FROM given USER */
+/** GET ALL TWEETS FROM given USER */
 router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
@@ -52,7 +121,8 @@ router.get("/user/:userid", (req, res, next) => {
     const agg = [
         {
             $match: {
-                byUserId: new ObjectId(userid)
+                byUserId: new ObjectId(userid),
+                _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
@@ -163,14 +233,13 @@ router.get("/:tweetid", (req, res, next) => {
 });
 
 
-// ⚠ ❌❌ -- TO BE FIXED: ADD RETWEETS
 /* GET ALL MY own TWEETS */
 router.get("/mine/all", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     const lastTweetID = req.query.gt || 0; //attached with the consecutive requests
     //axios.get(mine/all?gt=x12345)
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(404);
-    
+
     const agg = [
         {
             $match: {
