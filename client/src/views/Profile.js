@@ -10,6 +10,9 @@ import Header from '../components/Header';
 import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import OutsideClick from '../components/OutsideClick';
+import Likes from './Likes';
+import Retweets from './Retweets';
+import Tweets from './Tweets';
 import deer from '../images/linus2.jpg';
 import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
@@ -64,6 +67,12 @@ export default function Profile() {
     const { user } = useParams()
 
     const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
+
+    const [showLike, setShowLike] = useState(false)    // test for showing likes page
+
+    const [showTweets, setShowTweets] = useState(true)  //showing main tweets page, on refresh this always shows
+
+    const [showRetweets, setShowRetweets] = useState(false)     //showing retweets
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
 
@@ -372,10 +381,10 @@ export default function Profile() {
         }
     }
 
-    if (childData) {
-        getData()
-        setchildData(false)
-    }
+    // if (childData) {
+    //     getData()
+    //     setchildData(false)
+    // }
 
 
     let location = useLocation()
@@ -390,6 +399,27 @@ export default function Profile() {
     let path0 = location.pathname
     let path5 = path0.split(`/u/${profile.username}`)
     let finalPath = path5[1]
+
+    const likePage = () => {
+        setShowLike(true)
+        setShowTweets(false)
+        setShowRetweets(false)
+    }
+
+    const tweetsPage = () => {
+        setShowLike(false)
+        setShowTweets(true)
+        setShowRetweets(false)
+    }
+
+    const retweetsPage = () => {
+        setShowTweets(false)
+        setShowLike(false)
+        setShowRetweets(true)
+    }
+
+
+
 
     return (
         <div className="App general" >
@@ -512,21 +542,23 @@ export default function Profile() {
 
                                     {userNotFound ? null :
                                         <div className="row d-flex view mt-3" style={{ textAlign: 'center', fontWeight: '700' }}>
-                                            <div className={finalPath === '' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                            <div onClick={tweetsPage} className={showTweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
                                                 <div className="p-3 ">
                                                     Tweets
                                             </div>
                                             </div>
-                                            <Link to={`/u/${profile.username}/retweets`} className={finalPath === '/following' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                            <div onClick={retweetsPage} className={showRetweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
                                                 <div className="p-3 ">
                                                     Retweets
                                             </div>
-                                            </Link>
-                                            <Link to={`/u/${profile.username}/likes`} className={finalPath === '/following' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                            </div>
+                                            <div onClick={likePage} className={showLike ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                                {/* to={`/u/${profile.username}/likes`} */}
+                                                {/* {finalPath === '/following' ? "w-35 follow-tab-active" : } */}
                                                 <div className="p-3 ">
                                                     Likes
+                                                </div>
                                             </div>
-                                            </Link>
                                         </div>
                                     }
                                 </div>
@@ -535,11 +567,15 @@ export default function Profile() {
 
                         {userNotFound ? <UserNotFound /> : null}
                         {noTweets ? <NoTweets /> : null}
-                        {tweetLoading ? <Loading /> : null}
-                        {tweets.data.map((item) => (
+                        {/* {tweetLoading ? <Loading /> : null} */}
+                        {showLike ? <Likes /> : null}
+                        {showTweets ? <Tweets fromHeader={childData} /> : null}
+                        {showRetweets ? <Retweets /> : null}
+
+                        {/* {tweets.data.map((item) => (
                             <div className={disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} key={item._id}>
                                 {userNotFound ? null :
-                                    <div className="col-1.5">              {/* <--- user avi */}
+                                    <div className="col-1.5">             
                                         <Link
                                             to={`/u/${profile.username}`}
                                         >
@@ -551,7 +587,7 @@ export default function Profile() {
 
                                 {userNotFound ? null :
                                     <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >
-                                        {/* <--- user content */}
+                                        
                                         <div  >
                                             <div >
                                                 <Link
@@ -631,7 +667,7 @@ export default function Profile() {
                                     </Link>
                                 }
                             </div>
-                        ))}
+                        ))} */}
 
                     </div>
 

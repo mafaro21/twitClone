@@ -233,154 +233,40 @@ export default function Retweets() {
     let finalPath = path5[1]
 
     return (
-        <div className="App general" >
-            {/* <Navbar /> */}
-            <div className="container  " >
-                <div className="row " >
-                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
+        <div className="p-2 view row main-post-div" >
 
-                    <Header />
+            <div className="col-1.5">              {/* <--- user avi */}
 
-                    <div className="col main-view phone-home " >
-                        {/* {loading ? <Loading /> : null} */}
+                <img src={icon} alt="example" className="user-logo" />
 
-                        <div className="row profile-header view mt-1">
-
-                            <div className=" col row ">
-                                <div className="ml-2 col-1.5">
-                                    <BackButton />
-                                </div>
-                                <div className="col ">
-                                    <div >
-                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname} {msg}</strong>
-                                    </div>
-                                    {/* <p> */}
-                                    <span style={{ fontSize: '15px' }}>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
-                                    {/* </p> */}
-                                </div>
-                            </div>
-                        </div>
+            </div>
 
 
-                        <div className=" banner row" >
-                            <img src={!userNotFound ? deer : unf2} alt="example" className="header-photo " />
 
-                            <div className="p-2  col ">
-                                <div className="">
-                                    <img src={!userNotFound ? icon : unf1} alt="example" className="profile-logo" />
-
-                                    <div className="banner-right ">
-
-                                        {tweetLoading ? null :
-                                            userNotFound ? null :
-                                                sessionName === userPath ?
-                                                    <Link
-                                                        to={`/u/${profile.username}/edit`}
-                                                        className="btn login-submit banner-edit btn-accent rounded-pill mt-1 "
-                                                        type="submit"
-                                                    // onClick={editToggle}
-                                                    >
-                                                        Edit Profile
-                                                </Link>
-                                                    :
-                                                    profile.isfollowedbyme === true ?
-                                                        <div className="banner-right" onClick={() => handleUnfollow()}>
-                                                            <button
-                                                                className="btn login-submit banner-edit btn-accent rounded-pill mt-1"
-                                                                type="submit"
-                                                                disabled={disabled}
-                                                            >
-                                                                Following
-                                                        </button>
-                                                        </div>
-                                                        :
-                                                        <div className="banner-right" onClick={() => handleFollow()}>
-                                                            <button
-                                                                className="btn login-submit banner-edit btn-accent-outline rounded-pill mt-1"
-                                                                type="submit"
-                                                                disabled={disabled}
-                                                            >
-                                                                Follow
-                                                    </button>
-                                                        </div>
-
-                                        }
-
-                                    </div>
-
-
-                                </div>
-
-                                <div className="p-2 col">
-
-                                    <strong style={{ fontWeight: 700 }}>{userNotFound ? `@${user}` : profile.fullname}</strong>
-                                    <p><span >{userNotFound ? null : `@${profile.username}`}</span></p>
-
-                                    <div className="mt-1">
-                                        {profile.bio}
-                                    </div>
-
-                                    {userNotFound ? null :
-                                        <div className="mt-1">
-                                            <span>
-                                                <svg viewBox="0 0 24 24" className="bio-icon">
-                                                    <g>
-                                                        <path d="M19.708 2H4.292C3.028 2 2 3.028 2 4.292v15.416C2 20.972 3.028 22 4.292 22h15.416C20.972 22 22 20.972 22 19.708V4.292C22 3.028 20.972 2 19.708 2zm.792 17.708c0 .437-.355.792-.792.792H4.292c-.437 0-.792-.355-.792-.792V6.418c0-.437.354-.79.79-.792h15.42c.436 0 .79.355.79.79V19.71z">
-                                                        </path>
-                                                        <circle cx="7.032" cy="8.75" r="1.285"></circle>
-                                                        <circle cx="7.032" cy="13.156" r="1.285"></circle>
-                                                        <circle cx="16.968" cy="8.75" r="1.285"></circle>
-                                                        <circle cx="16.968" cy="13.156" r="1.285"></circle>
-                                                        <circle cx="12" cy="8.75" r="1.285"></circle>
-                                                        <circle cx="12" cy="13.156" r="1.285"></circle>
-                                                        <circle cx="7.032" cy="17.486" r="1.285"></circle>
-                                                        <circle cx="12" cy="17.486" r="1.285"></circle>
-                                                    </g>
-                                                </svg>
-                                            &nbsp;
-                                            Joined {datejoined}
-                                            </span>
-                                        </div>
-                                    }
-
-                                    {userNotFound ? null :
-                                        <div className="mt-1 d-flex">
-                                            <div className="flw-flw" onClick={FollowingLink}><span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span></div>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <div className="flw-flw" onClick={FollowerLink}><span style={{ fontWeight: 700 }}>{profile.followers}</span> &nbsp;<span>Followers</span></div>
-                                        </div>
-                                    }
-
-                                    {userNotFound ? null :
-                                        <div className="row d-flex view mt-3" style={{ textAlign: 'center', fontWeight: '700' }}>
-                                            <Link to={`/u/${profile.username}`} className={finalPath === '' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
-                                                <div className="p-3 ">
-                                                    Tweets
-                                                </div>
-                                            </Link>
-                                            <div className={finalPath === '/retweets' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
-                                                <div className="p-3 ">
-                                                    Retweets
-                                                </div>
+            <div className="col user-name-tweet post-div" >
+                {/* <--- user content */}
+                <div  >
+                    <div >
+                        <div
+                            className="name-link"
+                        >
+                            <strong >yo</strong>&nbsp;
                                             </div>
-                                            <Link to={`/u/${profile.username}/likes`} className={finalPath === '/following' ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
-                                                <div className="p-3 ">
-                                                    Likes
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        {userNotFound ? <UserNotFound /> : null}
+                        <span>@yos</span>
 
+                                            &nbsp; <span>·</span> &nbsp;
+                                            <span>
+                            {/* <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" /> */}
+                        </span>
                     </div>
 
-
-                    <Sidebar />
+                    <div className="post-link">
+                        <p>RETWEETS PAGE </p>
+                    </div>
                 </div>
             </div>
+
+
         </div>
     )
 }
