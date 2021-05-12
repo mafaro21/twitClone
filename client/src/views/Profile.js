@@ -13,7 +13,7 @@ import OutsideClick from '../components/OutsideClick';
 import Likes from './Likes';
 import Retweets from './Retweets';
 import Tweets from './Tweets';
-import deer from '../images/linus2.jpg';
+import deer from '../images/paul-carmona1.jpg';
 import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
@@ -93,7 +93,7 @@ export default function Profile() {
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
                 document.title = `TwitClone - @${user}`
-                
+
             })
             .catch((error) => {
 
@@ -113,17 +113,15 @@ export default function Profile() {
 
             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
                 .then((res) => {
-                    setTweets(res);
+                    // setTweets(res);
                     setTweetCount(res.data.length);
                     // console.log(res.data);
                     // console.log(x)
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    } else if (error.response.status === 404) {
-                        setNoTweets(true);
+                    if (error.response.status === 404) {
+                        setTweetCount(0)
                     }
                 }).finally(() => {
                     setTweetLoading(false);
@@ -141,6 +139,7 @@ export default function Profile() {
         })();
 
         getData()
+        setNoTweets(false)
 
     }, [user]);
 
@@ -554,7 +553,7 @@ export default function Profile() {
                                             </div>
                                             </div>
                                             <div onClick={likePage} className={showLike ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
-                                                {/* to={`/u/${profile.username}/likes`} */}
+                                                {/* to={`/ u / ${profile.username}/likes`} */}
                                                 {/* {finalPath === '/following' ? "w-35 follow-tab-active" : } */}
                                                 <div className="p-3 ">
                                                     Likes

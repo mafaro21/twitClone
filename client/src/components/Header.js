@@ -63,16 +63,19 @@ export default function Header({ passChildData }) {
         </div>
         : '';
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + sessionStorage.getItem("username") + ".svg";
 
     useEffect(() => {
 
         (async () => {
             const res = await axios.get("/statuslogin");
-            setUser(res.data.loggedin);
+            setUser(res.data.loggedin); //for use context
             setFullname(res.data.fullname);
             setUsername(res.data.user);
             // console.log(res.data)
+
+            sessionStorage.setItem("fullname", res.data.fullname)
+            sessionStorage.setItem("username", res.data.user)
 
         })();
 
@@ -632,9 +635,9 @@ export default function Header({ passChildData }) {
                             <img src={icon} alt="example" className="user-data-img" />
 
                             <div className="col user-data-text">
-                                <div className="text">{fullname}</div>
+                                <div className="text">{sessionStorage.getItem("fullname") || fullname}</div>
                                 <div>
-                                    <span>@{username}</span>
+                                    <span>@{sessionStorage.getItem("username") || username}</span>
                                 </div>
                             </div>
 
