@@ -20,6 +20,7 @@ export default function Tweets() {
     const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
     const [datejoined, setDatejoined] = useState('');
     const [tweetLoading, setTweetLoading] = useState(true);
+    const [noTweets, setNoTweets] = useState(false);
 
     const [disabled, setDisabled] = useState(false);
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
@@ -61,21 +62,23 @@ export default function Tweets() {
                 }
             });
 
-
+        setTweets({ data: [] }) //refresh tweets state when going to another user's profile
         async function getTweets(x) {
             setTweetLoading(true)
 
             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
                 .then((res) => {
                     setTweets(res);
-                    // setTweetCount(res.data.length);
-                    // console.log(res.data);
+                    setNoTweets(false)
+                    console.log(res.data);
                     // console.log(x)
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response.status === 500) {
                         internalError();
+                    } else if (error.response.status === 404) {
+                        setNoTweets(true);
                     }
                 }).finally(() => {
                     setTweetLoading(false);
@@ -101,7 +104,13 @@ export default function Tweets() {
         setchildData(false)
     }
 
-    console.log(childData)
+    const NoTweets = () => {        //only shown when user has no tweets
+        return <div className="d-flex justify-content-center p-2">
+
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>This user hasn't made any tweets yet</span>
+
+        </div>;
+    };
 
     const Loading = () => {
 
@@ -119,6 +128,7 @@ export default function Tweets() {
 
     return (
         <div>
+            {noTweets ? <NoTweets /> : null}
             {tweetLoading ? <Loading /> : null}
             {tweets.data.map((item) => (
                 <div className="p-2 view row main-post-div" key={item._id}>
@@ -212,6 +222,7 @@ export default function Tweets() {
                                 likes={item.likes}
                                 likesByMe={item.isLikedbyme}
                                 passChildData={setchildData}
+                                retweetsByMe={item.isRetweetbyme}
                             />
                         </Link>
                     }

@@ -19,6 +19,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
+import Interactive from '../components/Interactive';
 
 export default function Retweets() {
     let location = useLocation()
@@ -39,25 +40,21 @@ export default function Retweets() {
     const [userNotFound, setUserNotFound] = useState(false)
     const [datejoined, setDatejoined] = useState('');
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
-    const [noTweets, setNoTweets] = useState(false);
+    const [noRetweets, setNoRetweets] = useState(false);
     const [userID, setUserID] = useState('')
     const [noAccountDiv, setNoAccountDiv] = useState(false)
     const [sessionName, setSessionName] = useState('')
+    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
 
     useEffect(() => {   //fetching data for logged in users
 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
-                let x = res.data[0]._id;
-                setUserID(x);
-                getTweets(x);
+                setUserID(res.data[0]._id);
+                getTweets(res.data[0]._id);
                 // console.log(res.data)
-                let date = new Date(res.data[0].datejoined);
-                let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
-                setDatejoined(finalDate);
                 document.title = `TwitClone - @${user}`
             })
             .catch((error) => {
@@ -72,15 +69,15 @@ export default function Retweets() {
                 }
             });
 
-
+        setTweets({ data: [] }) // this is to refresh the state to make sure someone else's retweets don't show up on another account
         async function getTweets(x) {
             setTweetLoading(true)
 
-            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+            axios.get(`/retweets/${x}`) //fetching all tweets from a given user
                 .then((res) => {
+                    setNoRetweets(false)
                     setTweets(res);
-                    setTweetCount(res.data.length);
-                    // console.log(res.data);
+                    console.log(res.data);
                     // console.log(x)
                 })
                 .catch((error) => {
@@ -88,7 +85,7 @@ export default function Retweets() {
                     if (error.response.status === 500) {
                         internalError();
                     } else if (error.response.status === 404) {
-                        setNoTweets(true);
+                        setNoRetweets(true);
                     }
                 }).finally(() => {
                     setTweetLoading(false);
@@ -113,13 +110,14 @@ export default function Retweets() {
 
         </div>;
     };
-    const NoTweets = () => {        //only shown when user has no tweets
+    const NoRetweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
 
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>This user hasn't made any tweets yet</span>
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>This user hasn't made any retweets</span>
 
         </div>;
     };
+
     const UpdateData = () => {  //update data after like or deleted tweet
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
@@ -155,77 +153,11 @@ export default function Retweets() {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setNoTweets(true);
+                    // setNoTweets(true);
                 }
             });
 
 
-    }
-    const UserNotFound = () => {
-        return <div className="d-flex justify-content-center p-2">
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {user}?, never heard of them... </span>
-        </div>
-    }
-
-    const handleFollow = () => {
-        setDisabled(true)
-        axios.post(`/follows/${userID}`)
-            .then((res) => {
-                UpdateData()
-                console.log(res.data)
-            })
-            .catch((err) => {
-                console.error(err)
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
-            })
-            .finally(() => {
-                setDisabled(false)
-                setTimeout(() => {
-                    setNoAccountDiv(false)
-                }, 2000);
-            })
-
-    }
-
-    const handleUnfollow = () => {
-        setDisabled(true)
-        axios.delete(`/follows/${userID}`)
-            .then((res) => {
-                UpdateData()
-                console.log(res.data)
-            })
-            .catch((err) => {
-                console.error(err)
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
-            })
-            .finally(() => {
-                setDisabled(false)
-                setTimeout(() => {
-                    setNoAccountDiv(false)
-                }, 2000);
-            })
-    }
-
-    const FollowingLink = () => {
-        if (sessionName) {
-            history.push(`/u/${profile.username}/following`)
-        } else {
-            setNoAccountDiv(true)
-            setTimeout(() => {
-                setNoAccountDiv(false)
-            }, 2000);
-        }
-    }
-
-    const FollowerLink = () => {
-        if (sessionName) {
-            history.push(`/u/${profile.username}/followers`)
-        } else {
-            setNoAccountDiv(true)
-            setTimeout(() => {
-                setNoAccountDiv(false)
-            }, 2000);
-        }
     }
 
     let path0 = location.pathname
@@ -233,40 +165,58 @@ export default function Retweets() {
     let finalPath = path5[1]
 
     return (
-        <div className="p-2 view row main-post-div" >
-
-            <div className="col-1.5">              {/* <--- user avi */}
-
-                <img src={icon} alt="example" className="user-logo" />
-
-            </div>
-
+        <>
+            {tweetLoading ? <Loading /> : null}
+            {noRetweets ? <NoRetweets /> : null}
+            {tweets.data.map((item) => {
+                // console.log(item.ogtweet[0])
+                let icon = "https://avatars.dicebear.com/api/identicon/" + item.oguser[0].username + ".svg";
 
 
-            <div className="col user-name-tweet post-div" >
-                {/* <--- user content */}
-                <div  >
-                    <div >
-                        <div
-                            className="name-link"
-                        >
-                            <strong >yo</strong>&nbsp;
-                                            </div>
-                        <span>@yos</span>
+                return <div className="p-2 view row main-post-div" >
 
-                                            &nbsp; <span>·</span> &nbsp;
-                                            <span>
-                            {/* <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" /> */}
-                        </span>
+                    <div className="col-1.5">
+
+                        <img src={icon} alt="example" className="user-logo" />
                     </div>
 
-                    <div className="post-link">
-                        <p>RETWEETS PAGE </p>
+
+
+                    <div className="col user-name-tweet post-div" >
+                        <div  >
+                            <div >
+                                <Link
+                                    to={`/u/${item.oguser[0].username}`}
+                                    className="name-link"
+                                >
+                                    <strong >{item.oguser[0].fullname}</strong>&nbsp;
+                                </Link>
+                                <span>@{item.oguser[0].username}</span>
+
+                        &nbsp; <span>·</span> &nbsp;
+                        <span>
+                                    <ReactTimeAgo date={item.ogtweet[0].dateposted} locale="en-US" timeStyle="twitter" />
+                                </span>
+                            </div>
+
+                            <div className="post-link">
+                                <p>{item.ogtweet[0].content} </p>
+                            </div>
+                        </div>
+                        <Interactive
+                            className="mt-2"
+                            // session={sessionName}
+                            id={item._id}
+                            comments={item.ogtweet[0].comments}
+                            retweets={item.ogtweet[0].retweets}
+                            likes={item.ogtweet[0].likes}
+                            likesByMe={item.isLikedbyme}
+                            passChildData={setchildData}
+                            retweetsByMe={item.isRetweetbyme}
+                        />
                     </div>
                 </div>
-            </div>
-
-
-        </div>
+            })}
+        </>
     )
 }

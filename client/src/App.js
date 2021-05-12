@@ -49,7 +49,6 @@ function App() {
 
 
 
-    // setTimeout(() => {
     const options = {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
@@ -68,7 +67,6 @@ function App() {
     }).catch(function (error) {
       console.error(error);
     });
-    // }, 10000);
 
   }, []);
 

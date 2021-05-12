@@ -11,19 +11,19 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 /** GET ALL TWEETS! */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.lt || 0;  //attached from Client for paging
+    const lastTweetID = req.query.gt || "000000000000";  //attached from Client for paging
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
 
     const agg = [
         {
             $match: {
-                _id: { $lt: new ObjectId(lastTweetID) }
+                _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
             $limit: 20
         },
         {
-            $sort: { dateposted: -1, likes: -1 }
+            $sort: { dateposted: -1 }
         },
         {
             $lookup: {
@@ -39,13 +39,25 @@ router.get("/", (req, res, next) => {
                 foreignField: "OGtweetid",
                 as: "retweetby"
             }
-        }, {
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "byUserId",
+                foreignField: "_id",
+                as: "User",
+            }
+        },
+        {
             $project: {
                 _id: 1,
                 content: 1,
                 likes: 1,
+                retweets: 1,
                 comments: 1,
                 dateposted: 1,
+                "User.fullname": 1,
+                "User.username": 1,
                 isLikedbyme: {
                     $in: [new ObjectId(viewerId), "$likedby.userid"]
                 },
@@ -145,6 +157,7 @@ router.get("/user/:userid", (req, res, next) => {
                 _id: 1,
                 content: 1,
                 likes: 1,
+                retweets: 1,
                 comments: 1,
                 dateposted: 1,
                 isLikedbyme: {

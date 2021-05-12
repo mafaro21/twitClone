@@ -51,13 +51,9 @@ export default function Likes() {
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
-                let x = res.data[0]._id;
-                setUserID(x);
-                getTweets(x);
+                setUserID(res.data[0]._id);
+                getTweets(res.data[0]._id);
                 // console.log(res.data)
-                let date = new Date(res.data[0].datejoined);
-                let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
-                setDatejoined(finalDate);
                 document.title = `TwitClone - @${user}`
             })
             .catch((error) => {
@@ -76,12 +72,10 @@ export default function Likes() {
         async function getTweets(x) {
             setTweetLoading(true)
 
-            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+            axios.get(`/likes/${x}`) //fetching all tweets from a given user
                 .then((res) => {
                     setTweets(res);
-                    setTweetCount(res.data.length);
-                    // console.log(res.data);
-                    // console.log(x)
+                    console.log(res.data);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -100,6 +94,7 @@ export default function Likes() {
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
     };
+
     const Loading = () => {
 
         let x = localStorage.getItem("accent") || 'grey'
@@ -233,46 +228,45 @@ export default function Likes() {
     let finalPath = path5[1]
 
     return (
-        <div className="p-2 view row main-post-div" >
+        <>
+            {tweets.data.map((item) => {
+                // console.log(item.ogtweet[0])
+                console.log(item.oguser[0])
+                return <div className="p-2 view row main-post-div" >
 
-            <div className="col-1.5">              {/* <--- user avi */}
+                    <div className="col-1.5">
 
-                <img src={icon} alt="example" className="user-logo" />
-
-            </div>
-
-
-
-            <div className="col user-name-tweet post-div" >
-                {/* <--- user content */}
-                <div  >
-                    <div >
-                        <div
-                            className="name-link"
-                        >
-                            <strong >yo</strong>&nbsp;
-                                            </div>
-                        <span>@yos</span>
-
-                                            &nbsp; <span>·</span> &nbsp;
-                                            <span>
-                            {/* <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" /> */}
-                        </span>
+                        <img src={icon} alt="example" className="user-logo" />
                     </div>
 
-                    <div className="post-link">
-                        <p>LIKES PAGE </p>
+
+
+                    <div className="col user-name-tweet post-div" >
+                        <div  >
+                            <div >
+                                <div
+                                    className="name-link"
+                                >
+                                    {/* <strong >{item.oguser[0].fullname}</strong>&nbsp; */}
+                                </div>
+                                {/* <span>{item.oguser[0].username}</span> */}
+
+                        &nbsp; <span>·</span> &nbsp;
+                        <span>
+                                    {/* <ReactTimeAgo date={item.ogtweet[0].dateposted} locale="en-US" timeStyle="twitter" /> */}
+                                </span>
+                            </div>
+
+                            <div className="post-link">
+                                {/* <p>{item.ogtweet[0].content} </p> */}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            })}
+        </>
 
 
-        </div>
 
-
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
     )
 }
