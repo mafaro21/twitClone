@@ -45,14 +45,14 @@ function Sidebar() {
             {location.pathname === '/explore' ? null : <Search />}
 
             <div className="p-3 sidebar mt-4">
-                <h5 style={{ fontWeight: 700 }}>Trending Topics</h5>
+                <h5 style={{ fontWeight: 700 }}>People You Should Follow</h5>
                 <p>Trending</p>
             </div>
 
             {user ?
 
                 <div className="p-1 mt-4 sidebar" >
-                    <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Headlines</h5>
+                    <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Sports Headlines</h5>
                     <ul className="col " >
                         {loading ? <Loading /> : null}
                         {apiData.articles.map(item => (

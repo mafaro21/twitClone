@@ -13,7 +13,7 @@ import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 
 
-export default function Interactive({ session, id, comments, retweets, likes, likesByMe, passChildData }) {
+export default function Interactive({ session, id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe }) {
     //most props are from profile.js
 
     const [username, setUsername] = useState("");
@@ -81,7 +81,7 @@ export default function Interactive({ session, id, comments, retweets, likes, li
         e.preventDefault()
         // console.log(likedbyme)
 
-        if (!likesByMe) {
+        if (!likesByMe && !likedTweets[id]) {
             setDisabled(true);
             setLikedTweets(prevTweets => ({
                 ...prevTweets,
@@ -128,7 +128,59 @@ export default function Interactive({ session, id, comments, retweets, likes, li
                     }, 2000);
                 });
         }
+        // console.log(likedTweets)
     };
+
+    const handleRetweet = (e, id, retweetsByMe) => {
+        e.preventDefault()
+
+        if (!retweetsByMe && !retweetTweet[id]) {
+            setDisabled(true);
+            setRetweetTweet(prevRetweets => ({
+                ...prevRetweets,
+                [id]: !setRetweetTweet[id],
+            }));
+
+            axios.post(`/retweets/${id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    passChildData(true)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem")
+
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                });
+
+        } else {
+            setDisabled(true);
+            setRetweetTweet(prevRetweets => ({
+                ...prevRetweets,
+                [id]: setRetweetTweet[id],
+            }));
+
+            axios.delete(`/retweets/${id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    passChildData(true)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false)
+                    }, 2000);
+                });
+        }
+        console.log(retweetTweet)
+    }
 
     return (
 
@@ -145,12 +197,12 @@ export default function Interactive({ session, id, comments, retweets, likes, li
             </button>
 
             <button
-                className="col retweet"// className={isRetweetbyme ? "col retweet-true" : "col retweet"}
-                // onClick={(e) => handleRetweet(e, _id)}
+                className={retweetsByMe ? "col retweet-true" : "col retweet"}
+                onClick={(e) => handleRetweet(e, id, retweetsByMe)}
                 disabled={disabled}
             >
                 <FontAwesomeIcon icon={faRetweet} />
-                &nbsp; {retweets}
+                &nbsp; {retweets} {retweetsByMe}
             </button>
 
             <button

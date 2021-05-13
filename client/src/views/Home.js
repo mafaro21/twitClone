@@ -15,9 +15,14 @@ import { Picker } from 'emoji-mart'
 import Loader from "react-loader-spinner";
 import TweetLoading from '../components/Header'
 import { UserContext } from '../Contexts/UserContext';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import ReactTimeAgo from 'react-time-ago';
+import { Link, useLocation } from 'react-router-dom';
 
 function Home() {
     const [user] = useContext(UserContext)
+    let location = useLocation()
 
     const [disabled, setDisabled] = useState(true);
     const [count, setCount] = useState(0)
@@ -26,15 +31,16 @@ function Home() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
     const [rows, setRows] = useState(1)
-
+    const [loading, setLoading] = useState(true)
     const [comment, setComment] = useState('')
     const [sessionName, setSessionName] = useState('')
     const [tweetLoading, setTweetLoading] = useState(false)
-
-
-
+    const [allTweets, setAllTweets] = useState({ data: [] })
+    const [newTweets, setNewTweets] = useState({ data: [] })
+    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
+    const [lastID, setLastID] = useState('')  //the last id in the .map
     const [minRows] = useState(1)
-
+    const [newTweetsLoader, setNewTweetsLoader] = useState(false)
     const [maxRows] = useState(8)
     const [tweetErr, setTweetErr] = useState({})
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -45,6 +51,23 @@ function Home() {
         : '';
 
     let icon = `https://avatars.dicebear.com/api/identicon/${sessionName}.svg`
+
+    function getData() {
+        axios.get(`/tweets/`)
+            .then((res) => {
+                console.log(res.data)
+                setAllTweets(res)
+
+                let x = res.data.length - 1     // to fetch the last id inside the .map
+                setLastID(res.data[0]._id)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
 
     useEffect(() => {
 
@@ -57,8 +80,10 @@ function Home() {
                 });
         })();
 
-        document.title = "TwitClone - Home"
 
+
+        document.title = "TwitClone - Home"
+        getData()
     }, [])
 
     const handleChange = (e) => {
@@ -140,7 +165,19 @@ function Home() {
         </div>
     }
 
-    // let percent = 60;
+    const Loading = () => {
+
+        let x = localStorage.getItem("accent") || 'grey'
+
+        return <div className="accent d-flex justify-content-center mt-2">
+            <Loader type="TailSpin"
+                color={x}
+                height={60}
+                width={60}
+            />
+
+        </div>;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -203,10 +240,43 @@ function Home() {
         return isValid;
     }
 
+    TimeAgo.addLocale(en);   //for the time ago
 
-    const LineLoader = () => {
+    window.onscroll = function () {
+        if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+            // alert(`the last id is ${lastID}`)
+            GetNewTweets(lastID)
+        }
     }
 
+    function GetNewTweets(x) {
+        if (location.pathname === '/home') {
+            setNewTweetsLoader(true)
+
+
+            axios.get(`/tweets?gt=${x}`)
+                .then((res) => {
+                    console.log(res.data)
+                    setNewTweets(res)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+                .finally(() => {
+                    setNewTweetsLoader(false)
+                })
+
+        }
+    }
+
+
+
+
+
+    if (childData) {
+        setchildData(false)
+        getData()
+    }
 
 
     return (
@@ -300,57 +370,93 @@ function Home() {
                             </div>
                             : null}
 
-                        <div className="p-2 view row">             {/* <--- standard tweet*/}
-                            <div className="col-1.5">              {/* <--- user avi */}
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">                   {/* <--- user content */}
-                                <div className="user-content">
-                                    first user &nbsp; <span>@firstuser69</span>
-                                </div>
-                                <p>this is my first tweet</p>
-                                <Interactive />
+                        <div className="row profile-header view p-3">
 
-                            </div>
-                        </div>                                     {/* <--- standard tweet*/}
-
-                        <div className="p-2 view row">
-                            <div className="col-1.5 ">
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">
-                                <div className="user-content">
-                                    first user  &nbsp; <span> @firstuser69</span>
-                                </div>
-                                <p>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    It has survived not only five centuries,
-                                    but also the leap into electronic typesetting,
-                                    remaining essentially unchanged.
-                                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                </p>
-                                <Interactive />
+                            <div >
+                                <strong className="text" style={{ fontSize: '20px' }}>Your Feed </strong>
                             </div>
                         </div>
+                        {loading ? <Loading /> : null}
+                        {allTweets.data.map((item) => {
+                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
+                            // console.log(item[19])
 
-                        <div className="p-2 view row">
-                            <div className="col-1.5 ">
-                                <img src={icon} alt="example" className="user-logo" />
-                            </div>
-                            <div className="col user-name-tweet">
-                                <div className="user-content">
-                                    first user &nbsp; <span> @firstuser69</span>
+                            return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                                <div className="col-1.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className="user-logo" />
                                 </div>
-                                <p>travelling......</p>
-                                <p>
-                                    <img src={tobias} alt="test" className="tweet-img" />
-                                </p>
-                                <Interactive />
+                                <div className="col user-name-tweet">                   {/* <--- user content */}
+                                    <div >
+                                        <Link
+                                            to={`/u/${item.User[0].username}`}
+                                            className="name-link"
+                                        >
+                                            <strong >{item.User[0].fullname}</strong>&nbsp;
+                                        </Link>
+                                        <span>@{item.User[0].username}</span>
+
+                                            &nbsp; <span>·</span> &nbsp;
+                                            <span>
+                                            <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
+                                        </span>
+                                    </div>
+
+                                    <p>{item.content}</p>
+
+                                    <Interactive
+                                        id={item._id}
+                                        comments={item.comments}
+                                        retweets={item.retweets}
+                                        likes={item.likes}
+                                        likesByMe={item.isLikedbyme}
+                                        retweetsByMe={item.isRetweetbyme}
+                                        passChildData={setchildData}
+                                    />
+
+                                </div>
                             </div>
-                        </div>
+                        })}
+                        {/* <--- standard tweet*/}
+                        {newTweetsLoader ? <Loading /> : null}
+                        {newTweets.data.map((item) => {
+                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
+                            // console.log(item[19])
+
+                            return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                                <div className="col-1.5">              {/* <--- user avi */}
+                                    <img src={icon} alt="example" className="user-logo" />
+                                </div>
+                                <div className="col user-name-tweet">                   {/* <--- user content */}
+                                    <div >
+                                        <Link
+                                            to={`/u/${item.User[0].username}`}
+                                            className="name-link"
+                                        >
+                                            <strong >{item.User[0].fullname}</strong>&nbsp;
+                                        </Link>
+                                        <span>@{item.User[0].username}</span>
+
+                                            &nbsp; <span>·</span> &nbsp;
+                                            <span>
+                                            <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
+                                        </span>
+                                    </div>
+
+                                    <p>{item.content}</p>
+
+                                    <Interactive
+                                        id={item._id}
+                                        comments={item.comments}
+                                        retweets={item.retweets}
+                                        likes={item.likes}
+                                        likesByMe={item.isLikedbyme}
+                                        retweetsByMe={item.isRetweetbyme}
+                                        passChildData={setchildData}
+                                    />
+
+                                </div>
+                            </div>
+                        })}
                     </div>
 
                     <Sidebar />
