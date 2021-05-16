@@ -54,7 +54,7 @@ router.delete("/:commentid/tweet/:tweetid", isLoggedin, (req, res, next) => {
     if (!ObjectId.isValid(commentid) || !ObjectId.isValid(tweetid))
         return res.sendStatus(400);
 
-    // Objectives: Negate the above ones in the POST block.
+    // Objectives: Negate all in the POST block above.
     // Will Only DELETE if current (sesssion) User === this.comment.userid
     const commentObject = {
         _id: new ObjectId(commentid),
@@ -72,8 +72,7 @@ router.delete("/:commentid/tweet/:tweetid", isLoggedin, (req, res, next) => {
                 await tweets.updateOne({ _id: commentObject.tweetid }, { $inc: { comments: -1 } });
                 res.status(200).send({ "deleted": 1, "success": true });
             } catch (error) {
-                res.sendStatus(400);
-                console.error(error);
+                res.status(400).send({ message: error.message });
             } finally {
                 await client.close();
             }
@@ -91,6 +90,9 @@ router.get("/tweet/:tweetid", (req, res, next) => {
             $match: {
                 tweetid: new ObjectId(tweetid),
             }
+        },
+        {
+            $sort: { _id: -1 }
         },
         {
             $limit: 20
@@ -118,9 +120,7 @@ router.get("/tweet/:tweetid", (req, res, next) => {
         .then(async (client) => {
             const comments = client.db("twitclone").collection("comments");
             try {
-                const result = await comments.aggregate(agg)
-                    .sort({ date: -1 })
-                    .toArray();
+                const result = await comments.aggregate(agg).toArray();
                 if (!result) throw new Error("No comments for this tweet");
                 res.status(200).send(result);
             } catch (error) {

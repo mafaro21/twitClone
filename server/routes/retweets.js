@@ -94,12 +94,12 @@ router.delete("/:tweetid", RetweetLimiter, (req, res, next) => {
             const retweets = client.db("twitclone").collection("retweets");
             const tweets = client.db("twitclone").collection("tweets");
             try {
-                const r1 = await retweets.deleteOne(retweetObject);
-                const r2 = await tweets.updateOne({ _id: retweetObject.OGtweetid }, { $inc: { retweets: -1 } });
-                if (r1.deletedCount === 1 && r2.modifiedCount === 1)
-                    res.status(200).send({ "success": true });
+                let r1 = await retweets.deleteOne(retweetObject);
+                if (r1.deletedCount === 0) throw new Error("Cannot undo retweet");
+                await tweets.updateOne({ _id: retweetObject.OGtweetid }, { $inc: { retweets: -1 } });
+                res.status(200).send({"success": true });
             } catch (error) {
-                throw error;
+                res.status(400).send({ message: error.message });
             } finally {
                 await client.close();
             }
@@ -116,12 +116,11 @@ router.get("/:userid", (req, res, next) => {
             $match: {
                 userid: new ObjectId(byUserId)
             }
+        }, {
+            $sort: { _id: -1 }
         },
         {
             $limit: 20
-        },
-        {
-            $sort: { date: -1 }
         },
         {
             $lookup: {
@@ -158,8 +157,7 @@ router.get("/:userid", (req, res, next) => {
                 if (result.length === 0) throw new Error("No retweets by this user");
                 res.status(200).send(result);
             } catch (error) {
-                res.status(404).send({ "message": error.message });
-                console.error(error);
+                res.sendStatus(404);
             }
         }).catch(next);
 

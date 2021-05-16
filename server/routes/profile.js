@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
+const redis = require("redis");
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const { ProfileValidation } = require("../middleware/inputvalidation");
@@ -7,20 +8,39 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const router = express.Router();
 
 
-/* GETTING MY PROFILE */
+/** CONNECT to REDIS */
+const redisClient = redis.createClient({
+    host: process.env.REDIS_URI,
+    port: process.env.REDIS_PORT || 14847,
+    password: process.env.REDIS_PASSWORD,
+});
+
+
+/* GETTING MY OWN PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     /**
-     * TODO: GET from redis, if null
-     * fetch data from Mongodb 
+     * GET from redis. 
+     * If redis = NULL, fetch data from Mongodb,
+     * then store in redis for future requests.
      */
-    MongoClient.connect(uri, MongoOptions)
-        .then(async client => {
+    redisClient.hgetall(userid, (err, reply) => {
+        if (err) next(err);
+        if (!reply) fetchfromMongo();
+        else {
+            res.status(200).send([reply]);
+        }
+    });
+
+    function fetchfromMongo() {
+        MongoClient.connect(uri, MongoOptions).then(async client => {
             const users = client.db("twitclone").collection("users");
-            const projection = { _id: 0, password: 0, email: 0 }; // <--exclusions
+            const projection = { password: 0, email: 0 }; // <--exclusions
             try {
                 const result = await users.findOne({ _id: new ObjectId(userid) }, { projection: projection });
-                res.status(200).send(result);
+                //save RESULT TO REDIS HashSet.
+                savetoRedis(result);
+                res.status(200).send([result]);
             } catch (error) {
                 res.sendStatus(404);
                 console.error(error);
@@ -28,6 +48,23 @@ router.get("/mine", isLoggedin, (req, res, next) => {
                 await client.close();
             }
         }).catch(next);
+    }
+
+    async function savetoRedis(result) {
+        redisClient.hmset(userid, {
+            "_id": userid,
+            "fullname": result.fullname,
+            "username": result.username,
+            "bio": result.bio,
+            "datejoined": result.datejoined,
+            "followers": `${result.followers}`,
+            "following": `${result.following}`,
+        }, (err, reply) => {
+            if (err) console.error("REDIS_HASH", err);
+            console.log("REDIS HashSet", reply);
+        });
+    }
+
 });
 
 
@@ -38,8 +75,8 @@ router.get("/user/:username", (req, res, next) => {
     const userReg = /[^0-9a-zA-Z_\S]+/;
     //check if valid username format:
     if (userReg.test(username)) return res.sendStatus(404);
-
     if (username.length > 20) return res.sendStatus(404);
+    // above^ check if username length is over 20 chars
     const agg = [
         {
             $match: {
@@ -79,19 +116,19 @@ router.get("/user/:username", (req, res, next) => {
         }
     }
 
-    MongoClient.connect(uri, MongoOptions).then(async (client) => {
-        const users = client.db("twitclone").collection("users");
-        try {
-            const result = await users.aggregate(agg).toArray();
-            if (result.length === 0) throw new Error("User Not Found");
-            res.status(200).send(result);
-        } catch (error) {
-            res.status(404).send(error.message);
-            console.error(error);
-        } finally {
-            await client.close();
-        }
-    }).catch(next);
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const users = client.db("twitclone").collection("users");
+            try {
+                const result = await users.aggregate(agg).toArray();
+                if (result.length === 0) throw new Error("User Not Found");
+                res.status(200).send(result);
+            } catch (error) {
+                res.status(404).send({ "message": error.message });
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
 
 });
 

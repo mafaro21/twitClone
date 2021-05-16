@@ -20,8 +20,7 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
 
     if (!ObjectId.isValid(toUserId)) return res.sendStatus(400);
     /** 
-     * 
-     * Objective:
+     * Objectives:
      * 1. ADD a new entry to `follows` collection
      * 2. INCREMENT +1 the `following` count of Source user
      * 3. INCREMENT +1 the `followers` count of Target user.
@@ -97,7 +96,6 @@ router.get("/to/:userid", (req, res, next) => {
         {
             $match: {
                 toUserId: new ObjectId(toUserId),
-                _id: { $lt: new ObjectId(lastFollowerId) },
             },
         },
         {
@@ -127,8 +125,7 @@ router.get("/to/:userid", (req, res, next) => {
                 if (result.length === 0) throw new Error("No followers");
                 res.status(200).send(result);
             } catch (error) {
-                res.sendStatus(404);
-                console.error(error);
+                res.status(404).send({ "message": error.message });
             } finally {
                 await client.close();
             }
@@ -176,7 +173,6 @@ router.get("/from/:userid", (req, res, next) => {
                 res.status(200).send(result);
             } catch (error) {
                 res.sendStatus(404);
-                console.error(error);
             } finally {
                 await client.close();
             }

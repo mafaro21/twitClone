@@ -12,13 +12,13 @@ const RedisStore = require("connect-redis")(session);
 const app = express();
 
 /** CONNECT to REDIS */
-const client = redis.createClient({
+const redisClient = redis.createClient({
     host: process.env.REDIS_URI,
     port: process.env.REDIS_PORT || 14847,
     password: process.env.REDIS_PASSWORD,
 });
 
-client.ping((err, reply) => {
+redisClient.ping((err, reply) => {
     if (err) throw err;
     console.log(reply);
 });
@@ -29,7 +29,7 @@ app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
-    store: new RedisStore({ client: client }),
+    store: new RedisStore({ client: redisClient }),
     resave: true,
     cookie: {
         maxAge: 1000 * 60 * 60 * 3, // 3 hour session.
@@ -38,7 +38,7 @@ app.use(session({
     },
 }));
 
-client.on('error', (error) => {
+redisClient.on('error', (error) => {
     if (error.code === 'ECONNRESET') console.error(error.message);
     else throw error;
 });
