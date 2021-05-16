@@ -30,7 +30,7 @@ export default function Header({ passChildData }) {
     const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [tweetLoading, setTweetLoading] = useState(false);
-
+    
     const [tweetErr, setTweetErr] = useState({});
 
     const [tweetContent, setTweetContent] = useState('');
@@ -95,6 +95,7 @@ export default function Header({ passChildData }) {
             </div >
         </div>;
     };
+
 
     const MoreModal = () => {
         return <div className="user-modal modal-enter more-modal mr-1">
@@ -175,8 +176,6 @@ export default function Header({ passChildData }) {
                     setRows(3);
                 })
                 .catch((error) => {
-                    setTweetLoading(false);
-                    // setTweetModal(true);
                     setError(error.response.data.message);
                 })
                 .finally(() => {

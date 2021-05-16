@@ -53,6 +53,7 @@ export default function Profile() {
     const [tweetCount, setTweetCount] = useState(0);
 
     const [noTweets, setNoTweets] = useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     const [commentModal, setCommentModal] = useState(false);
 
@@ -143,6 +144,18 @@ export default function Profile() {
 
     }, [user]);
 
+    
+    const ButtonLoading = () => {    // loader for Follow button <------ FIX THE COLOR.⭐
+    
+        return <div className="d-flex justify-content-center ">
+            <Loader type="ThreeDots"
+                color="grey"
+                height={40}
+                width={40}
+            />
+
+        </div>;
+    };
 
     const Loading = () => {
 
@@ -322,6 +335,7 @@ export default function Profile() {
 
     const handleFollow = () => {
         setDisabled(true)
+        setButtonLoading(true)
         axios.post(`/follows/${userID}`)
             .then((res) => {
                 getData()
@@ -333,6 +347,7 @@ export default function Profile() {
             })
             .finally(() => {
                 setDisabled(false)
+                setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false)
                 }, 2000);
@@ -342,6 +357,7 @@ export default function Profile() {
 
     const handleUnfollow = () => {
         setDisabled(true)
+        setButtonLoading(true)
         axios.delete(`/follows/${userID}`)
             .then((res) => {
                 getData()
@@ -353,6 +369,7 @@ export default function Profile() {
             })
             .finally(() => {
                 setDisabled(false)
+                setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false)
                 }, 2000);
@@ -480,7 +497,7 @@ export default function Profile() {
                                                                 type="submit"
                                                                 disabled={disabled}
                                                             >
-                                                                Following
+                                                             {buttonLoading ? <ButtonLoading /> : "Following"}   
                                                         </button>
                                                         </div>
                                                         :
@@ -490,7 +507,7 @@ export default function Profile() {
                                                                 type="submit"
                                                                 disabled={disabled}
                                                             >
-                                                                Follow
+                                                            {buttonLoading ? <ButtonLoading /> : "Follow"}
                                                     </button>
                                                         </div>
 

@@ -46,7 +46,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
             let prob = res.data['error-codes'];
-            if (prob) throw prob;
+            if (prob) throw new Error(prob);
             return isValid;
         })
         .then(isValid => {
@@ -55,7 +55,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
         })
         .catch(err => {
             res.status(401).send({ "message": "CAPTCHA Error" });
-            console.error("AXIOS", err.message);
+            console.error("AXIOS_CAPTCHA", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 

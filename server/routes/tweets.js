@@ -19,11 +19,12 @@ router.get("/", (req, res, next) => {
             $match: {
                 _id: { $gt: new ObjectId(lastTweetID) }
             }
-        }, {
-            $limit: 20
         },
         {
-            $sort: { dateposted: -1 }
+            $sort: { _id: -1 }
+        },
+        {
+            $limit: 30
         },
         {
             $lookup: {
@@ -32,7 +33,8 @@ router.get("/", (req, res, next) => {
                 foreignField: "tweetid",
                 as: "likedby"
             }
-        }, {
+        },
+        {
             $lookup: {
                 from: "retweets",
                 localField: "_id",
@@ -45,7 +47,7 @@ router.get("/", (req, res, next) => {
                 from: "users",
                 localField: "byUserId",
                 foreignField: "_id",
-                as: "User",
+                as: "User"
             }
         },
         {
@@ -137,6 +139,9 @@ router.get("/user/:userid", (req, res, next) => {
                 _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
+            $sort: { _id: -1 }
+        },
+        {
             $limit: 20
         }, {
             $lookup: {
@@ -184,9 +189,7 @@ router.get("/user/:userid", (req, res, next) => {
         .then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
-                const result = await tweets.aggregate(agg)
-                    .sort({ dateposted: -1, byUserId: -1 })
-                    .toArray();
+                const result = await tweets.aggregate(agg).toArray();
                 if (result.length === 0) throw new Error("No tweets");
                 res.status(200).send(result);
             } catch (error) {
@@ -307,23 +310,33 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
 /* DELETE SINGLE TWEET */
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     const tweetid = req.params.tweetid;
-    if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
+    const userid = req.session.user.id;
+    if (!ObjectId.isValid(tweetid)) return res.sendStatus(400);
     //ABOVE^: verifying if tweetID is valid ObjectId.
+
+    /**
+     * Will Only DELETE if `this.tweet.byUserId` === `req.session.userId`.
+     * This is to avoid deleting other users' tweets.
+     */
+
+    const tweetObject = {
+        _id: new ObjectId(tweetid),
+        byUserId: new ObjectId(userid),
+    };
 
     MongoClient.connect(uri, MongoOptions)
         .then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
-                const result = await tweets.deleteOne({ _id: new ObjectId(tweetid) });
-                res.status(200).send({ "success": true });
-                console.log("DELETED Tweet", result.deletedCount);
+                const result = await tweets.deleteOne(tweetObject);
+                if (result.deletedCount === 0) throw new Error("Cannot delete tweet");
+                res.status(200).send({ "deleted": result.deletedCount, "success": true});     
             } catch (error) {
-                throw error;
+                res.status(400).send({ message: error.message });
             } finally {
                 await client.close();
             }
-        })
-        .catch(next);
+        }).catch(next);
 });
 
 /*error handler */
