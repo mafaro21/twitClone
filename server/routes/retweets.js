@@ -158,8 +158,7 @@ router.get("/:userid", (req, res, next) => {
                 if (result.length === 0) throw new Error("No retweets by this user");
                 res.status(200).send(result);
             } catch (error) {
-                res.status(404).send({ "message": error.message });
-                console.error(error);
+                res.sendStatus(404);
             }
         }).catch(next);
 

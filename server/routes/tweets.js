@@ -11,7 +11,7 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 /** GET ALL TWEETS! */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.gt || "000000000000";  //attached from Client for paging
+    const lastTweetID = req.query.gt || 0;  //attached from Client for paging
     if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
 
     const agg = [

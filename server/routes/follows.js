@@ -176,7 +176,6 @@ router.get("/from/:userid", (req, res, next) => {
                 res.status(200).send(result);
             } catch (error) {
                 res.sendStatus(404);
-                console.error(error);
             } finally {
                 await client.close();
             }
