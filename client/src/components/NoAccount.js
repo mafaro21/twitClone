@@ -10,9 +10,9 @@ export default function NoAccount({ currentState }) {
 
     useEffect(() => {
         setNoAccState(currentState)
-        console.log(noAccState)
+        // console.log(noAccState)
 
-    }, [currentState])
+    }, [currentState, setNoAccState])
 
     return (
         <div>

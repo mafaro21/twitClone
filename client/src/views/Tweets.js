@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useContext } from 'react'
-import NoAccount from '../components/NoAccount';
+import React, { useState, useEffect } from 'react'
+// import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+// import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+// import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+// import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
+// import TimeAgo from 'javascript-time-ago';
+// import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
-import { UserContext } from '../Contexts/UserContext';
+// import { UserContext } from '../Contexts/UserContext';
 
 export default function Tweets() {
 
     const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
-    const [datejoined, setDatejoined] = useState('');
+
     const [tweetLoading, setTweetLoading] = useState(true);
     const [noTweets, setNoTweets] = useState(false);
 
-    const [disabled, setDisabled] = useState(false);
+    // const [disabled, setDisabled] = useState(false);
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [userNotFound, setUserNotFound] = useState(false)
     const [sessionName, setSessionName] = useState('')
@@ -70,7 +70,7 @@ export default function Tweets() {
                 .then((res) => {
                     setTweets(res);
                     setNoTweets(false)
-                    console.log(res.data);
+                    // console.log(res.data);
                     // console.log(x)
                 })
                 .catch((error) => {
@@ -88,19 +88,56 @@ export default function Tweets() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        (() => {
-            axios.get("/statuslogin")
-                .then((res) => {
-                    setSessionName(res.data.user)
-                });
-        })();
+        setSessionName(sessionStorage.getItem("username"))
+
 
         getData()
 
     }, [user]);
 
+    function UpdateData() {
+        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+            .then((res) => {
+                setProfile(res.data[0]);
+                // setUserID(res.data[0]._id);
+                getTweets(res.data[0]._id);
+                // console.log(res.data)
+                document.title = `TwitClone - @${user}`
+            })
+            .catch((error) => {
+
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setUserNotFound(true)
+                    document.title = "TwitClone - User Not Found!!"
+                    // Error(user);
+                }
+            });
+
+
+        async function getTweets(x) {
+
+            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+                .then((res) => {
+                    setTweets(res);
+                    setNoTweets(false)
+                    console.log(res.data);
+                    // console.log(x)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.response.status === 500) {
+                        internalError();
+                    } else if (error.response.status === 404) {
+                        setNoTweets(true);
+                    }
+                })
+        }
+    }
+
     if (childData) {
-        getData()
+        UpdateData()
         setchildData(false)
     }
 

@@ -4,7 +4,6 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
-import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
@@ -21,8 +20,6 @@ export default function Followers() {
     const [notFollowers, setNoFollowers] = useState(false)
 
     const [loading, setLoading] = useState(true)
-
-    const [hoverData, setHoverData] = useState({ fullname: '', username: '', bio: '' })
 
     const [noAccountDiv, setNoAccountDiv] = useState(false)
 
@@ -86,7 +83,7 @@ export default function Followers() {
                 })
 
         }
-    }, [])
+    }, [user])
 
     const Loading = () => {        //the loading div
         let x = localStorage.getItem("accent") || 'grey'

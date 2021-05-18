@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
-import axios from "axios";
-import Loader from "react-loader-spinner";
+// import axios from "axios";
+// import Loader from "react-loader-spinner";
 import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
 import { UserContext } from '../Contexts/UserContext';
@@ -15,27 +15,23 @@ function Sidebar() {
 
     // const [api, setApi] = useState({ articles: [] });
 
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     const newsRef = useRef(false);
 
-    useEffect(() => {
 
-    }, []);
+    // const Loading = () => {        //the loading div
+    //     let x = localStorage.getItem("accent") || 'grey'
 
+    //     return <div className="d-flex justify-content-center">
+    //         <Loader type="TailSpin"
+    //             color={x}
+    //             height={40}
+    //             width={40}
+    //         />
 
-    const Loading = () => {        //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
-
-        return <div className="d-flex justify-content-center">
-            <Loader type="TailSpin"
-                color={x}
-                height={40}
-                width={40}
-            />
-
-        </div>
-    }
+    //     </div>
+    // }
 
     let location = useLocation()
 
@@ -54,7 +50,6 @@ function Sidebar() {
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>Top Sports Headlines</h5>
                     <ul className="col " >
-                        {loading ? <Loading /> : null}
                         {apiData.articles.map(item => (
                             <li key={item.url} >
                                 <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row view">

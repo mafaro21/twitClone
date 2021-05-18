@@ -13,8 +13,6 @@ import More from './views/More'
 import NotFound404 from './NotFound404';
 import Following from './views/Following'
 import Followers from './views/Followers'
-import Retweets from './views/Retweets'
-import Likes from './views/Likes'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserContext } from './Contexts/UserContext';

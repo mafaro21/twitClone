@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState } from 'react'
 import '../css/App.css';
 import '../css/Sidebar.css';
 import '../css/custom.scss';

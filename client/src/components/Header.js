@@ -30,7 +30,7 @@ export default function Header({ passChildData }) {
     const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [tweetLoading, setTweetLoading] = useState(false);
-    
+
     const [tweetErr, setTweetErr] = useState({});
 
     const [tweetContent, setTweetContent] = useState('');
@@ -79,7 +79,7 @@ export default function Header({ passChildData }) {
 
         })();
 
-    }, []);
+    }, [setUser]);
 
 
     const UserModal = () => {
