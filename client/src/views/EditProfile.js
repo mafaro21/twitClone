@@ -5,7 +5,6 @@ import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
@@ -53,7 +52,7 @@ export default function Edit() {
                     internalError();
                 }
             });
-    }, [])
+    }, [user])
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
@@ -74,14 +73,14 @@ export default function Edit() {
     const Loading = () => {        //the loading div
         let x = localStorage.getItem("accent") || 'grey'
 
-        return <div className="d-flex mt-2">
-            <Loader type="TailSpin"
+        return <div className="d-flex justify-content-center ">
+            <Loader type="ThreeDots"
                 color={x}
                 height={40}
                 width={40}
                 className="d-flex "
             />
-            <div className="mt-2 ml-3" style={{ color: x }}>Saving Changes....</div>
+            {/* <div className="d-flex mt-2 ml-3" style={{ color: x }}>gg</div> */}
 
         </div>
     }
@@ -106,7 +105,6 @@ export default function Edit() {
                 .then((res) => {
                     let x = res.data.success;
                     if (x === true) history.push(`/u/${userObject.username}`); //relocate to whatever username we have been given
-                    console.log("change")
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
@@ -265,7 +263,6 @@ export default function Edit() {
 
                                         < br />
                                         <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
-                                        {loading ? <Loading /> : null}
 
                                         <button
                                             // id="submit-btn"
@@ -274,18 +271,20 @@ export default function Edit() {
                                             onClick={onClick}
                                             disabled={disabled}    // button disabler
                                         >
-                                            Save
-                                            </button>
+                                            {loading ? <Loading /> : 'Save'}
+                                        </button>
 
                                     </form>
                                     <div className="modal-footer">
                                         <div
                                             onClick={() => history.goBack()}
                                             type="button"
-                                            className="btn login-submit btn-accent rounded-pill mt-2"
+                                            className="btn login-submit btn-accent rounded-pill mb-2"
                                         >
-                                            Cancel
+                                            <div className="mt-1">
+                                                Cancel
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -4,7 +4,6 @@ import '../css/Sidebar.css';
 import '../css/custom.scss';
 import '../css/Main.css';
 import BackButton from '../components/BackButton';
-import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
@@ -34,9 +33,6 @@ export default function Following() {
     const Error = () => {       //redirect when there is a server error
         return history.push("/NotFound404");
         // return <Redirect to={Error} />
-    }
-    const Redirect = () => {
-        return history.push("/NotFound404");
     }
 
 
@@ -86,7 +82,7 @@ export default function Following() {
                 })
 
         }
-    }, [])
+    }, [user])
 
     let location = useLocation()
     let path = location.pathname

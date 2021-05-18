@@ -13,10 +13,10 @@ import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 
 
-export default function Interactive({ session, id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe }) {
+export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username }) {
     //most props are from profile.js
 
-    const [username, setUsername] = useState("");
+    const [session1, setSession1] = useState("");
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
     const [deleteTweet, setdeleteTweet] = useState({})
@@ -27,12 +27,8 @@ export default function Interactive({ session, id, comments, retweets, likes, li
 
 
     useEffect(() => {
-        // (() => {
-        //     axios.get("/statuslogin")
-        //         .then((res) => {
-        //             setUsername(res.data.user)
-        //         });
-        // })();
+        setSession1(sessionStorage.getItem("username"))
+        // console.log(username, session)
     }, [])
 
     let location = useLocation()
@@ -218,7 +214,7 @@ export default function Interactive({ session, id, comments, retweets, likes, li
                 &nbsp; {likes}
             </button>
 
-            {session === userPath ?
+            {session1 === userPath || session1 === username ?
                 <button
                     className="col delete"
                     onClick={(e) => handleDelete(e, id)}

@@ -55,8 +55,6 @@ export default function Profile() {
     const [noTweets, setNoTweets] = useState(false);
     const [buttonLoading, setButtonLoading] = useState(false);
 
-    const [commentModal, setCommentModal] = useState(false);
-
     const [userID, setUserID] = useState('')
 
     const [userNotFound, setUserNotFound] = useState(false)
@@ -89,7 +87,7 @@ export default function Profile() {
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
                 getTweets(res.data[0]._id);
-                // console.log(res.data)
+                console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
@@ -132,24 +130,68 @@ export default function Profile() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        (() => {
-            axios.get("/statuslogin")
-                .then((res) => {
-                    setSessionName(res.data.user)
-                });
-        })();
+        setSessionName(sessionStorage.getItem("username"))
 
         getData()
         setNoTweets(false)
 
-    }, [user]);
+    }, []);
 
-    
-    const ButtonLoading = () => {    // loader for Follow button <------ FIX THE COLOR.⭐
-    
-        return <div className="d-flex justify-content-center ">
+    function UpdateData() {
+        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+            .then((res) => {
+                setProfile(res.data[0]);
+                setUserID(res.data[0]._id);
+                getTweets(res.data[0]._id);
+                // console.log(res.data)
+                let date = new Date(res.data[0].datejoined);
+                let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
+                setDatejoined(finalDate);
+                document.title = `TwitClone - @${user}`
+
+                setButtonLoading(false)
+                setDisabled(false)
+            })
+            .catch((error) => {
+
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setTweetLoading(false);
+                    setUserNotFound(true)
+                    document.title = "TwitClone - User Not Found!!"
+                    // Error(user);
+                }
+            });
+
+
+        async function getTweets(x) {
+
+            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+                .then((res) => {
+                    // setTweets(res);
+                    setTweetCount(res.data.length);
+                    // console.log(res.data);
+                    // console.log(x)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.response.status === 404) {
+                        setTweetCount(0)
+                    }
+                }).finally(() => {
+                    setTweetLoading(false);
+                });
+        }
+    }
+
+    const ButtonLoading = () => {    // loader for Follow button 
+
+        // let x = localStorage.getItem("accent") || 'grey'
+
+        return <div className="d-flex justify-content-center " style={{ marginTop: '-10%' }}>
             <Loader type="ThreeDots"
-                color="grey"
+                color="white"
                 height={40}
                 width={40}
             />
@@ -338,16 +380,18 @@ export default function Profile() {
         setButtonLoading(true)
         axios.post(`/follows/${userID}`)
             .then((res) => {
-                getData()
+                UpdateData()
                 console.log(res.data)
             })
             .catch((err) => {
                 console.error(err)
                 err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                setButtonLoading(false)
+                setDisabled(false)
             })
             .finally(() => {
-                setDisabled(false)
-                setButtonLoading(false)
+                // setDisabled(false)
+                // setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false)
                 }, 2000);
@@ -360,16 +404,18 @@ export default function Profile() {
         setButtonLoading(true)
         axios.delete(`/follows/${userID}`)
             .then((res) => {
-                getData()
+                UpdateData()
                 console.log(res.data)
             })
             .catch((err) => {
                 console.error(err)
                 err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                setButtonLoading(false)
+                setDisabled(false)
             })
             .finally(() => {
-                setDisabled(false)
-                setButtonLoading(false)
+                // setDisabled(false)
+                // setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false)
                 }, 2000);
@@ -478,38 +524,38 @@ export default function Profile() {
 
                                     <div className="banner-right ">
 
-                                        {tweetLoading ? null :
-                                            userNotFound ? null :
-                                                sessionName === userPath ?
-                                                    <Link
-                                                        to={`/u/${profile.username}/edit`}
-                                                        className="btn login-submit banner-edit btn-accent rounded-pill mt-1 "
-                                                        type="submit"
-                                                    // onClick={editToggle}
-                                                    >
-                                                        Edit Profile
+                                        {/* {tweetLoading ? null : */}
+                                        {userNotFound ? null :
+                                            sessionName === userPath ?
+                                                <Link
+                                                    to={`/u/${profile.username}/edit`}
+                                                    className="btn login-submit banner-edit btn-accent rounded-pill mt-1 "
+                                                    type="submit"
+                                                // onClick={editToggle}
+                                                >
+                                                    Edit Profile
                                                 </Link>
-                                                    :
-                                                    profile.isfollowedbyme === true ?
-                                                        <div className="banner-right" onClick={() => handleUnfollow()}>
-                                                            <button
-                                                                className="btn login-submit banner-edit btn-accent rounded-pill mt-1"
-                                                                type="submit"
-                                                                disabled={disabled}
-                                                            >
-                                                             {buttonLoading ? <ButtonLoading /> : "Following"}   
+                                                :
+                                                profile.isfollowedbyme === true ?
+                                                    <div className="banner-right" onClick={() => handleUnfollow()}>
+                                                        <button
+                                                            className="btn login-submit banner-edit btn-accent rounded-pill mt-1"
+                                                            type="submit"
+                                                            disabled={disabled}
+                                                        >
+                                                            {buttonLoading ? <ButtonLoading /> : "Following"}
                                                         </button>
-                                                        </div>
-                                                        :
-                                                        <div className="banner-right" onClick={() => handleFollow()}>
-                                                            <button
-                                                                className="btn login-submit banner-edit btn-accent-outline rounded-pill mt-1"
-                                                                type="submit"
-                                                                disabled={disabled}
-                                                            >
+                                                    </div>
+                                                    :
+                                                    <div className="banner-right" onClick={() => handleFollow()}>
+                                                        <button
+                                                            className="btn login-submit banner-edit btn-accent-outline rounded-pill mt-1"
+                                                            type="submit"
+                                                            disabled={disabled}
+                                                        >
                                                             {buttonLoading ? <ButtonLoading /> : "Follow"}
-                                                    </button>
-                                                        </div>
+                                                        </button>
+                                                    </div>
 
                                         }
 

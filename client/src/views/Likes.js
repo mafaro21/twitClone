@@ -1,30 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react'
-import BackButton from '../components/BackButton';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import NoAccount from '../components/NoAccount';
-import deer from '../images/linus2.jpg';
-import unf1 from '../images/unf1.jpg';
-import unf2 from '../images/unf2.jpg';
+// import BackButton from '../components/BackButton';
+// import Sidebar from '../components/Sidebar';
+// import Header from '../components/Header';
+// import NoAccount from '../components/NoAccount';
+// import deer from '../images/linus2.jpg';
+// import unf1 from '../images/unf1.jpg';
+// import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+// import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+// import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+// import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-import ReactTimeAgo from 'react-time-ago';
+// import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Likes() {
     let location = useLocation()
     let history = useHistory()
     const { user } = useParams()
-    const msg = useContext(UserContext)
     TimeAgo.addLocale(en);   //for the time ago
 
     let path = location.pathname

@@ -4,16 +4,13 @@ import '../css/custom.scss';
 import '../css/Main.css';
 import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
 import Header from '../components/Header';
-import tobias from '../images/polina-kuzovkova.jpg';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Loader from "react-loader-spinner";
-import TweetLoading from '../components/Header'
 import { UserContext } from '../Contexts/UserContext';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
@@ -53,6 +50,7 @@ function Home() {
     let icon = `https://avatars.dicebear.com/api/identicon/${sessionName}.svg`
 
     function getData() {
+        setLoading(true)
         axios.get(`/tweets/`)
             .then((res) => {
                 console.log(res.data)
@@ -70,21 +68,26 @@ function Home() {
     }
 
     useEffect(() => {
-
-        (() => {
-            axios.get("/statuslogin")
-                .then((res) => {
-                    setSessionName(res.data.user)
-                    // let x = res.data.user
-                    // getProfile(x)
-                });
-        })();
-
-
+        window.scroll(0, 0)
+        setSessionName(sessionStorage.getItem("username"))
 
         document.title = "TwitClone - Home"
         getData()
     }, [])
+
+    function UpdateData() {
+        axios.get(`/tweets/`)
+            .then((res) => {
+                console.log(res.data)
+                setAllTweets(res)
+
+                let x = res.data.length - 1     // to fetch the last id inside the .map
+                setLastID(res.data[0]._id)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }
 
     const handleChange = (e) => {
         wordCount(e)
@@ -242,12 +245,12 @@ function Home() {
 
     TimeAgo.addLocale(en);   //for the time ago
 
-    window.onscroll = function () {
-        if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-            // alert(`the last id is ${lastID}`)
-            GetNewTweets(lastID)
-        }
-    }
+    // window.onscroll = function () {
+    //     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+    //         // alert(`the last id is ${lastID}`)
+    //         GetNewTweets(lastID)
+    //     }
+    // }
 
     function GetNewTweets(x) {
         if (location.pathname === '/home') {
@@ -270,12 +273,9 @@ function Home() {
     }
 
 
-
-
-
     if (childData) {
         setchildData(false)
-        getData()
+        UpdateData()
     }
 
 
@@ -379,7 +379,7 @@ function Home() {
                         {loading ? <Loading /> : null}
                         {allTweets.data.map((item) => {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
-                            // console.log(item[19])
+                            // console.log(item.User[0].username)
 
                             return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
@@ -411,16 +411,19 @@ function Home() {
                                         likesByMe={item.isLikedbyme}
                                         retweetsByMe={item.isRetweetbyme}
                                         passChildData={setchildData}
+                                        username={item.User[0].username} // this is a test
                                     />
 
                                 </div>
                             </div>
                         })}
+
                         {/* <--- standard tweet*/}
                         {newTweetsLoader ? <Loading /> : null}
                         {newTweets.data.map((item) => {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
-                            // console.log(item[19])
+                            console.log(item.User[0].username)
+                            console.log('wtf')
 
                             return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
