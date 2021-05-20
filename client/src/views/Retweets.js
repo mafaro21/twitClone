@@ -182,7 +182,7 @@ export default function Retweets() {
 
 
 
-                    <div className="col user-name-tweet post-div" >
+                    <Link to={`/post/${item.ogtweet[0]._id}`} className="col user-name-tweet post-div" >
                         <div  >
                             <div >
                                 <Link
@@ -215,7 +215,7 @@ export default function Retweets() {
                             retweetsByMe={item.isRetweetbyme}
                             username={item.oguser[0].username}
                         />
-                    </div>
+                    </Link>
                 </div>
             })}
         </>
