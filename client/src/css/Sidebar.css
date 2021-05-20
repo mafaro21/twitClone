@@ -331,32 +331,40 @@ input[type=checkbox]:focus {
   .header-title {
     display: none;
   }
+  .header{
+    position: relative !important;
+    background-color: darkblue !important;
+    width: 0%;
+  }
   .phone-header{
-    display: none;
-    /* position: absolute !important; */
+    display: flex;
+    position: fixed !important;
     flex-direction: row !important;
     bottom: 0 !important;
-    /* border-top-color: rgb(47, 51, 54); */
-    background-color: #f61 !important;
+    /* border-top-color: rgb(47, 51, 54) !important; */
+    /* background-color: #f61 !important; */
     z-index: 1 !important;
-    width: 50% !important;
-    /* height: 2px !important;  */
-    /* justify-content: right !important; */
-    /* padding-bottom: 4%; */
+    width: 42% !important;
+    height: auto !important; 
+    /* justify-content: space-evenly !important; */
+    padding-bottom: 2%;
     /* margin-top: 78vh !important; */
+    margin-left: 5%;
   }
+  .wtf{
+    display: flex;
+    position: relative;
+    background-color: gold;
+    width: 100vw !important;
+    margin-left: 5%;
+  }
+  
   .header-link, .header-link-active{
     /* background-color: blueviolet; */
-    width: 100%;
-    margin-left: -5%;
+    width: 100vw;
+    margin-left: -9%;
     /* margin-top: 50%; */
-  }
-  .bg-test{
-    background-color: #061 !important;
-    z-index: 1 !important;
-    bottom: 0 !important;
-    display: flex;
-  flex-direction: row !important;
+    border-top-color: rgb(47, 51, 54) !important;
   }
   .phone-sidebar{
     display: none;
@@ -366,21 +374,28 @@ input[type=checkbox]:focus {
     display: none !important;
   }
   .tweet-btn{
-    /* display: none !important; */
+    display: flex !important;
     z-index:1;
     position: absolute;
     display: flex;
     margin-top: -60px !important;
-    margin-left: 75vw;
+    margin-left: 80vw;
     border-radius: 90%;
+    
   }
   .tweet-submit{
     width: 53px !important;
     height: 53px !important;
   }
   .tweettest{
-    width: 100% !important;
-    margin-left: -0%;
+    /* width: 100vw !important; */
+    margin-left: -0% !important;
+    /* height: 100vh !important; */
+  }
+  .modal-view{
+    margin-top: -30%;
+    width: 100vw !important;
+    height: 90vh;
   }
   .tweet-text{
     display: none;

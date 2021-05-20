@@ -213,6 +213,7 @@ export default function Retweets() {
                             likesByMe={item.isLikedbyme}
                             passChildData={setchildData}
                             retweetsByMe={item.isRetweetbyme}
+                            username={item.oguser[0].username}
                         />
                     </div>
                 </div>
