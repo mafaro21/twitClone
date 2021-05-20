@@ -47,7 +47,7 @@ function Home() {
         </div>
         : '';
 
-    let icon = `https://avatars.dicebear.com/api/identicon/${sessionName}.svg`
+    let icon = `https://avatars.dicebear.com/api/identicon/${user.username}.svg`
 
     function getData() {
         setLoading(true)
@@ -69,7 +69,6 @@ function Home() {
 
     useEffect(() => {
         window.scroll(0, 0)
-        setSessionName(sessionStorage.getItem("username"))
 
         document.title = "TwitClone - Home"
         getData()

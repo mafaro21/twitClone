@@ -31,6 +31,8 @@ function App() {
   const api = useMemo(() => [apiData, setApiData], [apiData, setApiData])
 
   useEffect(() => {
+
+
     if (localStorage.length === 0) {
       localStorage.setItem("theme", "medium");
       localStorage.setItem("accent", "rgba(29,161,242,1.00)");
@@ -51,9 +53,9 @@ function App() {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
       params: {
-        category: 'sports',
+        category: 'entertainment',
         pageSize: 8,
-        country: 'us',
+        country: 'au',
         apiKey: process.env.REACT_APP_NEWS_API_KEY
       }
     };

@@ -39,9 +39,9 @@ app.use(session({
 }));
 
 redisClient.on('error', (error) => {
-    if (error.code === 'ECONNRESET') console.error(error.message);
-    else throw error;
+    console.error(error.message)
 });
+
 
 //import all routers
 const indexRouter = require("./routes/index");

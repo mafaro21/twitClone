@@ -16,6 +16,7 @@ const redisClient = redis.createClient({
 });
 
 
+
 /* GETTING MY OWN PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
@@ -142,7 +143,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
         const users = client.db("twitclone").collection("users");
         const newValues = { fullname: fullname, username: username, bio: bio };
         try {
-            await users.updateOne({ _id: userid }, { $set: newValues });
+            await users.updateOne({ _id: new ObjectId(userid) }, { $set: newValues });
             //IF SUCCESS, UPDATE the Session variables
             req.session.user = { "id": userid, "username": username, "fullname": fullname };
             res.status(200).send({ "success": true });
@@ -158,6 +159,10 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
 
 });
 
+redisClient.on('error', (error) => {
+    console.error(error.message)
+
+});
 
 /*error handler */
 router.use((err, req, res, next) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 // import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import axios from 'axios';
@@ -13,16 +13,17 @@ import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 // import TimeAgo from 'javascript-time-ago';
 // import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
-// import { UserContext } from '../Contexts/UserContext';
+import { UserContext } from '../Contexts/UserContext';
 
-export default function Tweets() {
+export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, fullname }) {
+    const [loggedIn] = useContext(UserContext)
 
-    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
 
     const [tweetLoading, setTweetLoading] = useState(true);
     const [noTweets, setNoTweets] = useState(false);
 
     // const [disabled, setDisabled] = useState(false);
+    const [tweetCount, setTweetCount] = useState(0);
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [userNotFound, setUserNotFound] = useState(false)
     const [sessionName, setSessionName] = useState('')
@@ -37,104 +38,130 @@ export default function Tweets() {
     let path1 = path.split('/u/')
     let userPath = path1[1]
 
+
+
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
     };
 
-    function getData() {
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
-            .then((res) => {
-                setProfile(res.data[0]);
-                // setUserID(res.data[0]._id);
-                getTweets(res.data[0]._id);
-                // console.log(res.data)
-                document.title = `TwitClone - @${user}`
-            })
-            .catch((error) => {
+    // function getData() {
+    //     if (loggedIn === true) {
+    //         axios.get("/tweets/mine/all")
+    //             .then((res) => {
+    //                 setTweets(res);
+    //                 setTweetCount(res.data.length);
+    //                 console.log(res.data)
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error)
+    //                 if (error.response.status === 500) {
+    //                     internalError();
+    //                 } else if (error.response.status === 404) {
+    //                     setNoTweets(true)
+    //                 }
+    //             }).finally(() => {
+    //                 setTweetLoading(false)
+    //             })
+    //     } else {
 
-                if (error.response.status === 500) {
-                    internalError();
-                } else if (error.response.status === 404) {
-                    setTweetLoading(false);
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
-                    // Error(user);
-                }
-            });
+    //         setTweets({ data: [] }) //refresh tweets state when going to another user's profile
 
-        setTweets({ data: [] }) //refresh tweets state when going to another user's profile
-        async function getTweets(x) {
-            setTweetLoading(true)
+    //         async function getTweets(x) {
+    //             setTweetLoading(true)
 
-            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
-                .then((res) => {
-                    setTweets(res);
-                    setNoTweets(false)
-                    // console.log(res.data);
-                    // console.log(x)
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    } else if (error.response.status === 404) {
-                        setNoTweets(true);
-                    }
-                }).finally(() => {
-                    setTweetLoading(false);
-                });
-        }
-    }
+    //             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
+    //                 .then((res) => {
+    //                     setTweets(res);
+    //                     setNoTweets(false)
+    //                     tweetCountFromTweets(res.data.length);
+    //                     // console.log(res.data);
+    //                     // console.log(x)
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error(error);
+    //                     if (error.response.status === 500) {
+    //                         internalError();
+    //                     } else if (error.response.status === 404) {
+    //                         setNoTweets(true);
+    //                     }
+    //                 }).finally(() => {
+    //                     setTweetLoading(false);
+    //                 });
+    //         }
+    //     }
+    // }
 
     useEffect(() => {   //fetching data for logged in users
 
-        setSessionName(sessionStorage.getItem("username"))
+
+        // if (loggedIn === true) {
+        //     axios.get("/tweets/mine/all")
+        //         .then((res) => {
+        //             setTweets(res);
+        //             setTweetCount(res.data.length);
+        //             console.log(res.data)
+        //         })
+        //         .catch((error) => {
+        //             console.error(error)
+        //             if (error.response.status === 500) {
+        //                 internalError();
+        //             } else if (error.response.status === 404) {
+        //                 setNoTweets(true)
+        //             }
+        //         }).finally(() => {
+        //             setTweetLoading(false)
+        //         })
+        // } else {
+
+        setTweets({ data: [] }) //refresh tweets state when going to another user's profile
 
 
-        getData()
+        setTweetLoading(true)
 
-    }, [user]);
-
-    function UpdateData() {
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        IDtoTweets && axios.get(`/tweets/user/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
-                setProfile(res.data[0]);
-                // setUserID(res.data[0]._id);
-                getTweets(res.data[0]._id);
-                // console.log(res.data)
-                document.title = `TwitClone - @${user}`
+                setTweets(res);
+                setNoTweets(false)
+                tweetCountFromTweets(res.data.length);
+                console.log(res.data);
+                // console.log(x)
             })
             .catch((error) => {
-
+                console.error(error);
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
-                    // Error(user);
+                    setNoTweets(true);
                 }
+            }).finally(() => {
+                setTweetLoading(false);
             });
+        // }
 
 
-        async function getTweets(x) {
 
-            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
-                .then((res) => {
-                    setTweets(res);
-                    setNoTweets(false)
-                    console.log(res.data);
-                    // console.log(x)
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    } else if (error.response.status === 404) {
-                        setNoTweets(true);
-                    }
-                })
-        }
+    }, [user, IDtoTweets]);
+
+    function UpdateData() {
+
+
+        IDtoTweets && axios.get(`/tweets/user/${IDtoTweets}`) //fetching all tweets from a given user
+            .then((res) => {
+                setTweets(res);
+                setNoTweets(false)
+                console.log(res.data);
+                // console.log(x)
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response.status === 500) {
+                    internalError();
+                } else if (error.response.status === 404) {
+                    setNoTweets(true);
+                }
+            })
     }
+
 
     if (childData) {
         UpdateData()
@@ -173,7 +200,7 @@ export default function Tweets() {
                     {userNotFound ? null :
                         <div className="col-1.5">              {/* <--- user avi */}
                             <Link
-                                to={`/u/${profile.username}`}
+                                to={`/u/${username}`}
                             >
                                 <img src={icon} alt="example" className="user-logo" />
                             </Link>
@@ -187,12 +214,12 @@ export default function Tweets() {
                             <div  >
                                 <div >
                                     <Link
-                                        to={`/u/${profile.username}`}
+                                        to={`/u/${username}`}
                                         className="name-link"
                                     >
-                                        <strong >{profile.fullname}</strong>&nbsp;
+                                        <strong >{fullname}</strong>&nbsp;
                                             </Link>
-                                    <span>@{profile.username}</span>
+                                    <span>@{username}</span>
 
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
@@ -252,6 +279,7 @@ export default function Tweets() {
 
                             <Interactive
                                 className="mt-2"
+                                username={username}
                                 session={sessionName}
                                 id={item._id}
                                 comments={item.comments}

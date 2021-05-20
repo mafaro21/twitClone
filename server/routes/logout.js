@@ -13,20 +13,20 @@ const redisClient = redis.createClient({
 
 router.get("/", isLoggedin, (req, res, next) => {
     /** clear REDIS info for the user. */
-    redisClient.del(req.session.user.id, (err, reply)=>{
-        if(err) throw err;
+    redisClient.del(req.session.user.id, (err, reply) => {
+        if (err) throw err;
         else {
             destroySession();
             console.log(reply);
         }
     });
 
-   function destroySession() {
-    req.session.destroy((err) => {
-        if (err) throw err;
-        return res.send({ message: "logged out", success: true });
-    });
-   }
+    function destroySession() {
+        req.session.destroy((err) => {
+            if (err) throw err;
+            return res.send({ message: "logged out", success: true });
+        });
+    }
 });
 
 module.exports = router;

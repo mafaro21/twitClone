@@ -31,6 +31,7 @@ import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Profile() {
+    const [user1] = useContext(UserContext)
 
     const [tweetLoading, setTweetLoading] = useState(true);
 
@@ -82,11 +83,12 @@ export default function Profile() {
     };
 
     function getData() {
+        //loggedIn ? axios.get('/profile/mine') : 
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
-                getTweets(res.data[0]._id);
+                // getTweets(res.data[0]._id);
                 console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
@@ -105,32 +107,10 @@ export default function Profile() {
                     // Error(user);
                 }
             });
-
-
-        async function getTweets(x) {
-            setTweetLoading(true)
-
-            axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
-                .then((res) => {
-                    // setTweets(res);
-                    setTweetCount(res.data.length);
-                    // console.log(res.data);
-                    // console.log(x)
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 404) {
-                        setTweetCount(0)
-                    }
-                }).finally(() => {
-                    setTweetLoading(false);
-                });
-        }
     }
 
     useEffect(() => {   //fetching data for logged in users
 
-        setSessionName(sessionStorage.getItem("username"))
 
         getData()
         setNoTweets(false)
@@ -191,7 +171,7 @@ export default function Profile() {
 
         return <div className="d-flex justify-content-center " style={{ marginTop: '-10%' }}>
             <Loader type="ThreeDots"
-                color="white"
+                color="grey"
                 height={40}
                 width={40}
             />
@@ -423,7 +403,7 @@ export default function Profile() {
     }
 
     const FollowingLink = () => {
-        if (sessionName) {
+        if (user1.username) {
             history.push(`/u/${profile.username}/following`)
         } else {
             setNoAccountDiv(true)
@@ -434,7 +414,7 @@ export default function Profile() {
     }
 
     const FollowerLink = () => {
-        if (sessionName) {
+        if (user1.username) {
             history.push(`/u/${profile.username}/followers`)
         } else {
             setNoAccountDiv(true)
@@ -457,7 +437,7 @@ export default function Profile() {
 
     TimeAgo.addLocale(en);   //for the time ago
 
-    const msg = useContext(UserContext)
+
 
     let path0 = location.pathname
     let path5 = path0.split(`/u/${profile.username}`)
@@ -505,7 +485,7 @@ export default function Profile() {
                                 </div>
                                 <div className="col ">
                                     <div >
-                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname} {msg}</strong>
+                                        <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname}</strong>
                                     </div>
                                     {/* <p> */}
                                     <span style={{ fontSize: '15px' }}>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
@@ -526,7 +506,7 @@ export default function Profile() {
 
                                         {/* {tweetLoading ? null : */}
                                         {userNotFound ? null :
-                                            sessionName === userPath ?
+                                            user1.username === userPath ?
                                                 <Link
                                                     to={`/u/${profile.username}/edit`}
                                                     className="btn login-submit banner-edit btn-accent rounded-pill mt-1 "
@@ -631,8 +611,15 @@ export default function Profile() {
                         {userNotFound ? <UserNotFound /> : null}
                         {noTweets ? <NoTweets /> : null}
                         {/* {tweetLoading ? <Loading /> : null} */}
-                        {showLike ? <Likes /> : null}
-                        {showTweets ? <Tweets fromHeader={childData} /> : null}
+                        {showLike ? <Likes IDtoTweets={userID} /> : null}
+                        {showTweets ? <Tweets
+                            fullname={profile.fullname}
+                            username={profile.username}
+                            tweetCountFromTweets={setTweetCount}
+                            IDtoTweets={userID}
+                        />
+                            :
+                            null}
                         {showRetweets ? <Retweets /> : null}
 
                         {/* {tweets.data.map((item) => (
