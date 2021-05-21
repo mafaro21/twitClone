@@ -121,11 +121,10 @@ router.get("/tweet/:tweetid", (req, res, next) => {
             const comments = client.db("twitclone").collection("comments");
             try {
                 const result = await comments.aggregate(agg).toArray();
-                if (!result) throw new Error("No comments for this tweet");
+                if (result.length === 0) throw new Error("No comments for this tweet");
                 res.status(200).send(result);
             } catch (error) {
                 res.status(404).send({ "message": error.message });
-                console.error(error);
             } finally {
                 await client.close();
             }

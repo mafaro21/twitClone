@@ -7,6 +7,7 @@ const uri = process.env.MONGO_URL;
 const session = require("express-session");
 const isLoggedin = require("./middleware/authchecker");
 const redis = require("redis");
+const morgan = require('morgan');
 const RedisStore = require("connect-redis")(session);
 
 const app = express();
@@ -37,6 +38,8 @@ app.use(session({
         secure: app.get("env") === "production" ? true : false,
     },
 }));
+
+app.use(morgan("dev"));
 
 redisClient.on('error', (error) => {
     console.error(error.message)

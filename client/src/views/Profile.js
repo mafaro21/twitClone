@@ -18,7 +18,7 @@ import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -31,7 +31,8 @@ import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Profile() {
-    const [user1] = useContext(UserContext)
+    const [user1] = useContext(UserContext);
+    const [serverError, setserverError] = useState(false);
 
     const [tweetLoading, setTweetLoading] = useState(true);
 
@@ -39,61 +40,61 @@ export default function Profile() {
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [disableDiv, setDisableDiv] = useState(false) //linethrough when axios is handling delete request for a tweet
+    const [disableDiv, setDisableDiv] = useState(false); //linethrough when axios is handling delete request for a tweet
 
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets 
 
-    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
+    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }]);  //display user data
 
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
-    const [deleteTweet, setdeleteTweet] = useState({})
+    const [deleteTweet, setdeleteTweet] = useState({});
 
-    const [retweetTweet, setRetweetTweet] = useState({})
+    const [retweetTweet, setRetweetTweet] = useState({});
 
     const [tweetCount, setTweetCount] = useState(0);
 
     const [noTweets, setNoTweets] = useState(false);
     const [buttonLoading, setButtonLoading] = useState(false);
 
-    const [userID, setUserID] = useState('')
+    const [userID, setUserID] = useState('');
 
-    const [userNotFound, setUserNotFound] = useState(false)
+    const [userNotFound, setUserNotFound] = useState(false);
 
-    const [sessionName, setSessionName] = useState('')
+    const [sessionName, setSessionName] = useState('');
 
-    const [noAccountDiv, setNoAccountDiv] = useState(false) //shows modal that tells user they need to sign/log in
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
 
-    const { user } = useParams()
+    const { username } = useParams();
 
-    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
+    const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
 
-    const [showLike, setShowLike] = useState(false)    // test for showing likes page
+    const [showLike, setShowLike] = useState(false);    // test for showing likes page
 
-    const [showTweets, setShowTweets] = useState(true)  //showing main tweets page, on refresh this always shows
+    const [showTweets, setShowTweets] = useState(true);  //showing main tweets page, on refresh this always shows
 
-    const [showRetweets, setShowRetweets] = useState(false)     //showing retweets
+    const [showRetweets, setShowRetweets] = useState(false);     //showing retweets
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
-    let history = useHistory()
+    let history = useHistory();
 
     const internalError = () => {       //redirect when there is a server error
-        return history.push("/Error");
+        setserverError(true);
     };
 
     function getData() {
         //loggedIn ? axios.get('/profile/mine') : 
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
                 // getTweets(res.data[0]._id);
-                console.log(res.data)
+                console.log(res.data);
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
-                document.title = `TwitClone - @${user}`
+                document.title = `TwitClone - @${username}`;
 
             })
             .catch((error) => {
@@ -101,24 +102,27 @@ export default function Profile() {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setTweetLoading(false);
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
+
+                    setUserNotFound(true);
+                    setShowTweets(false);
+                    document.title = "TwitClone - User Not Found!!";
                     // Error(user);
                 }
+            }).finally(() => {
+                setTweetLoading(false);
             });
     }
 
     useEffect(() => {   //fetching data for logged in users
 
 
-        getData()
-        setNoTweets(false)
+        getData();
+        setNoTweets(false);
 
     }, []);
 
     function UpdateData() {
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
@@ -127,10 +131,10 @@ export default function Profile() {
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
-                document.title = `TwitClone - @${user}`
+                document.title = `TwitClone - @${username}`;
 
-                setButtonLoading(false)
-                setDisabled(false)
+                setButtonLoading(false);
+                setDisabled(false);
             })
             .catch((error) => {
 
@@ -138,8 +142,8 @@ export default function Profile() {
                     internalError();
                 } else if (error.response.status === 404) {
                     setTweetLoading(false);
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
+                    setUserNotFound(true);
+                    document.title = "TwitClone - User Not Found!!";
                     // Error(user);
                 }
             });
@@ -157,7 +161,7 @@ export default function Profile() {
                 .catch((error) => {
                     console.error(error);
                     if (error.response.status === 404) {
-                        setTweetCount(0)
+                        setTweetCount(0);
                     }
                 }).finally(() => {
                     setTweetLoading(false);
@@ -181,7 +185,7 @@ export default function Profile() {
 
     const Loading = () => {
 
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
@@ -198,8 +202,8 @@ export default function Profile() {
         // NOW WORKS 🎉🎉
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
-        e.preventDefault()
-        console.log(likedbyme)
+        e.preventDefault();
+        console.log(likedbyme);
 
         if (!likedTweets[id] && !likedbyme) {
             setDisabled(true);
@@ -211,16 +215,16 @@ export default function Profile() {
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData()
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
@@ -234,24 +238,24 @@ export default function Profile() {
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData()
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
     };
 
     const handleDelete = (e, id) => {
-        e.preventDefault()
+        e.preventDefault();
         // return alert(id)
-        setDisableDiv(true)
+        setDisableDiv(true);
 
         if (!deleteTweet[id]) {
             setDisabled(true);
@@ -263,29 +267,29 @@ export default function Profile() {
             axios.delete(`/tweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData()
+                    getData();
                 })
                 .catch((error) => {
-                    console.log(id)
+                    console.log(id);
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
                 })
                 .finally(() => {
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                     // setDisableDiv(false)
                     setDisabled(false);
-                })
+                });
         }
 
 
     };
 
     const handleRetweet = (e, id) => {
-        e.preventDefault()
-        console.log(id)
+        e.preventDefault();
+        console.log(id);
 
         if (!retweetTweet[id]) {
             setDisabled(true);
@@ -297,16 +301,16 @@ export default function Profile() {
             axios.post(`/retweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData()
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
@@ -320,19 +324,19 @@ export default function Profile() {
             axios.delete(`/retweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData()
+                    getData();
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
-    }
+    };
 
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
@@ -351,78 +355,78 @@ export default function Profile() {
 
     const UserNotFound = () => {
         return <div className="d-flex justify-content-center p-2">
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {user}?, never heard of them... </span>
-        </div>
-    }
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {username} never heard of them... </span>
+        </div>;
+    };
 
     const handleFollow = () => {
-        setDisabled(true)
-        setButtonLoading(true)
+        setDisabled(true);
+        setButtonLoading(true);
         axios.post(`/follows/${userID}`)
             .then((res) => {
-                UpdateData()
-                console.log(res.data)
+                UpdateData();
+                console.log(res.data);
             })
             .catch((err) => {
-                console.error(err)
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
-                setButtonLoading(false)
-                setDisabled(false)
+                console.error(err);
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                setButtonLoading(false);
+                setDisabled(false);
             })
             .finally(() => {
                 // setDisabled(false)
                 // setButtonLoading(false)
                 setTimeout(() => {
-                    setNoAccountDiv(false)
+                    setNoAccountDiv(false);
                 }, 2000);
-            })
+            });
 
-    }
+    };
 
     const handleUnfollow = () => {
-        setDisabled(true)
-        setButtonLoading(true)
+        setDisabled(true);
+        setButtonLoading(true);
         axios.delete(`/follows/${userID}`)
             .then((res) => {
-                UpdateData()
-                console.log(res.data)
+                UpdateData();
+                console.log(res.data);
             })
             .catch((err) => {
-                console.error(err)
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
-                setButtonLoading(false)
-                setDisabled(false)
+                console.error(err);
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                setButtonLoading(false);
+                setDisabled(false);
             })
             .finally(() => {
                 // setDisabled(false)
                 // setButtonLoading(false)
                 setTimeout(() => {
-                    setNoAccountDiv(false)
+                    setNoAccountDiv(false);
                 }, 2000);
-            })
-    }
+            });
+    };
 
     const FollowingLink = () => {
         if (user1.username) {
-            history.push(`/u/${profile.username}/following`)
+            history.push(`/u/${profile.username}/following`);
         } else {
-            setNoAccountDiv(true)
+            setNoAccountDiv(true);
             setTimeout(() => {
-                setNoAccountDiv(false)
+                setNoAccountDiv(false);
             }, 2000);
         }
-    }
+    };
 
     const FollowerLink = () => {
         if (user1.username) {
-            history.push(`/u/${profile.username}/followers`)
+            history.push(`/u/${profile.username}/followers`);
         } else {
-            setNoAccountDiv(true)
+            setNoAccountDiv(true);
             setTimeout(() => {
-                setNoAccountDiv(false)
+                setNoAccountDiv(false);
             }, 2000);
         }
-    }
+    };
 
     // if (childData) {
     //     getData()
@@ -430,36 +434,36 @@ export default function Profile() {
     // }
 
 
-    let location = useLocation()
-    let path = location.pathname
-    let path1 = path.split('/u/')
-    let userPath = path1[1]
+    let location = useLocation();
+    let path = location.pathname;
+    let path1 = path.split('/u/');
+    let userPath = path1[1];
 
     TimeAgo.addLocale(en);   //for the time ago
 
 
 
-    let path0 = location.pathname
-    let path5 = path0.split(`/u/${profile.username}`)
-    let finalPath = path5[1]
+    let path0 = location.pathname;
+    let path5 = path0.split(`/u/${profile.username}`);
+    let finalPath = path5[1];
 
     const likePage = () => {
-        setShowLike(true)
-        setShowTweets(false)
-        setShowRetweets(false)
-    }
+        setShowLike(true);
+        setShowTweets(false);
+        setShowRetweets(false);
+    };
 
     const tweetsPage = () => {
-        setShowLike(false)
-        setShowTweets(true)
-        setShowRetweets(false)
-    }
+        setShowLike(false);
+        setShowTweets(true);
+        setShowRetweets(false);
+    };
 
     const retweetsPage = () => {
-        setShowTweets(false)
-        setShowLike(false)
-        setShowRetweets(true)
-    }
+        setShowTweets(false);
+        setShowLike(false);
+        setShowRetweets(true);
+    };
 
 
 
@@ -470,8 +474,8 @@ export default function Profile() {
             <div className="container  " >
                 <div className="row " >
 
-                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
-
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
+                    {serverError && <Redirect to="/Error" />}
                     <Header passChildData={setchildData} />
 
                     <div className="col main-view phone-home " >
@@ -488,7 +492,7 @@ export default function Profile() {
                                         <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname}</strong>
                                     </div>
                                     {/* <p> */}
-                                    <span style={{ fontSize: '15px' }}>{userNotFound ? null : tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
+                                    <span style={{ fontSize: '15px' }}>{!userNotFound && tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
                                     {/* </p> */}
                                 </div>
                             </div>
@@ -500,12 +504,13 @@ export default function Profile() {
 
                             <div className="p-2  col ">
                                 <div className="">
-                                    <img src={!userNotFound ? icon : unf1} alt="example" className="profile-logo" />
+                                    <img src={userNotFound === false ? icon : unf1} alt="example" className="profile-logo" />
 
                                     <div className="banner-right ">
 
                                         {/* {tweetLoading ? null : */}
-                                        {userNotFound ? null :
+                                      {/* {tweetLoading ? null : */}
+                                      {userNotFound || !user1.loggedin ? null :
                                             user1.username === userPath ?
                                                 <Link
                                                     to={`/u/${profile.username}/edit`}
@@ -545,14 +550,14 @@ export default function Profile() {
 
                                 <div className="p-2 col">
 
-                                    <strong style={{ fontWeight: 700 }}>{userNotFound ? `@${user}` : profile.fullname}</strong>
+                                    <strong style={{ fontWeight: 700 }}>{userNotFound ? `@${username}` : profile.fullname}</strong>
                                     <p><span >{userNotFound ? null : `@${profile.username}`}</span></p>
 
                                     <div className="mt-1">
                                         {profile.bio}
                                     </div>
 
-                                    {userNotFound ? null :
+                                    {!userNotFound &&
                                         <div className="mt-1">
                                             <span>
                                                 <svg viewBox="0 0 24 24" className="bio-icon">
@@ -575,7 +580,7 @@ export default function Profile() {
                                         </div>
                                     }
 
-                                    {userNotFound ? null :
+                                    {!userNotFound &&
                                         <div className="mt-1 d-flex">
                                             <div className="flw-flw" onClick={FollowingLink}><span style={{ fontWeight: 700 }}>{profile.following}</span>&nbsp;<span>Following</span></div>
                                             &nbsp;&nbsp;&nbsp;
@@ -583,7 +588,7 @@ export default function Profile() {
                                         </div>
                                     }
 
-                                    {userNotFound ? null :
+                                    {!userNotFound &&
                                         <div className="row d-flex view mt-3" style={{ textAlign: 'center', fontWeight: '700' }}>
                                             <div onClick={tweetsPage} className={showTweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
                                                 <div className="p-3 ">
@@ -608,19 +613,18 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        {userNotFound ? <UserNotFound /> : null}
-                        {noTweets ? <NoTweets /> : null}
+                        {userNotFound && <UserNotFound />}
+                        {noTweets && <NoTweets /> }
                         {/* {tweetLoading ? <Loading /> : null} */}
-                        {showLike ? <Likes IDtoTweets={userID} /> : null}
-                        {showTweets ? <Tweets
+                        {showLike && <Likes IDtoTweets={userID} /> }
+                        {showTweets && <Tweets
                             fullname={profile.fullname}
                             username={profile.username}
                             tweetCountFromTweets={setTweetCount}
                             IDtoTweets={userID}
                         />
-                            :
-                            null}
-                        {showRetweets ? <Retweets /> : null}
+                        }
+                        {showRetweets && <Retweets /> }
 
                         {/* {tweets.data.map((item) => (
                             <div className={disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} key={item._id}>
@@ -631,10 +635,8 @@ export default function Profile() {
                                         >
                                             <img src={icon} alt="example" className="user-logo" />
                                         </Link>
-
                                     </div>
                                 }
-
                                 {userNotFound ? null :
                                     <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >
                                         
@@ -647,27 +649,22 @@ export default function Profile() {
                                                     <strong >{profile.fullname}</strong>&nbsp;
                                             </Link>
                                                 <span>@{profile.username}</span>
-
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
                                                     <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                                 </span>
                                             </div>
-
                                             <div className="post-link">
                                                 <p>{item.content} </p>
                                             </div>
                                         </div>
-
                                         <div className="interact-row d-flex ">
                                             <button
                                                 className={item.comments ? "comment-true col" : "comment col"}
                                             >
                                                 <FontAwesomeIcon icon={faComment} />
                                             &nbsp; {item.comments}
-
                                             </button>
-
                                             <button
                                                 className={item.isRetweetbyme ? "col retweet-true" : "col retweet"}
                                                 onClick={(e) => handleRetweet(e, item._id)}
@@ -676,21 +673,17 @@ export default function Profile() {
                                                 <FontAwesomeIcon icon={faRetweet} />
                                                 &nbsp; {item.retweets}
                                             </button>
-
                                             <button
                                                 className="like col"
                                                 onClick={(e) => handleLike(e, item._id, item.isLikedbyme)}
                                                 disabled={disabled}
-
                                             >
                                                 {item.isLikedbyme ?
                                                     (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                                                     : <FontAwesomeIcon icon={faHeart} />
                                                 }
-
                                                 &nbsp; {item.likes}
                                             </button>
-
                                             {sessionName === userPath ?
                                                 <button
                                                     className="col delete"
@@ -701,9 +694,7 @@ export default function Profile() {
                                                 :
                                                 null
                                             }
-
                                         </div>
-
                                         <Interactive
                                             className="mt-2"
                                             session={sessionName}

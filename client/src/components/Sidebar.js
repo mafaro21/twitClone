@@ -45,7 +45,7 @@ function Sidebar() {
                 <p>Trending</p>
             </div>
 
-            {user ?
+            {user.loggedin === true ?
 
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>New Stories</h5>

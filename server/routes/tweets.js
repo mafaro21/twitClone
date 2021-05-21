@@ -8,16 +8,20 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 
 //HANDLING TWEETS
 
+
 /** GET ALL TWEETS! */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.gt || 0;  //attached from Client for paging
-    if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
+    const lastTweetID = req.query.lt;  //attached from Client for paging
+    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
+    if (lastTweetID && !(ObjectId.isValid(lastTweetID))) {
+        return res.sendStatus(400);
+    }
 
     const agg = [
         {
             $match: {
-                _id: { $gt: new ObjectId(lastTweetID) }
+               _id: mama
             }
         },
         {
@@ -79,8 +83,8 @@ router.get("/", (req, res, next) => {
                 if (result.length === 0) throw new Error("No tweets");
                 res.status(200).send(result);
             } catch (error) {
-                res.sendStatus(404);
-                console.error("FetchTweetsErr", error);
+                if (error.message === 'No tweets') return res.sendStatus(404);
+                throw error;
             } finally {
                 await client.close();
             }
@@ -94,34 +98,6 @@ router.get("/", (req, res, next) => {
             return defaultValue;
         }
     }
-});
-
-
-/* POST A NEW TWEET */
-router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
-    const userid = req.session.user.id;
-    const { content } = req.body;
-    const tweetObject = {
-        byUserId: new ObjectId(userid),
-        content: content,
-        likes: 0,
-        comments: 0,
-        retweets: 0,
-        dateposted: new Date(),
-    };
-
-    MongoClient.connect(uri, MongoOptions)
-        .then(async (client) => {
-            const tweets = client.db("twitclone").collection("tweets");
-            try {
-                await tweets.insertOne(tweetObject);
-                res.status(201).send({ "success": true });
-            } catch (error) {
-                throw error;
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
 });
 
 
@@ -184,7 +160,6 @@ router.get("/user/:userid", (req, res, next) => {
         }
     }
 
-    //retrieve data from db
     MongoClient.connect(uri, MongoOptions)
         .then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
@@ -201,7 +176,7 @@ router.get("/user/:userid", (req, res, next) => {
         }).catch(next);
 });
 
-/* GET SINGLE TWEET! */
+/** GET SINGLE TWEET! */
 router.get("/:tweetid", (req, res, next) => {
     const tweetid = req.params.tweetid;
     if (!ObjectId.isValid(tweetid)) return res.sendStatus(404);
@@ -217,7 +192,7 @@ router.get("/:tweetid", (req, res, next) => {
                 from: "users",
                 localField: "byUserId",
                 foreignField: "_id",
-                as: "User",
+                as: "User"
             }
         },
         {
@@ -330,7 +305,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
             try {
                 const result = await tweets.deleteOne(tweetObject);
                 if (result.deletedCount === 0) throw new Error("Cannot delete tweet");
-                res.status(200).send({ "deleted": result.deletedCount, "success": true});     
+                res.status(200).send({ "deleted": result.deletedCount, "success": true });
             } catch (error) {
                 res.status(400).send({ message: error.message });
             } finally {

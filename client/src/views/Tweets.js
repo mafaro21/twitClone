@@ -28,10 +28,9 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     const [userNotFound, setUserNotFound] = useState(false)
     const [sessionName, setSessionName] = useState('')
     const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
-    const { user } = useParams()
     let history = useHistory()
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + user + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
     let location = useLocation()
     let path = location.pathname
@@ -140,7 +139,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
 
 
 
-    }, [user, IDtoTweets]);
+    }, [username, IDtoTweets]);
 
     function UpdateData() {
 
@@ -192,8 +191,8 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
 
     return (
         <div>
-            {noTweets ? <NoTweets /> : null}
-            {tweetLoading ? <Loading /> : null}
+            {noTweets && <NoTweets /> }
+            {tweetLoading && <Loading /> }
             {tweets.data.map((item) => (
                 <div className="p-2 view row main-post-div" key={item._id}>
                     {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
