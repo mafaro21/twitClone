@@ -115,42 +115,42 @@ router.get("/:userid", (req, res, next) => {
   if (!ObjectId.isValid(byUserId)) return res.sendStatus(400);
 
   const agg = [
-      {
-        $match: {
-          userid: new ObjectId(byUserId)
-        }
-      },
-      {
-        $limit: 20
-      },
-      {
-        $sort: { dateliked: -1 }
-      },
-      {
-        $lookup: {
-          from: "tweets",
-          localField: "tweetid",
-          foreignField: "_id",
-          as: "ogtweet"
-        }
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "ogtweet.byUserId",
-          foreignField: "_id",
-          as: "oguser"
-        }
-      },
-      {
-        $project: {
-          _id: 1,
-          ogtweet: 1,
-          "oguser.fullname": 1,
-          "oguser.username": 1
-        }
+    {
+      $match: {
+        userid: new ObjectId(byUserId)
       }
-    ];
+    },
+    {
+      $sort: { _id: -1 }
+    },
+    {
+      $limit: 20
+    },
+    {
+      $lookup: {
+        from: "tweets",
+        localField: "tweetid",
+        foreignField: "_id",
+        as: "ogtweet"
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "ogtweet.byUserId",
+        foreignField: "_id",
+        as: "oguser"
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        ogtweet: 1,
+        "oguser.fullname": 1,
+        "oguser.username": 1
+      }
+    }
+  ];
 
   //collect all retweets from db
   MongoClient.connect(uri, MongoOptions)

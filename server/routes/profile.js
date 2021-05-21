@@ -28,7 +28,7 @@ router.get("/mine", isLoggedin, (req, res, next) => {
         if (err) next(err);
         if (!reply) fetchfromMongo();
         else {
-            res.status(200).send([reply]);
+         return res.status(200).send([reply]);
         }
     });
 
