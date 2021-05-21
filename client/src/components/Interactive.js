@@ -8,7 +8,7 @@ import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet'
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
@@ -18,7 +18,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     //most props are from profile.js
 
     const [user] = useContext(UserContext);
-    const [session1, setSession1] = useState("");
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
     const [deleteTweet, setdeleteTweet] = useState({})
@@ -29,10 +28,10 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
 
 
-    let location = useLocation()
-    let path = location.pathname
-    let path1 = path.split('/u/')
-    let userPath = path1[1]
+    // let location = useLocation()
+    // let path = location.pathname
+    // let path1 = path.split('/u/')
+    // let userPath = path1[1]
 
 
     const handleDelete = (e, id) => {

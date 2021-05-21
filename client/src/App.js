@@ -32,7 +32,6 @@ function App() {
 
   useEffect(() => {
 
-
     if (localStorage.length === 0) {
       localStorage.setItem("theme", "medium");
       localStorage.setItem("accent", "rgba(29,161,242,1.00)");
@@ -47,7 +46,16 @@ function App() {
       .getElementsByTagName("HTML")[0]
       .setAttribute("accent-theme", localStorage.getItem("accent"));
 
+    // const scheme = window.matchMedia('(prefers-color-scheme: dark)');
+    // scheme.addEventListener('change', (e) => {
+    //   // console.log(e.matches)
 
+    //   if (e.matches) {
+    //     localStorage.setItem("theme", "dark");
+    //   } else {
+    //     localStorage.setItem("theme", "light");
+    //   }
+    // });
 
     const options = {
       method: 'GET',

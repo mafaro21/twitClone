@@ -70,7 +70,7 @@ export default function Likes({ IDtoTweets }) {
             });
 
 
-    }, [user]);
+    }, [user, IDtoTweets]);
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
