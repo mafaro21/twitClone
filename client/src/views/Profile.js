@@ -16,23 +16,13 @@ import unf1 from '../images/unf1.jpg';
 import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-<<<<<<< HEAD
 import { Link, useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
-=======
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 // import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 // import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 // import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 // import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 // import ReactTimeAgo from 'react-time-ago';
@@ -67,13 +57,10 @@ export default function Profile() {
 
     const [userNotFound, setUserNotFound] = useState(false);
 
-<<<<<<< HEAD
     const [sessionName, setSessionName] = useState('');
+    const [tweetLoading, setTweetLoading] = useState(false);
 
     const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
-=======
-    const [noAccountDiv, setNoAccountDiv] = useState(false) //shows modal that tells user they need to sign/log in
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
     const { username } = useParams();
 
@@ -112,15 +99,10 @@ export default function Profile() {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-<<<<<<< HEAD
 
                     setUserNotFound(true);
                     setShowTweets(false);
                     document.title = "TwitClone - User Not Found!!";
-=======
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                     // Error(user);
                 }
             }).finally(() => {
@@ -156,14 +138,9 @@ export default function Profile() {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-<<<<<<< HEAD
                     setTweetLoading(false);
                     setUserNotFound(true);
                     document.title = "TwitClone - User Not Found!!";
-=======
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                     // Error(user);
                 }
             });
@@ -527,12 +504,8 @@ export default function Profile() {
                                     <div className="banner-right ">
 
                                         {/* {tweetLoading ? null : */}
-<<<<<<< HEAD
                                       {/* {tweetLoading ? null : */}
                                       {userNotFound || !user1.loggedin ? null :
-=======
-                                        {userNotFound || !user1.loggedin ? null :
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                                             user1.username === userPath ?
                                                 <Link
                                                     to={`/u/${profile.username}/edit`}

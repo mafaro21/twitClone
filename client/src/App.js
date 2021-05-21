@@ -51,8 +51,6 @@ function App() {
     // scheme.addEventListener('change', (e) => {
     //   // console.log(e.matches)
 
-<<<<<<< HEAD
-=======
     //   if (e.matches) {
     //     localStorage.setItem("theme", "dark");
     //   } else {
@@ -60,7 +58,6 @@ function App() {
     //   }
     // });
 
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
     const options = {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
