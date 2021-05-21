@@ -1,30 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react'
-import BackButton from '../components/BackButton';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import NoAccount from '../components/NoAccount';
-import deer from '../images/linus2.jpg';
-import unf1 from '../images/unf1.jpg';
-import unf2 from '../images/unf2.jpg';
+// import BackButton from '../components/BackButton';
+// import Sidebar from '../components/Sidebar';
+// import Header from '../components/Header';
+// import NoAccount from '../components/NoAccount';
+// import deer from '../images/linus2.jpg';
+// import unf1 from '../images/unf1.jpg';
+// import unf2 from '../images/unf2.jpg';
 import axios from 'axios';
 import Loader from "react-loader-spinner";
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+// import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+// import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+// import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
-export default function Likes() {
+export default function Likes({ IDtoTweets }) {
     let location = useLocation()
     let history = useHistory()
     const { user } = useParams()
-    const msg = useContext(UserContext)
     TimeAgo.addLocale(en);   //for the time ago
 
     let path = location.pathname
@@ -48,46 +47,28 @@ export default function Likes() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        setTweetLoading(true)
+
+        axios.get(`/likes/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
-                setProfile(res.data[0]);
-                setUserID(res.data[0]._id);
-                getTweets(res.data[0]._id);
-                // console.log(res.data)
-                document.title = `TwitClone - @${user}`
+                setTweets(res);
+                console.log(res.data);
             })
             .catch((error) => {
 
-                if (error.response.status === 500) {
-                    internalError();
-                } else if (error.response.status === 404) {
-                    setTweetLoading(false);
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
-                    // Error(user);
-                }
+                // if (error.response.status === 500) {
+                //     internalError();
+                // } else if (error.response.status === 404) {
+                //     setNoTweets(true);
+                // } else {
+                //     console.error(error);
+                // }
+                console.error(error.message);
+            }).finally(() => {
+                setTweetLoading(false);
+
             });
 
-
-        async function getTweets(x) {
-            setTweetLoading(true)
-
-            axios.get(`/likes/${x}`) //fetching all tweets from a given user
-                .then((res) => {
-                    setTweets(res);
-                    console.log(res.data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    } else if (error.response.status === 404) {
-                        setNoTweets(true);
-                    }
-                }).finally(() => {
-                    setTweetLoading(false);
-                });
-        }
 
     }, [user]);
 
@@ -231,7 +212,8 @@ export default function Likes() {
         <>
             {tweets.data.map((item) => {
                 // console.log(item.ogtweet[0])
-                console.log(item.oguser[0])
+                // let icon = "https://avatars.dicebear.com/api/identicon/" + item.oguser[0].username + ".svg";
+                // console.log(item.oguser[0])
                 return <div className="p-2 view row main-post-div" >
 
                     <div className="col-1.5">

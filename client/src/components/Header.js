@@ -17,6 +17,7 @@ export default function Header({ passChildData }) {
     const [user, setUser] = useContext(UserContext);
     // const [username, setUsername] = useContext(UserContext)
 
+    const [loggedinFromContext, setLoggedinFromContext] = useState('')
     const [fullname, setFullname] = useState("");
     const [username, setUsername] = useState("");
 
@@ -30,7 +31,7 @@ export default function Header({ passChildData }) {
     const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [tweetLoading, setTweetLoading] = useState(false);
-    
+
     const [tweetErr, setTweetErr] = useState({});
 
     const [tweetContent, setTweetContent] = useState('');
@@ -63,23 +64,22 @@ export default function Header({ passChildData }) {
         </div>
         : '';
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + sessionStorage.getItem("username") + ".svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + user.username + ".svg";
 
     useEffect(() => {
-
         (async () => {
             const res = await axios.get("/statuslogin");
-            setUser(res.data.loggedin); //for use context
+            setUser(res.data); //for use context
             setFullname(res.data.fullname);
-            setUsername(res.data.user);
+            setUsername(res.data.username);
             // console.log(res.data)
 
-            sessionStorage.setItem("fullname", res.data.fullname)
-            sessionStorage.setItem("username", res.data.user)
-
+            // let x = JSON.parse(user)
+            // setLoggedinFromContext(x.loggedin)
         })();
 
-    }, []);
+
+    }, [setUser]);
 
 
     const UserModal = () => {
@@ -169,7 +169,7 @@ export default function Header({ passChildData }) {
                     passChildData(true) // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
-                    setTweetContent('');
+                    setTweetContent('');       //reset default state of the tweet modal
                     setCount(0);
                     setColor('grey');
                     setShowEmojiPicker(false);
@@ -512,10 +512,10 @@ export default function Header({ passChildData }) {
                     </g>
                 </svg>
             </Link>
-            <div className="bg-test">
+            <div className="wtf">
                 <div className="fixed phone-header work mt-5 ">
 
-                    {user === true ?
+                    {user.loggedin === true ?
                         <Link className={path === '/home' || path === '/Home' ? "d-flex header-link-active" : "d-flex header-link"} to="/home">
                             <div className="  d-flex pl-2 mt-2" >
                                 <div>
@@ -544,7 +544,7 @@ export default function Header({ passChildData }) {
                         </div>
                     </Link>
 
-                    {user === true ?
+                    {user.loggedin === true ?
                         <Link to="#" className="d-flex header-link">
                             <div className=" d-flex pl-2 mt-2">
                                 <div>
@@ -559,7 +559,7 @@ export default function Header({ passChildData }) {
                         </Link>
                         : null}
 
-                    {user === true ?
+                    {user.loggedin === true ?
                         <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${username}`}>
                             <div className=" d-flex pl-2 mt-2" >
                                 <div>
@@ -599,7 +599,7 @@ export default function Header({ passChildData }) {
 
                     {moreModal ? <MoreModal /> : null}
 
-                    {user === true ?
+                    {user.loggedin === true ?
                         <div className="d-flex tweet-btn" >
                             <div className=" d-flex pl-2">
                                 <div>
@@ -628,15 +628,15 @@ export default function Header({ passChildData }) {
 
 
 
-                    {user === true ?
+                    {user.loggedin === true ?
                         <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
                             {userModal ? <UserModal /> : null}
                             <img src={icon} alt="example" className="user-data-img" />
 
                             <div className="col user-data-text">
-                                <div className="text">{sessionStorage.getItem("fullname") || fullname}</div>
+                                <div className="text">{user.fullname}</div>
                                 <div>
-                                    <span>@{sessionStorage.getItem("username") || username}</span>
+                                    <span>@{user.username}</span>
                                 </div>
                             </div>
 

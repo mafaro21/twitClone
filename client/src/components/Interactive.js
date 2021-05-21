@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -11,12 +11,14 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NoAccount from '../components/NoAccount';
+import { UserContext } from '../Contexts/UserContext';
 
 
-export default function Interactive({ session, id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe }) {
+export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username }) {
     //most props are from profile.js
 
-    const [username, setUsername] = useState("");
+    const [user] = useContext(UserContext);
+    const [session1, setSession1] = useState("");
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
 
     const [deleteTweet, setdeleteTweet] = useState({})
@@ -26,14 +28,6 @@ export default function Interactive({ session, id, comments, retweets, likes, li
     const [noAccountDiv, setNoAccountDiv] = useState(false) //shows modal that tells user they need to sign/log in
 
 
-    useEffect(() => {
-        // (() => {
-        //     axios.get("/statuslogin")
-        //         .then((res) => {
-        //             setUsername(res.data.user)
-        //         });
-        // })();
-    }, [])
 
     let location = useLocation()
     let path = location.pathname
@@ -218,7 +212,9 @@ export default function Interactive({ session, id, comments, retweets, likes, li
                 &nbsp; {likes}
             </button>
 
-            {session === userPath ?
+            {/* session1 === userPath || */}
+
+            { user.username === username ?
                 <button
                     className="col delete"
                     onClick={(e) => handleDelete(e, id)}

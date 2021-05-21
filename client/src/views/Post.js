@@ -144,7 +144,7 @@ export default function Post() {
             .then((res) => {
                 setTweets(res);
                 setLoading(false);
-                // console.log(res.data)
+                console.log(res.data)
             })
             .catch((error) => {
                 console.error(error);
@@ -180,7 +180,7 @@ export default function Post() {
 
         axios.get(`retweets/me/${finalPath}`)
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 setisRetweetedbyMe(res.data.count)
             })
             .catch((err) => {

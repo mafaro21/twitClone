@@ -13,8 +13,6 @@ import More from './views/More'
 import NotFound404 from './NotFound404';
 import Following from './views/Following'
 import Followers from './views/Followers'
-import Retweets from './views/Retweets'
-import Likes from './views/Likes'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserContext } from './Contexts/UserContext';
@@ -33,6 +31,8 @@ function App() {
   const api = useMemo(() => [apiData, setApiData], [apiData, setApiData])
 
   useEffect(() => {
+
+
     if (localStorage.length === 0) {
       localStorage.setItem("theme", "medium");
       localStorage.setItem("accent", "rgba(29,161,242,1.00)");
@@ -53,9 +53,9 @@ function App() {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
       params: {
-        category: 'sports',
+        category: 'entertainment',
         pageSize: 8,
-        country: 'us',
+        country: 'au',
         apiKey: process.env.REACT_APP_NEWS_API_KEY
       }
     };

@@ -1,8 +1,3 @@
-- fixed tweet count if a user has no tweets
-- if user has no retweets a single line div shows
-- tweets and retweets start as enpty when switching profiles
-- logout button doesn't glitch anymore
-- tweets now show up on home.js
-- retweets now appear on retweets.js 
-- changed news feed to only sports to avoid sensitive topics
-- can now get new tweets on home.js if scrolled to the bottom (but still needs some cleanup)
+- users can delete their own tweets from home.js
+- fixed follow button
+- reduced statuslogin requests
