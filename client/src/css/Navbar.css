@@ -33,11 +33,21 @@ html[data-theme="light"]{
 .nav-logo:hover{
   color: var(--darkaccent);
 }
-
 .search-input{
   padding: 23px;
   padding-left: 16%;
   border: 1px solid var(--text);
+  border-radius: 29px;
+  height: 1px;
+  width: 100%;
+  background-color: var(--background);
+  color:var(--text);
+  outline: none;
+}
+.search-error{
+  padding: 23px;
+  padding-left: 16%;
+  border: 2px solid red;
   border-radius: 29px;
   height: 1px;
   width: 100%;

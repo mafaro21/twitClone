@@ -15,20 +15,6 @@ export default function ThemeToggle() {
     const [theme, setTheme] = useState(localStorage.getItem("theme"))
     const [accent, setAccent] = useState(localStorage.getItem("accent"))
 
-    // useEffect(() => {
-
-    //     document
-    //         .getElementsByTagName("HTML")[0]
-    //         .setAttribute("data-theme", localStorage.getItem("theme"), "accent-theme", localStorage.getItem("accent"));
-    //     // document.setAttribute("accent-theme", localStorage.getItem("accent"));
-
-    //     document
-    //         .getElementsByTagName("HTML")[0]
-    //         .setAttribute("accent-theme", localStorage.getItem("accent"));
-
-    // }, []);
-
-
 
     const darkMode = () => {
         localStorage.setItem("theme", "dark");

@@ -29,6 +29,7 @@ export default function Edit() {
     const [loading, setLoading] = useState(false);      // loading animation
 
     const { user } = useParams()
+    const [errorColor, setErrorColor] = useState(false)
 
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
@@ -154,6 +155,10 @@ export default function Edit() {
         setBioErr(bioErr);
         setUsernameErr(usernameErr);
 
+        if (!isValid || error.length > 2) {
+            setErrorColor(true)
+        }
+
         return isValid;
     }
 
@@ -214,7 +219,7 @@ export default function Edit() {
                                                 type="text"
                                                 value={editFullname}
                                                 onChange={(e) => setEditFullname(e.target.value)}
-                                                className="edit-input change "
+                                                className={errorColor ? "edit-error change " : "edit-input change "}
                                                 maxLength="30"
                                                 placeholder="New Fullname..."
                                                 disabled={disabled}
@@ -230,7 +235,7 @@ export default function Edit() {
                                                 type="text"
                                                 value={editUsername}
                                                 onChange={(e) => setEditUsername(e.target.value)}
-                                                className="edit-input mt-1 change"
+                                                className={errorColor ? "edit-error mt-1 change" : "edit-input mt-1 change"}
                                                 maxLength="20"
                                                 placeholder="New Username..."
                                                 disabled={disabled}
@@ -247,7 +252,7 @@ export default function Edit() {
                                                 value={editBio}
                                                 onChange={onChange}
                                                 rows="4"
-                                                className="edit-input mt-1 change"
+                                                className={errorColor ? "edit-error mt-1 change" : "edit-input mt-1 change"}
                                                 maxLength="100"
                                                 placeholder="Bio..."
                                                 disabled={disabled}

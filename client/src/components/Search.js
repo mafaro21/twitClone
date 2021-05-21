@@ -1,18 +1,69 @@
+import React, { useState } from 'react';
+// import axios from 'axios';
+
+
 function Search() {
+    const [search, setSearch] = useState('')
+    const [searchErr, setSearchErr] = useState({})
+    const [errorColor, setErrorColor] = useState(false)
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+
+        setSearchErr({})
+
+        const isValid = SearchValidation()
+
+        if (isValid) {
+            console.log("yep")
+        }
+    }
+
+    const SearchValidation = () => {    //front-end regex
+        const searchErr = {}
+        let reg = /[^A-Za-z0-9]+/g;
+
+        let isValid = true
+
+        if (search.trim().length < 4) {
+            searchErr.short = 'Search is way too short'
+            isValid = false
+        }
+        if (search.match(reg)) {
+            searchErr.invalid = 'Search contains illegal characters'
+            isValid = false
+        }
+
+        setSearchErr(searchErr)
+
+        if (!isValid) {
+            setErrorColor(true)
+        }
+        return isValid
+    }
+
     return (
-        <form className="d-flex search-input-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search search-logo" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-            </svg>
-            <input className="search-input " type="search" placeholder="Search TwitClone..." />
+        <>
 
+            <form className="d-flex " onSubmit={(e) => handleSearch(e)}>
 
-            {/* <button className="btn btn-accent-outline" type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search search-logo" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                 </svg>
-            </button> */}
-        </form>
+                <input
+                    className={errorColor ? "search-error " : "search-input "}
+                    type="search"
+                    placeholder="Search TwitClone Users..."
+                    maxLength='15'
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
+                />
+
+            </form>
+            {Object.keys(searchErr).map((key) => {
+                return <div style={{ color: "red" }} className="mt-2 error-msg d-flex justify-content-center"> {searchErr[key]} </div>
+            })}
+        </>
     );
 
 

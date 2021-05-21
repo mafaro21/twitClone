@@ -1,5 +1,6 @@
 import React, { useRef, useContext } from 'react';
 import '../css/Sidebar.css';
+import '../css/Navbar.css';
 import '../css/custom.scss';
 // import axios from "axios";
 // import Loader from "react-loader-spinner";
@@ -45,13 +46,17 @@ function Sidebar() {
                 <p>Trending</p>
             </div>
 
+<<<<<<< HEAD
             {user.loggedin === true ?
+=======
+            {user.loggedin ?
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>New Stories</h5>
                     <ul className="col " >
                         {apiData.articles.map(item => (
-                            <li key={item.url} >
+                            <li key={item.url} className="modal-enter">
                                 <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row view">
                                     <img src={item.urlToImage} className="col-6 api-image row mt-1" alt="news" />
                                     <p className="col api-text " >{item.title} </p>

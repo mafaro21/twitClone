@@ -8,7 +8,11 @@ import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+<<<<<<< HEAD
 import { useLocation, Redirect } from 'react-router-dom';
+=======
+// import { useLocation } from 'react-router-dom';
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
@@ -18,7 +22,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     //most props are from profile.js
 
     const [user] = useContext(UserContext);
-    const [session1, setSession1] = useState("");
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
     const [serverError, setserverError] = useState(false);
 
@@ -40,10 +43,18 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     const [retweetTweet, setRetweetTweet] = useState({});
     const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
 
+<<<<<<< HEAD
     let location = useLocation();
     let path = location.pathname;
     let path1 = path.split('/u/');
     let userPath = path1[1];
+=======
+
+    // let location = useLocation()
+    // let path = location.pathname
+    // let path1 = path.split('/u/')
+    // let userPath = path1[1]
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
 
     const handleDelete = (e, id) => {

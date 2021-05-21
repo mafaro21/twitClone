@@ -38,58 +38,6 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     let userPath = path1[1]
 
 
-
-    const internalError = () => {       //redirect when there is a server error
-        return history.push("/Error");
-    };
-
-    // function getData() {
-    //     if (loggedIn === true) {
-    //         axios.get("/tweets/mine/all")
-    //             .then((res) => {
-    //                 setTweets(res);
-    //                 setTweetCount(res.data.length);
-    //                 console.log(res.data)
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error)
-    //                 if (error.response.status === 500) {
-    //                     internalError();
-    //                 } else if (error.response.status === 404) {
-    //                     setNoTweets(true)
-    //                 }
-    //             }).finally(() => {
-    //                 setTweetLoading(false)
-    //             })
-    //     } else {
-
-    //         setTweets({ data: [] }) //refresh tweets state when going to another user's profile
-
-    //         async function getTweets(x) {
-    //             setTweetLoading(true)
-
-    //             axios.get(`/tweets/user/${x}`) //fetching all tweets from a given user
-    //                 .then((res) => {
-    //                     setTweets(res);
-    //                     setNoTweets(false)
-    //                     tweetCountFromTweets(res.data.length);
-    //                     // console.log(res.data);
-    //                     // console.log(x)
-    //                 })
-    //                 .catch((error) => {
-    //                     console.error(error);
-    //                     if (error.response.status === 500) {
-    //                         internalError();
-    //                     } else if (error.response.status === 404) {
-    //                         setNoTweets(true);
-    //                     }
-    //                 }).finally(() => {
-    //                     setTweetLoading(false);
-    //                 });
-    //         }
-    //     }
-    // }
-
     useEffect(() => {   //fetching data for logged in users
 
 
@@ -140,6 +88,10 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
 
 
     }, [username, IDtoTweets]);
+
+    const internalError = () => {       //redirect when there is a server error
+        return history.push("/Error");
+    };
 
     function UpdateData() {
 
@@ -194,7 +146,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
             {noTweets && <NoTweets /> }
             {tweetLoading && <Loading /> }
             {tweets.data.map((item) => (
-                <div className="p-2 view row main-post-div" key={item._id}>
+                <div className="p-2 view row main-post-div modal-enter" key={item._id}>
                     {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
                     {userNotFound ? null :
                         <div className="col-1.5">              {/* <--- user avi */}

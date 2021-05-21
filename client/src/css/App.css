@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&display=swap');
 
 /* color schemes */
 html[data-theme="dark"]{
@@ -145,6 +145,16 @@ button:hover{
   color: white;
   outline: none;
 }
+.login-error{
+  padding: 26px;
+  border: 2px solid red;
+  border-radius: 20px;
+  height: 60px;
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  outline: none;
+}
 
 .error-msg{
   font-weight: 900;
@@ -159,6 +169,16 @@ button:hover{
 .signup-input{
   padding: 26px;
   border: 1px solid white;
+  border-radius: 20px;
+  height: 60px;
+  width: 50%;
+  background-color:rgba(0, 0, 0, 0.2);
+  color: white;
+  outline: none;
+}
+.signup-error{
+  padding: 26px;
+  border: 2px solid red;
   border-radius: 20px;
   height: 60px;
   width: 50%;
@@ -199,7 +219,17 @@ button:hover{
   outline: none;
   
 }
-textarea.edit-input{
+.edit-error{
+  width: 100%;
+  height: 60px;
+  padding: 26px;
+  border: 2px solid red;
+  border-radius: 20px;
+  background-color:rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  outline: none;
+}
+textarea.edit-input, textarea.edit-error{
   width: 100%;
   height: auto;
 }

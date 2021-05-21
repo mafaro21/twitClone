@@ -1,3 +1,3 @@
-- users can delete their own tweets from home.js
-- fixed follow button
-- reduced statuslogin requests
+- api data for explore page
+- data sliding in
+- set up search front end validation

@@ -20,6 +20,7 @@ function Signup() {
     const [disabled, setDisabled] = useState(false);// button disabler during request
 
     const [loading, setLoading] = useState(false);// loading animation
+    const [errorColor, setErrorColor] = useState(false)
 
     const [error, setError] = useState([]); //using array, data comes that way
     const errorDiv = error
@@ -146,6 +147,10 @@ function Signup() {
         setpasswordErr(passwordErr);
         setconfirmpasswordErr(confirmpasswordErr);
 
+        if (!isValid || error.length > 2) {
+            setErrorColor(true)
+        }
+
         return isValid;
 
     }
@@ -167,7 +172,7 @@ function Signup() {
                                 type="text"
                                 value={fullname}
                                 onChange={(e) => setfullName(e.target.value)}
-                                className="signup-input mt-4 change"
+                                className={errorColor ? "signup-error mt-4 change" : "signup-input mt-4 change"}
                                 maxLength="40"
                                 placeholder="Your Name"
                                 required
@@ -182,7 +187,7 @@ function Signup() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="signup-input mt-1 change"
+                                className={errorColor ? "signup-error mt-1 change" : "signup-input mt-1 change"}
                                 maxLength="30"
                                 placeholder="Email address"
                                 required
@@ -198,7 +203,7 @@ function Signup() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="signup-input mt-1 change"
+                                className={errorColor ? "signup-error mt-1 change" : "signup-input mt-1 change"}
                                 maxLength="20"
                                 placeholder="Enter Password"
                                 title="Required 8 characters or more"
@@ -215,7 +220,7 @@ function Signup() {
                                 type="password"
                                 value={confirmPass}
                                 onChange={(e) => setconfirmPass(e.target.value)}
-                                className="signup-input mt-1 change"
+                                className={errorColor ? "signup-error mt-1 change" : "signup-input mt-1 change"}
                                 maxLength="20"
                                 placeholder="Confirm Password"
                                 required

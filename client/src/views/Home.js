@@ -22,6 +22,7 @@ function Home() {
     let location = useLocation();
 
     const [disabled, setDisabled] = useState(true);
+<<<<<<< HEAD
     const [count, setCount] = useState(0);
 
     const [color, setColor] = useState("grey");
@@ -40,6 +41,25 @@ function Home() {
     const [newTweetsLoader, setNewTweetsLoader] = useState(false);
     const [maxRows] = useState(8);
     const [tweetErr, setTweetErr] = useState({});
+=======
+    const [count, setCount] = useState(0)
+
+    const [color, setColor] = useState("grey")
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
+    const [rows, setRows] = useState(1)
+    const [loading, setLoading] = useState(true)
+    const [comment, setComment] = useState('')
+    const [tweetLoading, setTweetLoading] = useState(false)
+    const [allTweets, setAllTweets] = useState({ data: [] })
+    const [newTweets, setNewTweets] = useState({ data: [] })
+    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
+    const [lastID, setLastID] = useState('')  //the last id in the .map
+    const [minRows] = useState(1)
+    const [newTweetsLoader, setNewTweetsLoader] = useState(false)
+    const [maxRows] = useState(8)
+    const [tweetErr, setTweetErr] = useState({})
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -54,8 +74,14 @@ function Home() {
         axios.get(`/tweets/`)
             .then((res) => {
                 setAllTweets(res)
+<<<<<<< HEAD
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
+=======
+
+                // to fetch the last id inside the .map
+                setLastID(res.data[0]._id)
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
                 console.error(err);
@@ -75,9 +101,17 @@ function Home() {
     function UpdateData() {
         axios.get(`/tweets/`)
             .then((res) => {
+<<<<<<< HEAD
                 setAllTweets(res);
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
+=======
+                console.log(res.data)
+                setAllTweets(res)
+
+                // to fetch the last id inside the .map
+                setLastID(res.data[0]._id)
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
                 console.error(err);
@@ -286,12 +320,14 @@ function Home() {
                     <Header />
 
                     <div className="col main-view phone-home ">
-                        <div className="row profile-header view p-3">
+                        {user.loggedin ?
+                            <div className="row profile-header view p-3">
 
-                            <div >
-                                <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
+                                <div >
+                                    <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
+                                </div>
                             </div>
-                        </div>
+                            : null}
 
                         <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
                         {Object.keys(tweetErr).map((key) => {
@@ -300,7 +336,11 @@ function Home() {
 
 
 
+<<<<<<< HEAD
                         {user.loggedin === true ?
+=======
+                        {user.loggedin ?
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                             <div className="p-2 profile-view row mt-3">
 
                                 <div className="col-0.5">              {/* <--- user avi */}
@@ -377,11 +417,11 @@ function Home() {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
                             // console.log(item.User[0].username)
 
-                            return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                            return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
-                                <div className="col user-name-tweet">                   {/* <--- user content */}
+                                <Link to={`/post/${item._id}`} className="col user-name-tweet post-div">                   {/* <--- user content */}
                                     <div >
                                         <Link
                                             to={`/u/${item.User[0].username}`}
@@ -397,7 +437,7 @@ function Home() {
                                         </span>
                                     </div>
 
-                                    <p>{item.content}</p>
+                                    <p className="post-link">{item.content}</p>
 
                                     <Interactive
                                         id={item._id}
@@ -410,8 +450,13 @@ function Home() {
                                         username={item.User[0].username} // this is a test
                                     />
 
+<<<<<<< HEAD
                                 </div>
                             </div>;
+=======
+                                </Link>
+                            </div>
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                         })}
 
                         {/* <--- standard tweet*/}
