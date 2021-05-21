@@ -1,14 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet'
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart'
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
+import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
+import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+<<<<<<< HEAD
+import { useLocation, Redirect } from 'react-router-dom';
+=======
 // import { useLocation } from 'react-router-dom';
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
@@ -19,23 +23,42 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
     const [user] = useContext(UserContext);
     const [likedTweets, setLikedTweets] = useState({}); // FOR HANDLING LIKES state
+    const [serverError, setserverError] = useState(false);
 
-    const [deleteTweet, setdeleteTweet] = useState({})
+    /** 
+     * THESE 4 below ARE LOCAL states. (they depend on Props NOT SERVER)
+     * They update the UI if Axios returns SUCCESS.
+     * SO NO NEED OF FETCHING ALL THE tweets AGAIN from SERVER just for 1 update.
+     * 
+     * */
+    const [likeCount, setLikeCount] = useState(parseInt(likes)); // local
+    const [likedState, setLikedState] = useState(Boolean(likesByMe)); // local
+    const [retweetCount, setRetweetCount] = useState(parseInt(retweets)); // local
+    const [retweetState, setRetweetState] = useState(Boolean(retweetsByMe)); // local
+    //------------------------------------------------------------------------
+    
+    const [deleteTweet, setdeleteTweet] = useState({});
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [retweetTweet, setRetweetTweet] = useState({})
-    const [noAccountDiv, setNoAccountDiv] = useState(false) //shows modal that tells user they need to sign/log in
+    const [retweetTweet, setRetweetTweet] = useState({});
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
 
-
+<<<<<<< HEAD
+    let location = useLocation();
+    let path = location.pathname;
+    let path1 = path.split('/u/');
+    let userPath = path1[1];
+=======
 
     // let location = useLocation()
     // let path = location.pathname
     // let path1 = path.split('/u/')
     // let userPath = path1[1]
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
 
     const handleDelete = (e, id) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!deleteTweet[id]) {
             setDisabled(true);
@@ -47,31 +70,36 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             axios.delete(`/tweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    passChildData(true)
+                    passChildData(true);
                     // getData()
                 })
                 .catch((error) => {
-                    // console.log(id)
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
-
-                })
-                .finally(() => {
+                    switch (error.response.status) {
+                        case 401:
+                            setNoAccountDiv(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
+                }).finally(() => {
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
-                    setdeleteTweet(false)
+                    setdeleteTweet(false);
                     setDisabled(false);
-                })
+                });
         }
-    }
+    };
 
     const handleLike = (e, id, likesByMe) => {
         //for liking and unliking posts
         // NOW WORKS 🎉🎉
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
-        e.preventDefault()
+        e.preventDefault();
         // console.log(likedbyme)
 
         if (!likesByMe && !likedTweets[id]) {
@@ -84,17 +112,24 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             axios.post(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    passChildData(true)
-                    // getData()
+                    setLikeCount(likeCount + 1);
+                    setLikedState(!likedState);  // <------------- UPDATE LOCAL states + UI
                 })
                 .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("something went wrong")
-
+                    switch (error.response.status) {
+                        case 401:
+                            setNoAccountDiv(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
@@ -108,16 +143,24 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    // getData()
-                    passChildData(true)
+                    setLikeCount(likeCount - 1);
+                    setLikedState(!likedState); // <------------- UPDATE LOCAL states + UI
                 })
                 .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    switch (error.response.status) {
+                        case 401:
+                            setNoAccountDiv(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
@@ -125,7 +168,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     };
 
     const handleRetweet = (e, id, retweetsByMe) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!retweetsByMe && !retweetTweet[id]) {
             setDisabled(true);
@@ -137,16 +180,24 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             axios.post(`/retweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    passChildData(true)
+                    setRetweetCount(retweetCount + 1);
+                    setRetweetState(!retweetState);
                 })
                 .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem")
-
+                    switch (error.response.status) {
+                        case 401:
+                            setNoAccountDiv(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
 
@@ -160,27 +211,35 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             axios.delete(`/retweets/${id}`)
                 .then((res) => {
                     console.log(res.data);
-                    passChildData(true)
+                    setRetweetCount(retweetCount - 1);
+                    setRetweetState(!retweetState);
                 })
                 .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem")
+                    switch (error.response.status) {
+                        case 401:
+                            setNoAccountDiv(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false)
+                        setNoAccountDiv(false);
                     }, 2000);
                 });
         }
-        console.log(retweetTweet)
-    }
+    };
 
     return (
 
 
         <div className="interact-row d-flex ">
-            {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
-
+            {noAccountDiv && <NoAccount currentState={noAccountDiv} /> }
+            {serverError && <Redirect to="/Error" />}
             <button
                 className={comments ? "comment-true col" : "comment col"}
             >
@@ -190,25 +249,25 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
             </button>
 
             <button
-                className={retweetsByMe ? "col retweet-true" : "col retweet"}
-                onClick={(e) => handleRetweet(e, id, retweetsByMe)}
+                className={retweetState === true ? "col retweet-true" : "col retweet"}
+                onClick={(e) => handleRetweet(e, id, retweetState)}
                 disabled={disabled}
             >
                 <FontAwesomeIcon icon={faRetweet} />
-                &nbsp; {retweets} {retweetsByMe}
+                &nbsp; {retweetCount}
             </button>
 
             <button
                 className="like col"
-                onClick={(e) => handleLike(e, id, likesByMe)}
+                onClick={(e) => handleLike(e, id, likedState)}
                 disabled={disabled}
             >
-                {likesByMe ?
+                {likedState === true ?
                     (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
                     : <FontAwesomeIcon icon={faHeart} />
                 }
 
-                &nbsp; {likes}
+                &nbsp; {likeCount}
             </button>
 
             {/* session1 === userPath || */}

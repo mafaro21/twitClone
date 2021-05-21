@@ -61,9 +61,10 @@ router.post("/:tweetid", RetweetLimiter, (req, res, next) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
                 const r1 = await retweets.insertOne(retweetObject);
-                const r2 = await tweets.updateOne({ _id: retweetObject.OGtweetid }, { $inc: { retweets: 1 } });
-                if (r1.result.ok && r2.result.ok)
+                if (r1.insertedCount === 1) {
+                    await tweets.updateOne({ _id: retweetObject.OGtweetid }, { $inc: { retweets: 1 } });
                     res.status(201).send({ "success": true });
+                }
             } catch (error) {
                 throw error;
             } finally {
@@ -97,7 +98,7 @@ router.delete("/:tweetid", RetweetLimiter, (req, res, next) => {
                 let r1 = await retweets.deleteOne(retweetObject);
                 if (r1.deletedCount === 0) throw new Error("Cannot undo retweet");
                 await tweets.updateOne({ _id: retweetObject.OGtweetid }, { $inc: { retweets: -1 } });
-                res.status(200).send({"success": true });
+                res.status(200).send({ "success": true });
             } catch (error) {
                 res.status(400).send({ message: error.message });
             } finally {

@@ -15,6 +15,14 @@ import { UserContext } from '../Contexts/UserContext';
 
 export default function Header({ passChildData }) {
     const [user, setUser] = useContext(UserContext);
+<<<<<<< HEAD
+    // const [username, setUsername] = useContext(UserContext)
+
+    const [loggedinFromContext, setLoggedinFromContext] = useState('');
+    const [fullname, setFullname] = useState("");
+    const [username, setUsername] = useState("");
+=======
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
@@ -159,7 +167,7 @@ export default function Header({ passChildData }) {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    passChildData(true) // to update profile.js when current user tweets
+                    passChildData(true); // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');       //reset default state of the tweet modal
@@ -552,8 +560,13 @@ export default function Header({ passChildData }) {
                         </div>
                         : null}
 
+<<<<<<< HEAD
+                    {user.loggedin &&
+                        <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${username}`}>
+=======
                     {user.loggedin === true ?
                         <Link className={path === `/u/${user.username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${user.username}`}>
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                             <div className=" d-flex pl-2 mt-2" >
                                 <div>
                                     <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -565,7 +578,7 @@ export default function Header({ passChildData }) {
                                 <p className="header-title " style={{ fontWeight: 700 }}>Profile</p>
                             </div>
                         </Link>
-                        : null}
+                        }
 
                     <Link to="/more" className={path === '/more' ? "d-flex header-link-active more" : "d-flex header-link more"}>
                         <div className=" d-flex pl-2 mt-2">
@@ -590,7 +603,7 @@ export default function Header({ passChildData }) {
                         </div>
                     </Link>
 
-                    {moreModal ? <MoreModal /> : null}
+                    {moreModal && <MoreModal />}
 
                     {user.loggedin === true ?
                         <div className="d-flex tweet-btn" >
@@ -621,9 +634,9 @@ export default function Header({ passChildData }) {
 
 
 
-                    {user.loggedin === true ?
+                    {user.loggedin &&
                         <button className="user-data d-flex row " onClick={userToggle} ref={ref}>
-                            {userModal ? <UserModal /> : null}
+                            {userModal && <UserModal />}
                             <img src={icon} alt="example" className="user-data-img" />
 
                             <div className="col user-data-text">
@@ -634,7 +647,7 @@ export default function Header({ passChildData }) {
                             </div>
 
                         </button>
-                        : null}
+                    }
                 </div>
             </div>
         </header >

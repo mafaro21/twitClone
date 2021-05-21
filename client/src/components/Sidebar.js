@@ -46,7 +46,11 @@ function Sidebar() {
                 <p>Trending</p>
             </div>
 
+<<<<<<< HEAD
+            {user.loggedin === true ?
+=======
             {user.loggedin ?
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
 
                 <div className="p-1 mt-4 sidebar" >
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>New Stories</h5>

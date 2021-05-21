@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useContext } from 'react'
 import dotenv from 'dotenv';
 import './css/App.css';
 import Login from './views/Login';
@@ -22,7 +22,8 @@ import axios from 'axios';
 function App() {
   dotenv.config();
 
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState("")
+
 
   const value = useMemo(() => [user, setUser], [user, setUser])
 
@@ -50,6 +51,8 @@ function App() {
     // scheme.addEventListener('change', (e) => {
     //   // console.log(e.matches)
 
+<<<<<<< HEAD
+=======
     //   if (e.matches) {
     //     localStorage.setItem("theme", "dark");
     //   } else {
@@ -57,19 +60,20 @@ function App() {
     //   }
     // });
 
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
     const options = {
       method: 'GET',
       url: 'https://newsapi.org/v2/top-headlines',
       params: {
         category: 'entertainment',
         pageSize: 8,
-        country: 'au',
+        country: 'us',
         apiKey: process.env.REACT_APP_NEWS_API_KEY
       }
     };
 
-    axios.request(options).then(function (res) {
-      // console.log(res.data)
+  axios.request(options).then(function (res) {
+       console.log("news api ran")
       setApiData(res.data)
       // setLoading(false);
     }).catch(function (error) {
@@ -97,18 +101,18 @@ function App() {
               <Route path="/explore" component={Explore} />
               <Route path="/more" component={More} />
 
-              <Route path="/u/:user" exact >
+              <Route path="/u/:username" exact >
                 <Profile />
               </Route>
-              <Route path="/u/:user/edit" exact >
+              <Route path="/u/:username/edit" exact >
                 <EditProfile />
               </Route>
               <Route path="/post/:postid" exact>
                 <Post />
               </Route>
 
-              <Route path="/u/:user/following" component={Following} />
-              <Route path="/u/:user/followers" component={Followers} />
+              <Route path="/u/:username/following" component={Following} />
+              <Route path="/u/:username/followers" component={Followers} />
 
               <Route path="/compose/tweet" component={Compose} />
               <Route path="/error" component={Error} />

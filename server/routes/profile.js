@@ -29,7 +29,7 @@ router.get("/mine", isLoggedin, (req, res, next) => {
         if (err) next(err);
         if (!reply) fetchfromMongo();
         else {
-            res.status(200).send([reply]);
+            return res.status(200).send([reply]);
         }
     });
 
@@ -61,11 +61,10 @@ router.get("/mine", isLoggedin, (req, res, next) => {
             "followers": `${result.followers}`,
             "following": `${result.following}`,
         }, (err, reply) => {
-            if (err) console.error("REDIS_HASH", err);
+            if (err) return console.error("REDIS_HASH", err);
             console.log("REDIS HashSet", reply);
         });
     }
-
 });
 
 
@@ -147,7 +146,6 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
             //IF SUCCESS, UPDATE the Session variables
             req.session.user = { "id": userid, "username": username, "fullname": fullname };
             res.status(200).send({ "success": true });
-
         } catch (error) {
             if (error.code === 11000)
                 res.status(409).send({ "message": "Username has already been taken" });
@@ -160,7 +158,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
 });
 
 redisClient.on('error', (error) => {
-    console.error(error.message)
+    console.error(error.message);
 
 });
 

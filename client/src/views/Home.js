@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -6,10 +6,10 @@ import Interactive from '../components/Interactive';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile'
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 import Loader from "react-loader-spinner";
 import { UserContext } from '../Contexts/UserContext';
 import TimeAgo from 'javascript-time-ago';
@@ -18,10 +18,30 @@ import ReactTimeAgo from 'react-time-ago';
 import { Link, useLocation } from 'react-router-dom';
 
 function Home() {
-    const [user] = useContext(UserContext)
-    let location = useLocation()
+    const [user] = useContext(UserContext);
+    let location = useLocation();
 
     const [disabled, setDisabled] = useState(true);
+<<<<<<< HEAD
+    const [count, setCount] = useState(0);
+
+    const [color, setColor] = useState("grey");
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
+    const [rows, setRows] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [comment, setComment] = useState('');
+    const [sessionName, setSessionName] = useState('');
+    const [tweetLoading, setTweetLoading] = useState(false);
+    const [allTweets, setAllTweets] = useState({ data: [] });
+    const [newTweets, setNewTweets] = useState({ data: [] });
+    const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
+    const [lastID, setLastID] = useState('');  //the last id in the .map
+    const [minRows] = useState(1);
+    const [newTweetsLoader, setNewTweetsLoader] = useState(false);
+    const [maxRows] = useState(8);
+    const [tweetErr, setTweetErr] = useState({});
+=======
     const [count, setCount] = useState(0)
 
     const [color, setColor] = useState("grey")
@@ -39,6 +59,7 @@ function Home() {
     const [newTweetsLoader, setNewTweetsLoader] = useState(false)
     const [maxRows] = useState(8)
     const [tweetErr, setTweetErr] = useState({})
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -46,49 +67,59 @@ function Home() {
         </div>
         : '';
 
-    let icon = `https://avatars.dicebear.com/api/identicon/${user.username}.svg`
+    let icon = `https://avatars.dicebear.com/api/identicon/${user.username}.svg`;
 
     function getData() {
-        setLoading(true)
+        setLoading(true);
         axios.get(`/tweets/`)
             .then((res) => {
-                console.log(res.data)
                 setAllTweets(res)
+<<<<<<< HEAD
+                let x = res.data.length - 1;     // to fetch the last id inside the .map
+                setLastID((res.data[x]._id));
+=======
 
                 // to fetch the last id inside the .map
                 setLastID(res.data[0]._id)
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
-                console.error(err)
+                console.error(err);
             })
             .finally(() => {
-                setLoading(false)
-            })
+                setLoading(false);
+            });
     }
 
     useEffect(() => {
-        window.scroll(0, 0)
+        window.scroll(0, 0);
 
-        document.title = "TwitClone - Home"
-        getData()
-    }, [])
+        document.title = "TwitClone - Home";
+        getData();
+    }, []);
 
     function UpdateData() {
         axios.get(`/tweets/`)
             .then((res) => {
+<<<<<<< HEAD
+                setAllTweets(res);
+                let x = res.data.length - 1;     // to fetch the last id inside the .map
+                setLastID((res.data[x]._id));
+=======
                 console.log(res.data)
                 setAllTweets(res)
 
                 // to fetch the last id inside the .map
                 setLastID(res.data[0]._id)
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
-                console.error(err)
-            })
+                console.error(err);
+            });
     }
 
     const handleChange = (e) => {
-        wordCount(e)
+        wordCount(e);
 
         const textareaLineHeight = 32;
 
@@ -106,40 +137,40 @@ function Home() {
             e.target.scrollTop = e.target.scrollHeight;
         }
 
-        setComment(e.target.value)
-        setRows(currentRows < maxRows ? currentRows : maxRows)
-    }
+        setComment(e.target.value);
+        setRows(currentRows < maxRows ? currentRows : maxRows);
+    };
 
     const wordCount = (e) => {
-        let comment = e.target.value
+        let comment = e.target.value;
         // setComment(comment)
-        setCount(comment.length)
+        setCount(comment.length);
 
         // let y = comment.length
         let x = comment.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
-            setColor("red")
+            setColor("red");
         } else if (x >= 250) {
-            setColor("#FF8000")
+            setColor("#FF8000");
         } else if (x >= 200) {
-            setColor("#FFB400")
+            setColor("#FFB400");
         } else if (x >= 150) {
-            setColor("#FFF800")
+            setColor("#FFF800");
         } else {
-            setColor("grey")
+            setColor("grey");
         }
 
         if (comment.trim().length > 0) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
+            setDisabled(true);
         }
-    }
+    };
 
     let addEmoji = emoji => {
-        setComment(comment + emoji.native)
-    }
+        setComment(comment + emoji.native);
+    };
     const Emoji = () => {
         return <Picker
             onSelect={addEmoji}
@@ -150,11 +181,11 @@ function Home() {
             set='twitter'
             style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '1' }}
             theme='auto'
-        />
-    }
+        />;
+    };
 
     const TweetLoading = () => {    //loader after tweet has been sent
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center ">
             <Loader type="ThreeDots"
@@ -163,12 +194,12 @@ function Home() {
                 width={40}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
     const Loading = () => {
 
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="accent d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
@@ -182,12 +213,12 @@ function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setDisabled(true)
+        setDisabled(true);
 
 
         const isValid = tweetValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
-            setTweetLoading(true)
+            setTweetLoading(true);
             sendToDb();
             // setTweetModal(false);
 
@@ -196,18 +227,18 @@ function Home() {
         function sendToDb() {
             const tweetObject = {
                 content: comment.replace(/\n/g, " ").trim()
-            }
+            };
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
                     setTweetLoading(true);
-                    let tweetDiv = document.getElementById("tweet-modal")
-                    tweetDiv.style.display = "none"
-                    setComment('')
-                    setCount(0)
-                    setColor('grey')
-                    setShowEmojiPicker(false)
-                    setRows(3)
+                    let tweetDiv = document.getElementById("tweet-modal");
+                    tweetDiv.style.display = "none";
+                    setComment('');
+                    setCount(0);
+                    setColor('grey');
+                    setShowEmojiPicker(false);
+                    setRows(3);
 
                 })
                 .catch((error) => {
@@ -217,10 +248,10 @@ function Home() {
                 })
                 .finally(() => {
                     setTweetLoading(false);
-                    setDisabled(false)
+                    setDisabled(false);
                 });
         }
-    }
+    };
 
     /** Validation check */
     const tweetValidation = (twt) => {
@@ -239,41 +270,42 @@ function Home() {
 
         setTweetErr(tweetErr);
         return isValid;
-    }
+    };
 
     TimeAgo.addLocale(en);   //for the time ago
 
-    // window.onscroll = function () {
-    //     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-    //         // alert(`the last id is ${lastID}`)
-    //         GetNewTweets(lastID)
-    //     }
-    // }
+    /** ⚠⛔🚫 NEEDS REPLACING with BUTTON 🔽 => INFINITE LOOP FETCHING! */
+     window.onscroll = function () {
+    //    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+    //         // window.alert(`the last id is ${lastID}`)
+    //          window.scroll(0,0)
+    //         GetNewTweets(lastID);
+    //     } 
+     }
 
-    function GetNewTweets(x) {
+    function GetNewTweets(lastTweetID) {
         if (location.pathname === '/home') {
-            setNewTweetsLoader(true)
+            setNewTweetsLoader(true);
 
-
-            axios.get(`/tweets?gt=${x}`)
+            axios.get(`/tweets/?lt=${lastTweetID}`)
                 .then((res) => {
-                    console.log(res.data)
-                    setNewTweets(res)
+                    // console.log(res.data);
+                    setNewTweets(res);
                 })
                 .catch((err) => {
-                    console.error(err)
+                   window.alert(err.response.data);
                 })
                 .finally(() => {
-                    setNewTweetsLoader(false)
-                })
+                    setNewTweetsLoader(false);
+                });
 
         }
     }
 
 
     if (childData) {
-        setchildData(false)
-        UpdateData()
+        setchildData(false);
+      //  UpdateData();
     }
 
 
@@ -299,12 +331,16 @@ function Home() {
 
                         <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
                         {Object.keys(tweetErr).map((key) => {
-                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>
+                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
                         })}
 
 
 
+<<<<<<< HEAD
+                        {user.loggedin === true ?
+=======
                         {user.loggedin ?
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                             <div className="p-2 profile-view row mt-3">
 
                                 <div className="col-0.5">              {/* <--- user avi */}
@@ -378,7 +414,7 @@ function Home() {
                         </div>
                         {loading ? <Loading /> : null}
                         {allTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
+                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
                             // console.log(item.User[0].username)
 
                             return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
@@ -414,16 +450,21 @@ function Home() {
                                         username={item.User[0].username} // this is a test
                                     />
 
+<<<<<<< HEAD
+                                </div>
+                            </div>;
+=======
                                 </Link>
                             </div>
+>>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                         })}
 
                         {/* <--- standard tweet*/}
                         {newTweetsLoader ? <Loading /> : null}
                         {newTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
-                            console.log(item.User[0].username)
-                            console.log('wtf')
+                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
+                            console.log(item.User[0].username);
+                            console.log('wtf');
 
                             return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
@@ -435,7 +476,7 @@ function Home() {
                                             to={`/u/${item.User[0].username}`}
                                             className="name-link"
                                         >
-                                            <strong >{item.User[0].fullname}</strong>&nbsp;
+                                            <span style={{ fontWeight: 700 }} >{item.User[0].fullname}</span>&nbsp;
                                         </Link>
                                         <span>@{item.User[0].username}</span>
 
@@ -458,7 +499,7 @@ function Home() {
                                     />
 
                                 </div>
-                            </div>
+                            </div>;
                         })}
                     </div>
 

@@ -17,7 +17,6 @@ router.get("/", isLoggedin, (req, res, next) => {
         if (err) throw err;
         else {
             destroySession();
-            console.log(reply);
         }
     });
 

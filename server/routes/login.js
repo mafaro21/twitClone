@@ -43,18 +43,18 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
     };
 
     axios.request(axiosOptions)
-        .then(res => {
-            isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
-            let prob = res.data['error-codes'];
+        .then((res) => {
+            isValid = res.data.success && res.data.score >= 0.5; //check if both TRUE
+            let prob = res.data["error-codes"];
             if (prob) throw new Error(prob);
             return isValid;
         })
-        .then(isValid => {
+        .then((isValid) => {
             if (isValid === true) operateDB();
             else throw new Error();
         })
-        .catch(err => {
-            res.status(401).send({ "message": "CAPTCHA Error" });
+        .catch((err) => {
+            res.status(401).send({ message: "CAPTCHA Error" });
             console.error("AXIOS_CAPTCHA", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//

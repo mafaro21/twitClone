@@ -38,7 +38,7 @@ export default function Post() {
 
     const [isLikedbyMe, setIsLikedbyMe] = useState(0);
 
-    const [isRetweetedbyMe, setisRetweetedbyMe] = useState(0)
+    const [isRetweetedbyMe, setisRetweetedbyMe] = useState(0);
 
     const [comment, setComment] = useState('');
 
@@ -68,6 +68,18 @@ export default function Post() {
 
     const [maxRows] = useState(8);
 
+    /** 
+ * THESE 4 below ARE LOCAL states. (they depend on Props NOT SERVER)
+ * They update the UI if Axios returns SUCCESS.
+ * SO NO NEED OF FETCHING ALL THE tweets AGAIN from SERVER just for 1 update.
+ * 
+ * */
+    const [likeCount, setLikeCount] = useState(0); // local
+    const [likedState, setLikedState] = useState(0); // local
+    const [retweetState, setRetweetState] = useState(0); // local
+    //------------------------------------------------------------------------
+
+
     let history = useHistory();
 
     let location = useLocation();
@@ -93,7 +105,7 @@ export default function Post() {
                 .then((res) => {
                     // console.log(res.data)
                     setDisabled(false);
-                    getData();
+                    setLikedState(likedState + 1);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -112,7 +124,7 @@ export default function Post() {
                 .then((res) => {
                     // console.log(res.data)
                     setDisabled(false);
-                    getData();
+                    setLikedState(likedState - 1);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -142,7 +154,10 @@ export default function Post() {
             .then((res) => {
                 setTweets(res);
                 setLoading(false);
-                console.log(res.data)
+                setLikeCount(res.data[0].likes);
+                console.log(likeCount);
+                console.log(res.data);
+                
             })
             .catch((error) => {
                 console.error(error);
@@ -159,7 +174,7 @@ export default function Post() {
 
         axios.get(`/likes/me/${finalPath}`)
             .then((res) => {
-                setIsLikedbyMe(res.data.count);
+                setLikedState(res.data.count);
                 // console.log(res.data.count)
 
             })
@@ -167,30 +182,38 @@ export default function Post() {
                 console.error(error);
             });
 
-        axios.get(`/comments/tweet/${finalPath}`)
-            .then((res) => {
-                // console.log(res.data)
-                setOtherComments(res);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+     
 
         axios.get(`retweets/me/${finalPath}`)
             .then((res) => {
                 // console.log(res.data)
-                setisRetweetedbyMe(res.data.count)
+                setRetweetState(res.data.count);
             })
             .catch((err) => {
-                console.error(err)
+                console.error(err);
             });
+    }
+
+    function getComments() {
+        setCommentLoading(true)
+        axios.get(`/comments/tweet/${finalPath}`)
+        .then((res) => {
+            // console.log(res.data)
+            setOtherComments(res);
+        })
+        .catch((err) => {
+            console.error(err);
+        }).finally(()=>{
+            setCommentLoading(false)
+        })
     }
 
     useEffect(() => {   //fetching data for logged in users
 
         window.scrollTo(0, 0);       //scroll to top of page when it loads
 
-        getData()
+        getData();
+        getComments();
 
     }, [finalPath]); //tweets
 
@@ -296,14 +319,14 @@ export default function Post() {
         // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
         // const tweet = myForm.elements.tweet.value;
 
-        const isValid = tweetValidation(comment); /* <-- call the validation fn. */
+        const isValid = commentValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
             setCommentLoading(true);
-            sendToDb();
+            sendCommentToDb();
             // setTweetModal(false);
         }
 
-        function sendToDb() {
+        function sendCommentToDb() {
             const tweetObject = {
                 content: comment.replace(/\n/g, " ").trim()
             };
@@ -318,8 +341,7 @@ export default function Post() {
                     setColor('grey');
                     setShowEmojiPicker(false);
                     setRows(1);
-                    getData();
-                    console.log(res.data);
+                    getComments();
                 })
                 .catch((error) => {
                     // setTweetLoading(false);
@@ -327,14 +349,13 @@ export default function Post() {
                     console.error(error);
                 })
                 .finally(() => {
-                    getData();
                     setCommentLoading(false);
                 });
         }
     };
 
     /** Validation check */
-    const tweetValidation = (twt) => {
+    const commentValidation = (twt) => {
         const tweetErr = {};
         let tweetReg = /[<>]+/;
         let isValid = true;
@@ -354,7 +375,6 @@ export default function Post() {
 
     const handleDelete = (e, id) => {
         e.preventDefault();
-        // return alert(id)
         setDisableDiv(true);
 
         if (!deleteTweet[id]) {
@@ -367,15 +387,14 @@ export default function Post() {
             axios.delete(`/comments/${id}/tweet/${finalPath}`)
                 .then((res) => {
                     console.log(res.data);
-                    getData();
+                    getComments();
                 })
                 .catch((error) => {
                     console.log(id);
                     console.error(error);
                     error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
 
-                })
-                .finally(() => {
+                }).finally(() => {
                     setTimeout(() => {
                         setNoAccountDiv(false);
                     }, 2000);
@@ -384,62 +403,6 @@ export default function Post() {
                 });
         }
 
-
-    };
-
-    const handleCommentLike = (e, id, likedbyme) => {
-        //for liking and unliking posts
-        // NOW WORKS 🎉🎉
-        //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
-
-        e.preventDefault();
-        console.log(likedbyme);
-
-        if (!likedTweets[id] && !likedbyme) {
-            setDisabled(true);
-            setLikedTweets(prevTweets => ({
-                ...prevTweets,
-                [id]: !setLikedTweets[id],
-            }));
-
-            axios.post(`/likes/${id}`)
-                .then((res) => {
-                    console.log(res.data);
-                    getData();
-                })
-                .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
-
-                }).finally(() => {
-                    setDisabled(false);
-                    setTimeout(() => {
-                        setNoAccountDiv(false);
-                    }, 2000);
-                });
-
-        } else {
-            setDisabled(true);
-            setLikedTweets(prevTweets => ({
-                ...prevTweets,
-                [id]: setLikedTweets[id],
-            }));
-
-            axios.delete(`/likes/${id}`)
-                .then((res) => {
-                    console.log(res.data);
-                    getData();
-                })
-                .catch((error) => {
-                    console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
-                }).finally(() => {
-                    setDisabled(false);
-                    setTimeout(() => {
-                        setNoAccountDiv(false);
-                    }, 2000);
-                });
-        }
     };
 
     return (
@@ -448,7 +411,7 @@ export default function Post() {
             <div className="container App " >
                 <div className="row " >
 
-                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
 
                     <Header />
 
@@ -469,10 +432,10 @@ export default function Post() {
 
                         </div>
 
-                        {loading ? <Loading /> : null}
+                        {loading && <Loading />}
                         {tweets.data.map((item, i) => {
                             let date = new Date(item.dateposted);
-                            const options = { dateStyle: 'long', timeStyle: 'short', hour12: true };
+                            const options = { dateStyle: "long", timeStyle: "short", hour12: true };
                             let finalDate = new Intl.DateTimeFormat("en-US", options).format(date);
 
                             document.title = `Post by @${item.User[0].username} - TwitClone`;
@@ -513,24 +476,25 @@ export default function Post() {
 
                                         </div>
 
-                                        {item.comments === 0 && item.likes === 0 ? null :
+                                        {(item.comments !== 0 && likeCount !== 0) &&
                                             <div className="view mt-1  p-2">
                                                 <span className={item.comments === 0 ? "d-none" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
                                                     <span
-                                                        style={{ fontWeight: '700' }}
+                                                        style={{ fontWeight: 700 }}
                                                         className="text"
                                                     >
                                                         {item.comments}
                                                     </span> {item.comments === 1 ? "Comment" : "Comments "}
                                                 </span>
 
-                                                <span className={item.likes === 0 ? "d-none" : null}>
+                                                <span className={likeCount === 0 ? "d-none" : null}>
                                                     <span
-                                                        style={{ fontWeight: '700' }}
+                                                        style={{ fontWeight: 700 }}
                                                         className="text"
                                                     >
-                                                        {item.likes}
-                                                    </span> {item.likes === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
+                                                        {likeCount}
+                                                        {/* fix this...to local */}
+                                                    </span> {likeCount === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
                                                 </span>
                                             </div>
                                         }
@@ -542,7 +506,6 @@ export default function Post() {
 
                                             <button className={isRetweetedbyMe === 1 ? "col retweet-true" : "col retweet"}>
                                                 <FontAwesomeIcon icon={faRetweet} />
-
                                             </button>
 
                                             <button
@@ -550,7 +513,7 @@ export default function Post() {
                                                 onClick={() => handleLike(item._id)}
                                                 disabled={disabled}
                                             >
-                                                {isLiked || isLikedbyMe === 1 ? (
+                                                {likedState === 1 ? (
                                                     <FontAwesomeIcon icon={heartSolid} size="lg" className="text-danger" />
                                                 ) : <FontAwesomeIcon icon={faHeart} size="lg" />}
                                             </button>
@@ -562,7 +525,7 @@ export default function Post() {
                             </div>;
                         })}
 
-                        {user ?
+                        {user.loggedin &&
                             <div className="p-2 profile-view row mt-3">
                                 <div className="col-0.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className={commentReply ? "user-logo mt-2" : "user-logo"} />
@@ -573,14 +536,13 @@ export default function Post() {
                                     {tweets.data.map((item, i) => (
                                         <div className="" key={i}>
 
-                                            {commentReply ?
+                                            {commentReply &&
                                                 <span>Replying to
                                                 <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
                                                         @{item.User[0].username}
                                                     </Link>
                                                 </span>
-                                                :
-                                                null
+
                                             }
 
                                             <textarea
@@ -656,12 +618,12 @@ export default function Post() {
                                 </form>
 
                             </div>
-                            : null}
+                        }
 
                         {otherComments.data.map((item, i) => {
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
 
-                            return <Link to={`/post/${item._id}`} className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link" : "p-2 view row main-post-div post-link name-link"} key={i} >             {/* <--- standard tweet*/}
+                            return <div className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link" : "p-2 view row main-post-div post-link name-link"} key={i} >             {/* <--- standard tweet*/}
                                 <Link to={`/u/${item.User[0].username}`} className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </Link>
@@ -692,22 +654,8 @@ export default function Post() {
                                             {/* &nbsp; {item.comments} */}
                                         </button>
 
-                                        <button className="col retweet">
+                                        <button className="col retweet" disabled>
                                             <FontAwesomeIcon icon={faRetweet} />
-                                        </button>
-
-                                        <button
-                                            className="like col"
-                                            onClick={(e) => handleCommentLike(e, item._id, item.isLikedbyme)}
-                                            disabled={disabled}
-
-                                        >
-                                            {likedTweets[item._id] || item.isLikedbyme ?
-                                                (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
-                                                : <FontAwesomeIcon icon={faHeart} />
-                                            }
-
-                                            {/* &nbsp; {item.likes} */}
                                         </button>
 
                                         {user === item.User[0].username ?
@@ -723,7 +671,7 @@ export default function Post() {
                                     </div>
 
                                 </div>
-                            </Link>;
+                            </div>;
                         })}
                     </div>
 
