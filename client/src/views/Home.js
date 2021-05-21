@@ -22,7 +22,6 @@ function Home() {
     let location = useLocation();
 
     const [disabled, setDisabled] = useState(true);
-<<<<<<< HEAD
     const [count, setCount] = useState(0);
 
     const [color, setColor] = useState("grey");
@@ -41,25 +40,6 @@ function Home() {
     const [newTweetsLoader, setNewTweetsLoader] = useState(false);
     const [maxRows] = useState(8);
     const [tweetErr, setTweetErr] = useState({});
-=======
-    const [count, setCount] = useState(0)
-
-    const [color, setColor] = useState("grey")
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-    const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
-    const [rows, setRows] = useState(1)
-    const [loading, setLoading] = useState(true)
-    const [comment, setComment] = useState('')
-    const [tweetLoading, setTweetLoading] = useState(false)
-    const [allTweets, setAllTweets] = useState({ data: [] })
-    const [newTweets, setNewTweets] = useState({ data: [] })
-    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
-    const [lastID, setLastID] = useState('')  //the last id in the .map
-    const [minRows] = useState(1)
-    const [newTweetsLoader, setNewTweetsLoader] = useState(false)
-    const [maxRows] = useState(8)
-    const [tweetErr, setTweetErr] = useState({})
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -74,14 +54,8 @@ function Home() {
         axios.get(`/tweets/`)
             .then((res) => {
                 setAllTweets(res)
-<<<<<<< HEAD
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
-=======
-
-                // to fetch the last id inside the .map
-                setLastID(res.data[0]._id)
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
                 console.error(err);
@@ -101,17 +75,9 @@ function Home() {
     function UpdateData() {
         axios.get(`/tweets/`)
             .then((res) => {
-<<<<<<< HEAD
                 setAllTweets(res);
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
-=======
-                console.log(res.data)
-                setAllTweets(res)
-
-                // to fetch the last id inside the .map
-                setLastID(res.data[0]._id)
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
             })
             .catch((err) => {
                 console.error(err);
@@ -336,11 +302,7 @@ function Home() {
 
 
 
-<<<<<<< HEAD
                         {user.loggedin === true ?
-=======
-                        {user.loggedin ?
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
                             <div className="p-2 profile-view row mt-3">
 
                                 <div className="col-0.5">              {/* <--- user avi */}
@@ -450,13 +412,8 @@ function Home() {
                                         username={item.User[0].username} // this is a test
                                     />
 
-<<<<<<< HEAD
-                                </div>
-                            </div>;
-=======
                                 </Link>
-                            </div>
->>>>>>> 66b7ab36d5f600dce4d2b3478bf73260e1c8a188
+                            </div>;
                         })}
 
                         {/* <--- standard tweet*/}
