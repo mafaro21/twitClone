@@ -1,4 +1,14 @@
 /* color schemes */
+/* @media (prefers-color-scheme: light) {
+  body{
+    --text: #080603;
+  --background: #fbfafa;
+  --interact: #414141;
+  --posthover: #ECEBEB;
+   --border: rgb(235, 238, 240);
+  }
+} */
+
 html[data-theme="dark"]{
   --text: #fbfafa;
   --background: #080603; 
@@ -101,11 +111,26 @@ span:hover{
 }
 /* home properties */
 
+/* explore page */
+.explore-photo{
+  height: 296px;
+  width: 100%;
+}
+
+.explore-data{
+  color: white;
+  font-weight: 900;
+  font-size: 23px;
+  margin-top: -17%;
+  text-shadow: 1px 1px #000;
+}
+/* explore page */
+
+
 /* profile props */
 
 strong {
   font-weight: 700;
-  /* for fullname. You can turn it to a Class. */
 }
 .test{
   text-decoration: line-through;
@@ -231,7 +256,7 @@ button{
 
 .modal-enter{
   animation: animate-enter-frames 0.4s ease-in 0s 1 normal forwards;
-  display: block;
+  /* display: block; */
   opacity: 0;
   transform: translate(0, 25px);
 }

@@ -106,7 +106,6 @@ export default function Followers() {
 
     return (
         <div className="App general">
-            {/* <Navbar /> */}
             <div className="container  " >
                 <div className="row " >
                     <Header />

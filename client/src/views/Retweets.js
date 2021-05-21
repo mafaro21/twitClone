@@ -1,39 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react'
-import BackButton from '../components/BackButton';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import NoAccount from '../components/NoAccount';
-import deer from '../images/linus2.jpg';
-import unf1 from '../images/unf1.jpg';
-import unf2 from '../images/unf2.jpg';
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
-import { UserContext } from '../Contexts/UserContext';
+// import { UserContext } from '../Contexts/UserContext';
 import Interactive from '../components/Interactive';
 
 export default function Retweets() {
     let location = useLocation()
     let history = useHistory()
     const { user } = useParams()
-    const msg = useContext(UserContext)
     TimeAgo.addLocale(en);   //for the time ago
 
-    let path = location.pathname
-    let path1 = path.split('/u/' && '/retweets')
-    let userPath = path1[1]
-
     const [tweetLoading, setTweetLoading] = useState(true);
-    const [disabled, setDisabled] = useState(false);
     const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
 
     const [tweetCount, setTweetCount] = useState(0);
@@ -42,8 +23,6 @@ export default function Retweets() {
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [noRetweets, setNoRetweets] = useState(false);
     const [userID, setUserID] = useState('')
-    const [noAccountDiv, setNoAccountDiv] = useState(false)
-    const [sessionName, setSessionName] = useState('')
     const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
 
 
@@ -160,9 +139,6 @@ export default function Retweets() {
 
     }
 
-    let path0 = location.pathname
-    let path5 = path0.split(`/u/${profile.username}`)
-    let finalPath = path5[1]
 
     return (
         <>

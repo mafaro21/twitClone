@@ -30,7 +30,6 @@ function Home() {
     const [rows, setRows] = useState(1)
     const [loading, setLoading] = useState(true)
     const [comment, setComment] = useState('')
-    const [sessionName, setSessionName] = useState('')
     const [tweetLoading, setTweetLoading] = useState(false)
     const [allTweets, setAllTweets] = useState({ data: [] })
     const [newTweets, setNewTweets] = useState({ data: [] })
@@ -56,7 +55,7 @@ function Home() {
                 console.log(res.data)
                 setAllTweets(res)
 
-                let x = res.data.length - 1     // to fetch the last id inside the .map
+                // to fetch the last id inside the .map
                 setLastID(res.data[0]._id)
             })
             .catch((err) => {
@@ -80,7 +79,7 @@ function Home() {
                 console.log(res.data)
                 setAllTweets(res)
 
-                let x = res.data.length - 1     // to fetch the last id inside the .map
+                // to fetch the last id inside the .map
                 setLastID(res.data[0]._id)
             })
             .catch((err) => {
@@ -289,12 +288,14 @@ function Home() {
                     <Header />
 
                     <div className="col main-view phone-home ">
-                        <div className="row profile-header view p-3">
+                        {user.loggedin ?
+                            <div className="row profile-header view p-3">
 
-                            <div >
-                                <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
+                                <div >
+                                    <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
+                                </div>
                             </div>
-                        </div>
+                            : null}
 
                         <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
                         {Object.keys(tweetErr).map((key) => {
@@ -303,7 +304,7 @@ function Home() {
 
 
 
-                        {user ?
+                        {user.loggedin ?
                             <div className="p-2 profile-view row mt-3">
 
                                 <div className="col-0.5">              {/* <--- user avi */}
@@ -380,11 +381,11 @@ function Home() {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`
                             // console.log(item.User[0].username)
 
-                            return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                            return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
-                                <div className="col user-name-tweet">                   {/* <--- user content */}
+                                <Link to={`/post/${item._id}`} className="col user-name-tweet post-div">                   {/* <--- user content */}
                                     <div >
                                         <Link
                                             to={`/u/${item.User[0].username}`}
@@ -400,7 +401,7 @@ function Home() {
                                         </span>
                                     </div>
 
-                                    <p>{item.content}</p>
+                                    <p className="post-link">{item.content}</p>
 
                                     <Interactive
                                         id={item._id}
@@ -413,7 +414,7 @@ function Home() {
                                         username={item.User[0].username} // this is a test
                                     />
 
-                                </div>
+                                </Link>
                             </div>
                         })}
 

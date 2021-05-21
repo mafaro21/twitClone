@@ -1,4 +1,12 @@
 /* color schemes */
+/* @media (prefers-color-scheme: light) {
+  body{
+    --text: #080603;
+    --background: #fbfafa;
+    --sidebarbg: #DCDBDB;
+  }
+} */
+
 html[data-theme="dark"]{
   /* --accent: #ff6300; */
   /* --darkaccent: #b45235; */

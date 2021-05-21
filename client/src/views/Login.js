@@ -17,6 +17,7 @@ function Login() {
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [loading, setLoading] = useState(false);      // loading animation
+    const [errorColor, setErrorColor] = useState(false)
 
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -132,6 +133,10 @@ function Login() {
 
         setemailErr(emailErr);
         setpasswordErr(passwordErr);
+
+        if (!isValid || error.length > 2) {
+            setErrorColor(true)
+        }
         return isValid;
 
     }
@@ -160,7 +165,7 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Email"
-                                className="login-input m-2"
+                                className={errorColor ? "login-error m-2" : "login-input m-2"}
                                 required
                             />
 
@@ -171,7 +176,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
-                                className="login-input"
+                                className={errorColor ? "login-error" : "login-input"}
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {

@@ -15,11 +15,6 @@ import { UserContext } from '../Contexts/UserContext';
 
 export default function Header({ passChildData }) {
     const [user, setUser] = useContext(UserContext);
-    // const [username, setUsername] = useContext(UserContext)
-
-    const [loggedinFromContext, setLoggedinFromContext] = useState('')
-    const [fullname, setFullname] = useState("");
-    const [username, setUsername] = useState("");
 
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
@@ -70,8 +65,6 @@ export default function Header({ passChildData }) {
         (async () => {
             const res = await axios.get("/statuslogin");
             setUser(res.data); //for use context
-            setFullname(res.data.fullname);
-            setUsername(res.data.username);
             // console.log(res.data)
 
             // let x = JSON.parse(user)
@@ -90,7 +83,7 @@ export default function Header({ passChildData }) {
                     type="submit"
                     onClick={Logout}
                 >
-                    Log out @{username}
+                    Log out @{user.username}
                 </button>
             </div >
         </div>;
@@ -545,7 +538,7 @@ export default function Header({ passChildData }) {
                     </Link>
 
                     {user.loggedin === true ?
-                        <Link to="#" className="d-flex header-link">
+                        <div to="#" className="d-flex header-link">
                             <div className=" d-flex pl-2 mt-2">
                                 <div>
                                     <svg viewBox="0 0 26 26" className="icon mr-2">
@@ -556,11 +549,11 @@ export default function Header({ passChildData }) {
                                 </div>
                                 <p className="header-title " style={{ fontWeight: 700 }}>Messages</p>
                             </div>
-                        </Link>
+                        </div>
                         : null}
 
                     {user.loggedin === true ?
-                        <Link className={path === `/u/${username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${username}`}>
+                        <Link className={path === `/u/${user.username}` || path === '/edit' ? "d-flex header-link-active" : "d-flex header-link"} to={`/u/${user.username}`}>
                             <div className=" d-flex pl-2 mt-2" >
                                 <div>
                                     <svg viewBox="0 0 26 26" className="icon mr-2">

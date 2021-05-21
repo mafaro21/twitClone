@@ -330,7 +330,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
             try {
                 const result = await tweets.deleteOne(tweetObject);
                 if (result.deletedCount === 0) throw new Error("Cannot delete tweet");
-                res.status(200).send({ "deleted": result.deletedCount, "success": true});     
+                res.status(200).send({ "deleted": result.deletedCount, "success": true });
             } catch (error) {
                 res.status(400).send({ message: error.message });
             } finally {

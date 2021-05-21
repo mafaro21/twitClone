@@ -110,7 +110,6 @@ export default function Following() {
 
     return (
         <div className="App general">
-            {/* <Navbar /> */}
             <div className="container  " >
                 <div className="row " >
                     <Header />
