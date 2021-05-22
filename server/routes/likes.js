@@ -110,7 +110,7 @@ router.delete("/:tweetid", LikeLimiter, (req, res, next) => {
 });
 
 /** FETCH ALL TWEETS LIKED BY USER */
-router.get("/:userid", (req, res, next) => {
+router.get("/user/:userid", (req, res, next) => {
   const byUserId = req.params.userid;
   if (!ObjectId.isValid(byUserId)) return res.sendStatus(400);
 

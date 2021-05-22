@@ -17,7 +17,7 @@ function Login() {
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [loading, setLoading] = useState(false);      // loading animation
-    const [errorColor, setErrorColor] = useState(false)
+    const [errorColor, setErrorColor] = useState(false);
 
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -27,7 +27,7 @@ function Login() {
         </div>
         : '';
 
-    let history = useHistory()
+    let history = useHistory();
 
     const loadCaptcha = useEffect(() => {
         axios.get("/statuslogin")
@@ -37,7 +37,7 @@ function Login() {
                 }
             });
 
-        document.title = "TwitClone - Login"
+        document.title = "TwitClone - Login";
 
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
@@ -45,7 +45,7 @@ function Login() {
 
         return () => {
             document.body.removeChild(script);
-        }
+        };
 
     }, []);
 
@@ -54,10 +54,10 @@ function Login() {
     const internalError = () => {       //redirect when there is a server error
         // return <Redirect to="./Error" />;
         return history.push("/Error");
-    }
+    };
 
     const Loading = () => {
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div>
             <Loader type="Watch"
@@ -66,14 +66,14 @@ function Login() {
                 width={30}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.grecaptcha.ready(() => {
+        window.grecaptcha && window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
                 .then((responseToken) => {
                     sendtoServer(responseToken); // send this to the server with User Data
@@ -84,7 +84,7 @@ function Login() {
 
         async function sendtoServer(token) {
             if (isValid) {
-                setError(false)
+                setError(false);
                 setDisabled(true);  //disable button
                 setLoading(true);
                 const userObject = {
@@ -110,13 +110,13 @@ function Login() {
                     });
             }
         }
-    }
+    };
 
     const formValidation = () => {           /* <--- react validation */
 
         const emailErr = {};
         const passwordErr = {};
-        var emailpatt = /(^([0-9A-Za-z])[\w.-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
+        var emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         let isValid = true;
 
@@ -135,11 +135,11 @@ function Login() {
         setpasswordErr(passwordErr);
 
         if (!isValid || error.length > 2) {
-            setErrorColor(true)
+            setErrorColor(true);
         }
         return isValid;
 
-    }
+    };
 
 
     return (
@@ -157,7 +157,7 @@ function Login() {
 
                         <div className="">
                             {Object.keys(emailErr).map((key) => {
-                                return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>;
                             })}
                             <input
                                 name="email"
@@ -180,7 +180,7 @@ function Login() {
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {
-                                return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>;
                             })}
                         </div>
                         <br />

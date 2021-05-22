@@ -7,7 +7,7 @@ const uri = process.env.MONGO_URL;
 const session = require("express-session");
 const isLoggedin = require("./middleware/authchecker");
 const redis = require("redis");
-const morgan = require('morgan');
+const morgan = require("morgan");
 const RedisStore = require("connect-redis")(session);
 
 const app = express();

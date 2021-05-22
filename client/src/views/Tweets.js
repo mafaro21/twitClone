@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 // import NoAccount from '../components/NoAccount';
 import Interactive from '../components/Interactive';
 import axios from 'axios';
@@ -16,8 +16,7 @@ import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
 
 export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, fullname }) {
-    const [loggedIn] = useContext(UserContext)
-
+    const [user] = useContext(UserContext);
 
     const [tweetLoading, setTweetLoading] = useState(true);
     const [noTweets, setNoTweets] = useState(false);
@@ -25,17 +24,17 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     // const [disabled, setDisabled] = useState(false);
     const [tweetCount, setTweetCount] = useState(0);
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
-    const [userNotFound, setUserNotFound] = useState(false)
-    const [sessionName, setSessionName] = useState('')
-    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
-    let history = useHistory()
+    const [userNotFound, setUserNotFound] = useState(false);
+    const [sessionName, setSessionName] = useState('');
+    const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
+    let history = useHistory();
 
     let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
 
-    let location = useLocation()
-    let path = location.pathname
-    let path1 = path.split('/u/')
-    let userPath = path1[1]
+    let location = useLocation();
+    let path = location.pathname;
+    let path1 = path.split('/u/');
+    let userPath = path1[1];
 
 
     useEffect(() => {   //fetching data for logged in users
@@ -60,15 +59,15 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
         //         })
         // } else {
 
-        setTweets({ data: [] }) //refresh tweets state when going to another user's profile
+        setTweets({ data: [] }); //refresh tweets state when going to another user's profile
 
 
-        setTweetLoading(true)
+        setTweetLoading(true);
 
         IDtoTweets && axios.get(`/tweets/user/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
                 setTweets(res);
-                setNoTweets(false)
+                setNoTweets(false);
                 tweetCountFromTweets(res.data.length);
                 console.log(res.data);
                 // console.log(x)
@@ -99,7 +98,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
         IDtoTweets && axios.get(`/tweets/user/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
                 setTweets(res);
-                setNoTweets(false)
+                setNoTweets(false);
                 console.log(res.data);
                 // console.log(x)
             })
@@ -110,13 +109,13 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
                 } else if (error.response.status === 404) {
                     setNoTweets(true);
                 }
-            })
+            });
     }
 
 
     if (childData) {
-        UpdateData()
-        setchildData(false)
+        UpdateData();
+        setchildData(false);
     }
 
     const NoTweets = () => {        //only shown when user has no tweets
@@ -129,7 +128,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
 
     const Loading = () => {
 
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
@@ -143,8 +142,8 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
 
     return (
         <div>
-            {noTweets && <NoTweets /> }
-            {tweetLoading && <Loading /> }
+            {noTweets && <NoTweets />}
+            {tweetLoading && <Loading />}
             {tweets.data.map((item) => (
                 <div className="p-2 view row main-post-div modal-enter" key={item._id}>
                     {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
@@ -245,5 +244,5 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
                 </div>
             ))}
         </div>
-    )
+    );
 }

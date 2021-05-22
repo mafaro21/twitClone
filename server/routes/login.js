@@ -15,7 +15,7 @@ const LoginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
     skipSuccessfulRequests: true,
-    message: { "message": "Too many tries, try again in 15 mins" }
+    message: { "message": "Too many tries, try again after some time" }
 });
 
 
