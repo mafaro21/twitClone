@@ -476,7 +476,7 @@ export default function Post() {
 
                                         </div>
 
-                                        {(item.comments !== 0 && likeCount !== 0) &&
+                                        {item.comments === 0 && likeCount === 0 ? null :
                                             <div className="view mt-1  p-2">
                                                 <span className={item.comments === 0 ? "d-none" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
                                                     <span
