@@ -14,7 +14,7 @@ const RegisterLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 mins window
     max: 5, // block after 5 FAILED requests
     skipSuccessfulRequests: true,
-    message: { "message": "Too many tries, try again in 15 mins" }
+    message: { "message": "Too many tries, try again after some time" }
 });
 
 

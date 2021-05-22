@@ -49,7 +49,7 @@ export default function Likes({ IDtoTweets }) {
 
         setTweetLoading(true)
 
-        axios.get(`/likes/${IDtoTweets}`) //fetching all tweets from a given user
+        axios.get(`/likes/user/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
                 setTweets(res);
                 console.log(res.data);

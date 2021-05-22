@@ -20,7 +20,7 @@ function Signup() {
     const [disabled, setDisabled] = useState(false);// button disabler during request
 
     const [loading, setLoading] = useState(false);// loading animation
-    const [errorColor, setErrorColor] = useState(false)
+    const [errorColor, setErrorColor] = useState(false);
 
     const [error, setError] = useState([]); //using array, data comes that way
     const errorDiv = error
@@ -29,26 +29,26 @@ function Signup() {
         </div>
         : '';
 
-    let history = useHistory()
+    let history = useHistory();
 
     const loadCaptcha = useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
         document.body.appendChild(script);
 
-        document.title = "TwitClone - Signup"
+        document.title = "TwitClone - Signup";
 
         return () => {
             document.body.removeChild(script);
-        }
+        };
     }, []);
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
-    }
+    };
 
     const Loading = () => { //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div>
             <Loader type="Watch"
@@ -56,14 +56,14 @@ function Signup() {
                 height={30}
                 width={30}
             />
-        </div>
-    }
+        </div>;
+    };
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.grecaptcha.ready(() => {
+        window.grecaptcha && window.grecaptcha.ready(() => {
             window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
                 .then((responseToken) => {
                     sendtoServer(responseToken); // send this to the server with User Data
@@ -74,7 +74,7 @@ function Signup() {
 
         async function sendtoServer(token) {
             if (isValid) {
-                setError(false)
+                setError(false);
                 setDisabled(true);  //disable button
                 setLoading(true);
 
@@ -103,7 +103,7 @@ function Signup() {
                     );
             }
         }
-    }
+    };
 
     const formValidation = () => {           /* <--- react validation */
 
@@ -148,12 +148,12 @@ function Signup() {
         setconfirmpasswordErr(confirmpasswordErr);
 
         if (!isValid || error.length > 2) {
-            setErrorColor(true)
+            setErrorColor(true);
         }
 
         return isValid;
 
-    }
+    };
 
 
 
@@ -178,7 +178,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(fullnameErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>;
                             })}
                         </div>
                         <div>
@@ -193,7 +193,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(emailErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>;
                             })}
                         </div>
 
@@ -210,7 +210,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {passwordErr[key]} </div>;
                             })}
                         </div>
 
@@ -226,7 +226,7 @@ function Signup() {
                                 required
                             />
                             {Object.keys(confirmpasswordErr).map((key) => {/* <--- react validation */
-                                return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>
+                                return <div style={{ color: "red" }} className="error-msg"> {confirmpasswordErr[key]} </div>;
                             })}
                         </div>
                         <br />

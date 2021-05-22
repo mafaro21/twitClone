@@ -67,12 +67,9 @@ export default function Header({ passChildData }) {
             setUser(res.data); //for use context
             // console.log(res.data)
 
-            // let x = JSON.parse(user)
-            // setLoggedinFromContext(x.loggedin)
         })();
 
-
-    }, [setUser]);
+    }, []);
 
 
     const UserModal = () => {
@@ -202,7 +199,8 @@ export default function Header({ passChildData }) {
 
     // });
 
-    const TweetLoading = () => {    //loader after tweet has been sent
+    /** Loader after tweet has been sent*/ 
+    const TweetLoading = () => {    
         let x = localStorage.getItem("accent") || "grey";
 
         return <div className="d-flex justify-content-center ">
@@ -387,7 +385,7 @@ export default function Header({ passChildData }) {
             setColor("grey");
         }
 
-        if (tweetContent.length !== 0) {
+        if (tweetContent.trim().length > 0) {
             setDisabled(false);
         } else {
             setDisabled(true);
@@ -474,7 +472,7 @@ export default function Header({ passChildData }) {
                                                 </div>
                                             </div>
 
-                                            {showEmojiPicker ? <Emoji /> : null}
+                                            {showEmojiPicker && <Emoji />}
 
                                             <button
                                                 id="submit-btn"
