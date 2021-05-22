@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import '../css/App.css';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
@@ -6,26 +6,27 @@ import '../css/Main.css';
 import BackButton from '../components/BackButton';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
-import axios from 'axios'
+import { useParams, useHistory, useLocation, Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
 import Loader from "react-loader-spinner";
 import NoAccount from '../components/NoAccount';
 
 export default function Following() {
 
-    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
+    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }]);  //display user data
 
-    const [following, setFollowing] = useState({ data: [] })
+    const [following, setFollowing] = useState({ data: [] });
 
-    const [notFollowing, setNotFollowing] = useState(false)
+    const [notFollowing, setNotFollowing] = useState(false);
+    const [notAuthorized, setNotAuthorized] = useState(false); // <--------for redirect if notloggedin
 
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
-    const [noAccountDiv, setNoAccountDiv] = useState(false)
+    const [noAccountDiv, setNoAccountDiv] = useState(false);
 
-    let { user } = useParams()
+    const { username } = useParams();
 
-    let { history } = useHistory()
+    const { history } = useHistory();
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
@@ -33,21 +34,21 @@ export default function Following() {
     const Error = () => {       //redirect when there is a server error
         return history.push("/NotFound404");
         // return <Redirect to={Error} />
-    }
+    };
 
 
     useEffect(() => {
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
-                setProfile(res.data[0])
+                setProfile(res.data[0]);
                 // console.log(res.data)
-                let x = res.data[0]._id
-                getFollowing(x)
+                let x = res.data[0]._id;
+                getFollowing(x);
                 // console.log(x)
-                document.title = `People followed by @${user} - TwitClone`
+                document.title = `People followed by @${username} - TwitClone`;
             })
             .catch((error) => {
-                console.error(error)
+                console.error(error);
 
                 if (error.response.status === 500) {
                     internalError();
@@ -61,36 +62,35 @@ export default function Following() {
             axios.get(`/follows/from/${x}`)
                 .then((res) => {
                     // console.log(res.data)
-                    setFollowing(res)
-                    setLoading(false)
+                    setFollowing(res);
+                    setLoading(false);
                 })
                 .catch((err) => {
-                    console.error(err)
+                    console.error(err.data);
                     if (err.response.status === 404) {
-                        setLoading(false)
-                        setNotFollowing(true)
+                        setLoading(false);
+                        setNotFollowing(true);
                     } else if (err.response.status === 401) {
-                        setLoading(false)
-                        setNoAccountDiv(true)
+                        setLoading(false);
+                        setNoAccountDiv(true);
+                        setNotAuthorized(true);
 
                         setTimeout(() => {
-                            setNoAccountDiv(false)
-                            return window.location.replace(`/u/${user}`);
-
+                            setNoAccountDiv(false);                   
                         }, 2000);
                     }
-                })
+                });
 
         }
-    }, [user])
+    }, [username]);
 
-    let location = useLocation()
-    let path = location.pathname
-    let path1 = path.split(`/u/${profile.username}`)
-    let finalPath = path1[1]
+    let location = useLocation();
+    let path = location.pathname;
+    let path1 = path.split(`/u/${profile.username}`);
+    let finalPath = path1[1];
 
     const Loading = () => {        //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
@@ -104,16 +104,17 @@ export default function Following() {
 
     const NotFollowing = () => {
         return <div className="d-flex justify-content-center p-2">
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {user} isn't following anyone.... very picky </span>
-        </div>
-    }
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {username} isn't following anyone.... very picky </span>
+        </div>;
+    };
 
     return (
         <div className="App general">
             <div className="container  " >
                 <div className="row " >
                     <Header />
-                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
+                    {notAuthorized && <Redirect to={`/u/${username}`} />}
                     <div className="col main-view phone-home " >
 
                         <div className="row profile-header ">
@@ -133,7 +134,7 @@ export default function Following() {
                             </div>
                         </div>
 
-                        <div className="row d-flex view" style={{ textAlign: 'center', fontWeight: '700' }}>
+                        <div className="row d-flex view" style={{ textAlign: 'center', fontWeight: 700 }}>
                             <Link to={`/u/${profile.username}/followers`} className={finalPath === '/followers' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
                                 <p className="p-2 ">
                                     Followers
@@ -144,8 +145,8 @@ export default function Following() {
                             </div>
                         </div>
 
-                        {notFollowing ? <NotFollowing /> : null}
-                        {loading ? <Loading /> : null}
+                        {notFollowing && <NotFollowing /> }
+                        {loading && <Loading /> }
                         {following.data.map((item, i) => {
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
 
@@ -168,7 +169,7 @@ export default function Following() {
                                     </div>
                                     <div>{item.User[0].bio}</div>
                                 </div>
-                            </Link>
+                            </Link>;
                         })}
                     </div>
 
@@ -177,5 +178,5 @@ export default function Following() {
             </div>
 
         </div>
-    )
+    );
 }

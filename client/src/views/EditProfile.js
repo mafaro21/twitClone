@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import '../css/App.css';
 import '../css/custom.scss';
 import '../css/Main.css';
@@ -6,30 +6,32 @@ import BackButton from '../components/BackButton';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import axios from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, Redirect, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 // import Loader from "react-loader-spinner";
 
 export default function Edit() {
     let history = useHistory();
 
-    const [editFullname, setEditFullname] = useState('')
-    const [editUsername, setEditUsername] = useState('')
-    const [editBio, setEditBio] = useState('')
+    const [editFullname, setEditFullname] = useState('');
+    const [editUsername, setEditUsername] = useState('');
+    const [editBio, setEditBio] = useState('');
 
-    const [fullnameErr, setFullnameErr] = useState({}) // front end validation
-    const [usernameErr, setUsernameErr] = useState({})
-    const [bioErr, setBioErr] = useState({})
+    const [fullnameErr, setFullnameErr] = useState({}); // front end validation
+    const [usernameErr, setUsernameErr] = useState({});
+    const [bioErr, setBioErr] = useState({});
 
-
-    const [count, setCount] = useState(0) //word counter
+    const [serverError, setserverError] = useState(false); // <-- for redirect on Server Error
+    
+    const [count, setCount] = useState(0); //word counter
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [loading, setLoading] = useState(false);      // loading animation
 
-    const { user } = useParams()
-    const [errorColor, setErrorColor] = useState(false)
+    const { username } = useParams();
+    
+    const [errorColor, setErrorColor] = useState(false);
 
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
@@ -40,39 +42,39 @@ export default function Edit() {
 
     useEffect(() => {
 
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
-                console.log(res.data)
-                setEditBio(res.data[0].bio)
-                setEditFullname(res.data[0].fullname)
-                setEditUsername(res.data[0].username)
+                console.log(res.data);
+                setEditBio(res.data[0].bio);
+                setEditFullname(res.data[0].fullname);
+                setEditUsername(res.data[0].username);
             })
             .catch((error) => {
-                console.error(error)
+                console.error(error);
                 if (error.response.status === 500) {
                     internalError();
                 }
             });
-    }, [user])
+    }, [username]);
 
     const internalError = () => {       //redirect when there is a server error
-        return history.push("/Error");
+        setserverError(true);
     };
 
     const onChange = (e) => {
-        setEditBio(e.target.value)
-        setCount(e.target.value.length)
-    }
+        setEditBio(e.target.value);
+        setCount(e.target.value.length);
+    };
 
 
     const onClick = () => {
         setFullnameErr(false);
         setBioErr(false);
         setUsernameErr(false);
-    }
+    };
 
     const Loading = () => {        //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center ">
             <Loader type="ThreeDots"
@@ -83,8 +85,8 @@ export default function Edit() {
             />
             {/* <div className="d-flex mt-2 ml-3" style={{ color: x }}>gg</div> */}
 
-        </div>
-    }
+        </div>;
+    };
 
 
     const handleSubmit = (e) => {
@@ -100,7 +102,7 @@ export default function Edit() {
                 fullname: editFullname.trim(),
                 username: editUsername.trim(),
                 bio: editBio.replace(/\n/g, " ").trim()
-            }
+            };
 
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
@@ -116,13 +118,13 @@ export default function Edit() {
                     setLoading(false);
                 });
         }
-    }
+    };
 
     const editValidation = () => {
 
-        const fullnameErr = {}
-        const usernameErr = {}
-        const bioErr = {}
+        const fullnameErr = {};
+        const usernameErr = {};
+        const bioErr = {};
         let userReg = /^[0-9a-zA-Z_\S]+$/gi;
         // eslint-disable-next-line
         let fullnameReg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/gi;
@@ -156,17 +158,18 @@ export default function Edit() {
         setUsernameErr(usernameErr);
 
         if (!isValid || error.length > 2) {
-            setErrorColor(true)
+            setErrorColor(true);
         }
 
         return isValid;
-    }
+    };
 
 
 
 
     return (
         <div className="App general " >
+            {serverError && <Redirect to="/Error" />}
             {/* <Navbar /> */}
 
             <div className="container  " >
@@ -226,7 +229,7 @@ export default function Edit() {
                                                 required
                                             />
                                             {Object.keys(fullnameErr).map((key) => {
-                                                return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>
+                                                return <div style={{ color: "red" }} className="error-msg"> {fullnameErr[key]} </div>;
                                             })}
                                         </div>
                                         <div>
@@ -242,7 +245,7 @@ export default function Edit() {
                                                 required
                                             />
                                             {Object.keys(usernameErr).map((key) => {
-                                                return <div style={{ color: "red" }} className="error-msg"> {usernameErr[key]} </div>
+                                                return <div style={{ color: "red" }} className="error-msg"> {usernameErr[key]} </div>;
                                             })}
                                         </div>
                                         <div>
@@ -259,7 +262,7 @@ export default function Edit() {
                                                 required
                                             />
                                             {Object.keys(bioErr).map((key) => {
-                                                return <div style={{ color: "red" }} className="error-msg"> {bioErr[key]} </div>
+                                                return <div style={{ color: "red" }} className="error-msg"> {bioErr[key]} </div>;
                                             })}
                                             <div className="container counter">
                                                 {count}/100

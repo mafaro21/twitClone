@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
 import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
 import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-import { faHeart as heartSolid}  from '@fortawesome/free-solid-svg-icons/faHeart';
+import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
@@ -32,7 +32,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     const [retweetCount, setRetweetCount] = useState(parseInt(retweets)); // local
     const [retweetState, setRetweetState] = useState(Boolean(retweetsByMe)); // local
     //------------------------------------------------------------------------
-    
+
     const [deleteTweet, setdeleteTweet] = useState({});
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
@@ -227,7 +227,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
 
         <div className="interact-row d-flex ">
-            {noAccountDiv && <NoAccount currentState={noAccountDiv} /> }
+            {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
             {serverError && <Redirect to="/Error" />}
             <button
                 className={comments ? "comment-true col" : "comment col"}

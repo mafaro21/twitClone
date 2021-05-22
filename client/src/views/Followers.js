@@ -18,14 +18,15 @@ export default function Followers() {
     const [followers, setFollowers] = useState({ data: [] })
 
     const [notFollowers, setNoFollowers] = useState(false)
+    const [notAuthorized, setNotAuthorized] = useState(false); // <--------for redirect if notloggedin
 
     const [loading, setLoading] = useState(true)
 
     const [noAccountDiv, setNoAccountDiv] = useState(false)
 
-    let { user } = useParams()
+    const { username } = useParams()
 
-    let { history } = useHistory()
+    const { history } = useHistory()
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
@@ -38,13 +39,13 @@ export default function Followers() {
 
     useEffect(() => {
 
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+        axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0])
                 // console.log(res.data)
                 let x = res.data[0]._id
                 getFollowers(x)
-                document.title = `People following @${user} - TwitClone`
+                document.title = `People following @${username} - TwitClone`
             })
             .catch((error) => {
                 console.error(error)
@@ -67,23 +68,23 @@ export default function Followers() {
                     setLoading(false)
                 })
                 .catch((err) => {
-                    console.error(err)
+                    console.error(err.data)
                     if (err.response.status === 404) {
                         setLoading(false)
                         setNoFollowers(true)
                     } else if (err.response.status === 401) {
                         setLoading(false)
                         setNoAccountDiv(true)
-
+                        setNotAuthorized(true);
+    
                         setTimeout(() => {
                             setNoAccountDiv(false)
-                            return window.location.replace(`/u/${user}`);
                         }, 2000);
                     }
                 })
 
         }
-    }, [user])
+    }, [username])
 
     const Loading = () => {        //the loading div
         let x = localStorage.getItem("accent") || 'grey'
@@ -100,7 +101,7 @@ export default function Followers() {
 
     const NoFollowers = () => {
         return <div className="d-flex justify-content-center p-2">
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>No one follows {user}, they seem nice though</span>
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>No one follows {username}, they seem nice though</span>
         </div>
     }
 
@@ -110,7 +111,8 @@ export default function Followers() {
                 <div className="row " >
                     <Header />
 
-                    {noAccountDiv ? <NoAccount currentState={noAccountDiv} /> : null}
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
+                    {notAuthorized && <Redirect to={`/u/${username}`} />}
                     <div className="col main-view phone-home " >
 
                         <div className="row profile-header ">
@@ -144,7 +146,7 @@ export default function Followers() {
                         </div>
 
                         {notFollowers ? <NoFollowers /> : null}
-                        {loading ? <Loading /> : null}
+                        {loading && <Loading /> }
                         {followers.data.map((item, i) => {
                             // setHoverData(item.User[0])
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
