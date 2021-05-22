@@ -150,7 +150,7 @@ button:hover{
   border: 2px solid red;
   border-radius: 20px;
   height: 60px;
-  width: 30%;
+  width: 90%;
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
   outline: none;
@@ -181,7 +181,7 @@ button:hover{
   border: 2px solid red;
   border-radius: 20px;
   height: 60px;
-  width: 50%;
+  width: 100%;
   background-color:rgba(0, 0, 0, 0.2);
   color: white;
   outline: none;

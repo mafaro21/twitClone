@@ -1,3 +1,1 @@
-- api data for explore page
-- data sliding in
-- set up search front end validation
+- fixed input errors on login and signup
