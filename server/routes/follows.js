@@ -9,7 +9,7 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 const FollowLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 20, //==> 20 hits in 5 minute window.
-    message: { "message": "Too many requests, try again in 5 mins" }
+    message: { "message": "Too many requests, try again later" }
 });
 
 
