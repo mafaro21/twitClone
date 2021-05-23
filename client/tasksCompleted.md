@@ -1,3 +1,3 @@
-- api data for explore page
-- data sliding in
-- set up search front end validation
+- fixed input errors on login and signup
+- show more for home works but it clears the previously fetched tweets 
+- animation when a tweet has been deleted
