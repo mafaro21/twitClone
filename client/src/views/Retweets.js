@@ -8,7 +8,7 @@ import ReactTimeAgo from 'react-time-ago';
 // import { UserContext } from '../Contexts/UserContext';
 import Interactive from '../components/Interactive';
 
-export default function Retweets() {
+export default function Retweets({ IDtoTweets }) {
     let location = useLocation()
     let history = useHistory()
     const { user } = useParams()
@@ -28,48 +28,29 @@ export default function Retweets() {
 
     useEffect(() => {   //fetching data for logged in users
 
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
+
+        setTweets({ data: [] }) // this is to refresh the state to make sure someone else's retweets don't show up on another account
+
+        setTweetLoading(true)
+
+        IDtoTweets && axios.get(`/retweets/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
-                setProfile(res.data[0]);
-                setUserID(res.data[0]._id);
-                getTweets(res.data[0]._id);
-                // console.log(res.data)
-                document.title = `TwitClone - @${user}`
+                setNoRetweets(false)
+                setTweets(res);
+                console.log(res.data);
+                // console.log(x)
             })
             .catch((error) => {
-
+                console.error(error);
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setTweetLoading(false);
-                    setUserNotFound(true)
-                    document.title = "TwitClone - User Not Found!!"
-                    // Error(user);
+                    setNoRetweets(true);
                 }
+            }).finally(() => {
+                setTweetLoading(false);
             });
 
-        setTweets({ data: [] }) // this is to refresh the state to make sure someone else's retweets don't show up on another account
-        async function getTweets(x) {
-            setTweetLoading(true)
-
-            axios.get(`/retweets/${x}`) //fetching all tweets from a given user
-                .then((res) => {
-                    setNoRetweets(false)
-                    setTweets(res);
-                    console.log(res.data);
-                    // console.log(x)
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response.status === 500) {
-                        internalError();
-                    } else if (error.response.status === 404) {
-                        setNoRetweets(true);
-                    }
-                }).finally(() => {
-                    setTweetLoading(false);
-                });
-        }
 
     }, [user]);
 
@@ -83,8 +64,8 @@ export default function Retweets() {
         return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
                 color={x}
-                height={60}
-                width={60}
+                height={50}
+                width={50}
             />
 
         </div>;

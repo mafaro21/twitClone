@@ -14,7 +14,7 @@ import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
 
 
-export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username }) {
+export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username, deleteID }) {
     //most props are from profile.js
 
     const [user] = useContext(UserContext);
@@ -48,6 +48,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
     const handleDelete = (e, id) => {
         e.preventDefault();
+        console.log(id)
 
         if (!deleteTweet[id]) {
             setDisabled(true);
@@ -60,6 +61,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 .then((res) => {
                     console.log(res.data);
                     passChildData(true);
+                    deleteID(id)
                     // getData()
                 })
                 .catch((error) => {

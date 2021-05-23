@@ -21,19 +21,6 @@ function Sidebar() {
     const newsRef = useRef(false);
 
 
-    // const Loading = () => {        //the loading div
-    //     let x = localStorage.getItem("accent") || 'grey'
-
-    //     return <div className="d-flex justify-content-center">
-    //         <Loader type="TailSpin"
-    //             color={x}
-    //             height={40}
-    //             width={40}
-    //         />
-
-    //     </div>
-    // }
-
     let location = useLocation()
 
 
@@ -43,7 +30,7 @@ function Sidebar() {
 
             <div className="p-3 sidebar mt-4">
                 <h5 style={{ fontWeight: 700 }}>People You Should Follow</h5>
-                <p>Trending</p>
+                <p>.</p>
             </div>
 
             {user.loggedin === true ?

@@ -30,6 +30,7 @@ export default function Post() {
     const [user] = useContext(UserContext);
 
     const [isLiked, setisLiked] = useState(false);
+    const [isRetweeted, setisRetweeted] = useState(false)
     const [tweets, setTweets] = useState({ data: [] });            // for displaying tweets and other info
     const [loading, setLoading] = useState(true);      // loading animation
     const [disabled, setDisabled] = useState(false);    // button disabler during request
@@ -74,9 +75,11 @@ export default function Post() {
  * SO NO NEED OF FETCHING ALL THE tweets AGAIN from SERVER just for 1 update.
  * 
  * */
+    const [commentCount, setCommentCount] = useState(0)
     const [likeCount, setLikeCount] = useState(0); // local
     const [likedState, setLikedState] = useState(0); // local
     const [retweetState, setRetweetState] = useState(0); // local
+    const [retweetCount, setRetweetCount] = useState(0)
     //------------------------------------------------------------------------
 
 
@@ -98,7 +101,7 @@ export default function Post() {
 
         setDisabled(true);
 
-        if (!isLiked && isLikedbyMe === 0) {
+        if (!isLiked && likedState === 0) {
             setisLiked(true);
 
             axios.post(`/likes/${id}`)
@@ -106,6 +109,7 @@ export default function Post() {
                     // console.log(res.data)
                     setDisabled(false);
                     setLikedState(likedState + 1);
+                    setLikeCount(likeCount + 1)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -125,6 +129,7 @@ export default function Post() {
                     // console.log(res.data)
                     setDisabled(false);
                     setLikedState(likedState - 1);
+                    setLikeCount(likeCount - 1)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -138,6 +143,52 @@ export default function Post() {
                 });
         }
     };
+
+    const handleRetweet = (id) => {     // retweeting and unretweeting posts
+        setDisabled(true);
+
+        if (!isRetweeted && retweetState === 0) {
+            setisRetweeted(true);
+
+            axios.post(`/retweets/${id}`)
+                .then((res) => {
+                    console.log(res.data, 'from retweet')
+                    setDisabled(false);
+                    setRetweetState(retweetState + 1);
+                    setRetweetCount(retweetCount + 1)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false);
+                    }, 2000);
+                });
+
+        } else {
+            setisRetweeted(false);
+
+            axios.delete(`/retweets/${id}`)
+                .then((res) => {
+                    console.log(res.data, 'from retweet')
+                    setDisabled(false);
+                    setRetweetState(retweetState - 1);
+                    setRetweetCount(retweetCount - 1)
+                })
+                .catch((error) => {
+                    console.error(error);
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
+
+                }).finally(() => {
+                    setDisabled(false);
+                    setTimeout(() => {
+                        setNoAccountDiv(false);
+                    }, 2000);
+                });
+        }
+    }
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
@@ -155,9 +206,11 @@ export default function Post() {
                 setTweets(res);
                 setLoading(false);
                 setLikeCount(res.data[0].likes);
-                console.log(likeCount);
+                setRetweetCount(res.data[0].retweets)
+                setCommentCount(res.data[0].comments)
+                // console.log(likeCount);
                 console.log(res.data);
-                
+
             })
             .catch((error) => {
                 console.error(error);
@@ -182,7 +235,7 @@ export default function Post() {
                 console.error(error);
             });
 
-     
+
 
         axios.get(`retweets/me/${finalPath}`)
             .then((res) => {
@@ -195,17 +248,14 @@ export default function Post() {
     }
 
     function getComments() {
-        setCommentLoading(true)
         axios.get(`/comments/tweet/${finalPath}`)
-        .then((res) => {
-            // console.log(res.data)
-            setOtherComments(res);
-        })
-        .catch((err) => {
-            console.error(err);
-        }).finally(()=>{
-            setCommentLoading(false)
-        })
+            .then((res) => {
+                // console.log(res.data)
+                setOtherComments(res);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
     }
 
     useEffect(() => {   //fetching data for logged in users
@@ -273,8 +323,8 @@ export default function Post() {
         return <div className="d-flex justify-content-center mt-3">
             <Loader type="TailSpin"
                 color={x}
-                height={60}
-                width={60}
+                height={50}
+                width={50}
             />
 
         </div>;
@@ -342,6 +392,7 @@ export default function Post() {
                     setShowEmojiPicker(false);
                     setRows(1);
                     getComments();
+                    setCommentCount(commentCount + 1)
                 })
                 .catch((error) => {
                     // setTweetLoading(false);
@@ -404,6 +455,7 @@ export default function Post() {
         }
 
     };
+
 
     return (
         <div className="general" >
@@ -476,15 +528,26 @@ export default function Post() {
 
                                         </div>
 
-                                        {item.comments === 0 && likeCount === 0 ? null :
+                                        {/* showing whether a post has likes, retweets or comments */}
+                                        {commentCount === 0 && likeCount === 0 && retweetCount === 0 ? null :
                                             <div className="view mt-1  p-2">
-                                                <span className={item.comments === 0 ? "d-none" : "mr-3"}>   {/*show/ hide whether there are comments or not */}
+                                                <span className={commentCount === 0 ? "d-none" : "mr-3"}>
                                                     <span
                                                         style={{ fontWeight: 700 }}
                                                         className="text"
                                                     >
-                                                        {item.comments}
-                                                    </span> {item.comments === 1 ? "Comment" : "Comments "}
+                                                        {commentCount}
+                                                    </span> {commentCount === 1 ? "Comment" : "Comments "}
+                                                </span>
+
+                                                <span className={retweetCount === 0 ? "d-none" : "mr-3"}>
+                                                    <span
+                                                        style={{ fontWeight: 700 }}
+                                                        className="text"
+                                                    >
+                                                        {retweetCount}
+                                                        {/* fix this...to local */}
+                                                    </span> {retweetCount === 1 ? "Retweet" : "Retweets"}
                                                 </span>
 
                                                 <span className={likeCount === 0 ? "d-none" : null}>
@@ -494,7 +557,7 @@ export default function Post() {
                                                     >
                                                         {likeCount}
                                                         {/* fix this...to local */}
-                                                    </span> {likeCount === 1 ? "Like" : "Likes"}      {/*show/ hide the (s) depending on number of likes */}
+                                                    </span> {likeCount === 1 ? "Like" : "Likes"}
                                                 </span>
                                             </div>
                                         }
@@ -504,7 +567,11 @@ export default function Post() {
                                                 <FontAwesomeIcon icon={faComment} size="lg" />
                                             </button>
 
-                                            <button className={isRetweetedbyMe === 1 ? "col retweet-true" : "col retweet"}>
+                                            <button
+                                                className={retweetState === 1 ? "col retweet-true" : "col retweet"}
+                                                onClick={() => handleRetweet(item._id)}
+                                                disabled={disabled}
+                                            >
                                                 <FontAwesomeIcon icon={faRetweet} />
                                             </button>
 
@@ -570,7 +637,6 @@ export default function Post() {
                                         </div>
                                     ))}
 
-                                    {/* {loading ? <Loading /> : null} */}
 
                                     <div className="d-flex flex-row mt-1 justify-content-between">
 
@@ -596,15 +662,6 @@ export default function Post() {
 
                                         {showEmojiPicker ? <Emoji /> : null}
 
-                                        {/* <Picker
-                                        set='twitter'
-                                        onSelect={addEmoji}
-                                        title='Pick your emoji…'
-                                        emoji='point_up'
-                                        style={{ position: 'absolute', marginTop: '20px', right: '20px', zIndex: '2' }}
-                                        theme='auto'
-                                    /> */}
-
                                         <button
                                             // id="submit-btn"
                                             className="btn login-submit btn-accent-outline rounded-pill "
@@ -623,7 +680,7 @@ export default function Post() {
                         {otherComments.data.map((item, i) => {
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
 
-                            return <div className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link" : "p-2 view row main-post-div post-link name-link"} key={i} >             {/* <--- standard tweet*/}
+                            return <div className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link modal-enter" : "p-2 view row main-post-div post-link name-link modal-enter"} key={i} >             {/* <--- standard tweet*/}
                                 <Link to={`/u/${item.User[0].username}`} className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </Link>
@@ -643,7 +700,10 @@ export default function Post() {
                                             <ReactTimeAgo date={item.date} locale="en-US" timeStyle="twitter" />
                                         </span>
                                     </div>
-                                    <p className="post-link ">{item.content}</p>
+                                    <p className="post-link ">
+                                        {item.content}
+                                        {/* {item.content.match(/[@]\w+/g) ? " accent" : "post-link "} */}
+                                    </p>
 
                                     <div className="interact-row d-flex ">
                                         <button
