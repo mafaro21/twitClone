@@ -76,7 +76,7 @@ export default function Followers() {
                         setLoading(false)
                         setNoAccountDiv(true)
                         setNotAuthorized(true);
-    
+
                         setTimeout(() => {
                             setNoAccountDiv(false)
                         }, 2000);
@@ -92,8 +92,8 @@ export default function Followers() {
         return <div className="d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
                 color={x}
-                height={60}
-                width={60}
+                height={50}
+                width={50}
             />
 
         </div>;
@@ -146,7 +146,7 @@ export default function Followers() {
                         </div>
 
                         {notFollowers ? <NoFollowers /> : null}
-                        {loading && <Loading /> }
+                        {loading && <Loading />}
                         {followers.data.map((item, i) => {
                             // setHoverData(item.User[0])
                             let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";

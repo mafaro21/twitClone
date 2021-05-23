@@ -8,6 +8,8 @@ import Header from '../components/Header';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile';
+import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons/faArrowCircleDown';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import Loader from "react-loader-spinner";
@@ -23,6 +25,7 @@ function Home() {
 
     const [disabled, setDisabled] = useState(true);
     const [count, setCount] = useState(0);
+    const [deleteId, setDeleteId] = useState(0)
 
     const [color, setColor] = useState("grey");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -30,7 +33,7 @@ function Home() {
     const [rows, setRows] = useState(1);
     const [loading, setLoading] = useState(true);
     const [comment, setComment] = useState('');
-    const [sessionName, setSessionName] = useState('');
+    const [endOfTweets, setEndOfTweets] = useState(false)   //showing the bottom div when the last tweets have been fetched
     const [tweetLoading, setTweetLoading] = useState(false);
     const [allTweets, setAllTweets] = useState({ data: [] });
     const [newTweets, setNewTweets] = useState({ data: [] });
@@ -56,6 +59,8 @@ function Home() {
                 setAllTweets(res)
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
+                // console.log(res.data)
+                // console.log((res.data[x]._id))
             })
             .catch((err) => {
                 console.error(err);
@@ -170,8 +175,8 @@ function Home() {
         return <div className="accent d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
                 color={x}
-                height={60}
-                width={60}
+                height={50}
+                width={50}
             />
 
         </div>;
@@ -205,7 +210,7 @@ function Home() {
                     setColor('grey');
                     setShowEmojiPicker(false);
                     setRows(3);
-
+                    UpdateData()
                 })
                 .catch((error) => {
                     setTweetLoading(false);
@@ -240,26 +245,19 @@ function Home() {
 
     TimeAgo.addLocale(en);   //for the time ago
 
-    /** ⚠⛔🚫 NEEDS REPLACING with BUTTON 🔽 => INFINITE LOOP FETCHING! */
-     window.onscroll = function () {
-    //    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-    //         // window.alert(`the last id is ${lastID}`)
-    //          window.scroll(0,0)
-    //         GetNewTweets(lastID);
-    //     } 
-     }
-
     function GetNewTweets(lastTweetID) {
         if (location.pathname === '/home') {
             setNewTweetsLoader(true);
 
             axios.get(`/tweets/?lt=${lastTweetID}`)
                 .then((res) => {
-                    // console.log(res.data);
+                    console.log(res.data);
                     setNewTweets(res);
+                    let x = res.data.length - 1;     // to fetch the last id inside the .map
+                    setLastID((res.data[x]._id));
                 })
                 .catch((err) => {
-                   window.alert(err.response.data);
+                    setEndOfTweets(true)
                 })
                 .finally(() => {
                     setNewTweetsLoader(false);
@@ -268,10 +266,17 @@ function Home() {
         }
     }
 
+    const EndOfTweets = () => {
+        return <div className="d-flex justify-content-center p-2">
+
+            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>~~You have reached the end~~</span>
+
+        </div>;
+    };
 
     if (childData) {
         setchildData(false);
-      //  UpdateData();
+        UpdateData();
     }
 
 
@@ -328,11 +333,6 @@ function Home() {
                                         style={{ fontSize: '20px', padding: '5px' }}
                                     />
 
-
-
-
-                                    {/* {loading ? <Loading /> : null} */}
-
                                     <div className="d-flex flex-row mt-1 justify-content-between">
 
                                         <div className="d-flex">
@@ -379,7 +379,7 @@ function Home() {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
                             // console.log(item.User[0].username)
 
-                            return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
+                            return <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
@@ -410,30 +410,30 @@ function Home() {
                                         retweetsByMe={item.isRetweetbyme}
                                         passChildData={setchildData}
                                         username={item.User[0].username} // this is a test
+                                        deleteID={setDeleteId}
+
                                     />
 
                                 </Link>
                             </div>;
                         })}
 
+
                         {/* <--- standard tweet*/}
-                        {newTweetsLoader ? <Loading /> : null}
                         {newTweets.data.map((item) => {
                             let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
-                            console.log(item.User[0].username);
-                            console.log('wtf');
 
-                            return <div className="p-2 view row" key={item._id}>             {/* <--- standard tweet*/}
+                            return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <img src={icon} alt="example" className="user-logo" />
                                 </div>
-                                <div className="col user-name-tweet">                   {/* <--- user content */}
+                                <Link to={`/post/${item._id}`} className="col user-name-tweet post-div">                   {/* <--- user content */}
                                     <div >
                                         <Link
                                             to={`/u/${item.User[0].username}`}
                                             className="name-link"
                                         >
-                                            <span style={{ fontWeight: 700 }} >{item.User[0].fullname}</span>&nbsp;
+                                            <strong >{item.User[0].fullname}</strong>&nbsp;
                                         </Link>
                                         <span>@{item.User[0].username}</span>
 
@@ -443,7 +443,8 @@ function Home() {
                                         </span>
                                     </div>
 
-                                    <p>{item.content}</p>
+                                    <p className="post-link">{item.content}</p>
+
 
                                     <Interactive
                                         id={item._id}
@@ -455,9 +456,23 @@ function Home() {
                                         passChildData={setchildData}
                                     />
 
-                                </div>
+                                </Link>
                             </div>;
                         })}
+
+                        {newTweetsLoader ? <Loading /> : null}
+
+
+                        {loading ? null :
+                            <div className="main-post-div p-2 row d-flex justify-content-center" onClick={() => GetNewTweets(lastID)}>
+
+                                {endOfTweets ?
+                                    <EndOfTweets />
+                                    :
+                                    <FontAwesomeIcon icon={faChevronDown} size="2x" style={{ opacity: '0.5' }} className="accent" />
+                                }
+                            </div>
+                        }
                     </div>
 
                     <Sidebar />

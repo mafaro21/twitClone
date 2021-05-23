@@ -83,8 +83,8 @@ export default function Likes({ IDtoTweets }) {
         return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
                 color={x}
-                height={60}
-                width={60}
+                height={50}
+                width={50}
             />
 
         </div>;
