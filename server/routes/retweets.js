@@ -9,7 +9,7 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 //setup rate limit
 const RetweetLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 30, //==> 50 hits in 5 minute window.
+    max: 20, //==> 20 hits in 5 minute window.
     message: { "message": "Too many requests, try again later" }
 });
 
@@ -168,7 +168,10 @@ router.get("/:userid", (req, res, next) => {
 
 /** error handler */
 router.use((err, req, res, next) => {
-    res.sendStatus(500);
+    res.status(500).send({
+        message: "Oops! Something went wrong :(",
+        success: false
+    });
     console.error("RETWEET_Error", err);
 });
 

@@ -156,7 +156,7 @@ export default function Header({ passChildData }) {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    passChildData(true); // to update profile.js when current user tweets
+                    //passChildData(true); // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');       //reset default state of the tweet modal
@@ -166,6 +166,7 @@ export default function Header({ passChildData }) {
                     setRows(3);
                 })
                 .catch((error) => {
+                    console.error(error);
                     setError(error.response.data.message);
                 })
                 .finally(() => {
@@ -199,8 +200,8 @@ export default function Header({ passChildData }) {
 
     // });
 
-    /** Loader after tweet has been sent*/ 
-    const TweetLoading = () => {    
+    /** Loader after tweet has been sent*/
+    const TweetLoading = () => {
         let x = localStorage.getItem("accent") || "grey";
 
         return <div className="d-flex justify-content-center ">
@@ -563,7 +564,7 @@ export default function Header({ passChildData }) {
                                 <p className="header-title " style={{ fontWeight: 700 }}>Profile</p>
                             </div>
                         </Link>
-                       : null }
+                        : null}
 
                     <Link to="/more" className={path === '/more' ? "d-flex header-link-active more" : "d-flex header-link more"}>
                         <div className=" d-flex pl-2 mt-2">

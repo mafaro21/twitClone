@@ -6,10 +6,36 @@ const { TweetValidation } = require("../middleware/inputvalidation");
 const router = express.Router();
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 
-//HANDLING TWEETS
+
+/** POST A NEW TWEET */
+router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
+    const userid = req.session.user.id;
+    const { content } = req.body;
+    const tweetObject = {
+        byUserId: new ObjectId(userid),
+        content: content,
+        likes: 0,
+        comments: 0,
+        retweets: 0,
+        dateposted: new Date(),
+    };
+
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const tweets = client.db("twitclone").collection("tweets");
+            try {
+                await tweets.insertOne(tweetObject);
+                res.status(201).send({ "success": true });
+            } catch (error) {
+                throw error;
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+});
 
 
-/** GET ALL TWEETS! */
+/** GET ALL TWEETS! (for Home Page) */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
     const lastTweetID = req.query.lt;  //attached from Client for paging
@@ -281,32 +307,6 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
         }).catch(next);
 });
 
-/* POST A NEW TWEET */
-router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
-    const userid = req.session.user.id;
-    const { content } = req.body;
-    const tweetObject = {
-        byUserId: new ObjectId(userid),
-        content: content,
-        likes: 0,
-        comments: 0,
-        retweets: 0,
-        dateposted: new Date(),
-    };
-
-    MongoClient.connect(uri, MongoOptions)
-        .then(async (client) => {
-            const tweets = client.db("twitclone").collection("tweets");
-            try {
-                await tweets.insertOne(tweetObject);
-                res.status(201).send({ "success": true });
-            } catch (error) {
-                throw error;
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
-});
 
 /* DELETE SINGLE TWEET */
 router.delete("/:tweetid", isLoggedin, (req, res, next) => {
@@ -342,7 +342,10 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
 
 /*error handler */
 router.use((err, req, res, next) => {
-    res.status(500).send({ message: "Oops! Something went wrong :(" });
+    res.status(500).send({
+        message: "Oops! Something went wrong :(",
+        success: false
+    });
     console.error("TWEET_ROUTE", err);
 });
 

@@ -9,8 +9,8 @@ const rateLimit = require("express-rate-limit"); // store it later in REDIS
 //setup rate limit
 const LikeLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
-  max: 50, //==> 50 hits in 5 minute window.
-  message: { "message": "Too many requests, try again in 5 mins" }
+  max: 20, //==> 20 max hits in 5 minute window.
+  message: { "message": "Too many requests, try again later" }
 });
 
 
@@ -170,7 +170,10 @@ router.get("/user/:userid", (req, res, next) => {
 
 /*error handler */
 router.use((err, req, res, next) => {
-  res.status(500).send({ message: "Oops! Something went wrong :(" });
+  res.status(500).send({
+    message: "Oops! Something went wrong :(",
+    success: false
+  });
   console.error("LIKE_Error", err);
 });
 
