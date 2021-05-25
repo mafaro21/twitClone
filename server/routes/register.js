@@ -5,8 +5,9 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
-const rateLimit = require("express-rate-limit"); // store it later in REDIS
+const rateLimit = require("express-rate-limit");
 const { RegValidation } = require("../middleware/inputvalidation");
+
 
 
 //setup rate limit
@@ -28,7 +29,7 @@ router.get("/", (req, res, next) => {
 router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
     const { fullname, email, password, responseToken } = req.body;
 
-    // BEGIN CAPTCHA VERIFICATION ---------------------------// 
+    //------------------------- BEGIN CAPTCHA VERIFICATION ---------------------------// 
     let isValid = false; // captcha result
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
@@ -43,8 +44,8 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
     axios.request(axiosOptions)
         .then(res => {
             isValid = res.data.success && (res.data.score >= 0.5); //check if both TRUE
-            let prob = res.data['error-codes'];
-            if (prob) throw prob;
+            let prob = res.data["error-codes"];
+            if (prob) throw new Error(prob);
             return isValid;
         })
         .then(isValid => {
@@ -53,7 +54,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
         })
         .catch(err => {
             res.status(400).send({ "message": "CAPTCHA Error" });
-            console.error("AXIOS", err);
+            console.error("AXIOS_CAPTCHA", err.message);
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
@@ -84,7 +85,8 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
                     "id": result.ops[0]._id,
                     "username": result.ops[0].username,
                     "fullname": result.ops[0].fullname
-                };
+                };    
+               
                 res.status(201).send({ "success": true });
             } catch (error) {
                 if (error.code === 11000) {
@@ -96,6 +98,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
         }).catch(next);
     }; // <--end of function
 
+   
 });
 
 

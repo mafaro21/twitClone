@@ -5,6 +5,7 @@ const secret = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
+const redis = require("redis");
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const rateLimit = require("express-rate-limit"); //store it later in REDIS
 const { LoginValidation } = require("../middleware/inputvalidation");
@@ -16,6 +17,13 @@ const LoginLimiter = rateLimit({
     max: 5,
     skipSuccessfulRequests: true,
     message: { "message": "Too many tries, try again after some time" }
+});
+
+/** CONNECT to REDIS */
+const redisClient = redis.createClient({
+    host: process.env.REDIS_URI,
+    port: process.env.REDIS_PORT || 14847,
+    password: process.env.REDIS_PASSWORD,
 });
 
 
@@ -75,7 +83,11 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
                         throw new Error("Wrong email or password! Try again.");
                     }
                     // BINGO! User authenticated. Now, create session.
-                    req.session.user = { "id": result._id, "username": result.username, "fullname": result.fullname };
+                    req.session.user = {
+                        "id": result._id,
+                        "username": result.username,
+                        "fullname": result.fullname
+                    };
                     res.status(200).send({ "success": true });
                 } catch (error) {
                     res.status(401).send({ "message": error.message });
@@ -85,13 +97,33 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             }).catch(next);
     } // <--end of function
 
+    /** STORE USER INFO TO REDIS for Search 
+    async function savetoRedis(item) {
+        redisClient.hmset(item.username, {
+            "_id": `${item._id}`,
+            "username": `${item.username}`,
+            "fullname": `${item.fullname}`,
+        }, (err, reply) => {
+            if (err) return console.error("REDIS_SAVE", err);
+            console.log("REDIS_SAVE", reply);
+        });
+
+        redisClient.expire(item.username, 60 * 60 * 24, (err, reply) => {
+            if(err) return console.error(err.message);
+            console.log("SETEX", reply);
+        });
+    }
+*/
 });
 
 
 /*error handler */
 router.use((err, req, res, next) => {
-    res.status(500).send({ message: "Oops! Something went wrong :(" });
-    console.error("LOGINeRR", err.message);
+    res.status(500).send({
+        message: "Oops! Something went wrong :(",
+        success: false
+    });
+    console.error("LOGIN_eRR", err.message);
 });
 
 module.exports = router;

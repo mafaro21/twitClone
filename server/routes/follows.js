@@ -182,7 +182,10 @@ router.get("/from/:userid", (req, res, next) => {
 
 /** error handler */
 router.use((err, req, res, next) => {
-    res.sendStatus(500);
+    res.status(500).send({
+        message: "Oops! Something went wrong :(",
+        success: false
+    });
     console.error("FOLLOW_Error", err);
 });
 

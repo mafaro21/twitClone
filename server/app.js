@@ -19,13 +19,16 @@ const redisClient = redis.createClient({
     password: process.env.REDIS_PASSWORD,
 });
 
-redisClient.ping((err, reply) => {
-    if (err) throw err;
-    console.log(reply);
-});
+(async () =>
+    redisClient.ping((err, reply) => {
+        if (err) throw new Error(err);
+        console.log(reply);
+    })
+)();
 
 
-//setup the session. save to Redis. 03 HOURS ONLY.
+/** SETUP THE SESSION. */ 
+//save to Redis. 03 HOURS ONLY.
 app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
@@ -41,12 +44,8 @@ app.use(session({
 
 app.use(morgan("dev"));
 
-redisClient.on('error', (error) => {
-    console.error(error.message)
-});
 
-
-//import all routers
+/** IMPORT ALL ROUTERS */
 const indexRouter = require("./routes/index");
 const toRegister = require("./routes/register");
 const toLogin = require("./routes/login");
@@ -57,13 +56,14 @@ const likesRouter = require("./routes/likes");
 const toRetweets = require("./routes/retweets");
 const toComments = require('./routes/comments');
 const toLogout = require("./routes/logout");
+const toExtras = require("./routes/extras");
 const statuslogin = require("./routes/statusLogin");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
-//Serve pages accordingly
+/** SERVE PAGES ACCORDINGLY */
 app.use("/", indexRouter);
 app.use("/register", toRegister);
 app.use("/login", toLogin);
@@ -74,14 +74,16 @@ app.use("/follows", isLoggedin, toFollows);
 app.use("/retweets", isLoggedin, toRetweets);
 app.use("/comments", toComments);
 app.use("/logout", toLogout);
+app.use("/extras", toExtras);
 app.use("/statuslogin", statuslogin);
 
-//listening port
+
+/** LISTENING PORT */
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 
-//TEST MongoDB connection
+// TEST MongoDB connection
 MongoClient.connect(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -103,7 +105,14 @@ app.use((req, res, next) => {
     //pass this to error handler below
 });
 
-// error handler
+/** REDIS Error handler */
+redisClient.on("error", (error) => {
+    if (error.code === "ECONNRESET") console.error(error.message);
+    else throw error;
+});
+
+
+/** main error handler */
 app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;

@@ -16,55 +16,28 @@ const redisClient = redis.createClient({
 });
 
 
-
 /* GETTING MY OWN PROFILE */
 router.get("/mine", isLoggedin, (req, res, next) => {
     const userid = req.session.user.id;
     /**
-     * GET from redis. 
-     * If redis = NULL, fetch data from Mongodb,
+     * FETCH from redis. 
+     * If redis = NULL, GET data from Mongodb,
      * then store in redis for future requests.
      */
-    redisClient.hgetall(userid, (err, reply) => {
-        if (err) next(err);
-        if (!reply) fetchfromMongo();
-        else {
-            return res.status(200).send([reply]);
+    MongoClient.connect(uri, MongoOptions).then(async client => {
+        const users = client.db("twitclone").collection("users");
+        const projection = { password: 0, email: 0 }; // <--exclusions
+        try {
+            const result = await users.findOne({ _id: new ObjectId(userid) }, { projection: projection });
+            res.status(200).send([result]);
+        } catch (error) {
+            res.sendStatus(404);
+            console.error(error);
+        } finally {
+            await client.close();
         }
-    });
+    }).catch(next);
 
-    function fetchfromMongo() {
-        MongoClient.connect(uri, MongoOptions).then(async client => {
-            const users = client.db("twitclone").collection("users");
-            const projection = { password: 0, email: 0 }; // <--exclusions
-            try {
-                const result = await users.findOne({ _id: new ObjectId(userid) }, { projection: projection });
-                //save RESULT TO REDIS HashSet.
-                savetoRedis(result);
-                res.status(200).send([result]);
-            } catch (error) {
-                res.sendStatus(404);
-                console.error(error);
-            } finally {
-                await client.close();
-            }
-        }).catch(next);
-    }
-
-    async function savetoRedis(result) {
-        redisClient.hmset(userid, {
-            "_id": userid,
-            "fullname": result.fullname,
-            "username": result.username,
-            "bio": result.bio,
-            "datejoined": result.datejoined,
-            "followers": `${result.followers}`,
-            "following": `${result.following}`,
-        }, (err, reply) => {
-            if (err) return console.error("REDIS_HASH", err);
-            console.log("REDIS HashSet", reply);
-        });
-    }
 });
 
 
@@ -138,26 +111,38 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
     const { fullname, username, bio } = req.body;
 
     //connect to db
-    MongoClient.connect(uri, MongoOptions).then(async (client) => {
-        const users = client.db("twitclone").collection("users");
-        const newValues = { fullname: fullname, username: username, bio: bio };
-        try {
-            await users.updateOne({ _id: new ObjectId(userid) }, { $set: newValues });
-            //IF SUCCESS, UPDATE the Session variables
-            req.session.user = { "id": userid, "username": username, "fullname": fullname };
-            res.status(200).send({ "success": true });
-        } catch (error) {
-            if (error.code === 11000)
-                res.status(409).send({ "message": "Username has already been taken" });
-            else throw error;
-        } finally {
-            await client.close();
-        }
-    }).catch(next);
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const users = client.db("twitclone").collection("users");
+            const newValues = { fullname: fullname, username: username, bio: bio };
+            try {
+                await users.updateOne({ _id: new ObjectId(userid) }, { $set: newValues });
+                //IF SUCCESS, UPDATE the Session variables
+                await updateRedisInfo(req.session.user.username);
+                req.session.user = { "id": userid, "username": username, "fullname": fullname };
+                res.status(200).send({ "success": true });
+            } catch (error) {
+                if (error.code === 11000)
+                    res.status(409).send({ "message": "Username has already been taken" });
+                else throw error;
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+
+    /**update username in Redis */
+    async function updateRedisInfo(oldUsername) {
+        redisClient.hmset(oldUsername, {
+            "username": username
+        }, (err, reply) => {
+            if (err) return console.error("REDIS_PROFILE", err.message);
+            console.log("Redis_PROFILE", reply);
+        });
+    }
 
 });
 
-redisClient.on('error', (error) => {
+redisClient.on("error", (error) => {
     console.error(error.message);
 
 });
