@@ -10,6 +10,7 @@ export default function More() {
         window.scrollTo(0, 0);
         document.title = 'TwitClone - More'
     }, [])
+
     return (
         <div className="App general ">
             <div className="container ">

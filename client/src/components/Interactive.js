@@ -14,7 +14,7 @@ import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
 
 
-export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username, deleteID }) {
+export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username, deleteID, justTrying }) {
     //most props are from profile.js
 
     const [user] = useContext(UserContext);
@@ -62,7 +62,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                     console.log(res.data);
                     passChildData(true);
                     deleteID(id)
-                    // getData()
+                    justTrying('testing')
                 })
                 .catch((error) => {
                     switch (error.response.status) {

@@ -13,6 +13,7 @@ import More from './views/More'
 import NotFound404 from './NotFound404';
 import Following from './views/Following'
 import Followers from './views/Followers'
+import SearchResults from './views/SearchResults'
 import Error from './views/Error';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserContext } from './Contexts/UserContext';
@@ -58,24 +59,24 @@ function App() {
     //   }
     // });
 
-    const options = {
-      method: 'GET',
-      url: 'https://newsapi.org/v2/top-headlines',
-      params: {
-        category: 'entertainment',
-        pageSize: 8,
-        country: 'us',
-        apiKey: process.env.REACT_APP_NEWS_API_KEY
-      }
-    };
+    //   const options = {
+    //     method: 'GET',
+    //     url: 'https://newsapi.org/v2/top-headlines',
+    //     params: {
+    //       category: 'entertainment',
+    //       pageSize: 8,
+    //       country: 'us',
+    //       apiKey: process.env.REACT_APP_NEWS_API_KEY
+    //     }
+    //   };
 
-  axios.request(options).then(function (res) {
-       console.log("news api ran")
-      setApiData(res.data)
-      // setLoading(false);
-    }).catch(function (error) {
-      console.error(error);
-    });
+    // axios.request(options).then(function (res) {
+    //      console.log("news api ran")
+    //     setApiData(res.data)
+    //     // setLoading(false);
+    //   }).catch(function (error) {
+    //     console.error(error);
+    //   });
 
   }, []);
 
@@ -97,6 +98,7 @@ function App() {
               <Route path="/home" component={Home} />
               <Route path="/explore" component={Explore} />
               <Route path="/more" component={More} />
+              <Route path="/search" component={SearchResults} />
 
               <Route path="/u/:username" exact >
                 <Profile />
