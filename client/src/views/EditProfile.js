@@ -22,7 +22,7 @@ export default function Edit() {
     const [bioErr, setBioErr] = useState({});
 
     const [serverError, setserverError] = useState(false); // <-- for redirect on Server Error
-    
+
     const [count, setCount] = useState(0); //word counter
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
@@ -30,7 +30,7 @@ export default function Edit() {
     const [loading, setLoading] = useState(false);      // loading animation
 
     const { username } = useParams();
-    
+
     const [errorColor, setErrorColor] = useState(false);
 
     const [error, setError] = useState([]);     //using array, data comes that way
@@ -106,8 +106,7 @@ export default function Edit() {
 
             axios.put("/profile/mine/edit", userObject)
                 .then((res) => {
-                    let x = res.data.success;
-                    if (x === true) history.push(`/u/${userObject.username}`); //relocate to whatever username we have been given
+                    if (res.data.success === true) history.push(`/u/${userObject.username}`); //relocate to whatever username we have been given
                 })
                 .catch((error) => {
                     setError(error.response.data.message);

@@ -46,7 +46,6 @@ export default function Profile() {
 
     const { username } = useParams();
 
-
     const [showLike, setShowLike] = useState(false);    // test for showing likes page
 
     const [showTweets, setShowTweets] = useState(true);  //showing main tweets page, on refresh this always shows
@@ -249,7 +248,7 @@ export default function Profile() {
         }
     };
 
-
+    // console.log(history)
     let location = useLocation();
     let path = location.pathname;
     let path1 = path.split('/u/');
@@ -259,9 +258,9 @@ export default function Profile() {
 
 
 
-    let path0 = location.pathname;
-    let path5 = path0.split(`/u/${profile.username}`);
-    let finalPath = path5[1];
+    // let path0 = location.pathname;
+    // let path5 = path0.split(`/u/${profile.username}`);
+    // let finalPath = path5[1];
 
     const likePage = () => {
         setShowLike(true);
@@ -294,7 +293,7 @@ export default function Profile() {
                     <Header />
 
                     <div className="col main-view phone-home " >
-                        {loading ? <Loading /> :
+                        {loading ? null :
                             <>
                                 <div className="row profile-header view mt-1">
 

@@ -1,3 +1,2 @@
-- fixed input errors on login and signup
-- show more for home works but it clears the previously fetched tweets 
-- animation when a tweet has been deleted
+- removed one of the loaders in profile.js so only one shows at any given time
+- added a search page

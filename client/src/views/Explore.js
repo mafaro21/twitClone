@@ -3,17 +3,19 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Search from '../components/Search'
 // import unf2 from '../images/unf2.jpg';
-import axios from "axios";
 import Loader from "react-loader-spinner";
-import { Link } from 'react-router-dom';
+import axios from "axios";
+
 
 export default function Explore() {
+
     const [mainApiData, setMainApiData] = useState({})
     const [apiData, setApiData] = useState({ articles: [0] })
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         document.title = "TwitClone - Explore"
+
 
         const options = {
             method: 'GET',
@@ -28,12 +30,14 @@ export default function Explore() {
 
         axios.request(options).then(function (res) {
             // console.log(res.data)    
-            setMainApiData(res.data.articles[1])
+            setMainApiData(res.data.articles[0])
             setApiData(res.data)
             setLoading(false);
         }).catch(function (error) {
             console.error(error);
         });
+
+
     }, [])
 
     const Loading = () => {        //the loading div
@@ -63,15 +67,16 @@ export default function Explore() {
                             </div>
                         </div>
 
+
                         {loading ? <Loading /> :
                             <>
                                 <a href={mainApiData.url} target="_blank" className=" banner row modal-enter" style={{ textDecoration: 'none' }}>
                                     <img src={mainApiData.urlToImage} alt="explore" className="explore-photo " />
                                     <p className="explore-data col ">{mainApiData.title}</p>
                                 </a>
-                                {apiData.articles.map(item => (
+                                {apiData.articles.map((item, key) => (
                                     <>
-                                        <div className="row view p-2 modal-enter">
+                                        <div className="row view p-2 modal-enter" key={key}>
                                             <div className="col">
                                                 <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row ">
                                                     <img src={item.urlToImage} className="col-4 api-image row mt-1" alt="news" />
@@ -83,8 +88,6 @@ export default function Explore() {
                                 ))}
                             </>
                         }
-
-
 
                     </div>
 
