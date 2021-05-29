@@ -345,7 +345,7 @@ export default function Post() {
 
     TimeAgo.addLocale(en);
 
-    let icon = "https://avatars.dicebear.com/api/identicon/3.svg";
+    let icon = "https://avatars.dicebear.com/api/identicon/" + user.username + ".svg";
 
     let addEmoji = emoji => {
         setComment(comment + emoji.native);
@@ -718,7 +718,7 @@ export default function Post() {
                                             <FontAwesomeIcon icon={faRetweet} />
                                         </button>
 
-                                        {user === item.User[0].username ?
+                                        {user.username === item.User[0].username ?
                                             <button
                                                 className="col delete"
                                                 onClick={(e) => handleDelete(e, item._id)}

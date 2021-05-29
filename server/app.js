@@ -42,7 +42,6 @@ app.use(session({
     },
 }));
 
-app.use(morgan("dev"));
 
 
 /** IMPORT ALL ROUTERS */
@@ -62,6 +61,7 @@ const statuslogin = require("./routes/statusLogin");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
+app.use(morgan("dev"));
 
 /** SERVE PAGES ACCORDINGLY */
 app.use("/", indexRouter);

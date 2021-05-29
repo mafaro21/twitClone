@@ -28,16 +28,17 @@ router.get("/search", SearchLimiter, (req, res, next) => {
         return res.sendStatus(400);
     }
 
-    // (async () => {
-    //     redisClient.scan("0", "MATCH", `*${username}*`, (err, reply) => {
-    //         if (err) next(err);
-    //         else if (reply[1].length === 0) fetchfromMongo();
-    //         else {
-    //             res.status(200).send(reply[1]);
-    //             console.log(reply[1]);
-    //         }
-    //     });
-    // })();\
+    /*     (async () => {
+            redisClient.scan("0", "MATCH", `*${username}*`, (err, reply) => {
+                if (err) next(err);
+                else if (reply[1].length === 0) fetchfromMongo();
+                else {
+                    res.status(200).send(reply[1]);
+                    console.log(reply[1]);
+                }
+            });
+        })(); 
+        */
 
     MongoClient.connect(uri, MongoOptions)
         .then(async client => {
@@ -60,6 +61,34 @@ router.get("/search", SearchLimiter, (req, res, next) => {
 
 });
 
+/** @returns TOP 3 USERS BY FOLLOWERS */
+router.get("/topusers", SearchLimiter, (req, res, next) => {
+
+/** 
+ * 1. fetch from REDIS
+ * 2. IF REDIS == NULL, fetch from mongodb
+ * 3. save result to redis for a 3 day lifespan.
+ */
+
+    MongoClient.connect(uri, MongoOptions)
+        .then(async (client) => {
+            const users = client.db("twitclone").collection("users");
+            const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
+            try {
+                const result = await users.find({})
+                    .sort({_id: -1, followers: -1 })
+                    .limit(3)
+                    .project(projection)
+                    .toArray();
+                res.status(200).send(result);
+            } catch (error) {
+                res.status(404).send({ message: error.message });
+                console.error("top3", error.message);
+            } finally {
+                await client.close();
+            }
+        }).catch(next);
+});
 
 /*error handler */
 router.use((err, req, res, next) => {

@@ -156,7 +156,7 @@ export default function Header({ passChildData }) {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    //passChildData(true); // to update profile.js when current user tweets
+                    passChildData =true; // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');       //reset default state of the tweet modal

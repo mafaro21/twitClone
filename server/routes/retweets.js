@@ -108,7 +108,7 @@ router.delete("/:tweetid", RetweetLimiter, (req, res, next) => {
 });
 
 /** FETCH ALL RETWEETS BY USER */
-router.get("/:userid", (req, res, next) => {
+router.get("/user/:userid", (req, res, next) => {
     const byUserId = req.params.userid;
     if (!ObjectId.isValid(byUserId)) return res.sendStatus(400);
 

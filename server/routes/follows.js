@@ -14,7 +14,7 @@ const FollowLimiter = rateLimit({
 
 
 /** FOLLOW SOMEONE by userId */
-router.post("/:userid", FollowLimiter, (req, res, next) => {
+router.post("/user/:userid", FollowLimiter, (req, res, next) => {
     const fromUserId = req.session.user.id;
     const toUserId = req.params.userid;
 
@@ -55,7 +55,7 @@ router.post("/:userid", FollowLimiter, (req, res, next) => {
 
 
 /** UNFOLLOW SOMEONE by userId  */
-router.delete("/:userid", FollowLimiter, (req, res, next) => {
+router.delete("/user/:userid", FollowLimiter, (req, res, next) => {
     const fromUserId = req.session.user.id;
     const toUserId = req.params.userid;
 

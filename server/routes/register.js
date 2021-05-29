@@ -28,9 +28,9 @@ router.get("/", (req, res, next) => {
 /* handling POST requests */
 router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
     const { fullname, email, password, responseToken } = req.body;
+    let isValid = false; // captcha result
 
     //------------------------- BEGIN CAPTCHA VERIFICATION ---------------------------// 
-    let isValid = false; // captcha result
     const axiosOptions = {
         url: process.env.VERIFY_LINK,
         method: "POST",
