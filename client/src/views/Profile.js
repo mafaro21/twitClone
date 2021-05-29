@@ -182,7 +182,7 @@ export default function Profile() {
     const handleFollow = () => {
         setDisabled(true);
         setButtonLoading(true);
-        axios.post(`/follows/${userID}`)
+        axios.post(`/follows/user/${userID}`)
             .then((res) => {
                 UpdateData();
                 console.log(res.data);
@@ -206,7 +206,7 @@ export default function Profile() {
     const handleUnfollow = () => {
         setDisabled(true);
         setButtonLoading(true);
-        axios.delete(`/follows/${userID}`)
+        axios.delete(`/follows/user/${userID}`)
             .then((res) => {
                 UpdateData();
                 console.log(res.data);

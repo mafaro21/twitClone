@@ -33,7 +33,7 @@ export default function Retweets({ IDtoTweets }) {
 
         setTweetLoading(true)
 
-        IDtoTweets && axios.get(`/retweets/${IDtoTweets}`) //fetching all tweets from a given user
+        IDtoTweets && axios.get(`/retweets/user/${IDtoTweets}`) //fetching all tweets from a given user
             .then((res) => {
                 setNoRetweets(false)
                 setTweets(res);

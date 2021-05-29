@@ -33,11 +33,11 @@ export default function SearchResults() {
         let isValid = true
 
         if (x.trim().length < 4) {
-            searchErr.short = 'Search is way too short'
+            searchErr.short = 'Search query is way too short'
             isValid = false
         }
         if (x.match(reg)) {
-            searchErr.invalid = 'Search contains illegal characters'
+            searchErr.invalid = 'Search query contains illegal characters'
             isValid = false
         }
 
@@ -96,7 +96,7 @@ export default function SearchResults() {
     const SearchDoesntExist = () => {
         return <div className="d-flex justify-content-center p-2">
 
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>
+            <span style={{ fontSize: "18px", fontWeight: 700 }}>
                 {searchParams} doesn't exist, maybe try a different user?
                 </span>
 

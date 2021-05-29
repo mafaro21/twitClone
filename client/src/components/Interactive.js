@@ -62,19 +62,20 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                     console.log(res.data);
                     passChildData(true);
                     deleteID(id)
-                    justTrying('testing')
+                   // justTrying('testing')
                 })
                 .catch((error) => {
-                    switch (error.response.status) {
-                        case 401:
-                            setNoAccountDiv(true);
-                            break;
-                        case 500:
-                            setserverError(true);
-                        default:
-                            console.error(error);
-                            break;
-                    }
+                    console.error(error);
+                    // switch (error.response.status) {
+                    //     case 401:
+                    //         setNoAccountDiv(true);
+                    //         break;
+                    //     case 500:
+                    //         setserverError(true);
+                    //     default:
+                    //         console.error(error);
+                    //         break;
+                    // }
                 }).finally(() => {
                     setTimeout(() => {
                         setNoAccountDiv(false);

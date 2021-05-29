@@ -25,7 +25,7 @@ function Search() {
 
         const isValid = SearchValidation()
 
-        if (isValid) {
+        if (isValid === true) {
             // searchData('yep')
             return history.push(`/search?q=${search}`)
             // return <Redirect to="explore" />
@@ -39,29 +39,26 @@ function Search() {
             //     .catch((err) => {
             //         console.error(err)
             //     })
-        }
+        } else setErrorColor(true);
     }
 
     const SearchValidation = () => {    //front-end regex
         const searchErr = {}
-        let reg = /[^A-Za-z0-9]+/g;
+        let reg = /[^A-Za-z0-9_\S]+/g;
 
         let isValid = true
 
         if (search.trim().length < 4) {
-            searchErr.short = 'Search is way too short'
+            searchErr.short = 'Search query is way too short'
             isValid = false
         }
         if (search.match(reg)) {
-            searchErr.invalid = 'Search contains illegal characters'
+            searchErr.invalid = 'Search query contains illegal characters'
             isValid = false
         }
 
         setSearchErr(searchErr)
 
-        if (!isValid) {
-            setErrorColor(true)
-        }
         return isValid
     }
 

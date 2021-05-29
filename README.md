@@ -7,9 +7,11 @@ A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ Mo
 
 ## Features
 - Redis for Sessions store.
-- MongoDB Atlas for the main database. (connected with native node.js driver)
+- Uses React Hooks (Functional Components)
+- MongoDB for the main database. (100% using native node.js driver)
 - Schema Validation done by MongoDB's own [built-in validation feature.](https://docs.mongodb.com/manual/core/schema-validation/) (*Requires MongoDB v3.6+. Also see: `./server/dbSchema/HOWTO.md`)
-- Google Captcha (v3) on Login and Register (native code, no extra libraries or dependencies used)
+- Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
+- Rate-Limiting for auth routes.
 - Top News Headlines, updated regularly.
 - (...List more _unique_ features of our app here...)
 

@@ -264,6 +264,9 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
                 _id: { $gt: new ObjectId(lastTweetID) }
             }
         }, {
+            $sort: {_id: -1}
+        },
+        {
             $limit: 20
         },
         {
@@ -294,7 +297,6 @@ router.get("/mine/all", isLoggedin, (req, res, next) => {
             const tweets = client.db("twitclone").collection("tweets");
             try {
                 const result = await tweets.aggregate(agg)
-                    .sort({ dateposted: -1, byUserId: -1 })
                     .toArray();
                 if (result.length === 0) throw new Error("No tweets");
                 res.status(200).send(result);
@@ -328,14 +330,20 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     MongoClient.connect(uri, MongoOptions)
         .then(async (client) => {
             const tweets = client.db("twitclone").collection("tweets");
+            const retweets = client.db("twitclone").collection("retweets");
+            const likes = client.db("twitclone").collection("likes");
+            const comments = client.db("twitclone").collection("comments");
             try {
                 const result = await tweets.deleteOne(tweetObject);
                 if (result.deletedCount === 0) throw new Error("Cannot delete tweet");
+                //Delete all linked-objects (children) as well.
+                 retweets.deleteMany({ OGtweetid: tweetObject._id });
+                 likes.deleteMany({ tweetid: tweetObject._id });
+                 comments.deleteMany({ tweetid: tweetObject._id });
+                //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 res.status(200).send({ "deleted": result.deletedCount, "success": true });
             } catch (error) {
                 res.status(400).send({ message: error.message });
-            } finally {
-                await client.close();
             }
         }).catch(next);
 });
