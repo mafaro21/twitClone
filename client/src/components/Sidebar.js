@@ -8,11 +8,15 @@ import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
 import { UserContext } from '../Contexts/UserContext';
 import { ApiContext } from '../Contexts/ApiContext';
+import { ToFollowContext } from '../Contexts/ToFollowContext';
+
 
 function Sidebar() {
     const [user] = useContext(UserContext)
 
     const [apiData] = useContext(ApiContext);
+
+    const [toFollow] = useContext(ToFollowContext)
 
     // const [api, setApi] = useState({ articles: [] });
 
@@ -28,9 +32,39 @@ function Sidebar() {
         <div className="col-4 p-3 phone-sidebar " ref={newsRef}>
             {location.pathname === '/explore' ? null : <Search />}
 
-            <div className="p-3 sidebar mt-4">
-                <h5 style={{ fontWeight: 700 }}>People You Should Follow</h5>
-                <p>.</p>
+            <div className="p-1 sidebar mt-4 ">
+                <h5 className="view p-3" style={{ fontWeight: 700 }}>People You Should Follow</h5>
+                <ul className="col " >
+                    {toFollow.data.map((item, key) => {
+                        let icon = "https://avatars.dicebear.com/api/identicon/" + item.username + ".svg";
+
+                        return <div className="p-2 view row main-post-div modal-enter" key={key}>
+                            <div className="col-1.5">              {/* <--- user avi */}
+                                <Link
+                                    to={`/u/${item.username}`}
+                                >
+                                    <img src={icon} alt="example" className="user-logo" />
+                                </Link>
+
+                            </div>
+
+                            <Link to={`/u/${item.username}`} className="col user-name-tweet post-div" >
+                                {/* <--- user content */}
+                                <div  >
+                                    <div >
+                                        <Link
+                                            to={`/u/${item.username}`}
+                                            className="name-link"
+                                        >
+                                            <strong >{item.fullname}</strong>&nbsp;
+                                            </Link>
+                                        <div><span>@{item.username}</span></div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    })}
+                </ul>
             </div>
 
             {user.loggedin === true ?
@@ -39,8 +73,8 @@ function Sidebar() {
                     <h5 className="view p-3" style={{ fontWeight: 700 }}>New Stories</h5>
                     <ul className="col " >
                         {apiData.articles.map(item => (
-                            <li key={item.url} className="modal-enter">
-                                <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row view">
+                            <li key={item.url} className="modal-enter ">
+                                <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row view main-post-div">
                                     <img src={item.urlToImage} className="col-6 api-image row mt-1" alt="news" />
                                     <p className="col api-text " >{item.title} </p>
                                 </a>

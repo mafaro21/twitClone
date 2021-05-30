@@ -293,7 +293,7 @@ export default function Profile() {
                     <Header />
 
                     <div className="col main-view phone-home " >
-                        {loading ? null :
+                        {loading ? <Loading /> :
                             <>
                                 <div className="row profile-header view mt-1">
 
