@@ -3,12 +3,15 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 import ThemeToggle from '../components/ThemeToggle'
+import axios from 'axios';
 
 export default function More() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = 'TwitClone - More'
+
+
     }, [])
 
     return (

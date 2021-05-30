@@ -1,2 +1,1 @@
-- removed one of the loaders in profile.js so only one shows at any given time
-- added a search page
+- added the 'people you should follow list'
