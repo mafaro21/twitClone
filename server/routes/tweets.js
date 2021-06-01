@@ -322,7 +322,7 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
     /**
      * Will Only DELETE if `this.tweet.byUserId` === `req.session.userId`.
      * This is to ensure current User IS the ORIGINAL Author of the tweet.
-     * ALSO, deleting all linked objects to the Tweet (`likes`, `comments`, `retweets`)
+     * ALSO, deleting all linked children of the Tweet (`likes`, `comments`, `retweets`)
      */
 
     const tweetObject = {
