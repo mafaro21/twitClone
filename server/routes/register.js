@@ -1,13 +1,12 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
-const secret = process.env.SECRET_KEY;
+const secret = process.env.CAPTCHA_SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
 const rateLimit = require("express-rate-limit");
 const { RegValidation } = require("../middleware/inputvalidation");
-
 
 
 //setup rate limit
@@ -19,13 +18,13 @@ const RegisterLimiter = rateLimit({
 });
 
 
-/* handling GET requests  */
+/** handling GET requests  */
 router.get("/", (req, res, next) => {
     res.send({ "title": " Twitclone Register" });
 });
 
 
-/* handling POST requests */
+/** handling POST requests */
 router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
     const { fullname, email, password, responseToken } = req.body;
     let isValid = false; // captcha result
@@ -49,7 +48,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
             return isValid;
         })
         .then(isValid => {
-            if (isValid === true) addUserToDatabase();
+            if (isValid === true) saveUserToDatabase();
             else throw new Error();
         })
         .catch(err => {
@@ -58,7 +57,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
         });
     //---------------------END OF VERIFICATION ABOVE ---------------------//
 
-    async function addUserToDatabase() {
+    async function saveUserToDatabase() {
         //IF ALL IS OK..😀
         let randnum = Math.floor(Math.random() * 100 - 10);
         let newPass = await bcrypt.hash(password, 10);

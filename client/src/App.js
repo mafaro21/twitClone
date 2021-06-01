@@ -37,59 +37,60 @@ function App() {
   const UsersToFollow = useMemo(() => [toFollow, setToFollow], [toFollow, setToFollow])
 
   useEffect(() => {
-
-    if (localStorage.length === 0) {  //if a user doesn't have any theme or accent preset in their localstorage
-      localStorage.setItem("theme", "medium");
-      localStorage.setItem("accent", "rgba(29,161,242,1.00)");
-    }
-
-    document
-      .getElementsByTagName("HTML")[0]
-      .setAttribute("data-theme", localStorage.getItem("theme"));
-    // document.setAttribute("accent-theme", localStorage.getItem("accent"));
-
-    document
-      .getElementsByTagName("HTML")[0]
-      .setAttribute("accent-theme", localStorage.getItem("accent"));
-
-    // const scheme = window.matchMedia('(prefers-color-scheme: dark)');
-    // scheme.addEventListener('change', (e) => {
-    //   // console.log(e.matches)
-
-    //   if (e.matches) {
-    //     localStorage.setItem("theme", "dark");
-    //   } else {
-    //     localStorage.setItem("theme", "light");
-    //   }
-    // });
-
-    axios.get('extras/topusers')
-      .then((res) => {
-        console.log(res.data)
-        setToFollow(res)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-
-    const options = {
-      method: 'GET',
-      url: 'https://newsapi.org/v2/top-headlines',
-      params: {
-        category: 'entertainment',
-        pageSize: 8,
-        country: 'us',
-        apiKey: process.env.REACT_APP_NEWS_API_KEY
+      if (localStorage.length === 0) {
+          //if a user doesn't have any theme or accent preset in their localstorage
+          localStorage.setItem("theme", "medium");
+          localStorage.setItem("accent", "rgba(29,161,242,1.00)");
       }
-    };
 
-    axios.request(options).then(function (res) {
-      // console.log("news api ran")
-      setApiData(res.data)
-    }).catch(function (error) {
-      console.error(error);
-    });
+      document
+          .getElementsByTagName("HTML")[0]
+          .setAttribute("data-theme", localStorage.getItem("theme"));
+      // document.setAttribute("accent-theme", localStorage.getItem("accent"));
 
+      document
+          .getElementsByTagName("HTML")[0]
+          .setAttribute("accent-theme", localStorage.getItem("accent"));
+
+      // const scheme = window.matchMedia('(prefers-color-scheme: dark)');
+      // scheme.addEventListener('change', (e) => {
+      //   // console.log(e.matches)
+
+      //   if (e.matches) {
+      //     localStorage.setItem("theme", "dark");
+      //   } else {
+      //     localStorage.setItem("theme", "light");
+      //   }
+      // });
+
+      axios.get("extras/top3users")
+          .then((res) => {
+              console.log(res.data);
+              setToFollow(res);
+          })
+          .catch((err) => {
+              console.error(err);
+          });
+
+      const options = {
+          method: "GET",
+          url: "https://newsapi.org/v2/top-headlines",
+          params: {
+              category: "entertainment",
+              pageSize: 8,
+              country: "us",
+              apiKey: process.env.REACT_APP_NEWS_API_KEY
+          }
+      };
+
+      axios.request(options)
+          .then(function (res) {
+              // console.log("news api ran")
+              setApiData(res.data);
+          })
+          .catch(function (error) {
+              console.error(error);
+          });
   }, []);
 
 

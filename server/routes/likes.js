@@ -162,7 +162,6 @@ router.get("/user/:userid", (req, res, next) => {
         res.status(200).send(result);
       } catch (error) {
         res.status(404).send({ "message": error.message });
-        console.error(error);
       }
     }).catch(next);
 });

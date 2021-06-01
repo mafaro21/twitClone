@@ -1,42 +1,42 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import '../css/App.css';
-import '../css/Sidebar.css';
-import '../css/custom.scss';
-import '../css/Main.css';
-import BackButton from '../components/BackButton';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import NoAccount from '../components/NoAccount';
-import OutsideClick from '../components/OutsideClick';
-import Likes from './Likes';
-import Retweets from './Retweets';
-import Tweets from './Tweets';
-import deer from '../images/test.jpg';
-import unf1 from '../images/unf1.jpg';
-import unf2 from '../images/unf2.jpg';
-import axios from 'axios';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import "../css/App.css";
+import "../css/Sidebar.css";
+import "../css/custom.scss";
+import "../css/Main.css";
+import BackButton from "../components/BackButton";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
+import NoAccount from "../components/NoAccount";
+import OutsideClick from "../components/OutsideClick";
+import Likes from "./Likes";
+import Retweets from "./Retweets";
+import Tweets from "./Tweets";
+import deer from "../images/test.jpg";
+import unf1 from "../images/unf1.jpg";
+import unf2 from "../images/unf2.jpg";
+import axios from "axios";
 import Loader from "react-loader-spinner";
-import { Link, useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
-import { UserContext } from '../Contexts/UserContext';
+import { Link, useParams, useHistory, useLocation, Redirect } from "react-router-dom";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+import { UserContext } from "../Contexts/UserContext";
 
 export default function Profile() {
     const [user1] = useContext(UserContext);
     const [serverError, setserverError] = useState(false);
 
-    const [datejoined, setDatejoined] = useState('');
+    const [datejoined, setDatejoined] = useState("");
 
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
-    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }]);  //display user data
+    const [profile, setProfile] = useState([{ fullname: "", username: "", bio: "", followers: 0, following: 0, isfollowedbyme: false }]);  //display user data
 
     const [tweetCount, setTweetCount] = useState(0);
 
     const [noTweets, setNoTweets] = useState(false);
     const [buttonLoading, setButtonLoading] = useState(false);
 
-    const [userID, setUserID] = useState('');
+    const [userID, setUserID] = useState("");
 
     const [userNotFound, setUserNotFound] = useState(false);
 
@@ -61,13 +61,13 @@ export default function Profile() {
     };
 
     // function getData() {
-    //     //loggedIn ? axios.get('/profile/mine') : 
+    //     //loggedIn ? axios.get("/profile/mine") : 
 
     // }
 
     useEffect(() => {   //fetching data for logged in users
-        window.scroll(0, 0)
-        setLoading(true)
+        window.scroll(0, 0);
+        setLoading(true);
 
         axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
@@ -80,8 +80,7 @@ export default function Profile() {
                 setDatejoined(finalDate);
                 document.title = `TwitClone - @${username}`;
 
-            })
-            .catch((error) => {
+            }).catch((error) => {
 
                 if (error.response.status === 500) {
                     internalError();
@@ -101,9 +100,10 @@ export default function Profile() {
     }, [username]);
 
     function UpdateData() {
-        setLoading(true)
+        // setLoading(true);
         axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
+                setButtonLoading(false);
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
                 // console.log(res.data)
@@ -111,30 +111,25 @@ export default function Profile() {
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
                 document.title = `TwitClone - @${username}`;
-
-                setButtonLoading(false);
                 setDisabled(false);
-            })
-            .catch((error) => {
 
+            }).catch((error) => {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    setLoading(false);
+                    // setLoading(false);
                     setUserNotFound(true);
                     document.title = "TwitClone - User Not Found!!";
                     // Error(user);
                 }
-            }).finally(() => {
-                setLoading(false)
-            })
+            });
     }
 
     const ButtonLoading = () => {    // loader for Follow button 
 
-        // let x = localStorage.getItem("accent") || 'grey'
+        // let x = localStorage.getItem("accent") || "grey"
 
-        return <div className="d-flex justify-content-center " style={{ marginTop: '-10%' }}>
+        return <div className="d-flex justify-content-center " style={{ marginTop: "-10%" }}>
             <Loader type="ThreeDots"
                 color="grey"
                 height={40}
@@ -146,7 +141,7 @@ export default function Profile() {
 
     const Loading = () => {
 
-        let x = localStorage.getItem("accent") || 'grey';
+        let x = localStorage.getItem("accent") || "grey";
 
         return <div className="accent d-flex justify-content-center ">
             <Loader type="TailSpin"
@@ -161,7 +156,7 @@ export default function Profile() {
     const NoTweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
 
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}>This user hasn't made any tweets yet</span>
+            <span style={{ fontSize: "18px", fontWeight: "bolder" }}>This user hasn"t made any tweets yet</span>
 
         </div>;
     };
@@ -175,7 +170,7 @@ export default function Profile() {
 
     const UserNotFound = () => {
         return <div className="d-flex justify-content-center p-2 view row">
-            <span style={{ fontSize: "18px", fontWeight: 'bolder' }}> {username}?, never heard of them... </span>
+            <span style={{ fontSize: "18px", fontWeight: "bolder" }}> {username}?, never heard of them... </span>
         </div>;
     };
 
@@ -214,12 +209,10 @@ export default function Profile() {
             .catch((err) => {
                 console.error(err);
                 err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
-                setButtonLoading(false);
-                setDisabled(false);
             })
             .finally(() => {
-                // setDisabled(false)
-                // setButtonLoading(false)
+                setDisabled(false)
+                setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false);
                 }, 2000);
@@ -251,7 +244,7 @@ export default function Profile() {
     // console.log(history)
     let location = useLocation();
     let path = location.pathname;
-    let path1 = path.split('/u/');
+    let path1 = path.split("/u/");
     let userPath = path1[1];
 
     TimeAgo.addLocale(en);   //for the time ago
@@ -303,9 +296,9 @@ export default function Profile() {
                                         </div>
                                         <div className="col ">
                                             <div >
-                                                <strong className="text" style={{ fontSize: '20px' }}>{userNotFound ? "Profile" : profile.fullname}</strong>
+                                                <strong className="text" style={{ fontSize: "20px" }}>{userNotFound ? "Profile" : profile.fullname}</strong>
                                             </div>
-                                            <span style={{ fontSize: '15px' }}>{!userNotFound && tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
+                                            <span style={{ fontSize: "15px" }}>{!userNotFound && tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
                                         </div>
                                     </div>
                                 </div>
@@ -405,18 +398,18 @@ export default function Profile() {
                                             }
 
                                             {!userNotFound &&
-                                                <div className="row d-flex view mt-3" style={{ textAlign: 'center', fontWeight: '700' }}>
-                                                    <div onClick={tweetsPage} className={showTweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                                <div className="row d-flex view mt-3" style={{ textAlign: "center", fontWeight: 700 }}>
+                                                    <div onClick={tweetsPage} className={showTweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
                                                         <div className="p-3 ">
                                                             Tweets
                                             </div>
                                                     </div>
-                                                    <div onClick={retweetsPage} className={showRetweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                                    <div onClick={retweetsPage} className={showRetweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
                                                         <div className="p-3 ">
                                                             Retweets
                                             </div>
                                                     </div>
-                                                    <div onClick={likePage} className={showLike ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: '33.3%' }}>
+                                                    <div onClick={likePage} className={showLike ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
 
                                                         <div className="p-3 ">
                                                             Likes

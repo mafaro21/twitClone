@@ -1,7 +1,7 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
-const secret = process.env.SECRET_KEY;
+const secret = process.env.CAPTCHA_SECRET_KEY;
 const bcrypt = require("bcrypt");
 const axios = require("axios").default;
 const router = express.Router();
