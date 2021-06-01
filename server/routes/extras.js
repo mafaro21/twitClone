@@ -10,21 +10,24 @@ const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const redisClient = redis.createClient({
     host: process.env.REDIS_URI,
     port: process.env.REDIS_PORT || 14847,
-    password: process.env.REDIS_PASSWORD,
+    password: process.env.REDIS_PASSWORD
 });
 
 /** setup rate limit */
 const SearchLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 mins window
     max: 20, // block after 20 requests
-    message: { "message": "Too many tries, try again after some time" }
+    message: { message: "Too many tries, try again after some time" }
 });
 
 router.get("/search", SearchLimiter, (req, res, next) => {
     const username = req.query.user;
-    const userReg = /[^0-9a-zA-Z_\S]+/;
+    const userReg = /[^0-9a-zA-Z_\S]/;
 
-    if (!username || userReg.test(username) || username.length > 20 || username.length < 4) {
+    if (!username ||
+        userReg.test(username) ||
+        username.length > 20 ||
+        username.length < 4) {
         return res.sendStatus(400);
     }
 
@@ -41,7 +44,7 @@ router.get("/search", SearchLimiter, (req, res, next) => {
         */
 
     MongoClient.connect(uri, MongoOptions)
-        .then(async client => {
+        .then(async (client) => {
             const users = client.db("twitclone").collection("users");
             const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
             const myquery = { $regex: new RegExp(username), $options: "i" };
@@ -53,33 +56,32 @@ router.get("/search", SearchLimiter, (req, res, next) => {
                 if (result.length === 0) throw new Error("No results for this username");
                 res.status(200).send(result);
             } catch (error) {
-                res.status(404).send({ "message": error.message });
+                res.status(404).send({ message: error.message });
             } finally {
                 await client.close();
             }
         }).catch(next);
-
 });
 
 /** @returns TOP 3 USERS BY FOLLOWERS */
-router.get("/topusers", SearchLimiter, (req, res, next) => {
-
-/** 
- * 1. fetch from REDIS
- * 2. IF REDIS == NULL, fetch from mongodb
- * 3. save result to redis for a 3 day lifespan.
- */
-
+router.get("/top3users", SearchLimiter, (req, res, next) => {
+    /**
+     * 1. fetch from REDIS
+     * 2. IF REDIS == NULL, fetch from mongodb
+     * 3. save result to redis for a 3 day lifespan.
+     */
     MongoClient.connect(uri, MongoOptions)
         .then(async (client) => {
             const users = client.db("twitclone").collection("users");
             const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
             try {
                 const result = await users.find({})
-                    .sort({_id: -1, followers: -1 })
+                    .sort({ _id: -1, followers: -1 })
                     .limit(3)
                     .project(projection)
                     .toArray();
+                //cache the result in Redis (async)
+                StoreinRedis(result);
                 res.status(200).send(result);
             } catch (error) {
                 res.status(404).send({ message: error.message });
@@ -88,13 +90,16 @@ router.get("/topusers", SearchLimiter, (req, res, next) => {
                 await client.close();
             }
         }).catch(next);
+
 });
 
 /*error handler */
 router.use((err, req, res, next) => {
-    res.status(500).send({ message: "Oops! Something went wrong :(", success: false, });
+    res.status(500).send({
+        message: "Oops! Something went wrong :(",
+        success: false
+    });
     console.error("EXTRA_err", err);
 });
-
 
 module.exports = router;

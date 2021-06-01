@@ -1,6 +1,6 @@
 # twitClone
 A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ MongoDB driver 
-(NOT Mongoose).
+(NO Mongoose).
 
 - _Server_:  runs on `http://localhost:5000`
 - _Client_:  runs on `http://localhost:3000`
