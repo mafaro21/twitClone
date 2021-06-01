@@ -108,61 +108,63 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     return (
         <div>
             {noTweets && <NoTweets />}
-            {tweetLoading && <Loading />}
-            {tweets.data.map((item) => (
-                <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>
-                    {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
 
-                    <div className="col-1.5">              {/* <--- user avi */}
-                        <Link
-                            to={`/u/${username}`}
-                        >
-                            <img src={icon} alt="example" className="user-logo" />
-                        </Link>
+            {tweetLoading || IDtoTweets === null ? <Loading /> :
+                tweets.data.map((item) => (
+                    <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>
+                        {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
 
-                    </div>
+                        <div className="col-1.5">              {/* <--- user avi */}
+                            <Link
+                                to={`/u/${username}`}
+                            >
+                                <img src={icon} alt="example" className="user-logo" />
+                            </Link>
 
-                    <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >
-                        {/* <--- user content */}
-                        <div  >
-                            <div >
-                                <Link
-                                    to={`/u/${username}`}
-                                    className="name-link"
-                                >
-                                    <strong >{fullname}</strong>&nbsp;
+                        </div>
+
+                        <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >
+                            {/* <--- user content */}
+                            <div  >
+                                <div >
+                                    <Link
+                                        to={`/u/${username}`}
+                                        className="name-link"
+                                    >
+                                        <strong >{fullname}</strong>&nbsp;
                                             </Link>
-                                <span>@{username}</span>
+                                    <span>@{username}</span>
 
                                             &nbsp; <span>·</span> &nbsp;
                                             <span>
-                                    <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
-                                </span>
+                                        <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
+                                    </span>
+                                </div>
+
+                                <div className="post-link">
+                                    <p>{item.content}</p>
+                                </div>
                             </div>
 
-                            <div className="post-link">
-                                <p>{item.content}</p>
-                            </div>
-                        </div>
 
+                            <Interactive
+                                className="mt-2"
+                                username={username}
+                                // session={sessionName}
+                                id={item._id}
+                                comments={item.comments}
+                                retweets={item.retweets}
+                                likes={item.likes}
+                                likesByMe={item.isLikedbyme}
+                                passChildData={setchildData}
+                                retweetsByMe={item.isRetweetbyme}
+                                deleteID={setDeleteId}
+                            />
+                        </Link>
 
-                        <Interactive
-                            className="mt-2"
-                            username={username}
-                            // session={sessionName}
-                            id={item._id}
-                            comments={item.comments}
-                            retweets={item.retweets}
-                            likes={item.likes}
-                            likesByMe={item.isLikedbyme}
-                            passChildData={setchildData}
-                            retweetsByMe={item.isRetweetbyme}
-                            deleteID={setDeleteId}
-                        />
-                    </Link>
+                    </div>
+                ))}
 
-                </div>
-            ))}
         </div>
     );
 }
