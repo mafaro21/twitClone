@@ -50,7 +50,7 @@ function Home() {
         </div>
         : '';
 
-    let icon = `https://avatars.dicebear.com/api/identicon/${user.username}.svg`;
+    let icon = `https://avatars.dicebear.com/api/gridy/${user.username}.svg`;
 
     function getData() {
         setLoading(true);
@@ -59,8 +59,6 @@ function Home() {
                 setAllTweets(res)
                 let x = res.data.length - 1;     // to fetch the last id inside the .map
                 setLastID((res.data[x]._id));
-                // console.log(res.data)
-                // console.log((res.data[x]._id))
             })
             .catch((err) => {
                 console.error(err);
@@ -114,10 +112,8 @@ function Home() {
 
     const wordCount = (e) => {
         let comment = e.target.value;
-        // setComment(comment)
         setCount(comment.length);
 
-        // let y = comment.length
         let x = comment.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
@@ -191,7 +187,6 @@ function Home() {
         if (isValid === true) {
             setTweetLoading(true);
             sendToDb();
-            // setTweetModal(false);
 
         }
 
@@ -214,7 +209,6 @@ function Home() {
                 })
                 .catch((error) => {
                     setTweetLoading(false);
-                    // setTweetModal(true);
                     setError(error.response.data.message);
                 })
                 .finally(() => {
@@ -251,7 +245,6 @@ function Home() {
 
             axios.get(`/tweets/?lt=${lastTweetID}`)
                 .then((res) => {
-                    console.log(res.data);
                     setNewTweets(res);
                     let x = res.data.length - 1;     // to fetch the last id inside the .map
                     setLastID((res.data[x]._id));
@@ -282,7 +275,6 @@ function Home() {
 
     return (
         <div className="App general ">
-            {/* <Navbar /> */}
             <div className="container ">
 
 
@@ -317,7 +309,6 @@ function Home() {
 
 
                                 <form className="signup col tweet-form " onSubmit={(e) => handleSubmit(e)}>
-                                    {/*  */}
 
                                     <textarea
                                         id="tweet"
@@ -338,7 +329,6 @@ function Home() {
                                         <div className="d-flex">
                                             <div className="container mt-2">
                                                 <span><span style={{ color }}>{count}</span>/280</span>
-                                                {/* <span id="show">0</span><span>/280</span> */}
                                             </div>
 
                                             <div className=" ml-4" >
@@ -354,10 +344,8 @@ function Home() {
                                         {showEmojiPicker ? <Emoji /> : null}
 
                                         <button
-                                            // id="submit-btn"
                                             className="btn login-submit btn-accent-outline rounded-pill "
                                             type="submit"
-                                            // onClick={handleSubmit}
                                             disabled={disabled}       //button disabler
                                         >
                                             {tweetLoading ? <TweetLoading /> : "Tweet"}
@@ -376,8 +364,7 @@ function Home() {
                         </div>
                         {loading ? <Loading /> : null}
                         {allTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
-                            // console.log(item.User[0].username)
+                            let icon = `https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`;
 
                             return <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
@@ -419,9 +406,8 @@ function Home() {
                         })}
 
 
-                        {/* <--- standard tweet*/}
                         {newTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
+                            let icon = `https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`;
 
                             return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}

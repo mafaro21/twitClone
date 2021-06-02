@@ -63,8 +63,7 @@ export default function SearchResults() {
 
             axios.get(`/extras/search?user=${searchResult}`)
                 .then((res) => {
-                    console.log(res.data);
-                    setSearchData(res);
+                    setSearchData(res)
                 })
                 .catch((err) => {
                     err.response.status === 404 ? setSearchError(true) : setError(err.response.data.message);
@@ -74,10 +73,9 @@ export default function SearchResults() {
                 });
         }
 
-        let x = location.pathname;
-        let y = location.search;
-        let z = x + y;       //length of the url
-        // console.log(z.length)
+        let x = location.pathname
+        let y = location.search
+        let z = x + y       //length of the url
 
         if (z.length < 14) {
             history.push('/explore');
@@ -137,7 +135,7 @@ export default function SearchResults() {
                         {loading ? <Loading /> : null}
                         {searchError ? <SearchDoesntExist /> : null}
                         {searchData.data.map((item, key) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.username + ".svg";
                             return <div className="p-2 view row main-post-div modal-enter" key={key}>
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <Link
@@ -149,7 +147,6 @@ export default function SearchResults() {
                                 </div>
 
                                 <Link to={`/u/${item.username}`} className="col user-name-tweet post-div" >
-                                    {/* <--- user content */}
                                     <div  >
                                         <div >
                                             <Link

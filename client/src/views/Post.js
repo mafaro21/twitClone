@@ -19,8 +19,6 @@ import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faSmile } from '@fortawesome/free-regular-svg-icons/faSmile';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-// import { Redirect } from 'react-router-dom';
-// import Error from '../views/Error';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
@@ -36,10 +34,6 @@ export default function Post() {
     const [disabled, setDisabled] = useState(false);    // button disabler during request
 
     const [commentDisabled, setCommentDisabled] = useState(true);
-
-    const [isLikedbyMe, setIsLikedbyMe] = useState(0);
-
-    const [isRetweetedbyMe, setisRetweetedbyMe] = useState(0);
 
     const [comment, setComment] = useState('');
 
@@ -106,14 +100,13 @@ export default function Post() {
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
-                    // console.log(res.data)
                     setDisabled(false);
                     setLikedState(likedState + 1);
                     setLikeCount(likeCount + 1)
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
@@ -126,14 +119,13 @@ export default function Post() {
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
-                    // console.log(res.data)
                     setDisabled(false);
                     setLikedState(likedState - 1);
                     setLikeCount(likeCount - 1)
                 })
                 .catch((error) => {
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
 
                 }).finally(() => {
                     setDisabled(false);
@@ -143,7 +135,7 @@ export default function Post() {
                 });
         }
     };
-
+    console.log(retweetState)
     const handleRetweet = (id) => {     // retweeting and unretweeting posts
         setDisabled(true);
 
@@ -152,7 +144,6 @@ export default function Post() {
 
             axios.post(`/retweets/${id}`)
                 .then((res) => {
-                    console.log(res.data, 'from retweet')
                     setDisabled(false);
                     setRetweetState(retweetState + 1);
                     setRetweetCount(retweetCount + 1)
@@ -172,7 +163,6 @@ export default function Post() {
 
             axios.delete(`/retweets/${id}`)
                 .then((res) => {
-                    console.log(res.data, 'from retweet')
                     setDisabled(false);
                     setRetweetState(retweetState - 1);
                     setRetweetCount(retweetCount - 1)
@@ -192,12 +182,10 @@ export default function Post() {
 
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
-        // return <Redirect to="/Error" />
     };
 
     const Error = () => {       //redirect when there is a server error
         return history.push("/NotFound404");
-        // return <Redirect to={Error} />
     };
 
     function getData() {
@@ -208,8 +196,6 @@ export default function Post() {
                 setLikeCount(res.data[0].likes);
                 setRetweetCount(res.data[0].retweets)
                 setCommentCount(res.data[0].comments)
-                // console.log(likeCount);
-                console.log(res.data);
 
             })
             .catch((error) => {
@@ -228,7 +214,6 @@ export default function Post() {
         axios.get(`/likes/me/${finalPath}`)
             .then((res) => {
                 setLikedState(res.data.count);
-                // console.log(res.data.count)
 
             })
             .catch((error) => {
@@ -239,7 +224,6 @@ export default function Post() {
 
         axios.get(`retweets/me/${finalPath}`)
             .then((res) => {
-                // console.log(res.data)
                 setRetweetState(res.data.count);
             })
             .catch((err) => {
@@ -250,7 +234,6 @@ export default function Post() {
     function getComments() {
         axios.get(`/comments/tweet/${finalPath}`)
             .then((res) => {
-                // console.log(res.data)
                 setOtherComments(res);
             })
             .catch((err) => {
@@ -292,10 +275,8 @@ export default function Post() {
 
     const wordCount = (e) => {
         let comment = e.target.value;
-        // setComment(comment)
         setCount(comment.length);
 
-        // let y = comment.length
         let x = comment.trim().replace(/\s/g, '').length;
 
         if (x === 280) {
@@ -345,7 +326,7 @@ export default function Post() {
 
     TimeAgo.addLocale(en);
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + user.username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/gridy/" + user.username + ".svg";
 
     let addEmoji = emoji => {
         setComment(comment + emoji.native);
@@ -366,14 +347,10 @@ export default function Post() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // const myForm = document.forms.tweetForm; // Or document.forms['tweetForm']
-        // const tweet = myForm.elements.tweet.value;
-
         const isValid = commentValidation(comment); /* <-- call the validation fn. */
         if (isValid === true) {
             setCommentLoading(true);
             sendCommentToDb();
-            // setTweetModal(false);
         }
 
         function sendCommentToDb() {
@@ -383,7 +360,6 @@ export default function Post() {
 
             axios.post(`/comments/tweet/${finalPath}`, tweetObject)
                 .then((res) => {
-                    // setTweetLoading(true);
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setComment('');
@@ -395,7 +371,6 @@ export default function Post() {
                     setCommentCount(commentCount + 1)
                 })
                 .catch((error) => {
-                    // setTweetLoading(false);
                     setError(error.response.data.message);
                     console.error(error);
                 })
@@ -437,13 +412,11 @@ export default function Post() {
 
             axios.delete(`/comments/${id}/tweet/${finalPath}`)
                 .then((res) => {
-                    console.log(res.data);
                     getComments();
                 })
                 .catch((error) => {
-                    console.log(id);
                     console.error(error);
-                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                    error.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
 
                 }).finally(() => {
                     setTimeout(() => {
@@ -459,7 +432,6 @@ export default function Post() {
 
     return (
         <div className="general" >
-            {/* <Navbar /> */}
             <div className="container App " >
                 <div className="row " >
 
@@ -588,7 +560,6 @@ export default function Post() {
                                     </div>
 
                                 </div>
-                                {/* </div> */}
                             </div>;
                         })}
 
@@ -644,7 +615,6 @@ export default function Post() {
                                             <div className="d-flex">
                                                 <div className="container mt-2">
                                                     <span><span style={{ color }}>{count}</span>/280</span>
-                                                    {/* <span id="show">0</span><span>/280</span> */}
                                                 </div>
 
                                                 <div className=" ml-4" >
@@ -663,10 +633,8 @@ export default function Post() {
                                         {showEmojiPicker ? <Emoji /> : null}
 
                                         <button
-                                            // id="submit-btn"
                                             className="btn login-submit btn-accent-outline rounded-pill "
                                             type="submit"
-                                            // onClick={handleSubmit}
                                             disabled={commentDisabled}       //button disabler
                                         >
                                             {commentLoading ? <CommentLoading /> : "Tweet"}
@@ -678,7 +646,7 @@ export default function Post() {
                         }
 
                         {otherComments.data.map((item, i) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.User[0].username + ".svg";
 
                             return <div className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link modal-enter" : "p-2 view row main-post-div post-link name-link modal-enter"} key={i} >             {/* <--- standard tweet*/}
                                 <Link to={`/u/${item.User[0].username}`} className="col-1.5">              {/* <--- user avi */}
@@ -708,13 +676,13 @@ export default function Post() {
                                     <div className="interact-row d-flex ">
                                         <button
                                             className="comment col"
-                                        // onClick={() => setCommentModal(true)}
+                                            onClick={() => setComment(`@${item.User[0].username} `)}
+                                        // style={{ maxWidth: '50%',  }}
                                         >
                                             <FontAwesomeIcon icon={faComment} />
-                                            {/* &nbsp; {item.comments} */}
                                         </button>
 
-                                        <button className="col retweet" disabled>
+                                        <button className="col retweet-disabled" disabled>
                                             <FontAwesomeIcon icon={faRetweet} />
                                         </button>
 

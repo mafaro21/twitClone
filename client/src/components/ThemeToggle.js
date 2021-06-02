@@ -83,7 +83,6 @@ export default function ThemeToggle() {
 
             <div style={{ fontWeight: 700 }} className="mt-3">Background</div>
             <div className="mt-1 theme">
-                {/* {x === light ? } */}
                 <div
                     className={theme === 'light' ? "more-back-active m-2 more-light" : "more-back m-2 more-light"}
                     onClick={lightMode}

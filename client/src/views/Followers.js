@@ -31,6 +31,9 @@ export default function Followers() {
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
     };
+    const Error = () => {       //redirect when there is a server error
+        return history.push("/NotFound404");
+    };
 
     let location = useLocation()
     let path = location.pathname
@@ -42,7 +45,6 @@ export default function Followers() {
         axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0])
-                // console.log(res.data)
                 let x = res.data[0]._id
                 getFollowers(x)
                 document.title = `People following @${username} - TwitClone`
@@ -53,17 +55,13 @@ export default function Followers() {
                 if (error.response.status === 500) {
                     internalError();
                 } else if (error.response.status === 404) {
-                    // setTweetLoading(false);
-                    // document.title = `TwitClone - User Not Found!!`
-                    // Error(user);
+                    Error();
                 }
             });
 
         async function getFollowers(x) {
-            // console.log(x)
             axios.get(`/follows/to/${x}`)
                 .then((res) => {
-                    // console.log(res.data)
                     setFollowers(res)
                     setLoading(false)
                 })
@@ -148,8 +146,7 @@ export default function Followers() {
                         {notFollowers ? <NoFollowers /> : null}
                         {loading && <Loading />}
                         {followers.data.map((item, i) => {
-                            // setHoverData(item.User[0])
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.User[0].username + ".svg";
                             return <Link to={`/u/${item.User[0].username}`} className="p-2 view row main-post-div post-link name-link " key={i}>
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <div

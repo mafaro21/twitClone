@@ -18,7 +18,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
     let history = useHistory();
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/gridy/" + username + ".svg";
 
 
 
@@ -34,8 +34,6 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
                 setTweets(res);
                 setNoTweets(false);
                 tweetCountFromTweets(res.data.length);
-                console.log(res.data);
-                // console.log(x)
             })
             .catch((error) => {
                 console.error(error);
@@ -64,8 +62,6 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
             .then((res) => {
                 setTweets(res);
                 setNoTweets(false);
-                console.log(res.data);
-                // console.log(x)
             })
             .catch((error) => {
                 console.error(error);
@@ -112,7 +108,6 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
             {tweetLoading || IDtoTweets === null ? <Loading /> :
                 tweets.data.map((item) => (
                     <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>
-                        {/* {disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} */}
 
                         <div className="col-1.5">              {/* <--- user avi */}
                             <Link
@@ -150,7 +145,6 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
                             <Interactive
                                 className="mt-2"
                                 username={username}
-                                // session={sessionName}
                                 id={item._id}
                                 comments={item.comments}
                                 retweets={item.retweets}

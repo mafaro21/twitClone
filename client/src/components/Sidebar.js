@@ -2,14 +2,11 @@ import React, { useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/Navbar.css';
 import '../css/custom.scss';
-// import axios from "axios";
-// import Loader from "react-loader-spinner";
 import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
 import { UserContext } from '../Contexts/UserContext';
 import { ApiContext } from '../Contexts/ApiContext';
 import { ToFollowContext } from '../Contexts/ToFollowContext';
-
 
 function Sidebar() {
     const [user] = useContext(UserContext)
@@ -18,12 +15,7 @@ function Sidebar() {
 
     const [toFollow] = useContext(ToFollowContext)
 
-    // const [api, setApi] = useState({ articles: [] });
-
-    // const [loading, setLoading] = useState(false)
-
     const newsRef = useRef(false);
-
 
     let location = useLocation()
 
@@ -32,40 +24,42 @@ function Sidebar() {
         <div className="col-4 p-3 phone-sidebar " ref={newsRef}>
             {location.pathname === '/explore' ? null : <Search />}
 
-            <div className="p-1 sidebar mt-4 ">
-                <h5 className="view p-3" style={{ fontWeight: 700 }}>People You Should Follow</h5>
-                <ul className="col " >
-                    {toFollow.data.map((item, key) => {
-                        let icon = "https://avatars.dicebear.com/api/identicon/" + item.username + ".svg";
+            {user.loggedin === true ?
+                <div className="p-1 sidebar mt-4 ">
+                    <h5 className="view p-3" style={{ fontWeight: 700 }}>People You Should Follow</h5>
+                    <ul className="col " >
+                        {toFollow.data.map((item, key) => {
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.username + ".svg";
 
-                        return <div className="p-2 view row main-post-div modal-enter" key={key}>
-                            <div className="col-1.5">              {/* <--- user avi */}
-                                <Link
-                                    to={`/u/${item.username}`}
-                                >
-                                    <img src={icon} alt="example" className="user-logo" />
-                                </Link>
+                            return <div className="p-2 view row main-post-div modal-enter" key={key}>
+                                <div className="col-1.5">              {/* <--- user avi */}
+                                    <Link
+                                        to={`/u/${item.username}`}
+                                    >
+                                        <img src={icon} alt="example" className="user-logo" />
+                                    </Link>
 
-                            </div>
-
-                            <Link to={`/u/${item.username}`} className="col user-name-tweet post-div" >
-                                {/* <--- user content */}
-                                <div  >
-                                    <div >
-                                        <Link
-                                            to={`/u/${item.username}`}
-                                            className="name-link"
-                                        >
-                                            <strong >{item.fullname}</strong>&nbsp;
-                                            </Link>
-                                        <div><span>@{item.username}</span></div>
-                                    </div>
                                 </div>
-                            </Link>
-                        </div>
-                    })}
-                </ul>
-            </div>
+
+                                <Link to={`/u/${item.username}`} className="col user-name-tweet post-div" >
+                                    {/* <--- user content */}
+                                    <div  >
+                                        <div >
+                                            <Link
+                                                to={`/u/${item.username}`}
+                                                className="name-link"
+                                            >
+                                                <strong >{item.fullname}</strong>&nbsp;
+                                            </Link>
+                                            <div className="sidebar-username">@{item.username}</div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </div>
+                        })}
+                    </ul>
+                </div>
+                : null}
 
             {user.loggedin === true ?
 
@@ -100,8 +94,9 @@ function Sidebar() {
             <div className="p-3 mt-4 sticky ">
                 <div className="footer row">
                     <div className="col">
-                        <p>About</p>
-                        <p>Terms Of Service</p>
+                        <a class="github-button" href="https://github.com/mafaro21" aria-label="Follow @ntkme on GitHub">Follow @mafaro21</a>
+
+                        <a class="github-button" href="https://github.com/mafaro21/twitClone" data-icon="octicon-star" aria-label="Star mafaro21/twitClone on GitHub">Star</a>
                     </div>
                     <div className="col">
                         <p>© TwitClone 2021</p>

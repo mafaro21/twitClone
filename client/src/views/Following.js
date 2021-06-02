@@ -41,10 +41,8 @@ export default function Following() {
         axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0]);
-                // console.log(res.data)
                 let x = res.data[0]._id;
                 getFollowing(x);
-                // console.log(x)
                 document.title = `People followed by @${username} - TwitClone`;
             })
             .catch((error) => {
@@ -58,10 +56,8 @@ export default function Following() {
             });
 
         async function getFollowing(x) {
-            // console.log(x)
             axios.get(`/follows/from/${x}`)
                 .then((res) => {
-                    // console.log(res.data)
                     setFollowing(res);
                     setLoading(false);
                 })
@@ -148,7 +144,7 @@ export default function Following() {
                         {notFollowing && <NotFollowing />}
                         {loading && <Loading />}
                         {following.data.map((item, i) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.User[0].username + ".svg";
 
                             return <Link to={`/u/${item.User[0].username}`} className="p-2 view row main-post-div post-link name-link" key={i}>
                                 <div className="col-1.5">              {/* <--- user avi */}
