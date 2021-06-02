@@ -67,7 +67,10 @@ html[data-theme="medium"]{
   z-index: 1;
   margin-top: -50px;
 }
-
+.logo{
+  width: 33px;
+  height: 33px;
+}
 .sidebar{
   /* border: 0.1px solid var(--text); */
   border-radius: 15px;

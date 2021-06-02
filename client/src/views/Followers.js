@@ -146,7 +146,7 @@ export default function Followers() {
                         {notFollowers ? <NoFollowers /> : null}
                         {loading && <Loading />}
                         {followers.data.map((item, i) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.User[0].username + ".svg";
                             return <Link to={`/u/${item.User[0].username}`} className="p-2 view row main-post-div post-link name-link " key={i}>
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <div
