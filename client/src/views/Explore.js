@@ -22,7 +22,7 @@ export default function Explore() {
             method: 'GET',
             url: 'https://newsapi.org/v2/top-headlines',
             params: {
-                category: 'general',
+                category: 'science',
                 pageSize: 3,
                 country: 'us',
                 apiKey: process.env.REACT_APP_NEWS_API_KEY

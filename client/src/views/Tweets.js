@@ -18,7 +18,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
     let history = useHistory();
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/gridy/" + username + ".svg";
 
 
 

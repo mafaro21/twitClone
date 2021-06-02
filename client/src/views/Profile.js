@@ -52,7 +52,7 @@ export default function Profile() {
 
     const [showRetweets, setShowRetweets] = useState(false);     //showing retweets
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/gridy/" + username + ".svg";
 
     let history = useHistory();
 

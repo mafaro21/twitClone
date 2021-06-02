@@ -135,7 +135,7 @@ export default function Post() {
                 });
         }
     };
-
+    console.log(retweetState)
     const handleRetweet = (id) => {     // retweeting and unretweeting posts
         setDisabled(true);
 
@@ -326,7 +326,7 @@ export default function Post() {
 
     TimeAgo.addLocale(en);
 
-    let icon = "https://avatars.dicebear.com/api/identicon/" + user.username + ".svg";
+    let icon = "https://avatars.dicebear.com/api/gridy/" + user.username + ".svg";
 
     let addEmoji = emoji => {
         setComment(comment + emoji.native);
@@ -646,7 +646,7 @@ export default function Post() {
                         }
 
                         {otherComments.data.map((item, i) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.User[0].username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.User[0].username + ".svg";
 
                             return <div className={disableDiv[item._id] ? "p-2 view row main-post-div test name-link modal-enter" : "p-2 view row main-post-div post-link name-link modal-enter"} key={i} >             {/* <--- standard tweet*/}
                                 <Link to={`/u/${item.User[0].username}`} className="col-1.5">              {/* <--- user avi */}
@@ -676,11 +676,13 @@ export default function Post() {
                                     <div className="interact-row d-flex ">
                                         <button
                                             className="comment col"
+                                            onClick={() => setComment(`@${item.User[0].username} `)}
+                                        // style={{ maxWidth: '50%',  }}
                                         >
                                             <FontAwesomeIcon icon={faComment} />
                                         </button>
 
-                                        <button className="col retweet" disabled>
+                                        <button className="col retweet-disabled" disabled>
                                             <FontAwesomeIcon icon={faRetweet} />
                                         </button>
 

@@ -50,7 +50,7 @@ function Home() {
         </div>
         : '';
 
-    let icon = `https://avatars.dicebear.com/api/identicon/${user.username}.svg`;
+    let icon = `https://avatars.dicebear.com/api/gridy/${user.username}.svg`;
 
     function getData() {
         setLoading(true);
@@ -364,7 +364,7 @@ function Home() {
                         </div>
                         {loading ? <Loading /> : null}
                         {allTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
+                            let icon = `https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`;
 
                             return <div className={item._id === deleteId ? "p-2 view row main-post-div delete-div" : "p-2 view row main-post-div modal-enter"} key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}
@@ -407,7 +407,7 @@ function Home() {
 
 
                         {newTweets.data.map((item) => {
-                            let icon = `https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`;
+                            let icon = `https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`;
 
                             return <div className="p-2 view row main-post-div modal-enter" key={item._id}>             {/* <--- standard tweet*/}
                                 <div className="col-1.5">              {/* <--- user avi */}

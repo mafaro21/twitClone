@@ -6,24 +6,16 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 // import { UserContext } from '../Contexts/UserContext';
-import Interactive from '../components/Interactive';
 
 export default function Retweets({ IDtoTweets }) {
-    let location = useLocation()
     let history = useHistory()
     const { user } = useParams()
     TimeAgo.addLocale(en);   //for the time ago
 
     const [tweetLoading, setTweetLoading] = useState(true);
-    const [profile, setProfile] = useState([{ fullname: '', username: '', bio: '', followers: 0, following: 0, isfollowedbyme: false }])  //display user data
 
-    const [tweetCount, setTweetCount] = useState(0);
-    const [userNotFound, setUserNotFound] = useState(false)
-    const [datejoined, setDatejoined] = useState('');
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [noRetweets, setNoRetweets] = useState(false);
-    const [userID, setUserID] = useState('')
-    const [childData, setchildData] = useState(false)   //boolean from interactve.js on whether to refresh data
 
 
     useEffect(() => {   //fetching data for logged in users
@@ -55,6 +47,7 @@ export default function Retweets({ IDtoTweets }) {
     const internalError = () => {       //redirect when there is a server error
         return history.push("/Error");
     };
+
     const Loading = () => {
 
         let x = localStorage.getItem("accent") || 'grey'
@@ -68,6 +61,7 @@ export default function Retweets({ IDtoTweets }) {
 
         </div>;
     };
+
     const NoRetweets = () => {        //only shown when user has no tweets
         return <div className="d-flex justify-content-center p-2">
 
@@ -76,52 +70,13 @@ export default function Retweets({ IDtoTweets }) {
         </div>;
     };
 
-    const UpdateData = () => {  //update data after like or deleted tweet
-        axios.get(`/profile/user/${user}`)  //getting profile data for anyone
-            .then((res) => {
-                setProfile(res.data[0])
-                let date = new Date(res.data[0].datejoined);
-                let months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-                let finalDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-                setDatejoined(finalDate)
-                document.title = `TwitClone - @${user}`
-            })
-            .catch((error) => {
-                console.error(error)
-
-                if (error.response.status === 500) {
-                    internalError();
-                } else if (error.response.status === 404) {
-                    setUserNotFound(true)
-                    document.title = `TwitClone - User Not Found!!`
-                }
-            });
-
-        axios.get(`/tweets/user/${userID}`)
-            .then((res) => {
-                setTweets(res);
-                setTweetCount(res.data.length);
-            })
-            .catch((error) => {
-                console.error(error);
-                if (error.response.status === 500) {
-                    internalError();
-                } else if (error.response.status === 404) {
-                    // setNoTweets(true);
-                }
-            });
-
-
-    }
-
 
     return (
         <>
             {tweetLoading ? <Loading /> : null}
             {noRetweets ? <NoRetweets /> : null}
             {tweets.data.map((item) => {
-                let icon = "https://avatars.dicebear.com/api/identicon/" + item.oguser[0].username + ".svg";
+                let icon = "https://avatars.dicebear.com/api/gridy/" + item.oguser[0].username + ".svg";
 
 
                 return <div className="p-2 view row main-post-div" >
@@ -154,17 +109,6 @@ export default function Retweets({ IDtoTweets }) {
                                 <p>{item.ogtweet[0].content} </p>
                             </div>
                         </div>
-                        <Interactive
-                            className="mt-2"
-                            id={item._id}
-                            comments={item.ogtweet[0].comments}
-                            retweets={item.ogtweet[0].retweets}
-                            likes={item.ogtweet[0].likes}
-                            likesByMe={item.isLikedbyme}
-                            passChildData={setchildData}
-                            retweetsByMe={item.isRetweetbyme}
-                            username={item.oguser[0].username}
-                        />
                     </Link>
                 </div>
             })}

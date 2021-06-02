@@ -135,7 +135,7 @@ export default function SearchResults() {
                         {loading ? <Loading /> : null}
                         {searchError ? <SearchDoesntExist /> : null}
                         {searchData.data.map((item, key) => {
-                            let icon = "https://avatars.dicebear.com/api/identicon/" + item.username + ".svg";
+                            let icon = "https://avatars.dicebear.com/api/gridy/" + item.username + ".svg";
                             return <div className="p-2 view row main-post-div modal-enter" key={key}>
                                 <div className="col-1.5">              {/* <--- user avi */}
                                     <Link
