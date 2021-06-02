@@ -60,14 +60,6 @@ export default function Profile() {
         setserverError(true);
     };
 
-<<<<<<< HEAD
-=======
-    // function getData() {
-    //     //loggedIn ? axios.get("/profile/mine") : 
-
-    // }
-
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
     useEffect(() => {   //fetching data for logged in users
         window.scroll(0, 0);
         setLoading(true);
@@ -125,10 +117,6 @@ export default function Profile() {
 
     const ButtonLoading = () => {    // loader for Follow button 
 
-<<<<<<< HEAD
-=======
-        // let x = localStorage.getItem("accent") || "grey"
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
 
         return <div className="d-flex justify-content-center " style={{ marginTop: "-10%" }}>
             <Loader type="ThreeDots"
@@ -202,19 +190,11 @@ export default function Profile() {
             })
             .catch((err) => {
                 console.error(err);
-<<<<<<< HEAD
                 err.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
                 setButtonLoading(false);
                 setDisabled(false);
             })
             .finally(() => {
-=======
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
-            })
-            .finally(() => {
-                setDisabled(false)
-                setButtonLoading(false)
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
                 setTimeout(() => {
                     setNoAccountDiv(false);
                 }, 2000);

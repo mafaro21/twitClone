@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 // import axios from 'axios';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-=======
-import axios from "axios";
-import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
 
 function Search() {
     let history = useHistory();
@@ -25,23 +19,7 @@ function Search() {
         const isValid = SearchValidation();
 
         if (isValid === true) {
-<<<<<<< HEAD
             return history.push(`/search?q=${search}`)
-=======
-            // searchData('yep')
-            return history.push(`/search?q=${search}`);
-            // return <Redirect to="explore" />
-
-            // axios.get(`/extras/search?user=${search}`)
-            //     .then((res) => {
-            //         // console.log(res.data)
-            //         // Destination()
-            //         return history.push("/more")
-            //     })
-            //     .catch((err) => {
-            //         console.error(err)
-            //     })
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
         } else setErrorColor(true);
     };
 
@@ -59,7 +37,7 @@ function Search() {
         if (reg.test(search)) {
             searchErr.invalid = "Search query contains illegal characters";
             isValid = false;
-        } 
+        }
         if (search.match(/\s/)) {
             searchErr.invalid = "No spaces allowed in query";
             isValid = false;
