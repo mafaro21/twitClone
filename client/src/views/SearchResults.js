@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Sidebar from '../components/Sidebar'
-import Search from '../components/Search'
+import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import Search from '../components/Search';
 import axios from "axios";
 import Loader from "react-loader-spinner";
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 export default function SearchResults() {
-    let location = useLocation()
-    let history = useHistory()
+    let location = useLocation();
+    let history = useHistory();
 
-    const [searchData, setSearchData] = useState({ data: [] })
-    const [searchParams, setSearchParams] = useState('')
-    const [searchError, setSearchError] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [searchErr, setSearchErr] = useState({})
+    const [searchData, setSearchData] = useState({ data: [] });
+    const [searchParams, setSearchParams] = useState('');
+    const [searchError, setSearchError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [searchErr, setSearchErr] = useState({});
     const [error, setError] = useState([]);     //using array, data comes that way
     const errorDiv = error
         ? <div>
@@ -22,64 +22,80 @@ export default function SearchResults() {
         </div>
         : '';
 
-    let path0 = location.search
+    let path0 = location.search;
     let path5 = path0.split('?q=');
     let searchResult = path5[1];
 
-    const SearchValidation = (x) => {    //front-end regex
-        const searchErr = {}
-        let reg = /[^A-Za-z0-9]+/g;
+    const SearchValidation = (query) => {    //front-end regex
+        const searchErr = {};
+        let reg = /[^A-Za-z0-9_]/g;
 
-        let isValid = true
+        let isValid = true;
 
-        if (x.trim().length < 4) {
-            searchErr.short = 'Search query is way too short'
-            isValid = false
+        if (query.trim().length < 4) {
+            searchErr.short = 'Search query is way too short';
+            isValid = false;
         }
-        if (x.match(reg)) {
-            searchErr.invalid = 'Search query contains illegal characters'
-            isValid = false
+        if (reg.test(query)) {
+            searchErr.invalid = 'Search query contains illegal characters';
+            isValid = false;
+        }
+        if (query.match(/\s/)) {
+            searchErr.invalid = "No spaces allowed in query";
+            isValid = false;
         }
 
-        setSearchErr(searchErr)
 
-        return isValid
-    }
+        setSearchErr(searchErr);
+
+        return isValid;
+    };
 
     useEffect(() => {
 
-        const isValid = SearchValidation(searchResult)
+        const isValid = SearchValidation(searchResult);
 
-        if (isValid) {
-            setSearchError(false)
+        if (isValid === true) {
+            setSearchError(false);
             setError(false);
-            setLoading(true)
-            setSearchParams(searchResult)
+            setLoading(true);
+            setSearchParams(searchResult);
 
             axios.get(`/extras/search?user=${searchResult}`)
                 .then((res) => {
+<<<<<<< HEAD
                     setSearchData(res)
+=======
+                    console.log(res.data);
+                    setSearchData(res);
+>>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
                 })
                 .catch((err) => {
-
-                    err.response.status === 404 ? setSearchError(true) : setError(err.response.data.message)
+                    err.response.status === 404 ? setSearchError(true) : setError(err.response.data.message);
                 })
                 .finally(() => {
-                    setLoading(false)
-                })
+                    setLoading(false);
+                });
         }
 
+<<<<<<< HEAD
         let x = location.pathname
         let y = location.search
         let z = x + y       //length of the url
+=======
+        let x = location.pathname;
+        let y = location.search;
+        let z = x + y;       //length of the url
+        // console.log(z.length)
+>>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
 
         if (z.length < 14) {
-            history.push('/explore')
+            history.push('/explore');
         }
-    }, [searchResult])
+    }, [searchResult]);
 
     const Loading = () => {        //the loading div
-        let x = localStorage.getItem("accent") || 'grey'
+        let x = localStorage.getItem("accent") || 'grey';
 
         return <div className="d-flex justify-content-center mt-2">
             <Loader type="TailSpin"
@@ -88,8 +104,8 @@ export default function SearchResults() {
                 width={40}
             />
 
-        </div>
-    }
+        </div>;
+    };
 
     const SearchDoesntExist = () => {
         return <div className="d-flex justify-content-center p-2">
@@ -99,7 +115,7 @@ export default function SearchResults() {
                 </span>
 
         </div>;
-    }
+    };
 
     return (
         <div className="App general ">
@@ -113,7 +129,7 @@ export default function SearchResults() {
                             <div style={{ width: '100%' }}>
                                 <Search />
                                 {Object.keys(searchErr).map((key) => {
-                                    return <div style={{ color: "red" }} className="mt-2 error-msg d-flex justify-content-center"> {searchErr[key]} </div>
+                                    return <div style={{ color: "red" }} className="mt-2 error-msg d-flex justify-content-center"> {searchErr[key]} </div>;
                                 })}
                                 <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
@@ -155,7 +171,7 @@ export default function SearchResults() {
                                         </div>
                                     </div>
                                 </Link>
-                            </div>
+                            </div>;
                         })}
 
                     </div>
@@ -164,5 +180,5 @@ export default function SearchResults() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

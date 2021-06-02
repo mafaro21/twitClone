@@ -131,14 +131,16 @@ router.get("/", (req, res, next) => {
 router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.lt || 0;  //attached by Client for paging
-    //axios.get(tweets/user/{userID}?lt=x12345)
-    if (!ObjectId.isValid(lastTweetID)) return res.sendStatus(400);
+    const lastTweetID = req.query.lt;  //attached from Client for paging
+    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
+    if (lastTweetID && !(ObjectId.isValid(lastTweetID))) {
+        return res.sendStatus(400);
+    }
     const agg = [
         {
             $match: {
                 byUserId: new ObjectId(userid),
-                _id: { $gt: new ObjectId(lastTweetID) }
+                _id: mama
             }
         }, {
             $sort: { _id: -1 }
@@ -319,7 +321,8 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
 
     /**
      * Will Only DELETE if `this.tweet.byUserId` === `req.session.userId`.
-     * This is to avoid deleting other users' tweets.
+     * This is to ensure current User IS the ORIGINAL Author of the tweet.
+     * ALSO, deleting all linked children of the Tweet (`likes`, `comments`, `retweets`)
      */
 
     const tweetObject = {
@@ -336,12 +339,12 @@ router.delete("/:tweetid", isLoggedin, (req, res, next) => {
             try {
                 const result = await tweets.deleteOne(tweetObject);
                 if (result.deletedCount === 0) throw new Error("Cannot delete tweet");
-                //Delete all linked-objects (children) as well.
-                 retweets.deleteMany({ OGtweetid: tweetObject._id });
-                 likes.deleteMany({ tweetid: tweetObject._id });
-                 comments.deleteMany({ tweetid: tweetObject._id });
-                //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 res.status(200).send({ "deleted": result.deletedCount, "success": true });
+                /* Delete all linked-objects (children) as well. */
+                await retweets.deleteMany({ OGtweetid: tweetObject._id });
+                await likes.deleteMany({ tweetid: tweetObject._id });
+                await comments.deleteMany({ tweetid: tweetObject._id });
+                //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             } catch (error) {
                 res.status(400).send({ message: error.message });
             }

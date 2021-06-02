@@ -7,7 +7,7 @@ const RegValidation = (req, res, next) => {
 
     function checkInputs() {
         let OK = true;
-        let reg = /^[ \p{Han}0-9a-zA-Z_\.\'\-]+$/;
+        let reg = /[^ \p{Han}0-9a-zA-Z_\.\'\-]/;
         let emailpatt = /(^([0-9A-Za-z])[\w\.\-]+@{1}[\w]+\.{1}[\w]\S+)$/gi;
 
         if (!fullname || !email || !password || !confirmPass) {
@@ -15,7 +15,7 @@ const RegValidation = (req, res, next) => {
             errors.push("No field can be empty, ");
             return false;
         }
-        if (!reg.test(fullname)) {
+        if (reg.test(fullname)) {
             errors.push("Name contains illegal characters, ");
             OK = false;
         }
