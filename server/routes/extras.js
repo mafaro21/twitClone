@@ -36,7 +36,8 @@ router.get("/search", SearchLimiter, (req, res, next) => {
             const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
             const myquery = { $regex: new RegExp(username), $options: "i" };
             try {
-                const result = await users.find({ username: myquery })
+                const result = await users
+                    .find({ username: myquery })
                     .project(projection)
                     .limit(10)
                     .toArray();
@@ -47,7 +48,8 @@ router.get("/search", SearchLimiter, (req, res, next) => {
             } finally {
                 await client.close();
             }
-        }).catch(next);
+        })
+        .catch(next);
 });
 
 /** TOP 3 USERS BY FOLLOWERS */
@@ -70,7 +72,8 @@ router.get("/top3users", isLoggedin, (req, res, next) => {
                 const users = client.db("twitclone").collection("users");
                 const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
                 try {
-                    const result = await users.find({})
+                    const result = await users
+                        .find({})
                         .sort({ _id: -1, followers: -1 })
                         .limit(3)
                         .project(projection)
@@ -85,7 +88,8 @@ router.get("/top3users", isLoggedin, (req, res, next) => {
                 } finally {
                     await client.close();
                 }
-            }).catch(next);
+            })
+            .catch(next);
     }
 
     /** Cache the result in Redis */
@@ -99,7 +103,6 @@ router.get("/top3users", isLoggedin, (req, res, next) => {
             if (err) console.error("REDIS_EXPIRE", err);
         });
     };
-
 });
 
 /*error handler */
