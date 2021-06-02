@@ -1,1 +1,4 @@
-- added the 'people you should follow list'
+- clean up
+- removed footer.js
+- remoded old tweet modal in header.js
+- removed navbar.js

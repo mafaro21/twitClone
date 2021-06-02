@@ -58,7 +58,6 @@ export default function SearchResults() {
 
             axios.get(`/extras/search?user=${searchResult}`)
                 .then((res) => {
-                    console.log(res.data)
                     setSearchData(res)
                 })
                 .catch((err) => {
@@ -73,7 +72,6 @@ export default function SearchResults() {
         let x = location.pathname
         let y = location.search
         let z = x + y       //length of the url
-        // console.log(z.length)
 
         if (z.length < 14) {
             history.push('/explore')
@@ -145,7 +143,6 @@ export default function SearchResults() {
                                 </div>
 
                                 <Link to={`/u/${item.username}`} className="col user-name-tweet post-div" >
-                                    {/* <--- user content */}
                                     <div  >
                                         <div >
                                             <Link

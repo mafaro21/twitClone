@@ -1,6 +1,6 @@
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 function Search() {
@@ -10,13 +10,6 @@ function Search() {
     const [searchErr, setSearchErr] = useState({})
     const [errorColor, setErrorColor] = useState(false)
 
-    // const Destination = () => {
-    //     // history.push("/Explore")
-    //     return history.push("/signup")
-    //     // <Redirect to="/Explore" />
-    // }
-
-    // console.log(history)
 
     const handleSearch = (e) => {
         e.preventDefault()
@@ -26,19 +19,7 @@ function Search() {
         const isValid = SearchValidation()
 
         if (isValid === true) {
-            // searchData('yep')
             return history.push(`/search?q=${search}`)
-            // return <Redirect to="explore" />
-
-            // axios.get(`/extras/search?user=${search}`)
-            //     .then((res) => {
-            //         // console.log(res.data)
-            //         // Destination()
-            //         return history.push("/more")
-            //     })
-            //     .catch((err) => {
-            //         console.error(err)
-            //     })
         } else setErrorColor(true);
     }
 

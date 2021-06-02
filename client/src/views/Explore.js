@@ -14,6 +14,7 @@ export default function Explore() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        window.scroll(0, 0)
         document.title = "TwitClone - Explore"
 
 
@@ -21,7 +22,7 @@ export default function Explore() {
             method: 'GET',
             url: 'https://newsapi.org/v2/top-headlines',
             params: {
-                category: 'science',
+                category: 'general',
                 pageSize: 3,
                 country: 'us',
                 apiKey: process.env.REACT_APP_NEWS_API_KEY
@@ -29,8 +30,7 @@ export default function Explore() {
         };
 
         axios.request(options).then(function (res) {
-            // console.log(res.data)    
-            setMainApiData(res.data.articles[0])
+            setMainApiData(res.data.articles[2])
             setApiData(res.data)
             setLoading(false);
         }).catch(function (error) {

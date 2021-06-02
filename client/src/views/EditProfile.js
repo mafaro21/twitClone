@@ -8,7 +8,6 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 import { useHistory, Redirect, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
-// import Loader from "react-loader-spinner";
 
 export default function Edit() {
     let history = useHistory();
@@ -44,7 +43,6 @@ export default function Edit() {
 
         axios.get(`/profile/user/${username}`)  //getting profile data for anyone
             .then((res) => {
-                console.log(res.data);
                 setEditBio(res.data[0].bio);
                 setEditFullname(res.data[0].fullname);
                 setEditUsername(res.data[0].username);
@@ -83,7 +81,6 @@ export default function Edit() {
                 width={40}
                 className="d-flex "
             />
-            {/* <div className="d-flex mt-2 ml-3" style={{ color: x }}>gg</div> */}
 
         </div>;
     };
@@ -110,7 +107,6 @@ export default function Edit() {
                 })
                 .catch((error) => {
                     setError(error.response.data.message);
-                    console.log(error.response.data);
                 })
                 .finally(() => {
                     setDisabled(false);  //stop disable button and loading.
@@ -169,7 +165,6 @@ export default function Edit() {
     return (
         <div className="App general " >
             {serverError && <Redirect to="/Error" />}
-            {/* <Navbar /> */}
 
             <div className="container  " >
                 <div className="row " >
@@ -178,7 +173,6 @@ export default function Edit() {
 
 
                     <div className="col main-view  phone-home w-100 " >
-                        {/* {loading ? <Loading /> : null} */}
                         <div className="row profile-header">
 
                             <div className="p-2  col row ">
@@ -272,7 +266,6 @@ export default function Edit() {
                                         <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                                         <button
-                                            // id="submit-btn"
                                             className="btn align-content-center login-submit btn-accent-outline rounded-pill mt-1"
                                             type="submit"
                                             onClick={onClick}
