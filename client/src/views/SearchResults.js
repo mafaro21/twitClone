@@ -63,12 +63,7 @@ export default function SearchResults() {
 
             axios.get(`/extras/search?user=${searchResult}`)
                 .then((res) => {
-<<<<<<< HEAD
                     setSearchData(res)
-=======
-                    console.log(res.data);
-                    setSearchData(res);
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
                 })
                 .catch((err) => {
                     err.response.status === 404 ? setSearchError(true) : setError(err.response.data.message);
@@ -78,16 +73,9 @@ export default function SearchResults() {
                 });
         }
 
-<<<<<<< HEAD
         let x = location.pathname
         let y = location.search
         let z = x + y       //length of the url
-=======
-        let x = location.pathname;
-        let y = location.search;
-        let z = x + y;       //length of the url
-        // console.log(z.length)
->>>>>>> b5891af8ecb036249fc200496a16f2ada4ccc5ec
 
         if (z.length < 14) {
             history.push('/explore');
