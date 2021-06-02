@@ -37,8 +37,6 @@ export default function Retweets({ IDtoTweets }) {
             .then((res) => {
                 setNoRetweets(false)
                 setTweets(res);
-                console.log(res.data);
-                // console.log(x)
             })
             .catch((error) => {
                 console.error(error);
@@ -82,7 +80,6 @@ export default function Retweets({ IDtoTweets }) {
         axios.get(`/profile/user/${user}`)  //getting profile data for anyone
             .then((res) => {
                 setProfile(res.data[0])
-                // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -98,7 +95,6 @@ export default function Retweets({ IDtoTweets }) {
                 } else if (error.response.status === 404) {
                     setUserNotFound(true)
                     document.title = `TwitClone - User Not Found!!`
-                    // Error(user);
                 }
             });
 
@@ -106,7 +102,6 @@ export default function Retweets({ IDtoTweets }) {
             .then((res) => {
                 setTweets(res);
                 setTweetCount(res.data.length);
-                // console.log(res.data);
             })
             .catch((error) => {
                 console.error(error);
@@ -126,7 +121,6 @@ export default function Retweets({ IDtoTweets }) {
             {tweetLoading ? <Loading /> : null}
             {noRetweets ? <NoRetweets /> : null}
             {tweets.data.map((item) => {
-                // console.log(item.ogtweet[0])
                 let icon = "https://avatars.dicebear.com/api/identicon/" + item.oguser[0].username + ".svg";
 
 
@@ -162,7 +156,6 @@ export default function Retweets({ IDtoTweets }) {
                         </div>
                         <Interactive
                             className="mt-2"
-                            // session={sessionName}
                             id={item._id}
                             comments={item.ogtweet[0].comments}
                             retweets={item.ogtweet[0].retweets}

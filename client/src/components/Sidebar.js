@@ -2,8 +2,6 @@ import React, { useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/Navbar.css';
 import '../css/custom.scss';
-// import axios from "axios";
-// import Loader from "react-loader-spinner";
 import { Link, useLocation } from 'react-router-dom';
 import Search from './Search';
 import { UserContext } from '../Contexts/UserContext';
@@ -18,12 +16,7 @@ function Sidebar() {
 
     const [toFollow] = useContext(ToFollowContext)
 
-    // const [api, setApi] = useState({ articles: [] });
-
-    // const [loading, setLoading] = useState(false)
-
     const newsRef = useRef(false);
-
 
     let location = useLocation()
 

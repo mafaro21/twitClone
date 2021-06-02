@@ -60,11 +60,6 @@ export default function Profile() {
         setserverError(true);
     };
 
-    // function getData() {
-    //     //loggedIn ? axios.get("/profile/mine") : 
-
-    // }
-
     useEffect(() => {   //fetching data for logged in users
         window.scroll(0, 0);
         setLoading(true);
@@ -73,8 +68,6 @@ export default function Profile() {
             .then((res) => {
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
-                // getTweets(res.data[0]._id);
-                console.log(res.data);
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
@@ -89,7 +82,6 @@ export default function Profile() {
                     setUserNotFound(true);
                     setShowTweets(false);
                     document.title = "TwitClone - User Not Found!!";
-                    // Error(user);
                 }
             }).finally(() => {
                 setLoading(false);
@@ -106,7 +98,6 @@ export default function Profile() {
                 setButtonLoading(false);
                 setProfile(res.data[0]);
                 setUserID(res.data[0]._id);
-                // console.log(res.data)
                 let date = new Date(res.data[0].datejoined);
                 let finalDate = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(date);
                 setDatejoined(finalDate);
@@ -120,14 +111,12 @@ export default function Profile() {
                     // setLoading(false);
                     setUserNotFound(true);
                     document.title = "TwitClone - User Not Found!!";
-                    // Error(user);
                 }
             });
     }
 
     const ButtonLoading = () => {    // loader for Follow button 
 
-        // let x = localStorage.getItem("accent") || "grey"
 
         return <div className="d-flex justify-content-center " style={{ marginTop: "-10%" }}>
             <Loader type="ThreeDots"
@@ -164,9 +153,6 @@ export default function Profile() {
 
     const ref = useRef();   //clicking outside closes modal
 
-    OutsideClick(ref, () => {
-        // console.log("yep cock");
-    });
 
     const UserNotFound = () => {
         return <div className="d-flex justify-content-center p-2 view row">
@@ -180,17 +166,14 @@ export default function Profile() {
         axios.post(`/follows/user/${userID}`)
             .then((res) => {
                 UpdateData();
-                console.log(res.data);
             })
             .catch((err) => {
                 console.error(err);
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
                 setButtonLoading(false);
                 setDisabled(false);
             })
             .finally(() => {
-                // setDisabled(false)
-                // setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false);
                 }, 2000);
@@ -204,15 +187,14 @@ export default function Profile() {
         axios.delete(`/follows/user/${userID}`)
             .then((res) => {
                 UpdateData();
-                console.log(res.data);
             })
             .catch((err) => {
                 console.error(err);
-                err.response.status === 401 ? setNoAccountDiv(true) : console.log("no acc div problem");
+                err.response.status === 401 ? setNoAccountDiv(true) : console.log("problem");
+                setButtonLoading(false);
+                setDisabled(false);
             })
             .finally(() => {
-                setDisabled(false)
-                setButtonLoading(false)
                 setTimeout(() => {
                     setNoAccountDiv(false);
                 }, 2000);
@@ -241,7 +223,6 @@ export default function Profile() {
         }
     };
 
-    // console.log(history)
     let location = useLocation();
     let path = location.pathname;
     let path1 = path.split("/u/");
@@ -249,11 +230,6 @@ export default function Profile() {
 
     TimeAgo.addLocale(en);   //for the time ago
 
-
-
-    // let path0 = location.pathname;
-    // let path5 = path0.split(`/u/${profile.username}`);
-    // let finalPath = path5[1];
 
     const likePage = () => {
         setShowLike(true);
@@ -435,89 +411,6 @@ export default function Profile() {
                         }
                         {showRetweets && <Retweets IDtoTweets={userID} />}
 
-                        {/* {tweets.data.map((item) => (
-                            <div className={disableDiv[item._id] ? "p-2 view row main-post-div test" : "p-2 view row main-post-div"} key={item._id}>
-                                {userNotFound ? null :
-                                    <div className="col-1.5">             
-                                        <Link
-                                            to={`/u/${profile.username}`}
-                                        >
-                                            <img src={icon} alt="example" className="user-logo" />
-                                        </Link>
-                                    </div>
-                                }
-                                {userNotFound ? null :
-                                    <Link to={`/post/${item._id}`} className="col user-name-tweet post-div" >
-                                        
-                                        <div  >
-                                            <div >
-                                                <Link
-                                                    to={`/u/${profile.username}`}
-                                                    className="name-link"
-                                                >
-                                                    <strong >{profile.fullname}</strong>&nbsp;
-                                            </Link>
-                                                <span>@{profile.username}</span>
-                                            &nbsp; <span>·</span> &nbsp;
-                                            <span>
-                                                    <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
-                                                </span>
-                                            </div>
-                                            <div className="post-link">
-                                                <p>{item.content} </p>
-                                            </div>
-                                        </div>
-                                        <div className="interact-row d-flex ">
-                                            <button
-                                                className={item.comments ? "comment-true col" : "comment col"}
-                                            >
-                                                <FontAwesomeIcon icon={faComment} />
-                                            &nbsp; {item.comments}
-                                            </button>
-                                            <button
-                                                className={item.isRetweetbyme ? "col retweet-true" : "col retweet"}
-                                                onClick={(e) => handleRetweet(e, item._id)}
-                                                disabled={disabled}
-                                            >
-                                                <FontAwesomeIcon icon={faRetweet} />
-                                                &nbsp; {item.retweets}
-                                            </button>
-                                            <button
-                                                className="like col"
-                                                onClick={(e) => handleLike(e, item._id, item.isLikedbyme)}
-                                                disabled={disabled}
-                                            >
-                                                {item.isLikedbyme ?
-                                                    (<FontAwesomeIcon icon={heartSolid} className="text-danger" />)
-                                                    : <FontAwesomeIcon icon={faHeart} />
-                                                }
-                                                &nbsp; {item.likes}
-                                            </button>
-                                            {sessionName === userPath ?
-                                                <button
-                                                    className="col delete"
-                                                    onClick={(e) => handleDelete(e, item._id)}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrashAlt} />
-                                                </button>
-                                                :
-                                                null
-                                            }
-                                        </div>
-                                        <Interactive
-                                            className="mt-2"
-                                            session={sessionName}
-                                            id={item._id}
-                                            comments={item.comments}
-                                            retweets={item.retweets}
-                                            likes={item.likes}
-                                            likesByMe={item.isLikedbyme}
-                                            passChildData={setchildData}
-                                        />
-                                    </Link>
-                                }
-                            </div>
-                        ))} */}
 
                     </div>
 

@@ -52,7 +52,6 @@ function Login() {
 
 
     const internalError = () => {       //redirect when there is a server error
-        // return <Redirect to="./Error" />;
         return history.push("/Error");
     };
 

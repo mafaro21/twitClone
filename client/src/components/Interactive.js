@@ -40,15 +40,8 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
     const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
 
 
-    // let location = useLocation()
-    // let path = location.pathname
-    // let path1 = path.split('/u/')
-    // let userPath = path1[1]
-
-
     const handleDelete = (e, id) => {
         e.preventDefault();
-        console.log(id)
 
         if (!deleteTweet[id]) {
             setDisabled(true);
@@ -59,10 +52,9 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
             axios.delete(`/tweets/${id}`)
                 .then((res) => {
-                    console.log(res.data);
                     passChildData(true);
                     deleteID(id)
-                   // justTrying('testing')
+                    // justTrying('testing')
                 })
                 .catch((error) => {
                     console.error(error);
@@ -92,7 +84,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
         //REFER: https://stackoverflow.com/questions/54853444/how-to-show-hide-an-item-of-array-map
 
         e.preventDefault();
-        // console.log(likedbyme)
 
         if (!likesByMe && !likedTweets[id]) {
             setDisabled(true);
@@ -103,7 +94,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
             axios.post(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data);
                     setLikeCount(likeCount + 1);
                     setLikedState(!likedState);  // <------------- UPDATE LOCAL states + UI
                 })
@@ -134,7 +124,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
             axios.delete(`/likes/${id}`)
                 .then((res) => {
-                    console.log(res.data);
                     setLikeCount(likeCount - 1);
                     setLikedState(!likedState); // <------------- UPDATE LOCAL states + UI
                 })
@@ -156,7 +145,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                     }, 2000);
                 });
         }
-        // console.log(likedTweets)
     };
 
     const handleRetweet = (e, id, retweetsByMe) => {
@@ -171,7 +159,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
             axios.post(`/retweets/${id}`)
                 .then((res) => {
-                    console.log(res.data);
                     setRetweetCount(retweetCount + 1);
                     setRetweetState(!retweetState);
                 })
@@ -202,7 +189,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
             axios.delete(`/retweets/${id}`)
                 .then((res) => {
-                    console.log(res.data);
                     setRetweetCount(retweetCount - 1);
                     setRetweetState(!retweetState);
                 })
@@ -261,8 +247,6 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
 
                 &nbsp; {likeCount}
             </button>
-
-            {/* session1 === userPath || */}
 
             { user.username === username ?
                 <button

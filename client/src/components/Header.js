@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import '../css/Sidebar.css';
 import '../css/custom.scss';
 import OutsideClick from './OutsideClick';
-// import Compose from '../views/Compose';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Loader from "react-loader-spinner";
 import axios from 'axios';
@@ -18,12 +17,6 @@ export default function Header({ passChildData }) {
 
     const [userModal, setUserModal] = useState(false);
     const userToggle = () => setUserModal(!userModal);
-
-    const [moreModal, setMoreModal] = useState(false);
-    const moreToggle = () => setMoreModal(!moreModal);
-
-    const [tweetModal, setTweetModal] = useState(false);//tweet modal
-    const tweetToggle = () => setTweetModal(!tweetModal);
 
     const [tweetLoading, setTweetLoading] = useState(false);
 
@@ -46,8 +39,6 @@ export default function Header({ passChildData }) {
 
     const [maxRows] = useState(10);
 
-    // const [addEmoji, setAddEmoji] = useState('')
-
     let history = useHistory();
 
     let tweetRef = useRef(); // this is to prevent the modal from refreshing when a user types something
@@ -65,7 +56,6 @@ export default function Header({ passChildData }) {
         (async () => {
             const res = await axios.get("/statuslogin");
             setUser(res.data); //for use context
-            // console.log(res.data)
 
         })();
 
@@ -86,55 +76,12 @@ export default function Header({ passChildData }) {
         </div>;
     };
 
-
-    const MoreModal = () => {
-        return <div className="user-modal modal-enter more-modal mr-1">
-            <button
-                className="text p-2 user-modal-btn "
-                type="submit"
-            >
-                Change Theme
-            </button>
-
-
-        </div >;
-    };
-
     /** Logout function */
     const Logout = () => {
         axios.get("/logout")
             .then(() => {
                 history.push("/");
             });
-    };
-
-    /** Live word-counter */
-    const wordCount = () => {
-        document.getElementById("tweet").addEventListener('input', function () {
-            var text = this.value,
-                count = text.trim().replace(/\s/g, '').length;
-
-
-            if (count === 280) {
-                document.getElementById('show').style.color = "red";
-            } else if (count >= 250) {
-                document.getElementById('show').style.color = "#FF8000";
-            } else if (count >= 200) {
-                document.getElementById('show').style.color = "#FFB400";
-            } else if (count >= 150) {
-                document.getElementById('show').style.color = "#FFF800";
-            } else {
-                document.getElementById('show').style.color = "grey";
-            }
-
-            if (count > 0) {        // used to disable button if textarea is empty
-                document.getElementById("submit-btn").disabled = false;
-            } else {
-                document.getElementById("submit-btn").disabled = true;
-            }
-
-            document.getElementById('show').textContent = count;
-        });
     };
 
     const handleSubmit = (e) => {
@@ -156,7 +103,7 @@ export default function Header({ passChildData }) {
 
             axios.post("/tweets", tweetObject)
                 .then(() => {
-                    passChildData =true; // to update profile.js when current user tweets
+                    passChildData = true; // to update profile.js when current user tweets
                     let tweetDiv = document.getElementById("tweet-modal");
                     tweetDiv.style.display = "none";
                     setTweetContent('');       //reset default state of the tweet modal
@@ -194,12 +141,6 @@ export default function Header({ passChildData }) {
         return isValid;
     };
 
-
-    // OutsideClick(tweetRef, () => {
-    //     setMoreModal(false)
-
-    // });
-
     /** Loader after tweet has been sent*/
     const TweetLoading = () => {
         let x = localStorage.getItem("accent") || "grey";
@@ -212,90 +153,6 @@ export default function Header({ passChildData }) {
             />
 
         </div>;
-    };
-
-    const TweetModal = () => {
-        return <div id="tweet-modal">
-            <div className="modal-wrapper" >
-                <div className="tweettest  modal-enter" >
-                    <div className="">
-                        <div className="modal-view">
-                            <div className="modal-header">
-                                <button className="" onClick={tweetToggle}>
-                                    <svg viewBox="0 0 24 24" className="back-button ">
-                                        <g>
-                                            <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z">
-                                            </path>
-                                        </g>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div style={{ color: "red", fontSize: "20px" }} className="mt-2 error-msg d-flex justify-content-center">{errorDiv}</div>
-
-
-                            <div className="modal-body row ">
-                                <div className="col-1">
-                                    <img src={icon} alt="example" className="user-tweet-img" />
-                                </div>
-
-                                <form id="tweetForm1" className="signup col tweet-form" onSubmit={(e) => handleSubmit(e)} >
-
-                                    <div className="view">
-                                        <textarea
-
-                                            id="tweet"
-                                            name="tweet"
-                                            type="text"
-                                            // value={addEmoji}
-
-                                            onChange={wordCount}
-                                            className=" edit-input "
-                                            maxLength="280"
-                                            rows="5"
-                                            placeholder="Any Hot Takes?"
-                                            required
-                                        />
-
-
-                                        {Object.keys(tweetErr).map((key) => {
-                                            return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
-                                        })}
-                                    </div>
-
-                                    <div className="d-flex flex-row mt-1">
-                                        <div className="container ">
-                                            {/* {count}/280 */}
-                                            <span id="show">0</span><span>/280</span>
-                                        </div>
-
-                                        {/* <Picker
-                                            set='twitter'
-                                            // onSelect={addEmoji}
-                                            title='Pick your emoji…'
-                                            emoji='point_up'
-                                            style={{ position: 'absolute', marginTop: '20px', right: '20px' }}
-                                            theme='auto'
-                                        /> */}
-
-                                        <button
-                                            id="submit-btn"
-                                            className="btn login-submit btn-accent-outline rounded-pill   "
-                                            type="submit"
-                                        // onClick={handleSubmit}
-                                        // disabled={disabled}       //button disabler
-                                        >
-                                            Tweet
-                                    </button>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div >;
     };
 
     let location = useLocation();    //for current location
@@ -412,7 +269,6 @@ export default function Header({ passChildData }) {
 
     return (
         <header className=" header pt-3 " >
-            {tweetModal ? <TweetModal /> : null}
             <div id="tweet-modal">
                 <div className="modal-wrapper" >
                     <div className="tweettest  modal-enter" >
@@ -494,8 +350,6 @@ export default function Header({ passChildData }) {
                 </div>
             </div >
 
-            {/* <Compose/> */}
-            {/* col-2 */}
 
             <Link className="text nav-logo fixed pl-2 " to="/home">
                 <svg width="26px" height="40px" viewBox="0 0 256 209" version="1.1" preserveAspectRatio="xMidYMid">
@@ -581,7 +435,6 @@ export default function Header({ passChildData }) {
                             </div>
                             <p className="header-title "
                                 style={{ fontWeight: 700 }}
-                                onClick={moreToggle}
                                 ref={tweetRef}
                             >
                                 More
@@ -589,18 +442,14 @@ export default function Header({ passChildData }) {
                         </div>
                     </Link>
 
-                    {moreModal && <MoreModal />}
-
                     {user.loggedin === true ?
                         <div className="d-flex tweet-btn" >
                             <div className=" d-flex pl-2">
                                 <div>
 
                                     <div
-                                        // to="/compose"
                                         id="tweet-button"
                                         className="btn tweet-submit btn-accent rounded-pill mt-3 "
-                                        // onClick={tweetToggle}
                                         onClick={toggleTest}
 
                                     >
