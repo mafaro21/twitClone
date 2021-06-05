@@ -5,6 +5,7 @@ import Loader from "react-loader-spinner";
 import { Link, useHistory } from 'react-router-dom';
 import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
+import NoAccount from '../components/NoAccount';
 
 export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, fullname }) {
     const [user] = useContext(UserContext);
@@ -16,6 +17,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     const [tweetCount, setTweetCount] = useState(0);
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [childData, setchildData] = useState(false);   //boolean from interactve.js on whether to refresh data
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
     let history = useHistory();
 
     let icon = "https://avatars.dicebear.com/api/gridy/" + username + ".svg";
@@ -104,6 +106,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
     return (
         <div>
             {noTweets && <NoTweets />}
+            {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
 
             {tweetLoading || IDtoTweets === null ? <Loading /> :
                 tweets.data.map((item) => (
@@ -153,6 +156,7 @@ export default function Tweets({ tweetCountFromTweets, IDtoTweets, username, ful
                                 passChildData={setchildData}
                                 retweetsByMe={item.isRetweetbyme}
                                 deleteID={setDeleteId}
+                                logInFirst={setNoAccountDiv}
                             />
                         </Link>
 

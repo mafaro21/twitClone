@@ -18,6 +18,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { Link, useLocation } from 'react-router-dom';
+import NoAccount from '../components/NoAccount';
 
 function Home() {
     const [user] = useContext(UserContext);
@@ -44,6 +45,8 @@ function Home() {
     const [maxRows] = useState(8);
     const [tweetErr, setTweetErr] = useState({});
     const [error, setError] = useState([]);     //using array, data comes that way
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
+
     const errorDiv = error
         ? <div>
             {error}
@@ -281,6 +284,7 @@ function Home() {
                 <div className="row ">
 
                     <Header />
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
 
                     <div className="col main-view phone-home ">
                         {user.loggedin ?
@@ -398,6 +402,7 @@ function Home() {
                                         passChildData={setchildData}
                                         username={item.User[0].username} // this is a test
                                         deleteID={setDeleteId}
+                                        logInFirst={setNoAccountDiv}
 
                                     />
 
@@ -439,7 +444,9 @@ function Home() {
                                         likes={item.likes}
                                         likesByMe={item.isLikedbyme}
                                         retweetsByMe={item.isRetweetbyme}
+                                        username={item.User[0].username} // this is a test
                                         passChildData={setchildData}
+                                        logInFirst={setNoAccountDiv}
                                     />
 
                                 </Link>

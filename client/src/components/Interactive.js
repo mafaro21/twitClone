@@ -14,7 +14,7 @@ import NoAccount from '../components/NoAccount';
 import { UserContext } from '../Contexts/UserContext';
 
 
-export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username, deleteID, justTrying }) {
+export default function Interactive({ id, comments, retweets, likes, likesByMe, passChildData, retweetsByMe, username, deleteID, logInFirst }) {
     //most props are from profile.js
 
     const [user] = useContext(UserContext);
@@ -58,19 +58,19 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 })
                 .catch((error) => {
                     console.error(error);
-                    // switch (error.response.status) {
-                    //     case 401:
-                    //         setNoAccountDiv(true);
-                    //         break;
-                    //     case 500:
-                    //         setserverError(true);
-                    //     default:
-                    //         console.error(error);
-                    //         break;
-                    // }
+                    switch (error.response.status) {
+                        case 401:
+                            logInFirst(true);
+                            break;
+                        case 500:
+                            setserverError(true);
+                        default:
+                            console.error(error);
+                            break;
+                    }
                 }).finally(() => {
                     setTimeout(() => {
-                        setNoAccountDiv(false);
+                        logInFirst(false);
                     }, 2000);
                     setdeleteTweet(false);
                     setDisabled(false);
@@ -100,7 +100,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 .catch((error) => {
                     switch (error.response.status) {
                         case 401:
-                            setNoAccountDiv(true);
+                            logInFirst(true);
                             break;
                         case 500:
                             setserverError(true);
@@ -111,7 +111,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false);
+                        logInFirst(false);
                     }, 2000);
                 });
 
@@ -130,7 +130,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 .catch((error) => {
                     switch (error.response.status) {
                         case 401:
-                            setNoAccountDiv(true);
+                            logInFirst(true);
                             break;
                         case 500:
                             setserverError(true);
@@ -141,7 +141,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false);
+                        logInFirst(false);
                     }, 2000);
                 });
         }
@@ -165,7 +165,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 .catch((error) => {
                     switch (error.response.status) {
                         case 401:
-                            setNoAccountDiv(true);
+                            logInFirst(true);
                             break;
                         case 500:
                             setserverError(true);
@@ -176,7 +176,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false);
+                        logInFirst(false);
                     }, 2000);
                 });
 
@@ -195,7 +195,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 .catch((error) => {
                     switch (error.response.status) {
                         case 401:
-                            setNoAccountDiv(true);
+                            logInFirst(true);
                             break;
                         case 500:
                             setserverError(true);
@@ -206,7 +206,7 @@ export default function Interactive({ id, comments, retweets, likes, likesByMe, 
                 }).finally(() => {
                     setDisabled(false);
                     setTimeout(() => {
-                        setNoAccountDiv(false);
+                        logInFirst(false);
                     }, 2000);
                 });
         }
