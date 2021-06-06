@@ -19,6 +19,7 @@ import Loader from "react-loader-spinner";
 import { Link, useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import OffCanvas from '../components/OffCanvas';
 import { UserContext } from "../Contexts/UserContext";
 
 export default function Profile() {
@@ -276,6 +277,8 @@ export default function Profile() {
                                             </div>
                                             <span style={{ fontSize: "15px" }}>{!userNotFound && tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
                                         </div>
+                                        <OffCanvas />
+
                                     </div>
                                 </div>
 

@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 import { useHistory, Redirect, useParams } from 'react-router-dom';
 import Loader from "react-loader-spinner";
+import OffCanvas from '../components/OffCanvas';
 
 export default function Edit() {
     let history = useHistory();
@@ -184,6 +185,7 @@ export default function Edit() {
                                         <strong>Edit Profile</strong>
                                     </div>
                                 </div>
+                                <OffCanvas />
 
                             </div>
                         </div>

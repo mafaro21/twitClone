@@ -293,90 +293,90 @@ ul{
 }
 
 /* toggle */
-input[type=checkbox] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-}
-input[type=checkbox]:focus {
-  outline: 0;
-}
 
-.toggle {
-  height: 32px;
-  width: 52px;
-  border-radius: 16px;
-  display: inline-block;
-  position: relative;
-  margin: 0;
-  border: 2px solid #474755;
-  background: linear-gradient(180deg, #2D2F39 0%, #1F2027 100%);
-  transition: all 0.2s ease;
-}
-.toggle:after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
-  transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
-}
-.toggle:checked {
-  border-color: #654FEC;
-}
-.toggle:checked:after {
-  transform: translatex(20px);
-}
-/* toggle */
 
-@media screen and (max-width: 500px){   
-  .nav-logo{
-    display: none;
+/* offcanvas */
+.offcanvas-wrapper{
+  z-index: 2 ;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(38, 36, 34, 0.9);
+  /* transition: all .3s ease-in-out; */
+}
+@keyframes animate-offcanvas {
+  0% {
+    left: -60%;
   }
+  100% {
+    left: 0;
+  }
+
+}
+.offcanvas{
+  z-index: 2;
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: left;
+  background: var(--background);
+  height: 100vh;
+  width: 64vw;
+  text-align: left;
+  padding: 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* transition: all 3s ease-in-out; */
+  border-right: 1px solid var(--text);
+  animation: animate-offcanvas 0.4s ease-in ;
+  
+}
+.offcanvas-link{
+  padding: -90%;
+}
+.offcanvas-button{
+  position: absolute;
+  /* border: 1px solid var(--accent); */
+  font-size: 19px;
+  width: auto;
+  bottom: 70px;
+  border-radius: 9px;
+}
+/* offcanvas */
+.main-only{
+  display: block;
+}
+.phone-only{
+  display: none;
+}
+@media screen and (max-width: 500px){   
+  
   .header-title {
-    display: none;
+    display: block;
   }
   .header{
     position: relative !important;
     background-color: darkblue !important;
     width: 0%;
   }
+  .main-only{
+    display: none;
+  }
+  .phone-only{
+    display: block;
+  }
   .phone-header{
     display: flex;
     position: fixed !important;
-    flex-direction: row !important;
     bottom: 0 !important;
-    /* border-top-color: rgb(47, 51, 54) !important; */
-    /* background-color: #f61 !important; */
     z-index: 1 !important;
     width: 42% !important;
-    height: auto !important; 
-    /* justify-content: space-evenly !important; */
     padding-bottom: 2%;
-    /* margin-top: 78vh !important; */
-    margin-left: 5%;
-  }
-  .wtf{
-    display: flex;
-    position: relative;
-    background-color: gold;
-    width: 100vw !important;
-    margin-left: 5%;
+    margin-left: 3%;
   }
   
-  .header-link, .header-link-active{
-    /* background-color: blueviolet; */
-    width: 100vw;
-    margin-left: -9%;
-    /* margin-top: 50%; */
-    border-top-color: rgb(47, 51, 54) !important;
-  }
   .phone-sidebar{
     display: none;
   }
@@ -386,7 +386,7 @@ input[type=checkbox]:focus {
   }
   .tweet-btn{
     display: flex !important;
-    z-index:1;
+    /* z-index: 2; */
     position: absolute;
     display: flex;
     margin-top: -60px !important;
@@ -404,9 +404,9 @@ input[type=checkbox]:focus {
     /* height: 100vh !important; */
   }
   .modal-view{
-    margin-top: -30%;
+    margin-top: -40%;
     width: 100vw !important;
-    height: 90vh;
+    height: 96vh;
   }
   .tweet-text{
     display: none;

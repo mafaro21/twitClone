@@ -14,7 +14,7 @@ export default function NoAccount({ currentState }) {
     }, [currentState, setNoAccState])
 
     return (
-        <div>
+        <div style={{ zIndex: '10' }}>
             <div>
                 <div className="no-acc-wrapper" >
                     <div className={noAccState ? "no-acc-test modal-enter" : "no-acc-test no-acc-modal-leave"} >
@@ -25,7 +25,7 @@ export default function NoAccount({ currentState }) {
                                 <div className="modal-body row p-3 d-flex justify-content-center">
 
                                     <div className="p-3" style={{ fontWeight: 700 }}>
-                                        You need to be logged in to do that!!
+                                        You need to be logged in!!
                                     </div>
                                 </div>
                             </div>
