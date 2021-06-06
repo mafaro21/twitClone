@@ -10,6 +10,7 @@ import { useParams, useHistory, useLocation, Link, Redirect } from 'react-router
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import NoAccount from '../components/NoAccount';
+import OffCanvas from '../components/OffCanvas';
 
 export default function Following() {
 
@@ -127,6 +128,8 @@ export default function Following() {
                                         <span className="text mb-2" style={{ fontSize: '14px', color: 'grey' }}>@{profile.username}</span>
                                     </div>
                                 </div>
+                                <OffCanvas />
+
                             </div>
                         </div>
 

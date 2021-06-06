@@ -23,6 +23,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
 import { UserContext } from '../Contexts/UserContext';
+import OffCanvas from '../components/OffCanvas';
 
 export default function Post() {
     const [user] = useContext(UserContext);
@@ -451,6 +452,8 @@ export default function Post() {
                                         <strong>Spicy Take</strong>
                                     </div>
                                 </div>
+                                <OffCanvas />
+
                             </div>
 
 
