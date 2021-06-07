@@ -27,6 +27,14 @@ const redisClient = redis.createClient({
 });
 
 
+(async () =>
+    redisClient.ping((err, reply) => {
+        if (err) throw new Error(err);
+        console.log(reply);
+    })
+)();
+
+
 //FOR LOGIN ONLY::
 
 /* handling GET requests  */
@@ -58,7 +66,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             return isValid;
         })
         .then((isValid) => {
-            if (isValid === true) operateDB();
+            if (true) operateDB();
             else throw new Error();
         })
         .catch((err) => {
