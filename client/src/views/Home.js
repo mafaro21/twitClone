@@ -18,6 +18,9 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { Link, useLocation } from 'react-router-dom';
+import NoAccount from '../components/NoAccount';
+import OffCanvas from '../components/OffCanvas';
+
 
 function Home() {
     const [user] = useContext(UserContext);
@@ -44,6 +47,10 @@ function Home() {
     const [maxRows] = useState(8);
     const [tweetErr, setTweetErr] = useState({});
     const [error, setError] = useState([]);     //using array, data comes that way
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
+
+
+
     const errorDiv = error
         ? <div>
             {error}
@@ -273,6 +280,9 @@ function Home() {
     }
 
 
+
+
+
     return (
         <div className="App general ">
             <div className="container ">
@@ -281,14 +291,15 @@ function Home() {
                 <div className="row ">
 
                     <Header />
+                    {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
 
                     <div className="col main-view phone-home ">
                         {user.loggedin ?
                             <div className="row profile-header view p-3">
 
-                                <div >
-                                    <strong className="text" style={{ fontSize: '20px' }}>Home </strong>
-                                </div>
+                                <strong className="text col mt-2" style={{ fontSize: '20px' }}>Home </strong>
+                                <OffCanvas />
+                                {/* user icon for phone view */}
                             </div>
                             : null}
 
@@ -296,7 +307,6 @@ function Home() {
                         {Object.keys(tweetErr).map((key) => {
                             return <div style={{ color: "red" }} className="error-msg"> {tweetErr[key]} </div>;
                         })}
-
 
 
                         {user.loggedin === true ?
@@ -356,11 +366,10 @@ function Home() {
                             </div>
                             : null}
 
-                        <div className="row profile-header view p-3">
+                        <div className="row  view p-3">
 
-                            <div >
-                                <strong className="text" style={{ fontSize: '20px' }}>Your Feed </strong>
-                            </div>
+                            <strong className="text col" style={{ fontSize: '20px' }}>Your Feed </strong>
+                            {user.loggedin ? null : <OffCanvas />}
                         </div>
                         {loading ? <Loading /> : null}
                         {allTweets.data.map((item) => {
@@ -398,6 +407,7 @@ function Home() {
                                         passChildData={setchildData}
                                         username={item.User[0].username} // this is a test
                                         deleteID={setDeleteId}
+                                        logInFirst={setNoAccountDiv}
 
                                     />
 
@@ -439,7 +449,9 @@ function Home() {
                                         likes={item.likes}
                                         likesByMe={item.isLikedbyme}
                                         retweetsByMe={item.isRetweetbyme}
+                                        username={item.User[0].username} // this is a test
                                         passChildData={setchildData}
+                                        logInFirst={setNoAccountDiv}
                                     />
 
                                 </Link>

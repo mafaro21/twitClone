@@ -95,6 +95,7 @@ function Sidebar() {
                 <div className="footer row">
                     <div className="col">
                         <a class="github-button" href="https://github.com/mafaro21" aria-label="Follow @ntkme on GitHub">Follow @mafaro21</a>
+                        <a class="github-button" href="https://github.com/Longwater1234" aria-label="Follow @ntkme on GitHub">Follow @Longwater1234</a>
 
                         <a class="github-button" href="https://github.com/mafaro21/twitClone" data-icon="octicon-star" aria-label="Star mafaro21/twitClone on GitHub">Star</a>
                     </div>

@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 import ThemeToggle from '../components/ThemeToggle'
 import axios from 'axios';
+import OffCanvas from '../components/OffCanvas';
 
 export default function More() {
 
@@ -33,6 +34,8 @@ export default function More() {
                                         <strong>More</strong>
                                     </div>
                                 </div>
+                                <OffCanvas />
+
                             </div>
 
 

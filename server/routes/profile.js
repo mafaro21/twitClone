@@ -47,8 +47,8 @@ router.get("/user/:username", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
     const userReg = /[^0-9a-zA-Z_\S]+/;
     //check if valid username format:
-    if (userReg.test(username) || username.length > 20 ) return res.sendStatus(404);
-   
+    if (userReg.test(username) || username.length > 20) return res.sendStatus(404);
+
     // above^ check if username length is over 20 chars
     const agg = [
         {
