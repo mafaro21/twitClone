@@ -3,6 +3,7 @@ const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URL;
 const router = express.Router();
 const redis = require("redis");
+const _ = require("lodash");
 const rateLimit = require("express-rate-limit");
 const isLoggedin = require("../middleware/authchecker");
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
@@ -26,15 +27,21 @@ router.get("/search", SearchLimiter, (req, res, next) => {
     const username = req.query.user;
     const userReg = /[^0-9a-zA-Z_\S]/;
 
+    if (typeof username !== "string") {
+        return res.sendStatus(400);
+    }
+
     if (!username || userReg.test(username) || username.length > 20 || username.length < 4) {
         return res.sendStatus(400);
     }
+
+    const safeUsername = _.escapeRegExp(username);
 
     MongoClient.connect(uri, MongoOptions)
         .then(async (client) => {
             const users = client.db("twitclone").collection("users");
             const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
-            const myquery = { $regex: new RegExp(username), $options: "i" };
+            const myquery = { $regex: new RegExp(safeUsername), $options: "i" };
             try {
                 const result = await users
                     .find({ username: myquery })
@@ -48,8 +55,7 @@ router.get("/search", SearchLimiter, (req, res, next) => {
             } finally {
                 await client.close();
             }
-        })
-        .catch(next);
+        }).catch(next);
 });
 
 /** TOP 3 USERS BY FOLLOWERS */
@@ -88,8 +94,7 @@ router.get("/top3users", isLoggedin, (req, res, next) => {
                 } finally {
                     await client.close();
                 }
-            })
-            .catch(next);
+            }).catch(next);
     }
 
     /** Cache the result in Redis */
