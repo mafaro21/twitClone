@@ -66,7 +66,7 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             return isValid;
         })
         .then((isValid) => {
-            if (true) operateDB();
+            if (isValid === true) operateDB();
             else throw new Error();
         })
         .catch((err) => {
@@ -105,23 +105,6 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             }).catch(next);
     } // <--end of function
 
-    /** STORE USER INFO TO REDIS for Search 
-    async function savetoRedis(item) {
-        redisClient.hmset(item.username, {
-            "_id": `${item._id}`,
-            "username": `${item.username}`,
-            "fullname": `${item.fullname}`,
-        }, (err, reply) => {
-            if (err) return console.error("REDIS_SAVE", err);
-            console.log("REDIS_SAVE", reply);
-        });
-
-        redisClient.expire(item.username, 60 * 60 * 24, (err, reply) => {
-            if(err) return console.error(err.message);
-            console.log("SETEX", reply);
-        });
-    }
-*/
 });
 
 
