@@ -2,6 +2,7 @@
 A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ MongoDB driver 
 (NO Mongoose).
 
+#### Default Local Settings
 - _Server_:  runs on `http://localhost:5000`
 - _Client_:  runs on `http://localhost:3000`
 
@@ -13,5 +14,5 @@ A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ Mo
 - Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
 - Rate-Limiting for auth routes.
 - Top News Headlines, updated regularly.
-- For more features, see file `./TODO/twitterclone.md`
+- For more features, see file `TODO/Twitterclone.md`
 
