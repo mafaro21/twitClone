@@ -6,6 +6,7 @@ import Search from '../components/Search'
 import Loader from "react-loader-spinner";
 import axios from "axios";
 import BackButton from "../components/BackButton";
+import BottomRow from '../components/BottomRow'
 
 
 export default function Explore() {
@@ -98,6 +99,8 @@ export default function Explore() {
                     <Sidebar />
                 </div>
             </div>
+            <BottomRow />
+
         </div>
 
     )

@@ -474,7 +474,7 @@ export default function Post() {
                                             to={`/u/${item.User[0].username}`}
                                         >
                                             <img
-                                                src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`}
+                                                src={`https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`}
                                                 alt="example"
                                                 className="user-logo"
                                             />
@@ -579,7 +579,7 @@ export default function Post() {
 
                                             {commentReply &&
                                                 <span>Replying to
-                                                <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
+                                                    <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
                                                         @{item.User[0].username}
                                                     </Link>
                                                 </span>

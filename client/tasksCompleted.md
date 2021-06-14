@@ -1,4 +1,2 @@
-- clean up
-- removed footer.js
-- remoded old tweet modal in header.js
-- removed navbar.js
+- updated data in Offcanvas
+- made a bottom row for phone view
