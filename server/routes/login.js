@@ -27,14 +27,6 @@ const redisClient = redis.createClient({
 });
 
 
-(async () =>
-    redisClient.ping((err, reply) => {
-        if (err) throw new Error(err);
-        console.log(reply);
-    })
-)();
-
-
 //FOR LOGIN ONLY::
 
 /* handling GET requests  */
@@ -54,11 +46,11 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
         timeout: 5000,
         params: {
             secret: secret,
-            response: responseToken
+            // response: responseToken
         }
     };
 
-    axios.request(axiosOptions)
+    /*axios.request(axiosOptions)
         .then((res) => {
             isValid = res.data.success && res.data.score >= 0.5; //check if both TRUE
             let prob = res.data["error-codes"];
@@ -72,9 +64,9 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
         .catch((err) => {
             res.status(401).send({ message: "CAPTCHA Error" });
             console.error("AXIOS_CAPTCHA", err.message);
-        });
+        });*/
     //---------------------END OF VERIFICATION ABOVE ---------------------//
-
+    operateDB()
     function operateDB() {
         //continue with LOGIN operations
         MongoClient.connect(uri, MongoOptions)
@@ -105,6 +97,23 @@ router.post("/", LoginLimiter, LoginValidation, (req, res, next) => {
             }).catch(next);
     } // <--end of function
 
+    /** STORE USER INFO TO REDIS for Search 
+    async function savetoRedis(item) {
+        redisClient.hmset(item.username, {
+            "_id": `${item._id}`,
+            "username": `${item.username}`,
+            "fullname": `${item.fullname}`,
+        }, (err, reply) => {
+            if (err) return console.error("REDIS_SAVE", err);
+            console.log("REDIS_SAVE", reply);
+        });
+
+        redisClient.expire(item.username, 60 * 60 * 24, (err, reply) => {
+            if(err) return console.error(err.message);
+            console.log("SETEX", reply);
+        });
+    }
+*/
 });
 
 

@@ -1,4 +1,4 @@
-:root{
+
  
 
   /* --accent: #dfbb29;
@@ -17,7 +17,7 @@
   --inputbk: #a3a4ab;
   --text: #f8f8f5;
   --background: #575162; */
-}
+
 
 /* media breakpoints */
 @media screen and (max-width: 500px){   /*phone view*/

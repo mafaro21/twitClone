@@ -11,6 +11,7 @@ import axios from 'axios'
 import Loader from "react-loader-spinner";
 import NoAccount from '../components/NoAccount';
 import OffCanvas from '../components/OffCanvas';
+import BottomRow from '../components/BottomRow'
 
 export default function Followers() {
 
@@ -142,7 +143,7 @@ export default function Followers() {
                             <Link to={`/u/${profile.username}/following`} className={finalPath === '/following' ? "w-50 follow-tab-active" : "w-50 follow-tab"}>
                                 <div className="p-3 ">
                                     Following
-                                    </div>
+                                </div>
                             </Link>
                         </div>
 
@@ -181,6 +182,7 @@ export default function Followers() {
                     <Sidebar />
                 </div>
             </div>
+            <BottomRow />
 
         </div>
     )

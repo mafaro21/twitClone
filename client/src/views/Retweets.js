@@ -5,14 +5,18 @@ import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
-// import { UserContext } from '../Contexts/UserContext';
+import { UserContext } from '../Contexts/UserContext';
+import NoAccount from "../components/NoAccount";
 
 export default function Retweets({ IDtoTweets }) {
+
     let history = useHistory()
     const { user } = useParams()
     TimeAgo.addLocale(en);   //for the time ago
 
     const [tweetLoading, setTweetLoading] = useState(true);
+    const [noAccountDiv, setNoAccountDiv] = useState(false); //shows modal that tells user they need to sign/log in
+
 
     const [tweets, setTweets] = useState({ data: [] });// for displaying user tweets
     const [noRetweets, setNoRetweets] = useState(false);
@@ -36,9 +40,14 @@ export default function Retweets({ IDtoTweets }) {
                     internalError();
                 } else if (error.response.status === 404) {
                     setNoRetweets(true);
+                } else if (error.response.status === 401) {
+                    setNoAccountDiv(true);
                 }
             }).finally(() => {
                 setTweetLoading(false);
+                setTimeout(() => {
+                    setNoAccountDiv(false);
+                }, 2000);
             });
 
 
@@ -75,6 +84,8 @@ export default function Retweets({ IDtoTweets }) {
         <>
             {tweetLoading ? <Loading /> : null}
             {noRetweets ? <NoRetweets /> : null}
+            {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
+
             {tweets.data.map((item) => {
                 let icon = "https://avatars.dicebear.com/api/gridy/" + item.oguser[0].username + ".svg";
 
@@ -99,8 +110,8 @@ export default function Retweets({ IDtoTweets }) {
                                 </Link>
                                 <span>@{item.oguser[0].username}</span>
 
-                        &nbsp; <span>·</span> &nbsp;
-                        <span>
+                                &nbsp; <span>·</span> &nbsp;
+                                <span>
                                     <ReactTimeAgo date={item.ogtweet[0].dateposted} locale="en-US" timeStyle="twitter" />
                                 </span>
                             </div>
