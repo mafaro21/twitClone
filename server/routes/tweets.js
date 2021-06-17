@@ -38,11 +38,12 @@ router.post("/", isLoggedin, TweetValidation, (req, res, next) => {
 /** GET ALL TWEETS! (for Home Page) */
 router.get("/", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const lastTweetID = req.query.lt;  //attached from Client for paging
-    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
+    const lastTweetID = req.query.lt;  //attached from Client for paging??
+    if(typeof lastTweetID !== "string") return res.sendStatus(400);
     if (lastTweetID && !(ObjectId.isValid(lastTweetID))) {
         return res.sendStatus(400);
     }
+    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
 
     const agg = [
         {
@@ -132,10 +133,11 @@ router.get("/user/:userid", (req, res, next) => {
     const userid = req.params.userid;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
     const lastTweetID = req.query.lt;  //attached from Client for paging
-    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
-    if (lastTweetID && !(ObjectId.isValid(lastTweetID))) {
+    if (lastTweetID && !(ObjectId.isValid(lastTweetID)) || !(ObjectId.isValid(userid))) {
         return res.sendStatus(400);
     }
+    const mama = lastTweetID ? { $lt: new ObjectId(lastTweetID) } : { $gt: new ObjectId(0) };
+    
     const agg = [
         {
             $match: {

@@ -9,7 +9,6 @@ router.get("/", (req, res, next) => {
     } else {
         return res.send({
             "loggedin": true,
-            "id": req.session.user.id,
             "username": req.session.user.username,
             "fullname": req.session.user.fullname
         });
