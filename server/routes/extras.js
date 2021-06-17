@@ -19,7 +19,7 @@ const redisClient = redis.createClient({
 const SearchLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 mins window
     max: 20, // block after 20 requests
-    message: { message: "Too many tries, try again after some time" }
+    message: { message: "Too many requests, try again after some time" }
 });
 
 /** SEARCH FOR USERNAME */
@@ -78,12 +78,11 @@ router.get("/top3users", isLoggedin, (req, res, next) => {
                 const users = client.db("twitclone").collection("users");
                 const projection = { _id: 1, username: 1, fullname: 1 }; // <--INCLUSIONS
                 try {
-                    const result = await users
-                        .find({})
-                        .sort({ _id: -1, followers: -1 })
-                        .limit(3)
-                        .project(projection)
-                        .toArray();
+                    const result = await users.find({})
+                    .sort({ _id: 1, followers: -1 })
+                    .limit(3)
+                    .project(projection)
+                    .toArray();
                     // store for later use (async)
                     StoreInRedis(result);
                     if (result.length === 0) throw new Error("No results");

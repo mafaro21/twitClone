@@ -1,18 +1,18 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
-const redis = require("redis");
 const uri = process.env.MONGO_URL;
 const isLoggedin = require('../middleware/authchecker');
 const { ProfileValidation } = require("../middleware/inputvalidation");
+const rateLimit = require("express-rate-limit");
 const MongoOptions = { useUnifiedTopology: true, useNewUrlParser: true };
 const router = express.Router();
 
 
-/** CONNECT to REDIS */
-const redisClient = redis.createClient({
-    host: process.env.REDIS_URI,
-    port: process.env.REDIS_PORT || 14847,
-    password: process.env.REDIS_PASSWORD,
+/** Limit the edit Profile to 3x per 15 mins window */
+const EditLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 3,
+    message: { "message": "Too many requests, try again after some time" }
 });
 
 
@@ -45,10 +45,10 @@ router.get("/mine", isLoggedin, (req, res, next) => {
 router.get("/user/:username", (req, res, next) => {
     const username = req.params.username;
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
-    const userReg = /[^0-9a-zA-Z_\S]+/;
+    const userReg = /[^0-9a-zA-Z_\S]/;
     //check if valid username format:
-    if (userReg.test(username) || username.length > 20) return res.sendStatus(404);
-
+    if (userReg.test(username) || username.length > 20 ) return res.sendStatus(404);
+   
     // above^ check if username length is over 20 chars
     const agg = [
         {
@@ -106,7 +106,7 @@ router.get("/user/:username", (req, res, next) => {
 });
 
 /**  UPDATING MY PROFILE  */
-router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
+router.put("/mine/edit", EditLimiter, isLoggedin, ProfileValidation, (req, res, next) => {
     const userid = req.session.user.id;
     const { fullname, username, bio } = req.body;
 
@@ -117,6 +117,7 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
             const newValues = { fullname: fullname, username: username, bio: bio };
             try {
                 await users.updateOne({ _id: new ObjectId(userid) }, { $set: newValues });
+                //IF SUCCESS, UPDATE the Session variables
                 req.session.user = { "id": userid, "username": username, "fullname": fullname };
                 res.status(200).send({ "success": true });
             } catch (error) {
@@ -129,9 +130,6 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
         }).catch(next);
 });
 
-redisClient.on("error", (error) => {
-    console.error(error.message);
-});
 
 /*error handler */
 router.use((err, req, res, next) => {
