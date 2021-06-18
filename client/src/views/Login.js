@@ -29,25 +29,25 @@ function Login() {
 
     let history = useHistory();
 
-    const loadCaptcha = useEffect(() => {
-        axios.get("/statuslogin")
-            .then((res) => {
-                if (res.data.loggedin === true) {
-                    return history.push("/Home");
-                }
-            });
+    // const loadCaptcha = useEffect(() => {
+    //     axios.get("/statuslogin")
+    //         .then((res) => {
+    //             if (res.data.loggedin === true) {
+    //                 return history.push("/Home");
+    //             }
+    //         });
 
-        document.title = "TwitClone - Login";
+    //     document.title = "TwitClone - Login";
 
-        const script = document.createElement('script');
-        script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
-        document.body.appendChild(script);
+    //     const script = document.createElement('script');
+    //     script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.REACT_APP_SITE_KEY}`;
+    //     document.body.appendChild(script);
 
-        return () => {
-            document.body.removeChild(script);
-        };
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     };
 
-    }, []);
+    // }, []);
 
 
 
@@ -72,43 +72,43 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.grecaptcha && window.grecaptcha.ready(() => {
-            window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
-                .then((responseToken) => {
-                    sendtoServer(responseToken); // send this to the server with User Data
-                });
-        });
+        // window.grecaptcha && window.grecaptcha.ready(() => {
+        //     window.grecaptcha.execute(process.env.REACT_APP_SITE_KEY, { action: 'submit' })
+        //         .then((responseToken) => {
+        //             sendtoServer(responseToken); // send this to the server with User Data
+        //         });
+        // });
 
         const isValid = formValidation(); /* <--- react validation */
 
-        async function sendtoServer(token) {
-            if (isValid) {
-                setError(false);
-                setDisabled(true);  //disable button
-                setLoading(true);
-                const userObject = {
-                    email: email.trim(),
-                    password: password,
-                    responseToken: token
-                };
+        // async function sendtoServer(token) {
+        if (isValid) {
+            setError(false);
+            setDisabled(true);  //disable button
+            setLoading(true);
+            const userObject = {
+                email: email.trim(),
+                password: password,
+                // responseToken: token
+            };
 
-                axios
-                    .post("/login", userObject)
-                    .then((res) => {
-                        let x = res.data.success;
-                        if (x === true) return history.push("/home");
-                    })
-                    .catch((error) => {
-                        if (error.response.status === 500) {
-                            internalError();
-                        }
-                        else setError(error.response.data.message);     //show error message from axios
-                    }).finally(() => {
-                        setDisabled(false);
-                        setLoading(false);      //re-enable the button + disable loading.
-                    });
-            }
+            axios
+                .post("/login", userObject)
+                .then((res) => {
+                    let x = res.data.success;
+                    if (x === true) return history.push("/home");
+                })
+                .catch((error) => {
+                    if (error.response.status === 500) {
+                        internalError();
+                    }
+                    else setError(error.response.data.message);     //show error message from axios
+                }).finally(() => {
+                    setDisabled(false);
+                    setLoading(false);      //re-enable the button + disable loading.
+                });
         }
+        // }
     };
 
     const formValidation = () => {           /* <--- react validation */
@@ -142,8 +142,8 @@ function Login() {
 
 
     return (
-        <body className="App general login-pic display" onLoad={loadCaptcha} >
-
+        <body className="App general login-pic display"  >
+            {/* onLoad={loadCaptcha} */}
             <div className="container mt-4">
 
                 <div className="container mt-5 p-5 login-form">
@@ -196,7 +196,7 @@ function Login() {
                     </form>
 
                     <h3 className="animate-enter login-text mt-5" style={{ color: 'white' }}>See what’s happening around <br />
-                                the world
+                        the world
                     </h3>
 
                     <h4 className="animate-enter login-text mt-5" style={{ color: 'white' }}>Join TwitClone Today...</h4>

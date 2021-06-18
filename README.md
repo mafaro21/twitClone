@@ -16,5 +16,5 @@ See it here https://twitclone.netlify.app/
 - Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
 - Rate-Limiting for auth routes.
 - Top News Headlines, updated regularly.
-- For more features, see file `./TODO/twitterclone.md`
+- For more features, see file `TODO/Twitterclone.md`
 

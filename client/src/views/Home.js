@@ -20,6 +20,7 @@ import ReactTimeAgo from 'react-time-ago';
 import { Link, useLocation } from 'react-router-dom';
 import NoAccount from '../components/NoAccount';
 import OffCanvas from '../components/OffCanvas';
+import BottomRow from '../components/BottomRow'
 
 
 function Home() {
@@ -389,8 +390,8 @@ function Home() {
                                         </Link>
                                         <span>@{item.User[0].username}</span>
 
-                                            &nbsp; <span>·</span> &nbsp;
-                                            <span>
+                                        &nbsp; <span>·</span> &nbsp;
+                                        <span>
                                             <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                         </span>
                                     </div>
@@ -433,8 +434,8 @@ function Home() {
                                         </Link>
                                         <span>@{item.User[0].username}</span>
 
-                                            &nbsp; <span>·</span> &nbsp;
-                                            <span>
+                                        &nbsp; <span>·</span> &nbsp;
+                                        <span>
                                             <ReactTimeAgo date={item.dateposted} locale="en-US" timeStyle="twitter" />
                                         </span>
                                     </div>
@@ -476,6 +477,8 @@ function Home() {
                     <Sidebar />
                 </div>
             </div>
+            <BottomRow />
+
         </div>
     );
 }
