@@ -79,7 +79,7 @@ export default function Header({ passChildData }) {
 
     /** Logout function */
     const Logout = () => {
-        axios.get("/logout")
+        axios.post("/logout")
             .then(() => {
                 history.push("/");
             });
