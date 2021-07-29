@@ -9,12 +9,13 @@ Local default Settings:
 - _Client_:  runs on `http://localhost:3000`
 
 ## Features
-- Uses React Hooks (Functional Components).
+- Uses React Hooks.
 - Redis for Sessions AND Caching.
 - MongoDB for the main database. (100% using native node.js driver)
-- Schema Validation done by MongoDB's own [built-in validation feature.](https://docs.mongodb.com/manual/core/schema-validation/) (*Requires MongoDB v3.6+. Also see: `./server/dbSchema/HOWTO.md`)
+- Schema Validation done by MongoDB's own [built-in validation feature.](https://docs.mongodb.com/manual/core/schema-validation/) (*Requires MongoDB v3.6+)
 - Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
 - Rate-Limiting for auth routes.
 - Top News Headlines, updated regularly.
+- IMPORTANT: MAKE SURE YOU READ THE FILE: [`server/dbSchema/HOWTO.md`](https://github.com/mafaro21/twitClone/blob/master/server/dbSchema/HOWTO.md)
 - For more features, see file `TODO/Twitterclone.md`
 
