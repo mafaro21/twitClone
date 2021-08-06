@@ -1,4 +1,4 @@
 # twitClone
 
-- A twitter clone made using the MERN Stack.
-- To test it, run `npm install` then `npm start` 
+- This API Server is **stictly**, and exclusively designed for the Browser (both desktop and mobile) ONLY.
+- Will NOT with API-clients such as Postman or curl.
