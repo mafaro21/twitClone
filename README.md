@@ -16,6 +16,6 @@ Local default Settings:
 - Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
 - Rate-Limiting for auth routes.
 - Top News Headlines, updated regularly.
-- IMPORTANT: MAKE SURE YOU READ THE FILE: [`server/dbSchema/HOWTO.md`](https://github.com/mafaro21/twitClone/blob/master/server/dbSchema/HOWTO.md)
-- For more features, see file `TODO/Twitterclone.md`
+- IMPORTANT: MAKE SURE YOU READ THE FILE: [`server/dbSchema/HOWTO.md`](https://github.com/mafaro21/twitClone/blob/master/server/dbSchema/)
+- For more features, see file [`TODO/Twitterclone.md`](https://github.com/mafaro21/twitClone/blob/master/TODO/TwitterClone.md)
 

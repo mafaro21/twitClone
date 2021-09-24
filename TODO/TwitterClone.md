@@ -1,7 +1,7 @@
 ﻿TWIT CLONE: TO-Do List
 --
 
-`last update: 2021-05-30`
+`last update: 2021-08-16`
 
 App Name: twitClone
 
@@ -55,3 +55,7 @@ App Name: twitClone
 - If @tagged name not exists, it should NOT auto- generate link. Just appears as plain text
 - ELSE, if exists, allow getting the person profile by clicking the @tagged name.
 - (maybe later) allow PROFILE preview by hovering mouse on @tagged name!! (Faster DB needed)
+
+## Documentation
+- [ ] API endpoints
+- [ ] Database optimization tips
