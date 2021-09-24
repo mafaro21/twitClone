@@ -11,7 +11,10 @@ ANY SINGLE one of the files define 2 things:  **Data Schema** as well as **Valid
 1. Create a **collection**. Lets start with `users`, for example.
 2. Open `twitclone.users.json` file contained here with Notepad (or any text-editor), **SelectAll** and **Copy** (the *content*, NOT THE FILE itself!!!).
 3. Now go back to MongoDB Compass > `yourDatabase` > `users` Collection > click **Validation** tab. {_TODO: show image here_}
+![1scr1](https://user-images.githubusercontent.com/33986524/134648021-20cf9fb7-dc88-4bb9-8949-db955b7f9d1e.png)
+
 4. Make sure **Validation Action** == _ERROR_, and **Validation Level** == _STRICT_. Paste the content there and click **Save** at the bottom. DONE! {_TODO: show image here_}
+![2scr2](https://user-images.githubusercontent.com/33986524/134648051-f71b7fef-014c-44b5-b882-e20c9f536a93.png)
 
 - Repeat steps 2-4 above for each new `collection` you create, with its corresponding `.json` file.
 - You can always **Update** the rules using MongoDB Compass whenever you wish.
