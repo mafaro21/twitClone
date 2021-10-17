@@ -4,9 +4,6 @@ A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ Mo
 
 ## [Live Demo](https://twitclone.netlify.app/)
 
-![Capture111](https://user-images.githubusercontent.com/33986524/134647598-d5f6f519-4399-4813-8512-89e07d0c0324.PNG)
-![Capture333](https://user-images.githubusercontent.com/33986524/134647664-8a193d8f-4553-4e04-9e4e-8e2ff9cc6b60.PNG)
-
 Local default Settings:
 
 - _Server_:  runs on `http://localhost:5000`
