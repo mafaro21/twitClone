@@ -265,7 +265,7 @@ export default function Profile() {
 
                     <div className="col main-view phone-home " >
                         {loading ? <Loading /> :
-                            <>
+                            <div>
                                 <div className="row profile-header view mt-1">
 
                                     <div className=" col row ">
@@ -400,7 +400,7 @@ export default function Profile() {
                                         </div>
                                     </div>
                                 </div>
-                            </>
+                            </div>
                         }
 
                         {userNotFound && <UserNotFound />}

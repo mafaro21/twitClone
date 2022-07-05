@@ -81,7 +81,7 @@ export default function Retweets({ IDtoTweets }) {
 
 
     return (
-        <>
+        <div>
             {tweetLoading ? <Loading /> : null}
             {noRetweets ? <NoRetweets /> : null}
             {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
@@ -123,6 +123,6 @@ export default function Retweets({ IDtoTweets }) {
                     </Link>
                 </div>
             })}
-        </>
+        </div>
     )
 }

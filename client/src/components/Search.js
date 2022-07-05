@@ -49,7 +49,7 @@ function Search() {
     };
 
     return (
-        <>
+        <div>
             <form className="d-flex " onSubmit={(e) => handleSearch(e)}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ function Search() {
                     </div>
                 );
             })}
-        </>
+        </div>
     );
 }
 

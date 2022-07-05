@@ -142,7 +142,7 @@ button:hover{
   height: 60px;
   width: 30%;
   background-color: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text);
   outline: none;
 }
 .login-error{
@@ -152,7 +152,7 @@ button:hover{
   height: 60px;
   width: 90%;
   background-color: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text);
   outline: none;
 }
 
@@ -173,7 +173,7 @@ button:hover{
   height: 60px;
   width: 50%;
   background-color:rgba(0, 0, 0, 0.2);
-  color: white;
+  color: var(--text);
   outline: none;
 }
 .signup-error{
@@ -183,7 +183,7 @@ button:hover{
   height: 60px;
   width: 100%;
   background-color:rgba(0, 0, 0, 0.2);
-  color: white;
+  color: var(--text);
   outline: none;
 }
 
@@ -290,6 +290,7 @@ textarea.edit-input, textarea.edit-error{
 
   .login-text{
       font-size: 18px;
+      color: var(--text)
   }
   .error-msg{
     font-size: 12px;

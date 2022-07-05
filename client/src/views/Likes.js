@@ -75,7 +75,7 @@ export default function Likes({ IDtoTweets }) {
 
 
     return (
-        <>
+        <div>
             {tweetLoading ? <Loading /> : null}
             {noLikes ? <NoLikes /> : null}
             {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
@@ -117,7 +117,7 @@ export default function Likes({ IDtoTweets }) {
                     </Link>
                 </div>
             })}
-        </>
+        </div>
 
 
 

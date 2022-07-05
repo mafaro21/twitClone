@@ -79,13 +79,13 @@ export default function Explore() {
 
 
                         {loading ? <Loading /> :
-                            <>
+                            <div>
                                 <a href={mainApiData.url} target="_blank" className=" banner row modal-enter" style={{ textDecoration: 'none' }}>
                                     <img src={mainApiData.urlToImage} alt="explore" className="explore-photo " />
                                     <p className="explore-data col ">{mainApiData.title}</p>
                                 </a>
                                 {apiData.articles.map((item, key) => (
-                                    <>
+                                    <div>
                                         <div className="row view p-2 modal-enter" key={key}>
                                             <div className="col">
                                                 <a href={item.url} style={{ textDecoration: 'none' }} target="_blank" rel="noreferrer" className="row ">
@@ -94,9 +94,9 @@ export default function Explore() {
                                                 </a>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 ))}
-                            </>
+                            </div>
                         }
 
                     </div>
