@@ -2,16 +2,11 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Loader from "react-loader-spinner";
 import { useParams, useHistory, Link } from 'react-router-dom';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faComment } from '@fortawesome/free-regular-svg-icons/faComment';
-// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
-// import { faRetweet } from '@fortawesome/free-solid-svg-icons/faRetweet';
-// import { faHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
-// import { faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons/faHeart';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import { UserContext } from '../Contexts/UserContext';
+import NoAccount from "../components/NoAccount";
 
 export default function Likes({ IDtoTweets }) {
     let history = useHistory()
@@ -39,10 +34,14 @@ export default function Likes({ IDtoTweets }) {
                     internalError();
                 } else if (error.response.status === 404) {
                     setNoLikes(true);
+                } else if (error.response.status === 401) {
+                    setNoAccountDiv(true);
                 }
             }).finally(() => {
                 setTweetLoading(false);
-
+                setTimeout(() => {
+                    setNoAccountDiv(false);
+                }, 2000);
             });
 
 
@@ -79,6 +78,8 @@ export default function Likes({ IDtoTweets }) {
         <div>
             {tweetLoading ? <Loading /> : null}
             {noLikes ? <NoLikes /> : null}
+            {noAccountDiv && <NoAccount currentState={noAccountDiv} />}
+
             {tweets.data.map((item) => {
                 // console.log(item.ogtweet[0])
                 let icon = "https://avatars.dicebear.com/api/gridy/" + item.oguser[0].username + ".svg";
@@ -103,8 +104,8 @@ export default function Likes({ IDtoTweets }) {
                                 </Link>
                                 <span>@{item.oguser[0].username}</span>
 
-                        &nbsp; <span>·</span> &nbsp;
-                        <span>
+                                &nbsp; <span>·</span> &nbsp;
+                                <span>
                                     <ReactTimeAgo date={item.ogtweet[0].dateposted} locale="en-US" timeStyle="twitter" />
                                 </span>
                             </div>

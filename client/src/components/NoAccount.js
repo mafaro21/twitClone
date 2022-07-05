@@ -13,6 +13,7 @@ export default function NoAccount({ currentState }) {
 
     }, [currentState, setNoAccState])
 
+
     return (
         <div style={{ zIndex: '10' }}>
             <div>
@@ -25,7 +26,7 @@ export default function NoAccount({ currentState }) {
                                 <div className="modal-body row p-3 d-flex justify-content-center">
 
                                     <div className="p-3" style={{ fontWeight: 700 }}>
-                                        You need to be logged in!!
+                                        You need to be logged in to do that!!!
                                     </div>
                                 </div>
                             </div>

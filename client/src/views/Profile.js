@@ -19,7 +19,9 @@ import Loader from "react-loader-spinner";
 import { Link, useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import OffCanvas from '../components/OffCanvas';
 import { UserContext } from "../Contexts/UserContext";
+import BottomRow from '../components/BottomRow'
 
 export default function Profile() {
     const [user1] = useContext(UserContext);
@@ -276,6 +278,8 @@ export default function Profile() {
                                             </div>
                                             <span style={{ fontSize: "15px" }}>{!userNotFound && tweetCount}  {userNotFound ? null : tweetCount === 1 ? "Tweet" : "Tweets"} </span>
                                         </div>
+                                        <OffCanvas />
+
                                     </div>
                                 </div>
 
@@ -297,7 +301,7 @@ export default function Profile() {
                                                             type="submit"
                                                         >
                                                             Edit Profile
-                                                </Link>
+                                                        </Link>
                                                         :
                                                         profile.isfollowedbyme === true ?
                                                             <div className="banner-right" onClick={() => handleUnfollow()}>
@@ -352,8 +356,8 @@ export default function Profile() {
                                                                 <circle cx="12" cy="17.486" r="1.285"></circle>
                                                             </g>
                                                         </svg>
-                                            &nbsp;
-                                            Joined {datejoined}
+                                                        &nbsp;
+                                                        Joined {datejoined}
                                                     </span>
                                                 </div>
                                             }
@@ -363,11 +367,11 @@ export default function Profile() {
                                                     <div className="flw-flw name-link d-flex" onClick={FollowingLink}>
                                                         <div style={{ fontWeight: 700 }}>
                                                             {profile.following}&nbsp;
-                                                </div>
+                                                        </div>
                                                         <span>Following</span>
                                                     </div>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <div className="flw-flw name-link d-flex" onClick={FollowerLink}>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div className="flw-flw name-link d-flex" onClick={FollowerLink}>
                                                         <div style={{ fontWeight: 700 }}> {profile.followers} &nbsp;</div><span >Followers</span>
                                                     </div>
                                                 </div>
@@ -378,18 +382,18 @@ export default function Profile() {
                                                     <div onClick={tweetsPage} className={showTweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
                                                         <div className="p-3 ">
                                                             Tweets
-                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div onClick={retweetsPage} className={showRetweets ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
                                                         <div className="p-3 ">
                                                             Retweets
-                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div onClick={likePage} className={showLike ? "w-35 follow-tab-active" : "w-35 follow-tab"} style={{ width: "33.3%" }}>
 
                                                         <div className="p-3 ">
                                                             Likes
-                                                </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             }
@@ -417,6 +421,8 @@ export default function Profile() {
                     <Sidebar />
                 </div>
             </div >
+            <BottomRow />
+
         </div >
     );
 }

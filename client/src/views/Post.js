@@ -23,6 +23,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
 import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
 import { UserContext } from '../Contexts/UserContext';
+import OffCanvas from '../components/OffCanvas';
 
 export default function Post() {
     const [user] = useContext(UserContext);
@@ -451,6 +452,8 @@ export default function Post() {
                                         <strong>Spicy Take</strong>
                                     </div>
                                 </div>
+                                <OffCanvas />
+
                             </div>
 
 
@@ -471,7 +474,7 @@ export default function Post() {
                                             to={`/u/${item.User[0].username}`}
                                         >
                                             <img
-                                                src={`https://avatars.dicebear.com/api/identicon/${item.User[0].username}.svg`}
+                                                src={`https://avatars.dicebear.com/api/gridy/${item.User[0].username}.svg`}
                                                 alt="example"
                                                 className="user-logo"
                                             />
@@ -576,7 +579,7 @@ export default function Post() {
 
                                             {commentReply &&
                                                 <span>Replying to
-                                                <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
+                                                    <Link to={`/u/${item.User[0].username}`} className="ml-1 accent">
                                                         @{item.User[0].username}
                                                     </Link>
                                                 </span>

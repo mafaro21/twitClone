@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 import ThemeToggle from '../components/ThemeToggle'
 import axios from 'axios';
+import OffCanvas from '../components/OffCanvas';
+import BottomRow from '../components/BottomRow'
+
 
 export default function More() {
 
@@ -17,6 +20,8 @@ export default function More() {
             })
 
     }, [])
+
+
 
     return (
         <div className="App general ">
@@ -37,6 +42,8 @@ export default function More() {
                                         <strong>More</strong>
                                     </div>
                                 </div>
+                                <OffCanvas />
+
                             </div>
 
 
@@ -46,11 +53,13 @@ export default function More() {
                             <ThemeToggle />
 
                         </div>
+
                     </div>
 
                     <Sidebar />
                 </div>
             </div>
+            <BottomRow />
         </div>
 
     )

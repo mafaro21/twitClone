@@ -5,6 +5,9 @@ import Search from '../components/Search'
 // import unf2 from '../images/unf2.jpg';
 import Loader from "react-loader-spinner";
 import axios from "axios";
+import BackButton from "../components/BackButton";
+import BottomRow from '../components/BottomRow'
+import OffCanvas from '../components/OffCanvas';
 
 
 export default function Explore() {
@@ -61,9 +64,16 @@ export default function Explore() {
 
                     <Header />
                     <div className="col main-view phone-home ">
-                        <div className="row view p-3" >
-                            <div style={{ width: '100%' }}>
+                        <div className="row view p-2" >
+                            <div className="col-1.5 phone-only">
+                                <BackButton />
+                            </div>
+                            <div style={{ width: '100%' }} className="col-9">
                                 <Search />
+                            </div>
+                            <div className="col-1 ml-3 mt-2">
+                                <OffCanvas />
+
                             </div>
                         </div>
 
@@ -94,6 +104,8 @@ export default function Explore() {
                     <Sidebar />
                 </div>
             </div>
+            <BottomRow />
+
         </div>
 
     )

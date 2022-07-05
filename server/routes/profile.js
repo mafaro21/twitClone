@@ -47,8 +47,8 @@ router.get("/user/:username", (req, res, next) => {
     const viewerId = getSafe(() => req.session.user.id, 0);  //current viewer (if Loggedin)
     const userReg = /[^0-9a-zA-Z_\S]+/;
     //check if valid username format:
-    if (userReg.test(username) || username.length > 20 ) return res.sendStatus(404);
-   
+    if (userReg.test(username) || username.length > 20) return res.sendStatus(404);
+
     // above^ check if username length is over 20 chars
     const agg = [
         {
@@ -117,8 +117,6 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
             const newValues = { fullname: fullname, username: username, bio: bio };
             try {
                 await users.updateOne({ _id: new ObjectId(userid) }, { $set: newValues });
-                //IF SUCCESS, UPDATE the Session variables
-                //updateRedisInfo(req.session.user.username);
                 req.session.user = { "id": userid, "username": username, "fullname": fullname };
                 res.status(200).send({ "success": true });
             } catch (error) {
@@ -129,18 +127,6 @@ router.put("/mine/edit", isLoggedin, ProfileValidation, (req, res, next) => {
                 await client.close();
             }
         }).catch(next);
-
-    /**update username in Redis */
-    async function updateRedisInfo(oldUsername) {
-        //rename the key, then update the values
-        redisClient.hmset(oldUsername, {
-            "username": username
-        }, (err, reply) => {
-            if (err) return console.error("REDIS_PROFILE", err.message);
-            console.log("Redis_PROFILE", reply);
-        });
-    }
-
 });
 
 redisClient.on("error", (error) => {

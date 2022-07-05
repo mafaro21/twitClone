@@ -84,8 +84,8 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
                     "id": result.ops[0]._id,
                     "username": result.ops[0].username,
                     "fullname": result.ops[0].fullname
-                };    
-               
+                };
+
                 res.status(201).send({ "success": true });
             } catch (error) {
                 if (error.code === 11000) {
@@ -97,7 +97,7 @@ router.post("/", RegisterLimiter, RegValidation, (req, res, next) => {
         }).catch(next);
     }; // <--end of function
 
-   
+
 });
 
 

@@ -8,9 +8,11 @@ const session = require("express-session");
 const isLoggedin = require("./middleware/authchecker");
 const redis = require("redis");
 const morgan = require("morgan");
+const csurf = require("csurf");
 const RedisStore = require("connect-redis")(session);
 
 const app = express();
+
 
 /** CONNECT to REDIS */
 const redisClient = redis.createClient({
@@ -28,13 +30,12 @@ const redisClient = redis.createClient({
 
 
 /** SETUP THE SESSION. */ 
-//save to Redis. 03 HOURS ONLY.
 app.use(session({
     name: process.env.COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     store: new RedisStore({ client: redisClient }),
-    resave: true,
+    resave: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 3, // 3 hour session.
         httpOnly: true,
@@ -42,7 +43,8 @@ app.use(session({
     },
 }));
 
-
+/** MAKE SURE TO UNCOMMENT THIS IN PROD */
+//app.use(csurf());
 
 /** IMPORT ALL ROUTERS */
 const indexRouter = require("./routes/index");
@@ -58,6 +60,7 @@ const toLogout = require("./routes/logout");
 const toExtras = require("./routes/extras");
 const statuslogin = require("./routes/statusLogin");
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
@@ -65,7 +68,7 @@ app.use(morgan("dev"));
 
 /** SERVE PAGES ACCORDINGLY */
 app.use("/", indexRouter);
-app.use("/register", toRegister);
+app.use("/register",  toRegister);
 app.use("/login", toLogin);
 app.use("/profile", toProfile);
 app.use("/tweets", tweetRouter);
