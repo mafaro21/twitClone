@@ -142,19 +142,19 @@ function Login() {
 
 
     return (
-        <body className="App general login-pic display" onLoad={loadCaptcha} >
+        <body className="App general text login-pic display" onLoad={loadCaptcha} >
 
             <div className="container mt-4">
 
                 <div className="container mt-5 p-5 login-form">
 
 
-                    <h3 style={{ fontWeight: 700, color: 'white' }}>Welcome back. Login</h3>
+                    <h3 style={{ fontWeight: 700 }} className="text">Welcome back. Login</h3>
                     <div style={{ color: "red" }} className="error-msg ">{errorDiv}</div>
 
                     <form id="captcha" className="mt-2" onSubmit={(e) => handleSubmit(e)}>
 
-                        <div className="">
+                        <div className="text">
                             {Object.keys(emailErr).map((key) => {
                                 return <div style={{ color: "red" }} className="error-msg"> {emailErr[key]} </div>;
                             })}
@@ -164,7 +164,7 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Email"
-                                className={errorColor ? "login-error m-2" : "login-input m-2"}
+                                className={errorColor ? "login-error m-2 login-text" : "login-input m-2 login-text"}
                                 required
                             />
 
@@ -175,7 +175,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
-                                className={errorColor ? "login-error" : "login-input"}
+                                className={errorColor ? "login-error login-text" : "login-input login-text"}
                                 required
                             />
                             {Object.keys(passwordErr).map((key) => {
@@ -195,11 +195,11 @@ function Login() {
                         </button>
                     </form>
 
-                    <h3 className="animate-enter login-text mt-5" style={{ color: 'white' }}>See what’s happening around <br />
+                    <h3 className="animate-enter login-text text mt-5" >See what’s happening around <br />
                                 the world
                     </h3>
 
-                    <h4 className="animate-enter login-text mt-5" style={{ color: 'white' }}>Join TwitClone Today...</h4>
+                    <h4 className="animate-enter login-text text mt-5" >Join TwitClone Today...</h4>
 
                     <Link to="/signup" >
                         <button

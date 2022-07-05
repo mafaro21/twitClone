@@ -76,7 +76,7 @@ export default function Likes({ IDtoTweets }) {
 
 
     return (
-        <>
+        <div>
             {tweetLoading ? <Loading /> : null}
             {noLikes ? <NoLikes /> : null}
             {tweets.data.map((item) => {
@@ -116,7 +116,7 @@ export default function Likes({ IDtoTweets }) {
                     </Link>
                 </div>
             })}
-        </>
+        </div>
 
 
 

@@ -72,7 +72,7 @@ export default function Retweets({ IDtoTweets }) {
 
 
     return (
-        <>
+        <div>
             {tweetLoading ? <Loading /> : null}
             {noRetweets ? <NoRetweets /> : null}
             {tweets.data.map((item) => {
@@ -112,6 +112,6 @@ export default function Retweets({ IDtoTweets }) {
                     </Link>
                 </div>
             })}
-        </>
+        </div>
     )
 }

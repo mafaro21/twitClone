@@ -11,6 +11,10 @@ export default function More() {
         window.scrollTo(0, 0);
         document.title = 'TwitClone - More'
 
+        axios.get('https://jsonplaceholder.typicode.com/posts/1')
+            .then((res) => {
+                console.log(res)
+            })
 
     }, [])
 
