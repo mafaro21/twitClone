@@ -1,22 +1,31 @@
-# twitClone
-A Node.js clone of Twitter, built using MERN stack + Bootstrap. Uses _native_ MongoDB driver 
-(NO Mongoose).
+# TwitClone
 
-## [Live Demo](https://twitclone.netlify.app/)
+TwitClone is a full-stack social networking application built on the MERN stack. Designed around classic microblogging concepts, TwitClone intentionally moves away from traditional Twitter and modern X branding, sporting a distinct visual identity and UI layout built with React Bootstrap.
 
-Local default Settings:
+---
 
-- _Server_:  runs on `http://localhost:5000`
-- _Client_:  runs on `http://localhost:3000`
+## Key Highlights
+
+- **Custom UI & Branding:** Intentionally designed to break away from standard Twitter visual tropes, offering a fresh layout and distinct styling while keeping core social interactions intuitive.
+- **Classic Microblogging:** Focuses on classic tweet-style interactions, feeds, and user profiles.
+- **Full-Stack Architecture:** Powered by a React frontend and a Node.js/Express backend connected to MongoDB.
+
+---
 
 ## Features
-- Uses React Hooks.
-- Redis for Sessions AND Caching.
-- MongoDB for the main database. (100% using native node.js driver)
-- Schema Validation done by MongoDB's own [built-in validation feature.](https://docs.mongodb.com/manual/core/schema-validation/) (*Requires MongoDB v3.6+)
-- Google Captcha (v3) on Login and Register (native code, no 3rd-party libraries )
-- Rate-Limiting for auth routes.
-- Top News Headlines, updated regularly.
-- IMPORTANT: MAKE SURE YOU READ THE FILE: [`server/dbSchema/HOWTO.md`](https://github.com/mafaro21/twitClone/blob/master/server/dbSchema/)
-- For more features, see file [`TODO/Twitterclone.md`](https://github.com/mafaro21/twitClone/blob/master/TODO/TwitterClone.md)
 
+- **User Authentication:** Secure registration, login, and session handling.
+- **Tweets & Feeds:** Create tweets, view user timelines, and engage with content.
+- **Interactions:** Support for liking, posting updates, and viewing profile activity.
+- **Responsive Layout:** Mobile-friendly UI designed using React Bootstrap components.
+
+---
+
+## Tech Stack
+
+- **Frontend:** [React](https://react.dev/), [React Bootstrap](https://react-bootstrap.github.io/)
+- **Backend:** [Node.js](https://nodejs.org/), [Express.js](https://expressjs.com/)
+- **Database:** [MongoDB](https://www.mongodb.com/) (Mongoose ODM)
+- **Styling:** CSS3 / Bootstrap 5
+
+---
